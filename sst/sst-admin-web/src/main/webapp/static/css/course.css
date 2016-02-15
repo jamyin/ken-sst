@@ -1,0 +1,26 @@
+/**
+Course Admin Template CSS File
+@import url(../.com/css);
+*/
+.course_add_children{
+    float: left;
+    width: 90px;
+    padding-top: 5px;
+    text-align: right;
+}
+.course_add_label{
+	float: left;
+    width: 70px;
+    padding-top: 5px;
+    text-align: right;
+}
+.course_add_input {
+    margin-left: 90px;
+}
+.course_add_left{
+    margin-left: 10px;
+}
+.course_add_dropdown{
+	margin-top: -10px;
+}
+

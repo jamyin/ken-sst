@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.CompetitionApplyExMapper">
+	
+	<select id="selectByExample" resultType="com.tianfang.train.dto.CompetitionApplyDto">
+	   SELECT a.id, a.comp_id as compId,a.comp_name as compName,a.team_id as teamId,a.team_logo as teamLogo,a.team_name as teamName,a.contacts,a.mobile,a.audit_type as auditType,a.create_user_id as createUserId,a.create_user_name as createUserName, a.audit_user_id as auditUserId, a.create_time as  createTime ,a.last_update_time as lastUpdateTime ,a.stat,b.title as competitionName 
+	   FROM sst_competition_apply a 
+	   LEFT JOIN sst_competition b
+	   ON a.comp_id = b.id   
+	   WHERE a.stat =1 
+	   <include refid="where_assistant_bypage" />
+	   ORDER BY a.create_time desc
+       limit  #{page.startNum}, #{page.pageSize}
+	</select>
+	
+	<select id="countByExample" resultType="java.lang.Integer" parameterType="com.tianfang.train.dto.CompetitionApplyDto">
+	   SELECT count(*) 
+	   FROM sst_competition_apply a 
+	   LEFT JOIN sst_competition b
+	   ON a.comp_id = b.id  
+	   WHERE a.stat =1 
+	   <include refid="where_assistant_bypage" />
+	</select>
+	
+	<sql id="where_assistant_bypage">
+		<if test="competitionApplyDto.teamName != null and competitionApplyDto.teamName != ''">
+			and a.team_name like "%"#{competitionApplyDto.teamName}"%"
+	   </if>
+	   <if test="competitionApplyDto.competitionId != null and competitionApplyDto.competitionId != ''">
+			and b.id = #{competitionNoticeDto.competitionId}
+	   </if>
+	   <!--
+	   <if test="sportAlbum.createTime != null">
+			and a.name like "%"#{sportAlbum.createTime}"%"
+	   </if>
+	   <if test="sportAlbum.lastUpdateTime != null">
+			and a.name like "%"#{sportAlbum.lastUpdateTime}"%"
+	   </if>
+	    -->
+	</sql>
+	
+</mapper> 

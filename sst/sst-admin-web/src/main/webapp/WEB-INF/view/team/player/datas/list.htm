@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Tables - Ace Admin</title>
+		<meta name="description" content="Static & Dynamic Tables" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<#include "../../../common/head.htm"/>
+	</head>
+	<body>
+		<!-- tophead start-->
+			<#include "../../../common/topHead.htm"/>	
+		<!-- tophead end-->
+		<div class="container-fluid" id="main-container">
+			<a href="#" id="menu-toggler"><span></span></a><!-- menu toggler -->
+			<!-- left menu  start -->
+
+			<#include "../../../common/left.htm"/>
+
+			<!-- left menu  end -->
+			<div id="main-content" class="clearfix">
+					<div id="breadcrumbs">
+						<ul class="breadcrumb">
+							<!-- <li><i class="icon-home"></i> <a href="#">Home</a><span class="divider"><i class="icon-angle-right"></i></span></li>
+							<li class="active">Tables</li> -->
+						</ul><!--.breadcrumb-->
+<!-- 						<div id="nav-search">
+							<form class="form-search">
+									<span class="input-icon">
+										<input autocomplete="off" id="nav-search-input" type="text" class="input-small search-query" placeholder="Search ..." />
+										<i id="nav-search-icon" class="icon-search"></i>
+									</span>
+							</form>
+						</div> --><!--#nav-search-->
+					</div><!--#breadcrumbs-->
+					<div id="page-content" class="clearfix">
+						<div class="row-fluid">
+<!-- PAGE CONTENT BEGINS HERE -->
+		<div class="row-fluid">
+			<form action="${base}/team/player/datas/list.do" method="post" name="submitForm" id="submitForm">
+				<input type="hidden" id="currPage" name="page" value="${(pageList.currPage)!}"/>
+				<table border="0">
+					<tbody><tr>
+						<td>
+							<span class="input-icon">
+								<input autocomplete="off" id="nav-search-input" type="text" name="teamName" value="${(params.teamName)!}" placeholder="球队">
+								<i id="nav-search-icon" class="icon-search"></i>
+							</span>
+						</td>
+						<td>
+							<span class="input-icon">
+								<input autocomplete="off" id="nav-search-input" type="text" name="year" value="${(params.year)!}" placeholder="年份">
+								<i id="nav-search-icon" class="icon-search"></i>
+							</span>
+						</td>
+						<td style="vertical-align:top;"><button class="btn btn-mini btn-light" onclick="search();" title="检索"><i id="nav-search-icon" class="icon-search">检索</i></button></td>
+					</tr>
+				</tbody></table>				
+				<table id="table_report" class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th class="center" style="width:5%;">
+								<label><input type="checkbox" /><span class="lbl"></span></label>
+							</th>
+							<th>赛事名称</th>
+							<th style="width:18%;">球队</th>
+							<th>球员</th>
+							<th>进球数</th>
+							<th>黄牌</th>
+							<th>红牌</th>
+							<th class="hidden-phone"><i class="icon-time hidden-phone"></i>创建时间</th>
+							<th style="width:8%;">操作</th>
+						</tr>
+					</thead>
+										
+					<tbody>
+						<#if pageList??>
+							<#list pageList.results as page>
+								<tr>
+									<td class='center'>
+										<label><input name="checkBoxId" value="${(page.id)!}" type='checkbox' /><span class="lbl"></span></label>
+									</td>
+									<td>${(page.compName)!}</td>
+									<td><img style="width: 45px; height: 45px;" src="${imgurl}${(page.teamIcon)!}">&nbsp;&nbsp;${(page.teamName)!}</td>
+									<td>${(page.playerName)!}</td>
+									<td>${(page.num)!}</td>
+									<td>${(page.yellow)!}</td>
+									<td>${(page.red)!}</td>
+									<td  class='hidden-phone'>${(page.createTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>
+									<td>
+										<div id="operation" class='hidden-phone visible-desktop btn-group'>			
+											<a id='editObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-warning' style="margin-left:5px;" title="编辑"><i class='icon-edit'>编辑</i></a>
+											<a id='deleteObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-danger' style="margin-left:5px;" title="删除"><i class='icon-trash'></i></a>
+										</div>
+									</td>
+								</tr>
+							</#list>
+						</#if>
+					</tbody>
+				</table>
+				
+				<div class="page-header position-relative">
+					<table style="width:100%;">
+						<tbody><tr>
+							<td style="vertical-align:top;">
+								<a id="add" class="btn btn-small btn-success">新增</a>
+								<a id="batch-del" class="btn btn-small btn-danger" title="批量删除"><i class="icon-trash"></i></a>
+							</td>
+							<td style="vertical-align:top;">
+								<div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">	
+									<ul>
+										<li><a>共<font color="red">${(pageList.total)!}</font>条</a></li>
+										<li><input type="number" value="" id="toGoPage" style="width:50px;text-align:center;float:left" placeholder="页码"></li>
+										<li style="cursor:pointer;"><a onclick="gotoPage();" class="btn btn-mini btn-success">跳转</a></li>
+										<!-- <li><a onclick="gotoPage(1);" class="btn btn-primary">首页</a></li> -->
+										<li><a onclick="gotoPage('up');"  class="btn btn-primary">上页</a></li>
+										<li><a onclick="gotoPage('down');" class="btn btn-primary">下页</a></li>																																	
+										<!-- <li><a onclick="gotoPage();" class="btn btn-primary">尾页</a></li> -->
+										<li><a>第${(pageList.currPage)!}页</a></li>
+									</ul>
+								</div>
+							</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>				
+			</form>
+		</div>
+ 		<script type="text/javascript">
+		function search(){
+			$('#currPage').val(1);
+			$("#submitForm").submit();
+		}
+		function gotoPage(pageType){
+			var currP = parseInt($("#currPage").val());
+			var totalPage = Math.ceil(${(pageList.total/pageList.pageSize)!});
+			if(pageType=='up'){
+				if(currP==1){
+					var currPage = parseInt(1);
+				}else{
+					var currPage = parseInt($("#currPage").val())-1;	
+				}
+				$("#currPage").val(currPage);	
+			}else if(pageType=='down'){
+				if(currP==totalPage){
+					var currPage = parseInt(totalPage);
+				}else{
+					var currPage = parseInt($("#currPage").val())+1;	
+				}
+				$("#currPage").val(currPage);
+			}
+			$("#submitForm").submit();
+		}
+		</script>
+<!-- PAGE CONTENT ENDS HERE -->
+						 </div><!--/row-->
+					</div><!--/#page-content-->
+			</div><!-- #main-content -->
+		</div><!--/.fluid-container#main-container-->
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only"></i>
+		</a>
+		<!-- basic scripts -->
+		<script src="${base}/static/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+		</script>
+		
+		<script src="${base}/static/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		
+		<script type="text/javascript" src="${base}/static/js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.dataTables.bootstrap.js"></script>
+		<!-- ace scripts -->
+		<script src="${base}/static/js/ace-elements.min.js"></script>
+		<script src="${base}/static/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+		
+		<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script><!-- 下拉框 -->
+		<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script><!-- 日期框 -->
+		<script type="text/javascript" src="${base}/static/js/bootbox.min.js"></script><!-- 确认窗口 -->
+		
+		<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+		
+		<script type="text/javascript">
+		function reload_page(){
+			window.location.reload();//刷新当前页面
+		}
+		$(function() {
+			$("#operation #editObj").on('click',function(){
+				var id = $(this).attr("data-obj-id");
+				//iframe层-父子操作
+				layer.open({
+					type: 2,
+				    title: '编辑球员数据',
+				    area: ['30%', '50%'],
+				    fix: true, //不固定
+				    maxmin: true,
+				    content: '${base}/team/player/datas/edit.do?id='+id
+				});				
+				//console.log($(this).attr("data-obj-id"));
+			});
+			$("#operation #deleteObj").on('click',function(){
+				console.log($(this).attr("data-obj-id"));
+				var ids = $(this).attr("data-obj-id");
+				layer.confirm('确定要删除吗？', {icon: 3}, function(index){
+				$.ajax({
+		             type: "POST",
+		             url: "${base}/team/player/datas/delIds.do",
+		             data: {ids:ids},
+		             dataType: "json",
+		             success: function(data){
+		            	var jsondata = null;//eval('(' + data + ')');
+						if (data instanceof Object){
+							jsondata = data;
+						}else{
+							jsondata = eval('(' + data + ')');
+						}
+						if(jsondata.status == 200){
+	            			layer.msg(jsondata.message, {
+	            				shade: [0.9, '#000'],
+	            			    icon: 6,
+	            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+	            			}, function(){
+	            			    //do something
+	            				reload_page();
+	            			});		            		 
+		            	 }else{
+	            			layer.msg(jsondata.message, {
+	            				shade: [0.9, '#000'],
+	            			    icon: 6,
+	            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+	            			},function(){
+	            				return;
+	            			});
+		            	 }
+		             }
+		         });
+				});				
+			});		
+			$("#batch-del").on('click',function(){
+				var $chk = $("[name = checkBoxId]:checkbox").filter(":checked");
+				 if ($chk.length > 0){
+					//信息框-提醒框
+					layer.confirm('确定批量删除吗？', {icon: 3}, function(index){
+					    layer.close(index);
+					    var i = 0;
+					    var len = $chk.length;
+					    var ids = '';
+					    $chk.each(function() {
+					    	var id = $(this).attr("value");
+					    	if (i < len - 1){
+					    		ids += id+",";
+					    	}else{
+					    		ids += id;
+					    	}
+					    });
+					    
+					    $.ajax({
+				             type: "POST",
+				             url: "${base}/team/player/datas/delIds.do",
+				             data: {ids:ids},
+				             dataType: "json",
+				             success: function(data){
+				            	var jsondata = null;//eval('(' + data + ')');
+								if (data instanceof Object){
+									jsondata = data;
+								}else{
+									jsondata = eval('(' + data + ')');
+								}
+								if(jsondata.status == 200){
+			            			layer.msg(jsondata.message, {
+			            				shade: [0.9, '#000'],
+			            			    icon: 6,
+			            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+			            			}, function(){
+			            			    //do something
+			            				reload_page();
+			            			});		            		 
+				            	 }else{
+			            			layer.msg(jsondata.message, {
+			            				shade: [0.9, '#000'],
+			            			    icon: 6,
+			            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+			            			},function(){
+			            				return;
+			            			});
+				            	 }
+				             }
+				         });	
+					   
+					});
+				 }else {
+					 layer.alert('请至少选择一条记录~', {
+         			    icon: 7
+         			});
+					/*  layer.confirm('', {icon: 7}); */
+				 }
+			});
+			//日期框
+			$('.date-picker').datepicker();			
+			//下拉框
+			$(".chzn-select").chosen(); 
+			$(".chzn-select-deselect").chosen({allow_single_deselect:true}); 
+			
+			
+			$("#add").on('click',function(){
+				//iframe层-父子操作
+				layer.open({
+					type: 2,
+				    title: '新增球队数据',
+				    area: ['30%', '50%'],
+				    fix: true, //不固定
+				    maxmin: true,
+				    content: '${base}/team/player/datas/add.do'
+				});
+			});
+			
+			//复选框
+			$('table th input:checkbox').on('click' , function(){
+				var that = this;
+				$(this).closest('table').find('tr > td:first-child input:checkbox')
+				.each(function(){
+					this.checked = that.checked;
+					$(this).closest('tr').toggleClass('selected');
+				});
+					
+			});
+		});
+		</script>
+	</body>
+</html>

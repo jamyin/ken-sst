@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.message.mapper.NoticeUsersExMapper">
+	 <insert id="releaseNotice" parameterType="java.util.List">  
+      INSERT INTO sst_notice_users (id, notice_id, user_id, readstat,
+	               create_time, last_update_time, stat)
+      VALUES 
+     <foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.id},#{item.noticeId},#{item.userId},#{item.readstat},
+         #{item.createTime},#{item.lastUpdateTime},#{item.stat})  
+    </foreach> 
+  </insert>  
+	
+</mapper> 

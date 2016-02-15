@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.user.mapper.UserExMapper" >
+	<select id="findFriendsByUserId" resultType="com.tianfang.user.app.FriendApp" parameterType="java.lang.String">
+	   	SELECT a.user_id AS userId,d.user_account AS userAccount, c.id AS friendId, c.nick_name AS nickName, c.head_img AS headImg, c.user_account AS friendAccount, c.mobile AS mobile, a.care AS care 
+		FROM sst_user_friend AS a 
+		JOIN sst_user AS c ON c.id = a.friend_id AND c.stat = 1 
+		JOIN sst_user AS d ON d.id = a.user_id AND d.stat = 1 
+		WHERE a.user_id = #{userId} AND a.stat = 1
+	</select>
+	
+	<select id="findCareFriends" resultType="com.tianfang.user.app.FriendApp" parameterType="java.lang.String">
+		SELECT a.user_id AS userId,d.user_account AS userAccount, c.id AS friendId, c.nick_name AS nickName, c.head_img AS headImg, c.user_account AS friendAccount, c.mobile AS mobile, a.care AS care 
+		FROM sst_user_friend AS a 
+		JOIN sst_user AS c ON c.id = a.friend_id AND c.stat = 1 
+		JOIN sst_user AS d ON d.id = a.user_id AND d.stat = 1 
+		WHERE a.user_id = #{userId} AND a.stat = 1 AND a.care = 1
+	</select>
+</mapper>

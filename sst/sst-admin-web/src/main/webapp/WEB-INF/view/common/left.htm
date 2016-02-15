@@ -1,0 +1,47 @@
+<div id="sidebar">
+	<div id="sidebar-shortcuts">
+		<div id="sidebar-shortcuts-large">
+ 			<button class="btn btn-small btn-success"><i class="icon-signal"></i></button>
+			<button class="btn btn-small btn-info"><i class="icon-pencil"></i></button>
+			<button class="btn btn-small btn-warning"><i class="icon-group"></i></button>
+			<button class="btn btn-small btn-danger"><i class="icon-cogs"></i></button>
+		</div>
+		<div id="sidebar-shortcuts-mini">
+			<span class="btn btn-success"></span>
+			<span class="btn btn-info"></span>
+			<span class="btn btn-warning"></span>
+			<span class="btn btn-danger"></span>
+		</div>
+	</div><!-- #sidebar-shortcuts -->
+	<ul class="nav nav-list">
+		<#if menuList ??>
+			<#list menuList as menu>
+				<#if pId?? && menu.parant.id == pId>
+					<li class="open">
+				<#else>
+					<li>
+				</#if>
+					  <a href="#" style="cursor:pointer;" class="dropdown-toggle" >
+						<i class="${(menu.parant.menuIcon)!}"></i>
+						<span>${(menu.parant.menuTitle)!}</span>
+						<b class="arrow icon-angle-down"></b>
+					  </a>
+					<#if pId?? && menu.parant.id == pId>
+						<ul class="submenu" style="display: block;">
+					<#else>
+						<ul class="submenu">
+					</#if>
+					  		<#list menu.leaf as sub>
+								<li>
+									<a href="${base}${(sub.menuUrl)!}?pId=${sub.parentId}">
+										<i class="icon-double-angle-right"></i>${sub.menuTitle}
+									</a>
+								</li>
+							</#list>
+				  		</ul>
+				</li>
+			</#list>
+		</#if>
+	</ul><!--/.nav-list-->
+	<div id="sidebar-collapse"><i class="icon-double-angle-left"></i></div>
+</div><!--/#sidebar-->

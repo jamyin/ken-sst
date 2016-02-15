@@ -1,0 +1,35 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <bean id="freeMarker" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <!--<property name="templateLoaderPath" value="classpath:mailTemplate"/>-->
+        <property name="templateLoaderPath" value="/WEB-INF/view"/>
+        <!--指定模板文件目录-->
+        <property name="freemarkerSettings">
+            <!-- 设置FreeMarker环境属性-->
+            <props>
+                <prop key="template_update_delay">0</prop>
+                <!--刷新模板的周期，单位为秒-->
+                <prop key="default_encoding">UTF-8</prop>
+                <!--模板的编码格式 -->
+                <prop key="locale">zh_CN</prop>
+                <!-- 本地化设置-->
+            </props>
+        </property>
+    </bean>
+</beans>
+

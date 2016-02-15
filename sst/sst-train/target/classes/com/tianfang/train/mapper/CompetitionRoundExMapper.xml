@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.CompetitionRoundExMapper" >
+
+	<select id="maxPageRanking" parameterType="java.lang.String" resultType="java.lang.Integer" >
+	   	SELECT MAX(page_ranking)
+		FROM sst_competition_round
+		WHERE comp_id = #{compId} AND stat = 1
+ 	</select>
+  
+</mapper>

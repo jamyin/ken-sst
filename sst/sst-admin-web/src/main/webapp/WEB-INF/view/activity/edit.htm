@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>新增公告页面</title>
+		<meta name="description" content="Common form elements and layouts" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<#include "../common/head.htm"/>
+		<link href="${base}/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="${base}/static/css/bootstrap-timepicker.css" />
+ 		<script type="text/javascript" src="${base}/plugins/uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="${base}/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+	</head>
+	<body>
+		<div class="container-fluid" id="main-container">
+			<div id="main-content" class="clearfix" style="margin-left:0px;">
+					<div id="page-content" class="clearfix">
+						<div class="row-fluid">
+							<!-- PAGE CONTENT BEGINS HERE -->
+							<form id="submitForm" class="form-horizontal" action="${base}/notice/findNoticeView.do" method="POST">
+								<input type="hidden" name="id" value="${(activity.id)!}"/>
+								<input type="hidden" id="content" name="content" value=""/>
+								<input type="hidden" id="pic" name="pic" value="${(activity.pic)!}"/>
+								<div class="control-group">
+									<label class="control-label" for="form-field-1">标题</label>
+									<div class="controls">
+										<input type="text" name="title" class="span10" id="form-field-1" placeholder="请输入标题" value="${(activity.title)!}">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="form-field-8">活动概述</label>
+									<div class="controls">
+										<textarea class="span10" name="summary" id="form-field-8" placeholder="请输入活动概述">${(activity.summary)!}</textarea>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="form-field-3">图片</label>
+									<div class="controls">
+										<input type="file" id="id-input-file-3"/>
+									</div>
+									<div class="controls">
+										<img id="img_show" alt="" src="${imgurl}${(activity.pic)!}" style="width:60px;height:60px;"/>
+									</div>									
+								</div>
+								<div class="control-group">
+									<label class="control-label">活动状态</label>
+									<div class="controls">
+										<select class="chzn-select" name="status" data-placeholder="请选择一个状态">
+											<option value=""></option>
+											<#if status??>
+												<#list status as st>
+													<option <#if st.getIndex() == activity.status>selected="true"</#if> value='${(st.getIndex())!}'>${(st.getValue())!}</option>
+												</#list>
+											</#if> 
+										</select>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">活动日期</label>
+									<div class="controls">
+										<div class="row-fluid input-append date">
+											<input class="date-picker" type="text" readonly="readonly" name="activityDate" data-date-format="yyyy-mm-dd" value="${(activity.activityDate)!}"/>
+											<span class="add-on"><i class="icon-calendar"></i></span>
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">活动时间</label>
+									<div class="controls">
+										<div class="input-append bootstrap-timepicker">
+											<input id="startTime" name="startTime" type="text" class="input-small" value="${(activity.startTime)!}"/>
+											<span class="add-on"><i class="icon-time"></i></span>
+										</div>&nbsp;--
+										<div class="input-append bootstrap-timepicker">
+											<input id="endTime" name="endTime" type="text" class="input-small" value="${(activity.endTime)!}"/>
+											<span class="add-on"><i class="icon-time"></i></span>
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">地点</label>
+									<div class="controls">
+										<input type="text" name="address" class="span10" placeholder="请输入地点" value="${(activity.address)!}">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">内容</label>
+									<div class="controls">
+										<script id="editor" type="text/plain" style="width:769px;height:300px;">${(activity.content)!}</script>
+									</div>
+								</div>
+						
+								<div class="form-actions">
+									<button id='savebutton' class="btn btn-info" type="button"><i class="icon-ok"></i>保存</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn" type="reset" id="reset-btn"><i class="icon-undo"></i>关闭</button>
+								</div>
+							 </form>
+							<!-- PAGE CONTENT ENDS HERE -->
+						 </div><!--/row-->
+					</div><!--/#page-content-->
+			</div><!-- #main-content -->
+		</div><!--/.fluid-container#main-container-->
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only"></i>
+		</a>
+		<!-- basic scripts -->
+		<!-- <script src="${base}/static/1.9.1/jquery.min.js"></script> -->
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+		</script>
+		
+		<script src="${base}/static/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		
+		<!--[if lt IE 9]>
+		<script type="text/javascript" src="${base}/static/js/excanvas.min.js"></script>
+		<![endif]-->
+		<script type="text/javascript" src="${base}/static/js/jquery-ui-1.10.2.custom.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/fuelux.spinner.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-timepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/date.js"></script>
+		<script type="text/javascript" src="${base}/static/js/daterangepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-colorpicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.autosize-min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.inputlimiter.1.3.1.min.js"></script>
+		<!-- ace scripts -->
+		<script src="${base}/static/js/ace-elements.min.js"></script>
+		<script src="${base}/static/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+		
+	<link href="${base}/plugins/umeditor1.2.2/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/umeditor.min.js"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/lang/zh-cn/zh-cn.js"></script>		
+		
+		<!-- layer 弹出框处理 -->
+		<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+		<!-- 自定义js -->
+		<script type="text/javascript" src="${base}/static/js/wx-defined.js"></script>
+		<script type="text/javascript">
+		var um = UM.getEditor('editor');
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		$(function() {
+			$('[name=title]').maxLength(20);
+			$('[name=summary]').maxLength(200);
+			$('[name=address]').maxLength(200);
+			
+			$(".chzn-select").chosen(); 
+			
+			$('.date-picker').datepicker();
+			
+			$('#startTime').timepicker({
+				minuteStep: 1,
+				showSeconds: false,
+				showMeridian: false
+			});
+			$('#endTime').timepicker({
+				minuteStep: 1,
+				showSeconds: false,
+				showMeridian: false
+			});
+			
+			//图片上传
+			$("#id-input-file-3").uploadify({
+	            'uploader': '${base}/plugins/uploadify/uploadify.swf',
+	            'script':"${base}/file/upload.htm;jsessionid=${sessionId!}",
+	            'cancelImg': '${base}/plugins/uploadify/cancel.png',
+	            'queueID': 'fileQueue',
+	            'auto': true,
+	            //'multi':true,
+	            'buttonText': 'select',
+	            'simUploadLimit' : 1,
+	            'sizeLimit':1024*1024*10,
+	            'queueSizeLimit' : 1,
+	            'fileDesc' : 'pictures',
+	            'fileExt': '*.gif;*.png;*.jpg',
+	            onComplete: function(event, queueID, fileObj, response, data) {
+	                var dataObj = eval("("+response+")");
+	                if(dataObj.status == 200){
+	                	parent.layer.msg('图片上传成功', {
+							shade: [0.9, '#000'],
+						    icon: 6,
+						    time: 800 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							$("#img_show").attr("src",'${imgurl}'+dataObj.filePath);
+							$("#pic").val(dataObj.filePath);
+						});                
+	               		//console.log(dataObj.filePath);
+						//$("[name=logo]").val(dataObj.filePath);
+	                }else{
+	                	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的图片", {
+	        				shade: [0.9, '#000'],
+	        			    icon: 3,
+	        			    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+	        			}); 
+	                }
+	            },
+	            onSelect:function(){
+	            },
+	            onError: function(event, queueID, fileObj) {
+	            	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的图片", {
+	    				shade: [0.9, '#000'],
+	    			    icon: 3,
+	    			    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+	    			}); 
+	            }
+	        });
+			
+			$("#savebutton").on('click',function(){
+				var content = UM.getEditor('editor').getContent();
+				$("#content").val(content);
+				
+				var ajaxParams = $("#submitForm").serialize();
+				$.ajax({
+					type : "POST",
+					url : "${base}/activity/update.do",
+					data : ajaxParams,
+					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+					beforeSend : function() {
+					},
+					success : function(data) {// 成功返回之后调用的函数
+						var jsondata = null;//eval('(' + data + ')');
+						if (data instanceof Object){
+							jsondata = data;
+						}else{
+							jsondata = eval('(' + data + ')');
+						}
+						if(jsondata.status == 200){
+							parent.layer.msg(jsondata.message, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								parent.reload_page();
+								var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+								parent.layer.close(index);
+							}); 							
+						}else{
+							parent.layer.msg(jsondata.message, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+							}); 	
+						}
+						//console.log(data.success);
+					},
+					complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						
+					},
+					error : function() {// 调用出错执行的函数
+					}
+				});
+			});
+			
+			$("#reset-btn").on('click',function(){
+				parent.layer.close(index);
+			});
+		});
+		</script>
+	</body>
+</html>
