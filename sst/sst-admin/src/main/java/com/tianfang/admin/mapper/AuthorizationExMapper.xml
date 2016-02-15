@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.admin.mapper.AuthorizationExMapper">
+	
+	<select id="findMenuByAdminId" resultType="com.tianfang.admin.pojo.AdminMenu" parameterType="java.lang.String">
+	   SELECT a.id id,a.create_time createTime,a.descript descript,a.leaf leaf,a.left_menu leftMenu,a.menu_id menuId,a.menu_title menuTitle,
+	   a.parent_id parentId,a.last_update_time updateTime,a.stat stat,a.menu_icon menuIcon,a.menu_url menuUrl,a.orderby orderby
+	   FROM sst_admin_menu a 
+	   LEFT JOIN sst_authorization b ON a.id = b.menu_id
+	   WHERE a.stat = 1 
+	   and b.stat = 1
+	   and b.admin_id = #{id,jdbcType=VARCHAR}
+	   order by a.orderby asc
+	</select>
+	
+</mapper> 
