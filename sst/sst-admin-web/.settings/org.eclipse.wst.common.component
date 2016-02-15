@@ -10,6 +10,9 @@
         <dependent-module archiveName="sst-admin-api-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sst-admin-api/sst-admin-api">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="tianfang-common-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tianfang-common/tianfang-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="sst-user-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sst-user/sst-user">
             <dependency-type>uses</dependency-type>
         </dependent-module>
@@ -31,10 +34,7 @@
         <dependent-module archiveName="sst-message-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sst-message/sst-message">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="sst-evaluat-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sst-evaluat/sst-evaluat">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="sst-evaluat-api-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sst-evaluat-api/sst-evaluat-api">
+        <dependent-module archiveName="tianfang-train-api-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tianfang-train-api/tianfang-train-api">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/tianfang-home/target/classes"/>

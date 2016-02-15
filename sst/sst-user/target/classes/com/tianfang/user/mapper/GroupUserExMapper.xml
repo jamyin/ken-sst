@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tianfang.user.mapper.GroupUserExMapper" >
-  <select id="findUsersByGroupId" resultType="com.tianfang.user.dto.UserDto" parameterType="java.lang.String" >
-  	SELECT b.id AS id, b.nick_name AS nickName, b.head_img AS headImg, b.team_id AS teamId, b.sex AS sex, b.address AS address, b.birthday AS birthday, b.pwd AS pwd,b.user_account AS userAccount, b.mobile AS mobile, b.create_time AS createTime, b.last_update_time AS lastUpdateTime, b.stat AS stat
-	FROM sst_group_user AS a, sst_user AS b
-	WHERE a.user_id = b.id AND a.stat = 1 AND b.stat = 1 AND a.group_id = #{groupId}
-  </select>
-</mapper>
