@@ -90,8 +90,8 @@ public class UserController extends BaseController{
 		Response<UserDto> result = new Response<UserDto>();
 		String md5oldPwd;// 获取页面上输入的密码并加密校验
 		try {
-			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPwd());
-			dto.setPwd(md5oldPwd);
+			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPassword());
+			dto.setPassword(md5oldPwd);
 		} catch (Exception e) {
 			throw new SystemException(e.getMessage(), e);
 		}
@@ -129,7 +129,7 @@ public class UserController extends BaseController{
 				return result;
 			} else {
 				UserDto user = userService.getUserById(id);
-				LoginUserDto loginUserDto = new LoginUserDto(id, user.getNickName(), user.getHeadImg(), user.getTeamId(), user.getUserAccount(), user.getMobile());
+				LoginUserDto loginUserDto = new LoginUserDto(id, user.getNickName(), user.getPic(), user.getTeamId(), user.getMobile());
 				session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);
 				if(loginUserDto != null){
 					redisTemplate.opsForValue().set(id, loginUserDto);
@@ -168,18 +168,18 @@ public class UserController extends BaseController{
 			result.setMessage("输入的用户帐户(手机)为空！");
 			return result;
 		}
-		if (StringUtils.isBlank(dto.getPwd())){
+		if (StringUtils.isBlank(dto.getPassword())){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("输入的用户密码为空！");
 			return result;
 		}
 		String md5oldPwd;// 获取页面上输入的密码并加密校验
 		try {
-			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPwd());
+			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPassword());
 		} catch (Exception e) {
 			throw new SystemException(e.getMessage(), e);
 		}
-		dto.setPwd(md5oldPwd);
+		dto.setPassword(md5oldPwd);
 		UserDto user = null;
 		try {
 			user = userService.checkUser(dto);
@@ -197,7 +197,7 @@ public class UserController extends BaseController{
 			return result;
 		}
 
-		LoginUserDto loginUserDto = new LoginUserDto(user.getId(), user.getNickName(), user.getHeadImg(), user.getTeamId(), user.getUserAccount(), user.getMobile());
+		LoginUserDto loginUserDto = new LoginUserDto(user.getId(), user.getNickName(), user.getPic(), user.getTeamId(), user.getMobile());
 		session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);
 		if(user != null){
 			redisTemplate.opsForValue().set(dto.getId(), loginUserDto);
@@ -263,7 +263,7 @@ public class UserController extends BaseController{
 			logger.error(e.getMessage());
 			return data;
 		}
-		LoginUserDto userDto = new LoginUserDto(dto.getId(), dto.getNickName(), dto.getHeadImg(), dto.getTeamId(), dto.getUserAccount(), dto.getMobile());
+		LoginUserDto userDto = new LoginUserDto(dto.getId(), dto.getNickName(), dto.getPic(), dto.getTeamId(), dto.getMobile());
 		data.setStatus(DataStatus.HTTP_SUCCESS);
 		data.setData(userDto);
 		return data;

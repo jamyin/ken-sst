@@ -6,7 +6,7 @@
 		a.id AS optionId, a.text AS optionText, c.id AS optionUserId, c.nick_name AS optionNickName
 		FROM sst_vote_option AS a
 		LEFT JOIN sst_vote_user_option AS b ON a.id = b.option_id AND b.stat = 1
-		LEFT JOIN sst_user AS c ON c.id = b.user_id AND c.stat = 1
+		LEFT JOIN sport_user AS c ON c.id = b.user_id AND c.stat = 1
 		JOIN sst_vote AS d ON a.vote_id = d.id
 		WHERE d.id = #{id} AND d.stat = 1 AND a.stat =1 ORDER BY a.create_time DESC
 	</select>

@@ -88,20 +88,17 @@ public class UserDao extends MyBatisBaseDao<User> {
         	if (StringUtils.isNotBlank(params.getTeamId())){
         		criteria.andTeamIdEqualTo(params.getTeamId().trim());
         	}
-        	if (null != params.getSex()){
-        		criteria.andSexEqualTo(params.getSex().intValue());
+        	if (null != params.getGender()){
+        		criteria.andGenderEqualTo(params.getGender().intValue());
         	}
         	if (StringUtils.isNotBlank(params.getBirthday())){
         		criteria.andBirthdayEqualTo(params.getBirthday().trim());
         	}
-        	if (StringUtils.isNotBlank(params.getUserAccount())){
-        		criteria.andUserAccountEqualTo(params.getUserAccount().trim());
-        	}
         	if (StringUtils.isNotBlank(params.getMobile())){
         		criteria.andMobileEqualTo(params.getMobile().trim());
         	}
-        	if (null != params.getType()){
-        		criteria.andTypeEqualTo(params.getType().intValue());
+        	if (null != params.getUtype()){
+        		criteria.andUtypeEqualTo(params.getUtype().intValue());
         	}
         }
 		criteria.andStatEqualTo(DataStatus.ENABLED);

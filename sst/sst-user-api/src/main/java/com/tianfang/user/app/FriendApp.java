@@ -29,13 +29,6 @@ public class FriendApp implements Serializable{
 	private String friendId;
 	
 	/**
-	 * 朋友聊天账户
-	 */
-	@Getter
-	@Setter
-	private String friendAccount;
-	
-	/**
 	 * 朋友昵称
 	 */
 	@Getter
@@ -47,14 +40,14 @@ public class FriendApp implements Serializable{
 	 */
 	@Getter
 	@Setter
-	private String headImg;
+	private String pic;
 	
 	/**
 	 * 朋友手机号码
 	 */
 	@Getter
 	@Setter
-	private String mobile; 
+	private String friendMobile; 
 	
 	/**
 	 * 用户id
@@ -64,11 +57,11 @@ public class FriendApp implements Serializable{
 	private String userId;
 	
 	/**
-	 * 用户聊天账户
+	 * 用户手机号码
 	 */
 	@Getter
 	@Setter
-	private String userAccount;	
+	private String userMobile; 
 	
 	/**
 	 * 特别关注(0-否,1-是)
@@ -81,16 +74,15 @@ public class FriendApp implements Serializable{
 		super();
 	}
 
-	public FriendApp(String friendId, String friendAccount, String nickName,
-			String headImg, String mobile, String userId, String userAccount, Integer care) {
+	public FriendApp(String friendId, String nickName, String pic,
+			String friendMobile, String userId, String userMobile, Integer care) {
 		super();
 		this.friendId = friendId;
-		this.friendAccount = friendAccount;
 		this.nickName = nickName;
-		this.headImg = headImg;
-		this.mobile = mobile;
+		this.pic = pic;
+		this.friendMobile = friendMobile;
 		this.userId = userId;
-		this.userAccount = userAccount;
+		this.userMobile = userMobile;
 		this.care = care;
-	}	
+	}
 }

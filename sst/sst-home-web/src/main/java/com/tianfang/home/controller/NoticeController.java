@@ -79,7 +79,7 @@ public class NoticeController extends BaseController {
 		Response<String> data = new Response<String>();
 		LoginUserDto dto = getLoginUser();
 		noticeDto.setCreateUserId(dto.getId());
-		noticeDto.setCreateUserName(dto.getUserAccount());
+		noticeDto.setCreateUserName(dto.getMobile());
 		int flag = noticeService.addNotice(noticeDto);
 		if(flag > 0){
 			data.setMessage("添加公告成功");
@@ -104,7 +104,7 @@ public class NoticeController extends BaseController {
 		Response<String> data = new Response<String>();
 		LoginUserDto dto = getLoginUser();
 		noticeDto.setCreateUserId(dto.getId());
-		noticeDto.setCreateUserName(dto.getUserAccount());
+		noticeDto.setCreateUserName(dto.getMobile());
 		int flag = noticeService.updateNotice(noticeDto);
 		if(flag > 0){
 			data.setMessage("编辑公告成功");
@@ -185,7 +185,7 @@ public class NoticeController extends BaseController {
 		Response<String> data = new Response<String>();
 		LoginUserDto dto = getLoginUser();
 		noticeDto.setCreateUserId(dto.getId());
-		noticeDto.setCreateUserName(dto.getUserAccount());
+		noticeDto.setCreateUserName(dto.getMobile());
 		int flag = noticeService.addNotice(noticeDto);
 		List<NoticeUsersDto> list = new ArrayList<NoticeUsersDto>();
 		if(flag > 0){

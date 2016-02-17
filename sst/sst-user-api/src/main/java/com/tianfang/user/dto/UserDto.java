@@ -38,7 +38,7 @@ public class UserDto implements Serializable{
 	 */
 	@Getter
 	@Setter
-    private String headImg;
+    private String pic;
 
 	/**
 	 * 球队id
@@ -48,18 +48,32 @@ public class UserDto implements Serializable{
     private String teamId;	
 
 	/**
-	 * 性别
+	 * 性别(1.男  2.女)
 	 */
 	@Getter
 	@Setter
-    private Integer sex;
+    private Integer gender;
 
 	/**
-	 * 地区
+	 * 对应省份
 	 */
 	@Getter
 	@Setter
-    private String address;
+    private String province;
+	
+	/**
+	 * 用户所在地 区域
+	 */
+	@Getter
+	@Setter
+	private String location;
+	
+	/**
+	 * 地址详情
+	 */
+	@Getter
+	@Setter
+	private String detailedAddress;
 
 	/**
 	 * 生日
@@ -73,14 +87,7 @@ public class UserDto implements Serializable{
 	 */
 	@Getter
 	@Setter
-    private String pwd;
-
-	/**
-	 * 聊天账号
-	 */
-	@Getter
-	@Setter
-    private String userAccount;
+    private String password;
 
 	/**
 	 * 手机号码
@@ -90,11 +97,18 @@ public class UserDto implements Serializable{
     private String mobile;
 	
 	/**
-	 * 用户类型(0-普通用户,1-球员,2-队长,3-教练)
+	 * 用户类型(1，普通会员；2，教练；3，队长；4，裁判)
 	 */
 	@Getter
 	@Setter
-	private Integer type; 
+	private Integer utype; 
+	
+	/**
+	 * 教练级别0：顶级教练，1：教练 2  vip用户可查看课件
+	 */
+	@Getter
+	@Setter
+	private Integer trainerLevel;
 
 	/**
 	 * 创建时间
@@ -116,4 +130,11 @@ public class UserDto implements Serializable{
 	@Getter
 	@Setter
     private Integer stat;
+	
+	/**
+	 * 最后登录时间
+	 */
+	@Getter
+	@Setter
+	private Date lastLoginTime;
 }

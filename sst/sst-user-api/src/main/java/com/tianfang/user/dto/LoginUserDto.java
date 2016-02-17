@@ -47,13 +47,6 @@ public class LoginUserDto implements Serializable{
     private String teamId;
 
 	/**
-	 * 聊天账号
-	 */
-	@Getter
-	@Setter
-    private String userAccount;
-
-	/**
 	 * 手机号码
 	 */
 	@Getter
@@ -65,13 +58,12 @@ public class LoginUserDto implements Serializable{
 	}
 
 	public LoginUserDto(String id, String nickName, String headImg,
-			String teamId, String userAccount, String mobile) {
+			String teamId, String mobile) {
 		super();
 		this.id = id;
 		this.nickName = nickName;
 		this.headImg = headImg;
 		this.teamId = teamId;
-		this.userAccount = userAccount;
 		this.mobile = mobile;
 	}
 }

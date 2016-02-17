@@ -56,11 +56,11 @@ public class UserController extends BaseController{
     @RequestMapping(value = "save")
     @ResponseBody
     public Map<String, Object> save(UserDto dto) throws Exception{
-        if (StringUtils.isBlank(dto.getMobile()) || StringUtils.isBlank(dto.getPwd())) {
+        if (StringUtils.isBlank(dto.getMobile()) || StringUtils.isBlank(dto.getPassword())) {
             return MessageResp.getMessage(false, "请求参数不能为空~");
         }
-        String md5passwd = MD5Coder.encodeMD5Hex(dto.getPwd());
-        dto.setPwd(md5passwd);
+        String md5passwd = MD5Coder.encodeMD5Hex(dto.getPassword());
+        dto.setPassword(md5passwd);
         Map<String, Object> result;
         try {
 			userService.save(dto);
@@ -100,26 +100,26 @@ public class UserController extends BaseController{
         return result;
     }
     
-    @RequestMapping(value = "editPwd")
-    public ModelAndView editPwd(String id) throws Exception {
+    @RequestMapping(value = "editPassword")
+    public ModelAndView editPassword(String id) throws Exception {
         ModelAndView mv = this.getModelAndView(this.getSessionUserId());
-        mv.setViewName("/user/editPwd");
+        mv.setViewName("/user/editPassword");
         mv.addObject("id", id);
         return mv;
     }
     
-    @RequestMapping(value = "resetPwd")
+    @RequestMapping(value = "resetPassword")
     @ResponseBody
-    public Map<String, Object> resetPwd(UserDto dto) throws Exception{
+    public Map<String, Object> resetPassword(UserDto dto) throws Exception{
         if (StringUtils.isBlank(dto.getId())) {
             return MessageResp.getMessage(false, "主键ID为空~");
         }
-        if (StringUtils.isBlank(dto.getPwd())) {
+        if (StringUtils.isBlank(dto.getPassword())) {
         	 return MessageResp.getMessage(false, "密码为空~");
         }
-        if (StringUtils.isNotBlank(dto.getPwd())) {
-            String md5passwd = MD5Coder.encodeMD5Hex(dto.getPwd());
-            dto.setPwd(md5passwd);
+        if (StringUtils.isNotBlank(dto.getPassword())) {
+            String md5passwd = MD5Coder.encodeMD5Hex(dto.getPassword());
+            dto.setPassword(md5passwd);
         }     
         Map<String, Object> result;
         try {
@@ -128,7 +128,7 @@ public class UserController extends BaseController{
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = MessageResp.getMessage(false, e.getMessage());
-			logger.error("resetPwd方法抛出异常:"+e.getMessage());
+			logger.error("resetPassword方法抛出异常:"+e.getMessage());
 		}
         return result;
     }
