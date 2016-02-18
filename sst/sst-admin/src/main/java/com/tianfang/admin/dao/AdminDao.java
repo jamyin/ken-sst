@@ -16,7 +16,13 @@ import com.tianfang.admin.pojo.AdminExample;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.mybatis.MyBatisBaseDao;
-
+/**
+ * 
+ * @time:2016年2月18日 上午10:40:13
+ * @ClassName: AdminDao
+ * @Description: TODO
+ * @
+ */
 @Repository
 public class AdminDao extends MyBatisBaseDao<Admin>{
 
