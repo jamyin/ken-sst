@@ -20,7 +20,7 @@ import com.tianfang.common.util.StringUtils;
 
 /**
  * 轮播图Controller
- * @author YIn
+ * @author J. YIn
  * @time:2016年1月15日 上午9:39:09
  * @ClassName: bannerController
  * @Description: TODO
