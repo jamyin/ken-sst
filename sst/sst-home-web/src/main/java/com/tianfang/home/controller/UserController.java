@@ -20,6 +20,7 @@ import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.constants.SessionConstants;
 import com.tianfang.common.digest.MD5Coder;
 import com.tianfang.common.exception.SystemException;
+import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
@@ -603,6 +604,30 @@ public class UserController extends BaseController{
     }
     
     /**
+     * 查询用户备忘录 -分页
+     * @author YIn
+     * @time:2016年2月18日 下午4:49:36
+     * @param dto
+     * @param page
+     * @return
+     * @throws Exception
+     */
+	@RequestMapping(value = "list")
+    public Response<PageResult<MemoDto>> findpage(MemoDto dto, ExtPageQuery page) throws Exception {
+		Response<PageResult<MemoDto>> result = new Response<PageResult<MemoDto>>();
+		PageResult<MemoDto> data = memoService.findMemoByParam(dto, page.changeToPageQuery());
+		if(data != null){
+			result.setStatus(DataStatus.HTTP_SUCCESS);
+			result.setMessage("查询成功");
+			result.setData(data);
+		}else{
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("查询失败");
+		}
+        return result;
+    }
+    
+    /**
      * 增加用户备忘录
      * @author YIn
      * @time:2016年2月3日 下午3:31:58
@@ -654,7 +679,7 @@ public class UserController extends BaseController{
 			} catch (Exception e) {
 				e.printStackTrace();
 				result.setStatus(DataStatus.HTTP_FAILE);
-				result.setMessage("增加失败");
+				result.setMessage("更新失败");
 			}
     			
     	}else{
