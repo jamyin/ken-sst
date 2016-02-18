@@ -49,6 +49,12 @@ public class CompetitionDao extends MyBatisBaseDao<Competition> {
 	    	if (StringUtils.isNotBlank(competition.getTitle())){
 	    		criteria.andTitleLike("%" +competition.getTitle()+"%");
 	    	}
+	    	if (null != competition.getIsClosed()){
+	    		criteria.andIsClosedEqualTo(competition.getIsClosed());
+	    	}
+	    	if (null != competition.getCompType()){
+	    		criteria.andCompTypeEqualTo(competition.getCompType());
+	    	}
 		}
 		
     	criteria.andStatEqualTo(DataStatus.ENABLED);
