@@ -49,5 +49,9 @@ public class EvaluatDto implements Serializable{
 	@Setter
 	@Getter
     private Integer stat;
+	
+	@Setter
+	@Getter
+    private Integer evaType;
 
 }
