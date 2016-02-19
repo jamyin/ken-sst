@@ -3,7 +3,7 @@
 <mapper namespace="com.tianfang.train.mapper.CompetitionNoticeExMapper">
 	
 	<select id="selectByExample" resultType="com.tianfang.train.dto.CompetitionNoticeDto">
-	   SELECT a.id, a.comp_id as compId, a.title, a.content, a.create_admin_id as createAdminId,a.create_admin_name as createAdminName, a.update_admin_id as updateAdminId,a.update_admin_name as updateAdminName, a.create_time as  createTime ,a.last_update_time as lastUpdateTime ,a.stat,b.title as compName FROM sst_competition_notice a 
+	   SELECT a.id, a.comp_id as compId, a.title, a.summary, a.content, a.create_admin_id as createAdminId,a.create_admin_name as createAdminName, a.update_admin_id as updateAdminId,a.update_admin_name as updateAdminName, a.create_time as  createTime ,a.last_update_time as lastUpdateTime ,a.stat,b.title as compName FROM sst_competition_notice a 
 	   LEFT JOIN sst_competition b
 	   ON a.comp_id = b.id  
 	   WHERE a.stat =1 
