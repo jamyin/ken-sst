@@ -15,7 +15,7 @@ import lombok.Setter;
  * @Description: TODO
  * @
  */
-@JsonIgnoreProperties({"createAdminId","createAdminName","updateAdminId","updateAdminName","createTime","lastUpdateTime","stat","createTimeStr","lastUpdateTimeStr"})
+@JsonIgnoreProperties({"createAdminId","createAdminName","updateAdminId","updateAdminName","lastUpdateTime","stat","createTimeStr","lastUpdateTimeStr"})
 public class CompetitionNoticeDto implements Serializable{
 	
 	private static final long serialVersionUID = -2910543421008897096L;
