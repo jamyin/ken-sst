@@ -55,9 +55,27 @@ public class TeamDao extends MyBatisBaseDao<Team>{
 	 * @time:2016年1月23日 下午1:27:43
 	 */
 	private void assemblyParams(Team team, Criteria criteria) {
+		if (StringUtils.isNotBlank(team.getId())){
+    		criteria.andIdEqualTo(team.getId());
+    	}
 		if (StringUtils.isNotBlank(team.getName())){
     		criteria.andNameLike("%"+team.getName()+"%");
     	}
+		if (StringUtils.isNotBlank(team.getProvince())){
+			criteria.andProvinceEqualTo(team.getProvince());
+		}
+		if (StringUtils.isNotBlank(team.getCity())){
+			criteria.andCityEqualTo(team.getCity());
+		}
+		if (StringUtils.isNotBlank(team.getArea())){
+			criteria.andAreaEqualTo(team.getArea());
+		}
+		if (StringUtils.isNotBlank(team.getContacts())){
+			criteria.andContactsLike("%"+team.getContacts().trim()+"%");
+		}
+		if (StringUtils.isNotBlank(team.getMobile())){
+			criteria.andMobileLike("%"+team.getMobile().trim()+"%");
+		}
     	criteria.andStatEqualTo(DataStatus.ENABLED);
 	}
 
