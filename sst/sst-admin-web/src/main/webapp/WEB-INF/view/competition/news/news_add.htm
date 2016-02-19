@@ -214,6 +214,20 @@
 					layer.alert('赛事动态标题长度大于40~', { icon: 7 });
 					return;
 				}
+				var pic = $("[name = pic]").val();
+				if (null == pic || '' == pic) {
+					layer.alert('图片不能为空~', { icon: 7 });
+					return;
+				}
+				var summary = $("[name = summary]").val();
+				if (null == summary || '' == summary) {
+					layer.alert('赛事动态简介不能为空~', { icon: 7 });
+					return;
+				}
+				if(title.length>40){
+					layer.alert('赛事动态简介长度大于40~', { icon: 7 });
+					return;
+				}
 				var content = $("[name = content]").val();
 				if (null == content || '' == content) {
 					layer.alert('赛事动态内容不能为空~', { icon: 7 });
