@@ -43,7 +43,7 @@ public class NoticeController extends BaseController {
 	private INoticeUsersService noticeUsersDao;
 	
 	/**
-	 * 后台公告显示页面-分页
+	 * 公告显示页面-分页
 	 * @author YIn
 	 * @time:2016年2月2日 下午4:54:25
 	 * @param noticeDto
