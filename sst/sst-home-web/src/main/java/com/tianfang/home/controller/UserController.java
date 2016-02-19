@@ -82,7 +82,7 @@ public class UserController extends BaseController{
 	 * @param dto  注册用户数据封装
 	 * @param code	验证码
 	 * @return {"status":状态码(200-成功,500-失败),"message":"提示信息","data":UserDto(用户数据对象封装)}
-	 * @author xiang_wang xx
+	 * @author xiang_wang xx ee
 	 * 2016年1月18日下午4:23:51
 	 */
 	@RequestMapping(value = "register")
