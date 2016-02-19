@@ -19,6 +19,7 @@
 							<!-- PAGE CONTENT BEGINS HERE -->
 							<form id="submitForm" class="form-horizontal" action="${base}/news/findnewsView.do" method="POST">
 								<input type="hidden" id="content" name="content" value=""/>
+								<input type="hidden" id="pic" name="pic" value=""/>
 								<!-- <div class="control-group">	
 								<label class="control-label" for="form-field-2">所属赛事</label> 	
 									<div class="controls">	
@@ -44,6 +45,21 @@
 									<label class="control-label" for="form-field-1">标题</label>
 									<div class="controls">
 										<input type="text" name="title" class="span10" id="form-field-1" placeholder="动态标题">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="form-field-2">图片</label>
+									<div class="controls">
+										<input multiple type="file" id="id-input-file-3"/>
+									</div>
+									<div class="controls">
+										<img id="img_show" alt="" src="" style="width:60px;height:60px;"/>
+									</div>									
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="form-field-1">简介</label>
+									<div class="controls">
+										<textarea class="span10" name="summary" id="form-field-8" placeholder="请输入简介"></textarea>
 									</div>
 								</div>
 								<div class="control-group">
@@ -135,6 +151,50 @@
 					} 
 				}
 			}); */
+			//图片上传
+			$("#id-input-file-3").uploadify({
+	            'uploader': '${base}/plugins/uploadify/uploadify.swf',
+	            'script':"${base}/file/upload.htm;jsessionid=${sessionId!}",
+	            'cancelImg': '${base}/plugins/uploadify/cancel.png',
+	            'queueID': 'fileQueue',
+	            'auto': true,
+	            //'multi':true,
+	            'buttonText': 'select',
+	            'simUploadLimit' : 1,
+	            'sizeLimit':1024*1024*10,
+	            'queueSizeLimit' : 1,
+	            'fileDesc' : 'pictures',
+	            'fileExt': '*.gif;*.png;*.jpg',
+	            onComplete: function(event, queueID, fileObj, response, data) {
+	                var dataObj = eval("("+response+")");
+	                if(dataObj.status == 200){
+	                	parent.layer.msg('图片上传成功', {
+							shade: [0.9, '#000'],
+						    icon: 6,
+						    time: 800 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							$("#img_show").attr("src",'${imgurl}'+dataObj.filePath);
+						});                
+	               		//console.log(dataObj.filePath);
+						$("[name=pic]").val(dataObj.filePath);
+	                }else{
+	                	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的图片", {
+	        				shade: [0.9, '#000'],
+	        			    icon: 3,
+	        			    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+	        			}); 
+	                }
+	            },
+	            onSelect:function(){
+	            },
+	            onError: function(event, queueID, fileObj) {
+	            	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的图片", {
+	    				shade: [0.9, '#000'],
+	    			    icon: 3,
+	    			    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+	    			}); 
+	            }
+	        });
 			
 			$("#savebutton").on('click',function(){
 				var content = UM.getEditor('editor').getContent();
