@@ -46,6 +46,10 @@ public class CompetitionNewsDto implements Serializable{
 	
 	@Getter
 	@Setter
+	private String pic;
+	
+	@Getter
+	@Setter
     private String createAdminId;
 	
 	@Getter
