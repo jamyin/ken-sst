@@ -87,6 +87,8 @@
 												class="lbl"></span></label></th>
 										<th style="width:200px;" class="center">赛事名称</th>
 										<th style="width:80px;" class="center">动态标题</th>
+										<th style="width:80px;" class="center">动态图片</th>
+										<th style="width:80px;" class="center">动态简介</th>
 										<th style="width:80px;" class="center">创建人</th>
 										<th style="width:100px;"><i class="icon-time hidden-phone"></i> 创建时间</th>
 										<th style="width:150px;">操作</th>
@@ -101,6 +103,8 @@
 												del-id="${(page.id)!}" /><span class="lbl"></span></label></td>
 										<td class='hidden-phone'>${(page.compName)!}</td>
 										<td class='hidden-phone'>${(page.title)!}</td>
+										<td><img style="width: 45px; height: 45px;" src="${imgurl}${(page.pic)!}"></td>
+										<td class='hidden-phone'>${(page.summary)!}</td>
 										<td class='hidden-phone'>${(page.createAdminName)!}</td>
 										<td class='hidden-phone'>${(page.createTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>
 										<td>
