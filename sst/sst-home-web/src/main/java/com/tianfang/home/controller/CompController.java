@@ -345,6 +345,66 @@ public class CompController extends BaseController {
 	}
 	
 	/**
+	 * 通过比赛日期查询当天的比赛
+	 * @param compId
+	 * @param date
+	 * @return
+	 * @author xiang_wang
+	 * 2016年2月22日下午4:07:47
+	 */
+	@RequestMapping(value = "roundsByDate")
+	@ResponseBody
+	public Response<CompRound> roundsByDate(String compId, String matchDate){
+		Response<CompRound> response = new Response<CompRound>();
+		if (StringUtils.isBlank(compId)){
+			response.setStatus(DataStatus.HTTP_FAILE);
+			response.setMessage("查询失败");
+			return response;
+		}
+		try {
+			CompRound datas = findCompRounds(compId, matchDate); 
+			response.setData(datas);
+			response.setStatus(DataStatus.HTTP_SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(DataStatus.HTTP_FAILE);
+			response.setMessage("查询失败");
+			logger.error(e.getMessage());
+		}
+		return response;
+	}
+	
+	/**
+	 * 根据赛事场次id查询比赛
+	 * @param compId
+	 * @param roundId
+	 * @return
+	 * @author xiang_wang
+	 * 2016年2月22日下午4:14:21
+	 */
+	@RequestMapping(value = "roundsByRoundId")
+	@ResponseBody
+	public Response<CompRound> roundsByRoundId(String compId, String roundId){
+		Response<CompRound> response = new Response<CompRound>();
+		if (StringUtils.isBlank(compId)){
+			response.setStatus(DataStatus.HTTP_FAILE);
+			response.setMessage("查询失败");
+			return response;
+		}
+		try {
+			CompRound datas = getCompRoundsByCroundId(compId, roundId); 
+			response.setData(datas);
+			response.setStatus(DataStatus.HTTP_SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(DataStatus.HTTP_FAILE);
+			response.setMessage("查询失败");
+			logger.error(e.getMessage());
+		}
+		return response;
+	}
+	
+	/**
 	 * 比赛详情接口
 	 * @param id
 	 * @return
@@ -506,5 +566,78 @@ public class CompController extends BaseController {
 		}
 		
 		return crs;
+	}
+	
+	/**
+	 * 根据日期获得当天的比赛数据
+	 * @param compId
+	 * @param date
+	 * @return
+	 * @author xiang_wang
+	 * 2016年2月22日下午4:05:24
+	 */
+	private CompRound findCompRounds(String compId, String matchDate) {
+		CompRound result = new CompRound();
+		List<CompetitionRoundDto> rounds = roundSerivce.findRoundByCompId(compId);
+		if (null != rounds && rounds.size() > 0){
+			CompetitionMatchDto params = new CompetitionMatchDto();
+			params.setCompId(compId);
+			params.setMatchDateStr(matchDate);
+			List<CompetitionMatchDto> matchs = matchService.findCompetitionMatch(params);
+			if (null != matchs && matchs.size() > 0){
+				String croundId = matchs.get(0).getCroundId();
+				result.setMatchs(matchs);
+				for (int i = 0, len = rounds.size(); i < len; i++ ){
+					if (croundId.equals(rounds.get(i).getId())){
+						result.setId(croundId);
+						result.setName(rounds.get(i).getName());
+						if (i >= 1){
+							result.setBefore(rounds.get(i-1).getId());
+						}
+						if (i < len - 1){
+							result.setBefore(rounds.get(i+1).getId());
+						}
+					}
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 根据赛事场次id查询比赛
+	 * @param compId
+	 * @param croundId
+	 * @return
+	 * @author xiang_wang
+	 * 2016年2月22日下午4:12:50
+	 */
+	private CompRound getCompRoundsByCroundId(String compId, String croundId) {
+		CompRound result = new CompRound();
+		List<CompetitionRoundDto> rounds = roundSerivce.findRoundByCompId(compId);
+		if (null != rounds && rounds.size() > 0){
+			CompetitionMatchDto params = new CompetitionMatchDto();
+			params.setCompId(compId);
+			params.setCroundId(croundId);
+			List<CompetitionMatchDto> matchs = matchService.findCompetitionMatch(params);
+			if (null != matchs && matchs.size() > 0){
+				result.setMatchs(matchs);
+				for (int i = 0, len = rounds.size(); i < len; i++ ){
+					if (croundId.equals(rounds.get(i).getId())){
+						result.setId(croundId);
+						result.setName(rounds.get(i).getName());
+						if (i >= 1){
+							result.setBefore(rounds.get(i-1).getId());
+						}
+						if (i < len - 1){
+							result.setBefore(rounds.get(i+1).getId());
+						}
+					}
+				}
+			}
+		}
+		
+		return result;
 	}
 }

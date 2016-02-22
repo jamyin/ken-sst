@@ -35,4 +35,18 @@ public class CompRound implements Serializable {
 	@Getter
 	@Setter
 	private List<CompetitionMatchDto> matchs;
+	
+	/**
+	 * 上一轮id
+	 */
+	@Getter
+	@Setter
+	private String before;
+	
+	/**
+	 * 下一轮id
+	 */
+	@Getter
+	@Setter
+	private String next;
 }

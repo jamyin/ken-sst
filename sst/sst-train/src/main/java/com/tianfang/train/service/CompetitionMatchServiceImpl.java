@@ -116,8 +116,7 @@ public class CompetitionMatchServiceImpl implements ICompetitionMatchService {
 	 */
 	@Override
 	public List<CompetitionMatchDto> findCompetitionMatch(CompetitionMatchDto competitionMatchDto) {
-		CompetitionMatch competitionMatch = BeanUtils.createBeanByTarget(competitionMatchDto, CompetitionMatch.class);
-		List<CompetitionMatch> list = competitionMatchDao.selectByParameter(competitionMatch);
+		List<CompetitionMatch> list = competitionMatchDao.selectByParameter(competitionMatchDto);
 		List<CompetitionMatchDto> dtoList = BeanUtils.createBeanListByTarget(list, CompetitionMatchDto.class);
 		return dtoList;
 	}
@@ -128,9 +127,8 @@ public class CompetitionMatchServiceImpl implements ICompetitionMatchService {
 	 */
 	@Override
 	public PageResult<CompetitionMatchDto> findCompetitionMatchViewByPage(CompetitionMatchDto competitionMatchDto , PageQuery page) {
-		CompetitionMatch competitionMatch = BeanUtils.createBeanByTarget(competitionMatchDto, CompetitionMatch.class);
-		List<CompetitionMatch> list = competitionMatchDao.findCompetitionMatchViewByPage(competitionMatch,page);
-		int total = competitionMatchDao.selectAccount(competitionMatch);
+		List<CompetitionMatch> list = competitionMatchDao.findCompetitionMatchViewByPage(competitionMatchDto,page);
+		int total = competitionMatchDao.selectAccount(competitionMatchDto);
 		page.setTotal(total);
 		List<CompetitionMatchDto> dtoList = BeanUtils.createBeanListByTarget(list, CompetitionMatchDto.class);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
@@ -146,7 +144,7 @@ public class CompetitionMatchServiceImpl implements ICompetitionMatchService {
 	
 	@Override
 	public List<CompetitionMatchDto> findMatchByRoundId(String roundId) {
-		CompetitionMatch m = new CompetitionMatch();
+		CompetitionMatchDto m = new CompetitionMatchDto();
 		m.setCroundId(roundId);
 		List<CompetitionMatch> ms = competitionMatchDao.selectByParameter(m);
 		return PojoToDto(ms);

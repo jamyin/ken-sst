@@ -86,7 +86,7 @@ public interface ICompetitionMatchService {
 	 * @return
 	 */
 	List<CompetitionMatchDto> findCompetitionMatch(CompetitionMatchDto competitionMatchDto);
-
+	
 	/**
 	 * 后台比赛显示页面-分页
 	 * @author YIn
