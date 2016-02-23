@@ -87,8 +87,8 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "register")
 	@ResponseBody
-	public Response<UserDto> register(HttpSession session, UserDto dto, @RequestParam(value = "code", required = false) String code) {
-		Response<UserDto> result = new Response<UserDto>();
+	public Response<String> register(HttpSession session, UserDto dto, @RequestParam(value = "code", required = false) String code) {
+		Response<String> result = new Response<String>();
 		String md5oldPwd;// 获取页面上输入的密码并加密校验
 		try {
 			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPassword());
@@ -135,6 +135,7 @@ public class UserController extends BaseController{
 				if(loginUserDto != null){
 					redisTemplate.opsForValue().set(id, loginUserDto);
 				}
+				result.setData(user.getId());
 				result.setStatus(DataStatus.HTTP_SUCCESS);
 				result.setMessage("恭喜您注册成功！");
 				return result;
