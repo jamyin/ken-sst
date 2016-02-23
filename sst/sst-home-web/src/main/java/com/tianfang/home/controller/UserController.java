@@ -253,7 +253,7 @@ public class UserController extends BaseController{
 		Response<LoginUserDto> data = new Response<LoginUserDto>();
 		if(StringUtils.isEmpty(getSessionUserId())){
 			data.setStatus(DataStatus.HTTP_FAILE);
-			data.setMessage("用户未登录");
+			data.setMessage("用户不存在");
 			return data;
 		}
 		UserDto dto = null;
@@ -316,7 +316,7 @@ public class UserController extends BaseController{
 			}
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
        
         return result;
@@ -346,7 +346,7 @@ public class UserController extends BaseController{
 			}	
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	
     	return result;
@@ -379,7 +379,7 @@ public class UserController extends BaseController{
 			}	
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	
     	return result;
@@ -409,7 +409,7 @@ public class UserController extends BaseController{
 			}	
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	return result;
     }
@@ -448,7 +448,7 @@ public class UserController extends BaseController{
 			}	
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	
     	return result;
@@ -493,7 +493,7 @@ public class UserController extends BaseController{
 			}	
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	
     	return result;
@@ -529,7 +529,7 @@ public class UserController extends BaseController{
 			}	
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	
     	return result;
@@ -569,7 +569,7 @@ public class UserController extends BaseController{
 			}	
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	
     	return result;
@@ -599,7 +599,7 @@ public class UserController extends BaseController{
 			}	
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	
     	return result;
@@ -631,7 +631,7 @@ public class UserController extends BaseController{
 			}
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
         return result;
     }
@@ -664,7 +664,7 @@ public class UserController extends BaseController{
     		}
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	return result;
     }
@@ -693,7 +693,7 @@ public class UserController extends BaseController{
     			
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	return result;
     }
@@ -722,7 +722,7 @@ public class UserController extends BaseController{
     			
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	return result;
     }
@@ -750,7 +750,7 @@ public class UserController extends BaseController{
 			}	
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	
     	return result;
@@ -779,7 +779,7 @@ public class UserController extends BaseController{
 			}	
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	
     	return result;
@@ -817,7 +817,7 @@ public class UserController extends BaseController{
 			}	
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登录");
+    		result.setMessage("用户不存在");
     	}
     	
     	return result;
