@@ -587,24 +587,13 @@ public class CompController extends BaseController {
 			if (null != matchs && matchs.size() > 0){
 				String croundId = matchs.get(0).getCroundId();
 				result.setMatchs(matchs);
-				for (int i = 0, len = rounds.size(); i < len; i++ ){
-					if (croundId.equals(rounds.get(i).getId())){
-						result.setId(croundId);
-						result.setName(rounds.get(i).getName());
-						if (i >= 1){
-							result.setBefore(rounds.get(i-1).getId());
-						}
-						if (i < len - 1){
-							result.setBefore(rounds.get(i+1).getId());
-						}
-					}
-				}
+				assemblyCompRound(result, rounds, croundId);
 			}
 		}
 		
 		return result;
 	}
-	
+
 	/**
 	 * 根据赛事场次id查询比赛
 	 * @param compId
@@ -623,21 +612,33 @@ public class CompController extends BaseController {
 			List<CompetitionMatchDto> matchs = matchService.findCompetitionMatch(params);
 			if (null != matchs && matchs.size() > 0){
 				result.setMatchs(matchs);
-				for (int i = 0, len = rounds.size(); i < len; i++ ){
-					if (croundId.equals(rounds.get(i).getId())){
-						result.setId(croundId);
-						result.setName(rounds.get(i).getName());
-						if (i >= 1){
-							result.setBefore(rounds.get(i-1).getId());
-						}
-						if (i < len - 1){
-							result.setBefore(rounds.get(i+1).getId());
-						}
-					}
-				}
+				assemblyCompRound(result, rounds, croundId);
 			}
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * 组装赛事场次数据,上一轮和下一轮id
+	 * @param result
+	 * @param rounds
+	 * @param croundId
+	 * @author xiang_wang
+	 * 2016年2月23日上午9:21:55
+	 */
+	private void assemblyCompRound(CompRound result, List<CompetitionRoundDto> rounds, String croundId) {
+		for (int i = 0, len = rounds.size(); i < len; i++ ){
+			if (croundId.equals(rounds.get(i).getId())){
+				result.setId(croundId);
+				result.setName(rounds.get(i).getName());
+				if (i >= 1){
+					result.setBefore(rounds.get(i-1).getId());
+				}
+				if (i < len - 1){
+					result.setNext(rounds.get(i+1).getId());
+				}
+			}
+		}
 	}
 }
