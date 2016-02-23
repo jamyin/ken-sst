@@ -82,7 +82,7 @@
 									</td>
 									<td>${(page.nickName)!}</td>
 									<td>${(page.mobile)!}</td>
-									<td><#if page.sex == 0>男<#else>女</#if></td>
+									<td><#if page.gender??><#if page.gender == 1>男<#else>女</#if></#if></td>
 									<td>${(page.address)!}</td>
 									<td>${(page.birthday)!}</td>
 									<td  class='hidden-phone'>${(page.createTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>

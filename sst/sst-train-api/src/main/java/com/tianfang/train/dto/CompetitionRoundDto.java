@@ -3,6 +3,8 @@ package com.tianfang.train.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +20,7 @@ import lombok.Setter;
  * <p>修改时间：</p>
  * <p>修改备注：</p>
  */
+@JsonIgnoreProperties({"pageRanking","createAdminId","createAdminName","createTime","lastUpdateTime","stat","homeTeamId","visitingTeamId","homeScore","visitingScore","matchType","matchDateStr","matchTimeStr", "peopleType"})
 public class CompetitionRoundDto implements Serializable{
 
 	private static final long serialVersionUID = 2243909039276061203L;
@@ -79,6 +82,13 @@ public class CompetitionRoundDto implements Serializable{
     @Getter
     @Setter
     private Integer stat;
+    
+    /**
+     *  比赛几人制(1-11人制,2-7人制,3-5人制)
+     */
+    @Getter
+    @Setter
+    private Integer peopleType;
     
     @Getter
     @Setter

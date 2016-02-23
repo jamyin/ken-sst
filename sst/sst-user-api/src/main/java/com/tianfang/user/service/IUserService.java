@@ -27,7 +27,7 @@ public interface IUserService {
 	
 	int update(UserDto dto) throws Exception;
 	
-	UserDto getUserById(String id) throws Exception;
+	UserDto getUserById(String id);
 	
 	List<UserDto> findUserByParam(UserDto dto) throws Exception;
 	

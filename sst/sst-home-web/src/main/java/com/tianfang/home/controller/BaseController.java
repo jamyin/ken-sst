@@ -35,10 +35,10 @@ public class BaseController {
 	 * 2016年1月18日下午4:45:10
 	 * @throws Exception 
 	 */
-	public UserDto getUserByCache(String userId) throws Exception{	
+	public UserDto getUserByCache(String userId){	
 		String keyCode = "SSTUSER"+userId;
 		UserDto dto = null;
-		if(redisTemplate.opsForValue().get(keyCode)!=null){
+		if(null != redisTemplate.opsForValue().get(keyCode)){
 			dto = (UserDto)redisTemplate.opsForValue().get(keyCode);
 		}else{
 			dto = iUserService.getUserById(userId);

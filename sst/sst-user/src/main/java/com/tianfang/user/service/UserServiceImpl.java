@@ -54,7 +54,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public UserDto getUserById(String id) throws Exception {
+	public UserDto getUserById(String id) {
 		checkIdIsNullException(id);
 		return BeanUtils.createBeanByTarget(userDao.selectByPrimaryKey(id),UserDto.class);
 	}

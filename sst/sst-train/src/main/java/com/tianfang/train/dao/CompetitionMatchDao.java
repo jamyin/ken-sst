@@ -1,5 +1,6 @@
 package com.tianfang.train.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import lombok.Getter;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.mybatis.MyBatisBaseDao;
+import com.tianfang.common.util.DateUtils;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.train.dto.CompetitionMatchDto;
 import com.tianfang.train.mapper.CompetitionMatchExMapper;
 import com.tianfang.train.mapper.CompetitionMatchMapper;
 import com.tianfang.train.pojo.CompetitionMatch;
@@ -32,7 +35,7 @@ public class CompetitionMatchDao extends MyBatisBaseDao<CompetitionMatch> {
 	 * @author YIn
 	 * @time:2016年1月15日 下午1:24:21
 	 */
-	public List<CompetitionMatch> selectByParameter(CompetitionMatch competitionMatch) {
+	public List<CompetitionMatch> selectByParameter(CompetitionMatchDto competitionMatch) {
 		CompetitionMatchExample example = new CompetitionMatchExample();
 		CompetitionMatchExample.Criteria criteria = example.createCriteria();
         assemblyParams(competitionMatch, criteria);   //组装参数
@@ -45,7 +48,7 @@ public class CompetitionMatchDao extends MyBatisBaseDao<CompetitionMatch> {
 	 * @author YIn
 	 * @time:2016年1月15日 下午1:27:43
 	 */
-	private void assemblyParams(CompetitionMatch competitionMatch, Criteria criteria) {
+	private void assemblyParams(CompetitionMatchDto competitionMatch, Criteria criteria) {
 		if (null != competitionMatch){
 			if (StringUtils.isNotBlank(competitionMatch.getId())){
 	    		criteria.andIdEqualTo(competitionMatch.getId());
@@ -77,6 +80,9 @@ public class CompetitionMatchDao extends MyBatisBaseDao<CompetitionMatch> {
 			if (null != competitionMatch.getMatchType()){
 				criteria.andMatchTypeEqualTo(competitionMatch.getMatchType().intValue());
 			}
+			if (StringUtils.isNotBlank(competitionMatch.getMatchDateStr())){
+				criteria.andMatchTimeBetween(DateUtils.parse(competitionMatch.getMatchDateStr(), "yyyy-MM-dd"), new Date(((DateUtils.parse(competitionMatch.getMatchDateStr(), "yyyy-MM-dd")).getTime()+86400000L)));
+			}
 		}
 		
     	criteria.andStatEqualTo(DataStatus.ENABLED);
@@ -87,7 +93,7 @@ public class CompetitionMatchDao extends MyBatisBaseDao<CompetitionMatch> {
 	 * @author YIn
 	 * @time:2016年1月15日 下午2:43:29
 	 */
-	public List<CompetitionMatch> findCompetitionMatchViewByPage(CompetitionMatch competitionMatch, PageQuery page) {
+	public List<CompetitionMatch> findCompetitionMatchViewByPage(CompetitionMatchDto competitionMatch, PageQuery page) {
 		CompetitionMatchExample example = new CompetitionMatchExample();
 		CompetitionMatchExample.Criteria criteria = example.createCriteria();
 		example.setOrderByClause(" match_time asc limit " + page.getStartNum() +"," + page.getPageSize());
@@ -101,7 +107,7 @@ public class CompetitionMatchDao extends MyBatisBaseDao<CompetitionMatch> {
 	 * @author YIn
 	 * @time:2016年1月15日 下午2:43:59
 	 */
-	public int selectAccount(CompetitionMatch competitionMatch) {
+	public int selectAccount(CompetitionMatchDto competitionMatch) {
 		CompetitionMatchExample example = new CompetitionMatchExample();
 		CompetitionMatchExample.Criteria criteria = example.createCriteria();
         assemblyParams(competitionMatch, criteria);   //组装参数
