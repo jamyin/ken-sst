@@ -613,6 +613,7 @@ public class UserController extends BaseController{
      * @throws Exception
      */
 	@RequestMapping(value = "list")
+	@ResponseBody
     public Response<PageResult<MemoDto>> findpage(MemoDto dto, ExtPageQuery page) throws Exception {
 		Response<PageResult<MemoDto>> result = new Response<PageResult<MemoDto>>();
 		PageResult<MemoDto> data = memoService.findMemoByParam(dto, page.changeToPageQuery());
