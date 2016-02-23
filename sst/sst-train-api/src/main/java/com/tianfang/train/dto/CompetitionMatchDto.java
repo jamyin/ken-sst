@@ -86,6 +86,13 @@ public class CompetitionMatchDto implements Serializable{
 	@Getter
 	@Setter
 	private String address;
+	
+	/**
+	 * 比赛几人制(1-11人制,2-7人制,3-5人制)
+	 */
+	@Getter
+	@Setter
+	private Integer peopleType;
 
 	@Getter
 	@Setter

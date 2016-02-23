@@ -195,6 +195,7 @@ public class CompetitionRoundServiceImpl implements ICompetitionRoundService {
 		int[] visitingScores = dto.getVisitingScore();
 		String[] matchDateStrs = dto.getMatchDateStr();
 		String[] matchTimeStrs = dto.getMatchTimeStr();
+		Integer peopleType = dto.getPeopleType();
 		if (null == matchTypes || null == homeTeamIds || null == visitingTeamIds || null == homeScores 
 				|| null == visitingScores || null == matchDateStrs || null == matchTimeStrs){
 			throw new RuntimeException(MSG_MATCH_ERROR);
@@ -246,6 +247,7 @@ public class CompetitionRoundServiceImpl implements ICompetitionRoundService {
 			match.setMatchType(matchTypes[i]);
 			match.setCreateAdminId(adminId);
 			match.setCreateAdminName(adminName);
+			match.setPeopleType(peopleType);
 			
 			matchs.add(match);
 		}

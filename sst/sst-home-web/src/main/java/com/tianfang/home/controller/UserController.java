@@ -203,6 +203,7 @@ public class UserController extends BaseController{
 		if(user != null){
 			redisTemplate.opsForValue().set(dto.getId(), loginUserDto);
 		}
+		result.setData(loginUserDto.getId());
 		result.setStatus(DataStatus.HTTP_SUCCESS);
 		result.setMessage("用户登录成功！");
 		return result;
@@ -299,8 +300,8 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="friend/list")
     @ResponseBody
-    public Response<List<FriendApp>> findFriends() {
-    	LoginUserDto dto = getLoginUser();
+    public Response<List<FriendApp>> findFriends(String userId) {
+    	UserDto dto = getUserByCache(userId);
     	Response<List<FriendApp>> result = new Response<List<FriendApp>>();
     	if (null != dto){
 			try {
@@ -329,8 +330,8 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="plan/byDate")
     @ResponseBody
-    public Response<List<PlanDto>> findPlansByDate(String planTimeStr){
-    	LoginUserDto dto = getLoginUser();
+    public Response<List<PlanDto>> findPlansByDate(String planTimeStr, String userId){
+    	UserDto dto = getUserByCache(userId);
     	Response<List<PlanDto>> result = new Response<List<PlanDto>>();
     	if (null != dto){
     		try {
@@ -360,8 +361,8 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="plan/byParams")
     @ResponseBody
-    public Response<PageResult<PlanDto>> findPlansByParams(PlanDto dto, PageQuery query){
-    	LoginUserDto user = getLoginUser();
+    public Response<PageResult<PlanDto>> findPlansByParams(PlanDto dto, PageQuery query, String userId){
+    	UserDto user = getUserByCache(userId);
     	Response<PageResult<PlanDto>> result = new Response<PageResult<PlanDto>>();
     	if (null != user){
     		try {
@@ -392,8 +393,8 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="plan/detail")
     @ResponseBody
-    public Response<PlanDto> getPlan(String id){
-    	LoginUserDto user = getLoginUser();
+    public Response<PlanDto> getPlan(String id, String userId){
+    	UserDto user = getUserByCache(userId);
     	Response<PlanDto> result = new Response<PlanDto>();
     	if (null != user){
 	    	try {
@@ -421,8 +422,8 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="plan/add")
     @ResponseBody
-    public Response<String> addPlan(PlanDto dto){
-    	LoginUserDto user = getLoginUser();
+    public Response<String> addPlan(PlanDto dto, String userId){
+    	UserDto user = getUserByCache(userId);
     	Response<String> result = new Response<String>();
     	if (null != user){
     		try {
@@ -461,8 +462,8 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="plan/update")
     @ResponseBody
-    public Response<String> updatePlan(PlanDto dto){
-    	LoginUserDto user = getLoginUser();
+    public Response<String> updatePlan(PlanDto dto, String userId){
+    	UserDto user = getUserByCache(userId);
     	Response<String> result = new Response<String>();
     	if (null != user){
     		try {
@@ -506,8 +507,8 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="plan/del")
     @ResponseBody
-    public Response<String> delPlan(String id){
-    	LoginUserDto user = getLoginUser();
+    public Response<String> delPlan(String id, String userId){
+    	UserDto user = getUserByCache(userId);
     	Response<String> result = new Response<String>();
     	if (null != user){
     		try {
@@ -543,8 +544,8 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="plan/delAll")
     @ResponseBody
-    public Response<String> delAllPlan(Integer isFinish, String year){
-    	LoginUserDto user = getLoginUser();
+    public Response<String> delAllPlan(Integer isFinish, String year, String userId){
+    	UserDto user = getUserByCache(userId);
     	Response<String> result = new Response<String>();
     	if (null != user){
     		try {
@@ -582,13 +583,13 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="findMemos")
     @ResponseBody
-    public Response<List<MemoDto>> findMemos(){
-    	LoginUserDto dto = getLoginUser();
+    public Response<List<MemoDto>> findMemos(String userId){
+    	UserDto user = getUserByCache(userId);
     	Response<List<MemoDto>> result = new Response<List<MemoDto>>();
-    	if (null != dto){
+    	if (null != user){
     		try {
     			result.setStatus(DataStatus.HTTP_SUCCESS);
-				result.setData(memoService.findMemoByUserId(dto.getId()));
+				result.setData(memoService.findMemoByUserId(user.getId()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
@@ -615,15 +616,21 @@ public class UserController extends BaseController{
 	@RequestMapping(value = "list")
     public Response<PageResult<MemoDto>> findpage(MemoDto dto, ExtPageQuery page) throws Exception {
 		Response<PageResult<MemoDto>> result = new Response<PageResult<MemoDto>>();
-		PageResult<MemoDto> data = memoService.findMemoByParam(dto, page.changeToPageQuery());
-		if(data != null){
-			result.setStatus(DataStatus.HTTP_SUCCESS);
-			result.setMessage("查询成功");
-			result.setData(data);
-		}else{
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("查询失败");
-		}
+		UserDto user = getUserByCache(dto.getUserId());
+		if (null != user){
+			PageResult<MemoDto> data = memoService.findMemoByParam(dto, page.changeToPageQuery());
+			if(data != null){
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+				result.setMessage("查询成功");
+				result.setData(data);
+			}else{
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("查询失败");
+			}
+    	}else{
+    		result.setStatus(DataStatus.HTTP_FAILE);
+    		result.setMessage("用户未登录");
+    	}
         return result;
     }
     
@@ -637,9 +644,9 @@ public class UserController extends BaseController{
     @ResponseBody
     public Response<String> addMemos(MemoDto memoDto){
     	Response<String> result = new Response<String>();
-    	LoginUserDto dto = getLoginUser();
+    	UserDto user = getUserByCache(memoDto.getUserId());
     	String id = "";
-    	if (null != dto){
+    	if (null != user){
     		try {
 				id = memoService.save(memoDto);
 			} catch (Exception e) {
@@ -670,8 +677,8 @@ public class UserController extends BaseController{
     @ResponseBody
     public Response<String> updateMemos(MemoDto memoDto){
     	Response<String> result = new Response<String>();
-    	LoginUserDto dto = getLoginUser();
-    	if (null != dto){
+    	UserDto user = getUserByCache(memoDto.getUserId());
+    	if (null != user){
     		try {
 				memoService.update(memoDto);
 				result.setStatus(DataStatus.HTTP_SUCCESS);
@@ -697,10 +704,10 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="delMemos")
     @ResponseBody
-    public Response<String> delMemos(String id){
+    public Response<String> delMemos(String id, String userId){
     	Response<String> result = new Response<String>();
-    	LoginUserDto dto = getLoginUser();
-    	if (null != dto){
+    	UserDto user = getUserByCache(userId);
+    	if (null != user){
     		try {
 				memoService.del(id);
 				result.setStatus(DataStatus.HTTP_SUCCESS);
@@ -726,13 +733,13 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="myGroups")
     @ResponseBody
-    public Response<List<GroupDto>> myGroups(){
-    	LoginUserDto dto = getLoginUser();
+    public Response<List<GroupDto>> myGroups(String userId){
+    	UserDto user = getUserByCache(userId);
     	Response<List<GroupDto>> result = new Response<List<GroupDto>>();
-    	if (null != dto){
+    	if (null != user){
     		try {
     			result.setStatus(DataStatus.HTTP_SUCCESS);
-				result.setData(groupService.findGroupByUserId(dto.getId()));
+				result.setData(groupService.findGroupByUserId(userId));
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
@@ -755,13 +762,13 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="myCares")
     @ResponseBody
-    public Response<List<FriendApp>> myCares(){
-    	LoginUserDto dto = getLoginUser();
+    public Response<List<FriendApp>> myCares(String userId){
+    	UserDto user = getUserByCache(userId);
     	Response<List<FriendApp>> result = new Response<List<FriendApp>>();
-    	if (null != dto){
+    	if (null != user){
     		try {
     			result.setStatus(DataStatus.HTTP_SUCCESS);
-				result.setData(userService.findCareFriends(dto.getId()));
+				result.setData(userService.findCareFriends(userId));
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
@@ -784,16 +791,16 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value="teamBook")
     @ResponseBody
-    public Response<List<TeamDto>> teamBook(){
-    	LoginUserDto dto = getLoginUser();
+    public Response<List<TeamDto>> teamBook(String userId){
+    	UserDto user = getUserByCache(userId);
     	Response<List<TeamDto>> result = new Response<List<TeamDto>>();
-    	if (null != dto){
+    	if (null != user){
     		try {
     			result.setStatus(DataStatus.HTTP_SUCCESS);
     			List<TeamDto> list = teamService.findAll();
-    			if (StringUtils.isNotBlank(dto.getTeamId())){
+    			if (StringUtils.isNotBlank(user.getTeamId())){
     				for (TeamDto team : list){
-        				if (dto.getTeamId().equals(team.getId())){
+        				if (user.getTeamId().equals(team.getId())){
         					team.setChecked(true);
         					break;
         				}

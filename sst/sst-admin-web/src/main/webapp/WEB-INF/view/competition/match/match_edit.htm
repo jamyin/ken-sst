@@ -72,6 +72,18 @@
 										</select>
 									</div>									
 								</div>
+								<div class="control-group">
+									<label class="course_add_label">比赛几人制</label>
+									<div class="course_add_input">
+										<select class="chzn-select" id="peopleType" name="peopleType" data-placeholder="比赛几人制" style="vertical-align: top; width: 120px;">
+												<#if peopleTypes??> 
+													<#list peopleTypes as type>
+													<option <#if match.peopleType == type.getIndex()>selected="true"</#if> value="${(type.getIndex())!}">${(type.getValue())!}</option>
+													</#list> 
+												</#if>
+										</select>
+									</div>									
+								</div>
 								<div class="control-group" id="div_hs" <#if match.matchType == 0>style="display:none"</#if> >
 									<label class="course_add_label">主场得分</label>
 									<div class="course_add_input">

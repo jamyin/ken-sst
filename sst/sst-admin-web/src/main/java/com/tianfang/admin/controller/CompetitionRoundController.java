@@ -20,6 +20,7 @@ import com.tianfang.train.dto.CompetitionDto;
 import com.tianfang.train.dto.CompetitionMatchDto;
 import com.tianfang.train.dto.CompetitionRoundDto;
 import com.tianfang.train.dto.TeamDto;
+import com.tianfang.train.enums.PeopleType;
 import com.tianfang.train.enums.TeamType;
 import com.tianfang.train.service.ICompetitionMatchService;
 import com.tianfang.train.service.ICompetitionRoundService;
@@ -80,6 +81,7 @@ public class CompetitionRoundController extends BaseController{
 			mv.addObject("comp", comp);
 			mv.addObject("teams", teams);
 			mv.addObject("types", TeamType.values());
+			mv.addObject("peopleTypes", PeopleType.values());
 			mv.setViewName("/competition/round/selectTeam");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -116,6 +118,10 @@ public class CompetitionRoundController extends BaseController{
 			mv.addObject("teams", teams);
 			mv.addObject("matchs", matchs);
 			mv.addObject("types", TeamType.values());
+			mv.addObject("peopleTypes", PeopleType.values());
+			if (null != matchs && matchs.size() > 0){
+				mv.addObject("ptselected", matchs.get(0).getPeopleType());
+			}
 			mv.setViewName("/competition/round/edit");
 		} catch (Exception e) {
 			logger.error(e.getMessage());

@@ -40,10 +40,10 @@
 									<label class="course_add_label" for="form-input-readonly">性别</label>
 										<div class="course_add_input" id="form-radio-show">
 											<label class="span2">
-												<input name="sex" <#if datas.sex == 0 >checked="checked"</#if>  type="radio" value="0"/><span class="lbl">男</span>
+												<input name="gender" <#if datas.sex??><#if datas.sex == 1 >checked="checked"</#if></#if>  type="radio" value="0"/><span class="lbl">男</span>
 											</label>
 											<label class="span2">
-												<input name="sex" <#if datas.sex == 1 >checked="checked"</#if> type="radio" value="1"/><span class="lbl">女</span>
+												<input name="gender" <#if datas.sex??><#if datas.sex == 2 >checked="checked"</#if></#if> type="radio" value="1"/><span class="lbl">女</span>
 											</label>
 										</div>
 								</div>

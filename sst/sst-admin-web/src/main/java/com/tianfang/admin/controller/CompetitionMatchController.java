@@ -18,6 +18,7 @@ import com.tianfang.train.dto.CompetitionDto;
 import com.tianfang.train.dto.CompetitionMatchDto;
 import com.tianfang.train.dto.CompetitionRoundDto;
 import com.tianfang.train.dto.TeamDto;
+import com.tianfang.train.enums.PeopleType;
 import com.tianfang.train.enums.TeamType;
 import com.tianfang.train.service.ICompetitionMatchService;
 import com.tianfang.train.service.ICompetitionRoundService;
@@ -62,6 +63,7 @@ public class CompetitionMatchController extends BaseController {
 		mv.addObject("round", round);
 		mv.addObject("teams", teams);
 		mv.addObject("types", TeamType.values());
+		mv.addObject("peopleTypes", PeopleType.values());
 		mv.setViewName("/competition/match/match_add");
 		return mv;
 	}
@@ -139,6 +141,7 @@ public class CompetitionMatchController extends BaseController {
 		mv.addObject("match", match);
 		mv.addObject("teams", teams);
 		mv.addObject("types", TeamType.values());
+		mv.addObject("peopleTypes", PeopleType.values());
 		mv.setViewName("/competition/match/match_edit");
 		return mv;
 	}
