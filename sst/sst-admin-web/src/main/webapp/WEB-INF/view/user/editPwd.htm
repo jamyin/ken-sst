@@ -23,13 +23,13 @@
 								<div class="control-group">
 										<label class="course_add_label" for="form-field-1">密码</label>
 										<div class="course_add_input">
-											<input type="password" name="pwd"  id="form-field-1" placeholder="输入密码">
+											<input type="password" name="password"  id="form-field-1" placeholder="输入密码">
 										</div>									
 								</div>
 								<div class="control-group">
 										<label class="course_add_label" for="form-field-1">确认密码</label>
 										<div class="course_add_input">
-											<input type="password" name="confirmPwd"  id="form-field-1" placeholder="确认密码">
+											<input type="password" name="confirmPassword"  id="form-field-1" placeholder="确认密码">
 										</div>									
 								</div>
 								<div class="form-actions">
@@ -128,15 +128,15 @@
 			});
 			
 			$("#savebutton").on('click',function(){
-				if (null == $("[name=pwd]").val() || '' == $("[name=pwd]").val()) {
+				if (null == $("[name=password]").val() || '' == $("[name=password]").val()) {
 					layer.alert('密码不能为空~', { icon: 7 });
 					return;
 				}
-				if (null == $("[name=confirmPwd]").val() || '' == $("[name=confirmPwd]").val()) {
+				if (null == $("[name=confirmPassword]").val() || '' == $("[name=confirmPassword]").val()) {
 					layer.alert('确认密码不能为空~', { icon: 7 });
 					return;
 				}
-				if ($("[name=pwd]").val() != $("[name=confirmPwd]").val()) {
+				if ($("[name=password]").val() != $("[name=confirmPassword]").val()) {
 					layer.alert('密码不一致，请重新输入~', { icon: 7 });
 					return;
 				}
