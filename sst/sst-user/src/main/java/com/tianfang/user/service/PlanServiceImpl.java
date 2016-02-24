@@ -28,8 +28,11 @@ public class PlanServiceImpl implements IPlanService {
 		Plan m = BeanUtils.createBeanByTarget(dto, Plan.class);
 		String id = UUIDGenerator.getUUID();
 		m.setId(id);
-		planDao.insertSelective(m);
-		return id;
+		int flag = planDao.insertSelective(m);
+		if(flag > 0){
+			return id;
+		}
+		return "";
 	}
 
 	@Override

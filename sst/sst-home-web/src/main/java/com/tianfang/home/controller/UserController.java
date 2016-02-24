@@ -437,8 +437,9 @@ public class UserController extends BaseController{
     			}
     			Date planTime = DateUtils.parse(dto.getPlanTimeStr(), Y_M_D_H_M);
     			dto.setPlanTime(planTime);
-    			planService.save(dto);
+    			String id = planService.save(dto);
     			result.setStatus(DataStatus.HTTP_SUCCESS);
+    			result.setData(id);
     			result.setMessage("添加成功!");
 			} catch (Exception e) {
 				e.printStackTrace();
