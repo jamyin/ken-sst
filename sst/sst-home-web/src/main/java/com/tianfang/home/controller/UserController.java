@@ -476,14 +476,11 @@ public class UserController extends BaseController{
     			}
     			dto.setUserId(user.getId());
     			dto.setUserName(user.getNickName());
-    			if (StringUtils.isBlank(dto.getPlanTimeStr())){
-    				result.setStatus(DataStatus.HTTP_FAILE);
-    	    		result.setMessage("时间参数异常!");
-    	    		return result;
+    			if (StringUtils.isNotBlank(dto.getPlanTimeStr())){
+    	    		Date planTime = DateUtils.parse(dto.getPlanTimeStr(), Y_M_D_H_M);
+    	    		dto.setPlanTime(planTime);
     			}
-    			Date planTime = DateUtils.parse(dto.getPlanTimeStr(), Y_M_D_H_M);
-    			dto.setPlanTime(planTime);
-    			planService.save(dto);
+    			planService.update(dto);
     			result.setStatus(DataStatus.HTTP_SUCCESS);
     			result.setMessage("更新成功!");
 			} catch (Exception e) {
