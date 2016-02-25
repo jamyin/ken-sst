@@ -3,6 +3,8 @@ package com.tianfang.message.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +20,7 @@ import lombok.Setter;
  * <p>修改时间：</p>
  * <p>修改备注：</p>
  */
+@JsonIgnoreProperties({"createAdminId", "createAdminName", "createTime", "lastUpdateTime", "stat"})
 public class ActivityDto implements Serializable{
 
 	private static final long serialVersionUID = -6789126849180106526L;
