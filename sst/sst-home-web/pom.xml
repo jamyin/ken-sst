@@ -183,7 +183,17 @@
 		    <groupId>net.coobird</groupId>  
 		    <artifactId>thumbnailator</artifactId>  
 		    <version>0.4.5</version>  
-		</dependency>  		
+		</dependency>
+		<dependency>
+			<groupId>com.tianfang</groupId>
+			<artifactId>sst-admin-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tianfang</groupId>
+			<artifactId>sst-admin</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>sst-admin</finalName>
