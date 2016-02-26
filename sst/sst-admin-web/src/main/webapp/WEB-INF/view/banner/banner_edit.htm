@@ -49,6 +49,26 @@
 										<input type="text" name="url" class="span10" id="form-field-1" placeholder="跳转路径"  value="${(bannerDto.url)!}"> 
 									</div>
 								</div>
+								<div class="control-group">	
+								<label class="control-label" for="form-field-2">类型</label> 
+									<div class="controls">
+									<select class="chzn-select" name="type" id="type" data-placeholder="请选择类型" style="vertical-align:top;width: 250px;">
+									<!-- <option value="">请选择赛事</option> -->
+									<#if bannerDto.type??>
+										<#if bannerDto.type == 2>
+								   			 <option value="1">新闻</option>
+										   	 <option value="2" selected='selected'>助手</option>
+										<#else>
+								   			 <option value="1" selected='selected'>新闻</option>
+										   	 <option value="2">助手</option>
+								   		</#if>
+								   	<#else>	
+								   		<option value="1" selected='selected'>新闻</option>
+										<option value="2">助手</option>
+									</#if>	
+									</select>
+			        				</div>
+		        				</div>
 								<div class="form-actions">
 									<button id='savebutton' class="btn btn-info" type="button"><i class="icon-ok"></i>保存</button>
 									&nbsp; &nbsp; &nbsp;
@@ -105,6 +125,13 @@
 		var um = UM.getEditor('editor');
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 		$(function() {
+			//日期框
+			$('.date-picker').datepicker();
+			
+			//下拉框
+			$(".chzn-select").chosen(); 
+			$(".chzn-select-deselect").chosen({allow_single_deselect:true}); 
+			
 			//图片上传
 			$("#id-input-file-3").uploadify({
 	            'uploader': '${base}/plugins/uploadify/uploadify.swf',

@@ -67,6 +67,7 @@
 										<th style="width:80px;" class="center">缩略图</th>
 										<th style="width:600px;" class="center">描述</th>
 										<th style="width:600px;" class="center">跳转路径</th>
+										<th style="width:80px;" class="center">类型</th>
 										<th style="width:80px;" class="center">创建人</th>
 										<!-- <th style="width:80px;" class="center">页面位置</th>
 										<th style="width:80px;" class="center">是否发布</th> -->
@@ -85,8 +86,17 @@
 										<!-- <td><a href='#' style="vertical-align: top; width: 250px;">${(page.title)!}</a></td> -->
 										<td class='hidden-phone'>${(page.title)!}</td>
 										<td><img style="width: 45px; height: 45px;" src="${imgurl}${(page.img)!}"/></td>
-										<td class='hidden-phone'>${(page.url)!}</td>
 										<td class='hidden-phone'>${(page.note)!}</td>
+										<td class='hidden-phone'>${(page.url)!}</td>
+										<td>
+										<#if page.type??>
+											<#if page.type ==1>
+												<span class="label label-success">新闻</span>
+											<#else>
+												<span class="label label-warning">助手</span>
+											</#if>
+										</#if>
+										</td>
 										<td class='hidden-phone'>${(page.createAdminName)!}</td>
 										<td class='hidden-phone'>${(page.createTimeStr)!}</td>
 										<td>
