@@ -73,5 +73,9 @@ public class BannerDto implements Serializable {
 	@Getter
 	@Setter
     private String note;   //轮播图描述
+	
+	@Getter
+	@Setter
+    private Integer type;   //类型:1:新闻;2助手
 
 }

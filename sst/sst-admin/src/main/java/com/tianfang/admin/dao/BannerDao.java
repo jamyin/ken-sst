@@ -45,6 +45,9 @@ public class BannerDao extends MyBatisBaseDao<Banner> {
 		if (StringUtils.isNotBlank(banner.getId())){
     		criteria.andIdEqualTo(banner.getId());
     	}
+		if (banner.getType() != null){
+    		criteria.andTypeEqualTo(banner.getType());      //1: 新闻  ;2 :助手
+    	}
     	if (StringUtils.isNotBlank(banner.getTitle())){
     		criteria.andTitleLike("%" +banner.getTitle()+"%");
     	}
