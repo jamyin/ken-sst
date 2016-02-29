@@ -27,6 +27,8 @@
     <module>sst-message-api</module>
     <module>sst-evaluat</module>
     <module>sst-evaluat-api</module>
+    <module>sst-business</module>
+    <module>sst-business-api</module>
   </modules>
   
   	  <properties>
