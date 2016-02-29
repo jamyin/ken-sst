@@ -61,6 +61,10 @@ public class EvaluatDao extends MyBatisBaseDao<Evaluat>{
     	if(params.getStat()!=null){
     		criteria.andStatEqualTo(DataStatus.ENABLED);	
     	}
+    	
+    	if(params.getEvaType()!=null){
+    		criteria.andEvaTypeEqualTo(params.getEvaType());
+    	}
 	}
 	
 	

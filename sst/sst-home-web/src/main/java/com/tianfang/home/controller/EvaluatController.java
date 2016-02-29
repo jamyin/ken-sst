@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
@@ -53,17 +54,34 @@ public class EvaluatController extends BaseController{
 	 */
 	@RequestMapping(value = "list")
 	@ResponseBody
-	public Response<PageResult<EvaluatDto>> evaList(EvaluatDto dto,PageQuery page){
-		Response<PageResult<EvaluatDto>> response = new Response<PageResult<EvaluatDto>>();
-		try {
-			PageResult<EvaluatDto> datas = iEvaluatService.findEvaluatBySql(dto, page);
-			response.setStatus(DataStatus.HTTP_SUCCESS);
-			response.setData(datas);
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setStatus(DataStatus.HTTP_FAILE);
-			response.setMessage("系统异常");
-			logger.error(e.getMessage());
+	public Response<Object> evaList(EvaluatDto dto,PageQuery page){
+		Response<Object> response = new Response<Object>();
+		if(Objects.equal(dto.getEvaType(),DataStatus.EVA_TWO)){
+			List<EvaluatDto> resultList = iEvaluatService.findEvaluatBySql(dto);
+			if(resultList!=null){
+				EvaluatDto evaDto = resultList.get(0);
+				String evaId = evaDto.getId();
+				try {
+					response.setStatus(DataStatus.HTTP_SUCCESS);
+					response.setData(initAllDataList(evaId));
+				} catch (Exception e) {
+					e.printStackTrace();
+					response.setStatus(DataStatus.HTTP_FAILE);
+					response.setMessage("系统异常");
+					logger.error(e.getMessage());
+				}				
+			}
+		}else{
+			try {
+				PageResult<EvaluatDto> datas = iEvaluatService.findEvaluatBySql(dto, page);
+				response.setStatus(DataStatus.HTTP_SUCCESS);
+				response.setData(datas);
+			} catch (Exception e) {
+				e.printStackTrace();
+				response.setStatus(DataStatus.HTTP_FAILE);
+				response.setMessage("系统异常");
+				logger.error(e.getMessage());
+			}			
 		}
 		return response;
 	}
@@ -75,22 +93,9 @@ public class EvaluatController extends BaseController{
 	@ResponseBody
 	public Response<List<EvaluatQuestionDto>> queryById(String evaId){
 		Response<List<EvaluatQuestionDto>> response = new Response<List<EvaluatQuestionDto>>();
-		
-		EvaluatQuestionDto eqDto = new EvaluatQuestionDto();
-		eqDto.setEvaId(evaId);
-		eqDto.setStat(DataStatus.ENABLED);
-		//列出测评对应的所有题目List信息
-		List<EvaluatQuestionDto> eqList = iEvaluatQuestionService.findEvaluatQuesBySql(eqDto);
-		//列出所有评测对应题目中所有的答案信息
-		EvaluatAnswerDto eaDto = new EvaluatAnswerDto();
-		eaDto.setEvaId(evaId);
-		eaDto.setStat(DataStatus.ENABLED);
-		List<EvaluatAnswerDto> eaList = iEvaluatAnswerService.findEvaluatAnswerBySql(eaDto);
-		
-		List<EvaluatQuestionDto> resultList = changeListToMap(eqList,eaList);		
 		try {
 			response.setStatus(DataStatus.HTTP_SUCCESS);
-			response.setData(resultList);
+			response.setData(initAllDataList(evaId));
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(DataStatus.HTTP_FAILE);
@@ -192,5 +197,21 @@ public class EvaluatController extends BaseController{
 		}else{
 			iEvaluatResultService.save(erdto);	
 		}
+	}
+	
+	private List<EvaluatQuestionDto> initAllDataList(String evaId){
+		
+		EvaluatQuestionDto eqDto = new EvaluatQuestionDto();
+		eqDto.setEvaId(evaId);
+		eqDto.setStat(DataStatus.ENABLED);
+		//列出测评对应的所有题目List信息
+		List<EvaluatQuestionDto> eqList = iEvaluatQuestionService.findEvaluatQuesBySql(eqDto);
+		//列出所有评测对应题目中所有的答案信息
+		EvaluatAnswerDto eaDto = new EvaluatAnswerDto();
+		eaDto.setEvaId(evaId);
+		eaDto.setStat(DataStatus.ENABLED);
+		List<EvaluatAnswerDto> eaList = iEvaluatAnswerService.findEvaluatAnswerBySql(eaDto);
+		
+		return changeListToMap(eqList,eaList);		
 	}
 }

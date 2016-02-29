@@ -11,7 +11,7 @@ import com.tianfang.common.util.RandomCode;
 public interface DataStatus
 {
 
-    
+	final static int EVA_TWO = 2;
 
     final static int ENABLED = 1;
 
