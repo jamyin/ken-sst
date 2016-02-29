@@ -97,13 +97,13 @@
 		</dependency>
 		<dependency>
             <groupId>com.tianfang</groupId>
-    		<artifactId>tianfang-common</artifactId>
+    		<artifactId>sst-common</artifactId>
     		<version>0.0.1-SNAPSHOT</version>       
         </dependency>
         
         <dependency>
             <groupId>com.tianfang</groupId>
-    		<artifactId>tianfang-train-api</artifactId>
+    		<artifactId>sst-train-api</artifactId>
     		<version>0.0.1-SNAPSHOT</version>       
         </dependency>
         
