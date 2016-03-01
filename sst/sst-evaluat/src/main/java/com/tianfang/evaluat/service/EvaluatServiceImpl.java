@@ -55,4 +55,10 @@ public class EvaluatServiceImpl implements IEvaluatService {
 		evaluatDao.updateByPrimaryKeySelective(evaluat);
 	}
 
+
+	@Override
+	public List<EvaluatDto> findEvaluatBySql(EvaluatDto dto) {
+		return evaluatDao.findEvaluatBySql(dto,null);
+	}
+
 }
