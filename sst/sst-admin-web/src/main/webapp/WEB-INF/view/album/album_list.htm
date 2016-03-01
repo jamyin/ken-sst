@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>相册列表显示页面 - Ace Admin</title>
+		<meta name="description" content="Static & Dynamic Tables" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<#include "../common/head.htm"/>
+	</head>
+	<body>
+		<!-- tophead start-->
+			<#include "../common/topHead.htm"/>	
+		<!-- tophead end-->
+		<div class="container-fluid" id="main-container">
+			<a href="#" id="menu-toggler"><span></span></a><!-- menu toggler -->
+			<!-- left menu  start -->
+
+			<#include "../common/left.htm"/>
+
+			<!-- left menu  end -->
+			<div id="main-content" class="clearfix">
+					<div id="breadcrumbs">
+						<ul class="breadcrumb">
+							<!-- <li><i class="icon-home"></i> <a href="#">Home</a><span class="divider"><i class="icon-angle-right"></i></span></li>
+							<li class="active">Tables</li> -->
+						</ul><!--.breadcrumb-->
+<!-- 						<div id="nav-search">
+							<form class="form-search">
+									<span class="input-icon">
+										<input autocomplete="off" id="nav-search-input" type="text" class="input-small search-query" placeholder="Search ..." />
+										<i id="nav-search-icon" class="icon-search"></i>
+									</span>
+							</form>
+						</div> --><!--#nav-search-->
+					</div><!--#breadcrumbs-->
+					<div id="page-content" class="clearfix">
+						<div class="row-fluid">
+<!-- PAGE CONTENT BEGINS HERE -->
+		<div class="row-fluid">
+			<form action="${base}/album/findAlbumByPage.do" method="post" name="submitForm" id="submitForm">
+				<input type="hidden" id="currPage" name="page" value="${(pageList.currPage)!}"/>
+				<table border="0">
+					<tbody><tr>
+						<td>
+							<!-- <span>
+								<input autocomplete="off" id="nav-search-input" type="text" name="title" value="" placeholder="相册名称">
+								<i id="nav-search-icon" class="icon-search"></i>
+							</span> -->
+							<span class="input-icon">
+								<input autocomplete="off" id="nav-search-input" type="text" name="title"  placeholder="相册名称">
+								<i id="nav-search-icon" class="icon-search"></i>
+							</span>
+							
+						</td>
+						<!-- <td>
+							<span>所属球队：
+							 	<select  name="teamId" id="teamId" data-placeholder="所属球队" style="vertical-align:top;width: 100px;">
+								<option value="">全部</option>
+								</select>
+							</span>
+						</td> -->
+						<!-- <td style="vertical-align:top;"> 
+						 	<select class="chzn-select" name="teamId" id="teamId" data-placeholder="所属球队" style="vertical-align:top;width: 250px;">
+						 	<option value="">全部球队</option>
+							<#if allteam??>
+								<#list allteam as t>
+									<option value="${(t.id)!}">${(t.name)!}</option>
+								</#list>
+							</#if>
+							</select>
+						</td>  -->
+						
+						<!-- <td>上传时间：
+						<input class="span10 date-picker" name="startTimeStr" id="createTimeS"  value="${(newsDto.startTimeStr)!}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="最近登录开始"/>
+						</td>
+						
+						<td>至
+						<input class="span10 date-picker" name="endTimeStr" id="createTimeE" value="${(newsDto.endTimeStr)!}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="到期日期">
+						</td> -->
+						<!-- <td style="vertical-align:top;"> 
+						 	<select class="chzn-select" name="marked" id="marked" data-placeholder="首页显示" style="vertical-align:top;width: 79px;">
+							<option value=""></option>
+							<option value="">全部</option>
+								<option value="1">显示</option>
+								<option value="0">不显示</option>
+							</select>
+						</td> -->						
+						<td style="vertical-align:top;"><button class="btn btn-mini btn-light" onclick="search();" title="检索"><i id="nav-search-icon" class="icon-search">检索</i></button></td>
+						<!-- <td style="vertical-align:top;"><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td> -->
+					</tr>
+				</tbody></table>				
+				<table id="table_report" class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th class="center">
+								<label><input type="checkbox" /><span class="lbl"></span></label>
+							</th>
+							<th>相册名称</th>
+							<th>相册封面</th>
+							<th>相册类型</th>
+							<!-- <th>所属球队</th> -->
+							<th>创建人</th>
+							<th class="hidden-phone"><i class="icon-time hidden-phone"></i> 创建时间</th>
+							<th>最后更新</th>
+							<th>相册排序</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+											
+					<tbody>
+						<#if pageList??>
+							<#list pageList.results as page>
+								<tr>
+									<td class='center'>
+										<label><input name="checkBoxId" value="${(page.id)!}" type='checkbox' del-id="${(page.id)!}"/><span class="lbl"></span></label>
+									</td>
+									<td><a href='#'>${(page.title)!}</a></td>
+									<td>
+											<div class="gallery">
+												<a href="${imgurl}${(page.thumbnail)!}">
+												<img src="${imgurl}${(page.thumbnail)!}"  title="${(page.title)!}" style="width:50px;height:50px"/>
+												</a>
+											</div>
+									</td>
+									<td>
+										<#if page.picType??> 
+											<span class='label label-success'>教练培训</span> 
+										<#else> 
+											<span class='label label-warning'>无</span> 
+										</#if>
+									</td>									
+									<!-- <td>
+										<#if page.teamName??>
+											${(page.teamName)!}
+										<#else>
+											<span class='label label-warning'>无对应球队</span>
+										</#if>
+									</td> -->
+									<td class='hidden-phone'>${(page.publisher)!}</td>
+									<td class='hidden-phone'>${(page.createTimeStr)!}</td>
+									<td class='hidden-phone'>${(page.lastUpdateTimeStr)!}</td>
+									<td class='hidden-phone'>${(page.pageRanking)!}</td>
+									<td>
+										<div id="operation" class='hidden-phone visible-desktop btn-group'>		
+										   <!--  <a id='editRights' data-obj-id="${(page.id)!}" class="btn btn-mini btn-purple"><i class="icon-pencil"></i>修改排序</a>	 -->
+										   <!--  <a id='findObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-success' title="查看相片"><i class=' icon-align-justify'></i>查看相片</a>	 -->						
+											<a id='editObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-warning' title="编辑相册"><i class='icon-edit'></i></a>
+											<a id='deleteObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-danger' title="删除相册"><i class='icon-trash'></i></a>
+										</div>
+									</td>
+								</tr>
+							</#list>
+						</#if>
+					</tbody>
+				</table>
+				
+				<div class="page-header position-relative">
+					<table style="width:100%;">
+						<tbody><tr>
+							<td style="vertical-align:top;">
+								<a id="add" class="btn btn-small btn-success">新增</a>
+								<!-- <a class="btn btn-small btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除"><i class="icon-trash"></i></a> -->
+								<a id="batch-del" class="btn btn-small btn-danger" title="批量删除">批量删除</a>
+							</td>
+							<td style="vertical-align:top;">
+								<div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">	
+									<ul>
+										<#if pageList ??>
+											<li><a>共<font color="red">${(pageList.total)!}</font>条</a></li>
+											<li><input type="number" value="" id="toGoPage" style="width:50px;text-align:center;float:left" placeholder="页码"></li>
+											<li style="cursor:pointer;"><a onclick="gotoPage('skip');" class="btn btn-mini btn-success">跳转</a></li>
+											<!-- <li><a onclick="gotoPage(1);" class="btn btn-primary">首页</a></li> -->
+											<li><a onclick="gotoPage('up');"  class="btn btn-primary">上页</a></li>
+											<li><a onclick="gotoPage('down');" class="btn btn-primary">下页</a></li>																																	
+											<!-- <li><a onclick="gotoPage();" class="btn btn-primary">尾页</a></li> -->
+											<li><a>第${(pageList.currPage)!}页</a></li>											
+										</#if>
+									</ul>
+								</div>
+							</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>				
+			</form>
+		</div>
+ 		<script type="text/javascript">
+		function search(){
+			$("#currPage").val(1);	
+			$("#submitForm").submit();
+		}
+		function gotoPage(pageType){
+			var currP = parseInt($("#currPage").val());
+			var totalPage = Math.ceil(${(pageList.total/pageList.pageSize)!});
+			if(pageType=='up'){
+				if(currP==1){
+					var currPage = parseInt(1);
+				}else{
+					var currPage = parseInt($("#currPage").val())-1;	
+				}
+				$("#currPage").val(currPage);	
+			}
+			if(pageType=='down'){
+				if(currP==totalPage){
+					var currPage = parseInt(totalPage);
+				}else{
+					var currPage = parseInt($("#currPage").val())+1;	
+				}
+				$("#currPage").val(currPage);
+			}
+			
+			if(pageType=='skip'){
+				
+				var toPageStr = $('#toGoPage').val();
+				if(isNaN(toPageStr) || toPageStr==""){
+					alert("请正确输入页码");
+					return false;
+				}else{
+					
+					var toPage = parseInt($('#toGoPage').val());
+					if(toPage <= 0){
+						alert("请正确输入页码");
+						return false;
+					}else{
+						var currPage;
+						if(toPage <= totalPage){
+							currPage = toPage;
+						}else{
+							currPage = totalPage;
+						}
+						$("#currPage").val(currPage);
+					}
+				}
+			}
+			
+			$("#submitForm").submit();
+		}
+		</script>
+<!-- PAGE CONTENT ENDS HERE -->
+						 </div><!--/row-->
+					</div><!--/#page-content-->
+			</div><!-- #main-content -->
+		</div><!--/.fluid-container#main-container-->
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only"></i>
+		</a>
+		<!-- basic scripts -->
+		<script src="${base}/static/1.9.1/jquery.min.js"></script>
+		<script src="${base}/static/js/jquery.poptrox.min.js"></script>
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+		</script>
+		
+		<script src="${base}/static/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		
+		<script type="text/javascript" src="${base}/static/js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.dataTables.bootstrap.js"></script>
+		<!-- ace scripts -->
+		<script src="${base}/static/js/ace-elements.min.js"></script>
+		<script src="${base}/static/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+		
+		<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script><!-- 下拉框 -->
+		<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script><!-- 日期框 -->
+		<script type="text/javascript" src="${base}/static/js/bootbox.min.js"></script><!-- 确认窗口 -->
+		
+		<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+		
+		<script type="text/javascript">
+		function reload_page(){
+			window.location.reload();//刷新当前页面
+		}
+		$(function() {
+			 $('.gallery').poptrox({
+					usePopupCaption: true
+			 });
+			//球队下拉列表框
+			/* jQuery.ajax({
+				url:'/admin/team/getAllTeam.do',
+				type: 'POST',
+				dataType :'json',
+				success : function(data){
+					 //console.log("数据长度："+data.length);
+					 if(data != null){
+						//var jsondata = eval("("+data+")");
+						for(var i = 0;i< data.length;i++){
+							var teamId = data[i].id;
+							var teamName = data[i].name;
+							if(teamName == null || teamName == ""){
+								teamName = "无对应球队";
+							}
+						    var opt= '';
+						    opt += "<option value='" + teamId + "'>" + teamName + "</option>";
+							$("#teamId").append(opt);
+						}
+					} 
+				}
+			});	 */
+			
+			$("#operation #editRights").on('click',function(){
+				var id = $(this).attr("data-obj-id");
+				//iframe层-父子操作
+				layer.open({
+				    type: 2,
+				    area: ['380px', '260px'],
+				    fix: true, //不固定
+				    maxmin: false,
+				    content: '${base}/album/updateAlbum.do?id='+id
+				});				
+				//console.log($(this).attr("data-obj-id"));
+			});
+		 	$("#operation #editObj").on('click',function(){
+				var albumId = $(this).attr("data-obj-id");
+				//iframe层-父子操作
+				layer.open({
+					title:'编辑相册',
+				    type: 2,
+				    area: ['700px', '600px'],
+				    fix: true, //不固定
+				    maxmin: false,
+				    content: '${base}/album/goAlbumEdit.do?albumId='+albumId
+				});				
+				//console.log($(this).attr("data-obj-id"));
+			}); 
+			$("#operation #deleteObj").on('click',function(){
+				//console.log($(this).attr("data-obj-id"));
+				var albumId = $(this).attr("data-obj-id");
+				$.ajax({
+		             type: "POST",
+		             url: "${base}/album/delAlbum.do",
+		             data: {id:albumId},
+		             dataType: "json",
+		             success: function(data){
+		            	 if(data.success){
+	            			layer.msg('数据删除成功', {
+	            				shade: [0.9, '#000'],
+	            			    icon: 6,
+	            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+	            			}, function(){
+	            			    //do something
+	            				reload_page();
+	            			});		            		 
+		            	 }else{
+	            			layer.msg('数据删除失败', {
+	            				shade: [0.9, '#000'],
+	            			    icon: 6,
+	            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+	            			},function(){
+	            				return;
+	            			});
+		            	 }
+		             }
+		         });				
+				
+			});			
+			//日期框
+			$('.date-picker').datepicker();			
+			//下拉框
+			$(".chzn-select").chosen(); 
+			$(".chzn-select-deselect").chosen({allow_single_deselect:true}); 
+			
+			
+			$("#add").on('click',function(){
+				//iframe层-父子操作
+				layer.open({
+					title:'新增相册',
+				    type: 2,
+				    area: ['700px', '600px'],
+				    fix: true, //不固定
+				    maxmin: false,
+				    content: '${base}/album/goAlbumAdd.do'
+				});
+			});
+			
+			//查看相册里的相片
+			$("#findObj").on('click',function(){
+				var id = $(this).attr("data-obj-id");
+				var path = "/admin/albumPic/findAlbumPicByPage.do?pId=200";
+				if(id != null && id !=""){
+					path = path + "&&teamId=" + id; 
+				}
+				console.log(path);
+				window.location.href = path;
+			});
+			
+			//复选框
+			$('table th input:checkbox').on('click' , function(){
+				var that = this;
+				$(this).closest('table').find('tr > td:first-child input:checkbox')
+				.each(function(){
+					this.checked = that.checked;
+					$(this).closest('tr').toggleClass('selected');
+				});
+					
+			});
+		});
+		
+		//批量删除
+		$("#batch-del").on('click',function(){
+			 var $chk = $("[name = checkBoxId]:checkbox").filter(":checked");
+			 //console.log($chk.length);
+			 if ($chk.length > 0){
+				//信息框-提醒框
+				layer.confirm('确定批量删除吗？', {icon: 3}, function(index){
+				    layer.close(index);
+				    var i = 0;
+				    var len = $chk.length;
+				    var ids = '';
+				    $chk.each(function() {
+				    	var id = $(this).attr("del-id");
+				    	if (i < len - 1){
+				    		ids += id+",";
+				    	}else{
+				    		ids += id;
+				    	}
+				    });
+				    
+					$.ajax({
+			             type: "POST",
+			             url: "${base}/album/delByIds.do",
+			             data: {ids:ids},
+			             dataType: "json",
+			             success: function(data){
+			            	 if(data.success){
+		            			layer.msg('数据删除成功', {
+		            				shade: [0.9, '#000'],
+		            			    icon: 6,
+		            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+		            			}, function(){
+		            			    //do something
+		            				reload_page();
+		            			});		            		 
+			            	 }else{
+		            			layer.msg('数据删除失败', {
+		            				shade: [0.9, '#000'],
+		            			    icon: 6,
+		            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+		            			},function(){
+		            				return;
+		            			});
+			            	 }
+			             }
+			         });		
+				   
+				});
+			 }else{
+				 layer.msg("请至少选择一条记录进行删除！");
+			 }
+		});
+		</script>
+	</body>
+</html>
