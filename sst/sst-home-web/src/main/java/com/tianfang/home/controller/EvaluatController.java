@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -19,6 +18,7 @@ import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
+import com.tianfang.common.util.StringUtils;
 import com.tianfang.evaluat.dto.EvaluatAnswerDto;
 import com.tianfang.evaluat.dto.EvaluatDto;
 import com.tianfang.evaluat.dto.EvaluatQuestionDto;

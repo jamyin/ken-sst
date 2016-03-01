@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
+import com.tianfang.common.util.StringUtils;
 import com.tianfang.home.dto.CompRound;
 import com.tianfang.train.dto.CompetitionApplyDto;
 import com.tianfang.train.dto.CompetitionDto;
