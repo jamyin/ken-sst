@@ -647,6 +647,7 @@ public class UserController extends BaseController{
     	UserDto user = getUserByCache(memoDto.getUserId());
     	String id = "";
     	if (null != user){
+    		memoDto.setUserName(user.getNickName());
     		try {
 				id = memoService.save(memoDto);
 			} catch (Exception e) {

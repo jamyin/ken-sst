@@ -168,6 +168,12 @@ public class CompetitionMatchServiceImpl implements ICompetitionMatchService {
 		return PojoToDto(ms);
 	}
 	
+	@Override
+	public List<CompetitionMatchDto> findMatch(int limint,Integer matchType) {
+		List<CompetitionMatch> ms = competitionMatchDao.findMatch(limint,matchType);
+		return PojoToDto(ms);
+	}
+	
 	private CompetitionMatch assemblyMatch(CompetitionMatchDto dto,
 			TeamDto homeTeam, TeamDto visitingTeam, String adminId,
 			String adminName) {

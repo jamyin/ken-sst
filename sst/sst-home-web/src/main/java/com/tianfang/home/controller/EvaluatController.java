@@ -64,6 +64,7 @@ public class EvaluatController extends BaseController{
 				String evaId = evaDto.getId();
 				try {
 					response.setStatus(DataStatus.HTTP_SUCCESS);
+					response.setParentData(evaDto);
 					response.setData(initAllDataList(evaId,thumbnail));
 				} catch (Exception e) {
 					e.printStackTrace();
