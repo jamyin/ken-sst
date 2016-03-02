@@ -89,14 +89,15 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public Response<String> register(HttpSession session, UserDto dto, @RequestParam(value = "code", required = false) String code) {
 		Response<String> result = new Response<String>();
-		String md5oldPwd;// 获取页面上输入的密码并加密校验
+		/* 移动端将密码加密后,传给服务器
+		 * String md5oldPwd;// 获取页面上输入的密码并加密校验
 		try {
 			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPassword());
 			dto.setPassword(md5oldPwd);
 		} catch (Exception e) {
 			throw new SystemException(e.getMessage(), e);
-		}
-		String key = "reg" + dto.getMobile();
+		}*/
+		String key = SMSController.SST_PHONE_NUMBER + dto.getMobile();
 		if(!StringUtils.isBlank(code)){
 			int num;
 			try {

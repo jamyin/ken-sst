@@ -81,9 +81,9 @@ public class SMSController {
 		result.setStatus(DataStatus.HTTP_SUCCESS);
 		return result;
 	}
-
+	
 	/**
-	 * 验证手机
+	 * 验证手机(暂时不用)
 	 * @param session
 	 * @param validateCode
 	 * @param mobilePhone
@@ -91,6 +91,7 @@ public class SMSController {
 	 * @author xiang_wang
 	 * 2016年1月19日上午10:03:57
 	 */
+	@Deprecated
 	@RequestMapping(value = "validate")
 	@ResponseBody
 	public Response<String> validate(HttpSession session, String validateCode, String mobile) {
