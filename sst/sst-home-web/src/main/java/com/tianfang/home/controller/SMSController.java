@@ -76,7 +76,8 @@ public class SMSController {
 		String content = "温馨提示，为了保护您的隐私，请您在90秒内输入" + randomNumber + "验证码。";// 短信内容
 		iSmsSendService.sendSms(randomNumber, mobile, content);
 		String keyCode = SST_PHONE_NUMBER+mobile ;
-		redisTemplate.opsForValue().set(keyCode, randomNumber, 90, TimeUnit.SECONDS);;
+		redisTemplate.opsForValue().set(keyCode, randomNumber, 90, TimeUnit.SECONDS);
+		result.setMessage("短信验证码发送成功!");
 		result.setStatus(DataStatus.HTTP_SUCCESS);
 		return result;
 	}
