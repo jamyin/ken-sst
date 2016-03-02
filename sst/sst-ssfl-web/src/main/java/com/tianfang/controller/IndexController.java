@@ -59,6 +59,7 @@ public class IndexController extends BaseController{
 		map.put("raceNoteice", getRaceNotice());
 		map.put("newRace",getnewRace());
 		map.put("newRaceResult",getnewRaceResult());
+		map.put("raceRecord",getRecord());
 		mv.addObject("dataMap", map);
 		mv.setViewName("/index");
 		return mv;
