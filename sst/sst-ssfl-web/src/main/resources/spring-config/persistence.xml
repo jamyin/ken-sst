@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"  
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans.xsd 
+       http://www.springframework.org/schema/aop  
+       http://www.springframework.org/schema/aop/spring-aop-2.0.xsd          
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<bean id="masterdataSource"
+        class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${datasource.driverClassName}" />
+        <property name="url" value="${datasource.url}" />
+        <property name="username" value="${datasource.username}" />
+        <property name="password" value="${datasource.password}" />
+        
+		<!-- Connection Pooling Info -->
+		<property name="initialSize" value="${initialSize}" />
+		<property name="maxActive" value="${maxActive}" />
+		<property name="maxIdle" value="${maxIdle}" />
+		<property name="maxWait" value="${maxWait}" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="defaultAutoCommit" value="false" />
+    </bean>
+    
+    <bean id="slavedataSource"
+        class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${slave.datasource.driverClassName}" />
+        <property name="url" value="${slave.datasource.url}" />
+        <property name="username" value="${slave.datasource.username}" />
+        <property name="password" value="${slave.datasource.password}" />
+        
+		<!-- Connection Pooling Info -->
+		<property name="initialSize" value="${initialSize}" />
+		<property name="maxActive" value="${maxActive}" />
+		<property name="maxIdle" value="${maxIdle}" />
+		<property name="maxWait" value="${maxWait}" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="defaultAutoCommit" value="false" />
+    </bean>
+
+	
+	<bean id="dataSource" class="com.tianfang.common.jdbc.DynamicDataSource">
+        <property name="targetDataSources">  
+              <map key-type="java.lang.String">                   
+                 <entry key="master" value-ref="masterdataSource"/>  
+                 <entry key="slave" value-ref="slavedataSource"/>                              
+              </map>        
+        </property>  
+        <property name="defaultTargetDataSource" ref="masterdataSource"/>  
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations" value="classpath*:/mapper/*Mapper.xml" />
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com/tianfang/**/mapper" />
+    </bean>
+
+	<!-- 配置数据库注解aop -->
+    <aop:aspectj-autoproxy />  
+    <bean id="manyDataSourceAspect" class="com.tianfang.common.jdbc.DataSourceAspect" />
+    <aop:config>
+        <aop:aspect id="c" ref="manyDataSourceAspect">
+            <aop:pointcut id="tx" expression="execution(* com.tianfang..mapper.*.*(..))"/>
+            <aop:before pointcut-ref="tx" method="before"/>
+        </aop:aspect>
+    </aop:config>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"  />
+</beans>
+
