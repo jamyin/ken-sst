@@ -169,8 +169,23 @@ public class CompetitionMatchDao extends MyBatisBaseDao<CompetitionMatch> {
 	public List<CompetitionMatch> findMatchByCompId(String compId) {
 		CompetitionMatchExample example = new CompetitionMatchExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andCompIdEqualTo(compId);
+		if(!StringUtils.isEmpty(compId)){
+			criteria.andCompIdEqualTo(compId);	
+		}
+		
         example.setOrderByClause(" match_time asc");
+        List<CompetitionMatch> result = mapper.selectByExample(example);  
+		return result;
+	}
+
+	public List<CompetitionMatch> findMatch(int limint,Integer matchType) {
+		CompetitionMatchExample example = new CompetitionMatchExample();
+		Criteria criteria = example.createCriteria();
+        if(matchType!=null){
+        	criteria.andMatchTypeEqualTo(matchType);
+        }		
+        example.setOrderByClause(" match_time desc limit " + limint);
+
         List<CompetitionMatch> result = mapper.selectByExample(example);  
 		return result;
 	}

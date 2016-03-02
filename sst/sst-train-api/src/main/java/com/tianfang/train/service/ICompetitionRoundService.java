@@ -32,6 +32,8 @@ public interface ICompetitionRoundService {
 	PageResult<CompetitionRoundDto> findRoundByParam(CompetitionRoundDto dto, PageQuery query);
 	
 	List<CompetitionRoundDto> findRoundByCompId(String compId);
+	
+	List<CompetitionRoundDto> findRound();
 
 	/**
 	 * 更新球队场次和球队比赛

@@ -156,6 +156,12 @@ public class CompetitionRoundServiceImpl implements ICompetitionRoundService {
 	}
 	
 	@Override
+	public List<CompetitionRoundDto> findRound(){
+		CompetitionRoundDto dto = new CompetitionRoundDto();
+		return roundDao.findCompetitionRoundByParam(dto);
+	}
+	
+	@Override
 	public int maxPageRanking(String compId) {
 		if (StringUtils.isBlank(compId)){
 			throw new RuntimeException("对不起,赛事ID为空!");
