@@ -12,5 +12,5 @@ public interface CompetitionRoundExMapper {
      * @author xiang_wang
      * 2016年2月2日下午1:49:03
      */
-    int maxPageRanking(@Param("compId")String compId);
+    Integer maxPageRanking(@Param("compId")String compId);
 }
