@@ -60,10 +60,11 @@ public class EvaluatController extends BaseController{
 			List<EvaluatDto> resultList = iEvaluatService.findEvaluatBySql(dto);
 			if(resultList!=null){
 				EvaluatDto evaDto = resultList.get(0);
+				String thumbnail = evaDto.getThumbnail();
 				String evaId = evaDto.getId();
 				try {
 					response.setStatus(DataStatus.HTTP_SUCCESS);
-					response.setData(initAllDataList(evaId));
+					response.setData(initAllDataList(evaId,thumbnail));
 				} catch (Exception e) {
 					e.printStackTrace();
 					response.setStatus(DataStatus.HTTP_FAILE);
@@ -95,7 +96,7 @@ public class EvaluatController extends BaseController{
 		Response<List<EvaluatQuestionDto>> response = new Response<List<EvaluatQuestionDto>>();
 		try {
 			response.setStatus(DataStatus.HTTP_SUCCESS);
-			response.setData(initAllDataList(evaId));
+			response.setData(initAllDataList(evaId,""));
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(DataStatus.HTTP_FAILE);
@@ -124,10 +125,13 @@ public class EvaluatController extends BaseController{
 		return map;
 	}
 
-	private List<EvaluatQuestionDto> changeListToMap(List<EvaluatQuestionDto> eqList,List<EvaluatAnswerDto> eaList) {		
+	private List<EvaluatQuestionDto> changeListToMap(List<EvaluatQuestionDto> eqList,List<EvaluatAnswerDto> eaList,String thumbnail) {		
 		Map<String, List<EvaluatAnswerDto>> mapKey = changeListToMap(eaList);
 		for(EvaluatQuestionDto eqDto : eqList){
 			List<EvaluatAnswerDto> answerList = mapKey.get(eqDto.getId());
+			if(!StringUtils.isEmpty(thumbnail)){
+				eqDto.setThumbnail(thumbnail);
+			}
 			eqDto.setAnswerList(answerList);
 		}
 		return eqList;
@@ -199,7 +203,7 @@ public class EvaluatController extends BaseController{
 		}
 	}
 	
-	private List<EvaluatQuestionDto> initAllDataList(String evaId){
+	private List<EvaluatQuestionDto> initAllDataList(String evaId,String thumbnail){
 		
 		EvaluatQuestionDto eqDto = new EvaluatQuestionDto();
 		eqDto.setEvaId(evaId);
@@ -212,6 +216,6 @@ public class EvaluatController extends BaseController{
 		eaDto.setStat(DataStatus.ENABLED);
 		List<EvaluatAnswerDto> eaList = iEvaluatAnswerService.findEvaluatAnswerBySql(eaDto);
 		
-		return changeListToMap(eqList,eaList);		
+		return changeListToMap(eqList,eaList,thumbnail);		
 	}
 }
