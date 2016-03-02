@@ -34,7 +34,7 @@ public class VideoColltroller extends BaseController {
 	 * @param videoDto
 	 * @return
 	 */
-	@RequestMapping(value="/findAlbumList")
+	@RequestMapping(value="/getVideoPage")
 	@ResponseBody
 	public Response<PageResult<VideoDto>> getVideoPage(ExtPageQuery page,VideoDto videoDto){
 		Response<PageResult<VideoDto>> res = new Response<PageResult<VideoDto>>();
