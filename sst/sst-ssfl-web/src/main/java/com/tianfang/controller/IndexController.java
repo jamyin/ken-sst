@@ -58,6 +58,7 @@ public class IndexController extends BaseController{
 		map.put("authInfo", getAuthInfo());
 		map.put("raceNoteice", getRaceNotice());
 		map.put("newRace",getnewRace());
+		map.put("newRaceResult",getnewRaceResult());
 		mv.addObject("dataMap", map);
 		mv.setViewName("/index");
 		return mv;
@@ -93,10 +94,17 @@ public class IndexController extends BaseController{
 	/**
 	 * 获取最新赛程
 	 */
-	public List<CompRound> getnewRace(){
-		return findCompRounds(""); 
+	public List<CompetitionMatchDto> getnewRace(){
+		int limit = 10;
+		return matchService.findMatch(limit,0);//为开始的最新赛事
 	}
-	
+	/*
+	 * 最新赛果
+	 */
+	public List<CompetitionMatchDto> getnewRaceResult(){
+		int limit = 10;
+		return matchService.findMatch(limit,2);//为开始的最新赛事
+	}
 	/**
 	 * 获取精彩图集
 	 */
@@ -121,37 +129,6 @@ public class IndexController extends BaseController{
 		return datas.getResults();
 	}
 	
-	private List<CompRound> findCompRounds(String compId) {
-		List<CompRound> crs = null;
-		List<CompetitionRoundDto> rounds = roundSerivce.findRoundByCompId(compId);
-		if (null != rounds && rounds.size() > 0){
-			List<CompetitionMatchDto> matchs = matchService.findMatchByCompId(compId);
-			if (null != matchs && matchs.size() > 0){
-				Map<String, List<CompetitionMatchDto>> map = new HashMap<String, List<CompetitionMatchDto>>(rounds.size());
-				List<CompetitionMatchDto> temp;
-				for (CompetitionMatchDto match : matchs){
-					if (map.containsKey(match.getCroundId())){
-						map.get(match.getCroundId()).add(match);
-					} else{
-						temp = new ArrayList<CompetitionMatchDto>();
-						temp.add(match);
-						map.put(match.getCroundId(), temp);
-					}
-				}
-				
-				crs = new ArrayList<CompRound>(rounds.size());
-				for (CompetitionRoundDto round : rounds){
-					CompRound cr = new CompRound();
-					cr.setId(round.getId());
-					cr.setName(round.getName());
-					cr.setMatchs(map.get(round.getId()));
-					
-					crs.add(cr);
-				}
-			}
-		}
-		
-		return crs;
-	}
+
 	
 }

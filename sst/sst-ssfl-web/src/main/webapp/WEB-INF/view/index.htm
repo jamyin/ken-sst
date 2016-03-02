@@ -117,7 +117,16 @@
 				<div class="tab"><a class="cur" href="###" tag="match">最新赛程</a> | <a href="###" tag="match_result">最新赛果</a><a class="more" href="###">更多</a></div>
 				<div class="match show">
 					<ul>
-						<li><img src="/static/img/team_s.png" border="0"><span>阿森纳</span><span class="vs">VS</span><span>曼彻斯特联</span><img src="/static/img/team_a.png" border="0"></li>
+						<#if dataMap ??>
+							<#list dataMap.newRace as data>
+								<li>
+									<img src="${(data.homeTeamIcon)!}" border="0"><span>${(data.homeTeamName)!}</span>
+									<span class="vs">VS</span>
+									<span>${(data.visitingTeamName)!}</span><img src="${(data.visitingTeamIcon)!}" border="0">
+								</li>
+							</#list>
+						</#if>					
+						<!-- <li><img src="/static/img/team_s.png" border="0"><span>阿森纳</span><span class="vs">VS</span><span>曼彻斯特联</span><img src="/static/img/team_a.png" border="0"></li>
 						<li><img src="/static/img/team_s.png" border="0"><span>阿森纳</span><span class="vs">VS</span><span>切尔西</span><img src="/static/img/team_a.png" border="0"></li>
 						<li><img src="/static/img/team_s.png" border="0"><span>阿森纳</span><span class="vs">VS</span><span>切尔西</span><img src="/static/img/team_a.png" border="0"></li>
 						<li><img src="/static/img/team_s.png" border="0"><span>阿森纳</span><span class="vs">VS</span><span>切尔西</span><img src="/static/img/team_a.png" border="0"></li>
@@ -126,12 +135,25 @@
 						<li><img src="/static/img/team_s.png" border="0"><span>阿森纳</span><span class="vs">VS</span><span>切尔西</span><img src="/static/img/team_a.png" border="0"></li>
 						<li><img src="/static/img/team_s.png" border="0"><span>阿森纳</span><span class="vs">VS</span><span>切尔西</span><img src="/static/img/team_a.png" border="0"></li>
 						<li><img src="/static/img/team_s.png" border="0"><span>阿森纳</span><span class="vs">VS</span><span>切尔西</span><img src="/static/img/team_a.png" border="0"></li>
-						<li><img src="/static/img/team_s.png" border="0"><span>阿森纳</span><span class="vs">VS</span><span>切尔西</span><img src="/static/img/team_a.png" border="0"></li>
+						<li><img src="/static/img/team_s.png" border="0"><span>阿森纳</span><span class="vs">VS</span><span>切尔西</span><img src="/static/img/team_a.png" border="0"></li> -->
 					</ul>
 				</div>
 				<div class="match_result">
 					<div class="sub_tab"><span class="date">时间</span><span>球队</span><span class="score">比分</span><span>球队</span></div>
 					<ul>
+						<#if dataMap ??>
+							<#list dataMap.newRaceResult as data>
+								<li>
+									<span class="date">
+										${data.matchTime?string("MM-dd")}
+									</span>
+									<span>${(data.homeTeamName)!}</span>
+									<span class="score"><strong>${(data.homeScore)!}</strong>:${(data.visitingScore)!}</span>
+									<span>${(data.visitingTeamName)!}</span>
+								</li>
+							</#list>
+						</#if>						
+<!-- 						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
 						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
 						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
 						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
@@ -140,8 +162,7 @@
 						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
 						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
 						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
-						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
-						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
+						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li> -->
 					</ul>
 				</div>
 				

@@ -3,15 +3,12 @@ package com.tianfang.home.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.business.dto.VideoDto;
 import com.tianfang.business.service.IVideoService;
@@ -53,24 +50,6 @@ public class VideoColltroller extends BaseController {
 		res.setMessage("查询失败");
 		res.setStatus(DataStatus.HTTP_FAILE);
 		return res;
-	}
-	
-
-	/**
-	 * 跳转到视频播页面
-	 * @param id  videoId
-	 * @return
-	 */
-	@RequestMapping("/toVideo")
-	public ModelAndView toVideo(String id,HttpServletRequest request){
-		ModelAndView mv = getModelAndView();
-		Map<String,Object> map = new  HashMap<String, Object>();
-		map.put("id", id);
-		VideoDto Video = videoService.selectById(map);
-		Video.setVideo(Video.getVideo().replace("\\", "/"));
-		mv.addObject("result", Video);
-		mv.setViewName("video/video_details");
-		return mv;
 	}
 	
 	/**

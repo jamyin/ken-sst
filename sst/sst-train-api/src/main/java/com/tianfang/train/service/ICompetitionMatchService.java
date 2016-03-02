@@ -124,4 +124,6 @@ public interface ICompetitionMatchService {
 	 * 2016年2月2日下午3:09:25
 	 */
 	List<CompetitionMatchDto> findMatchByCompId(String compId);
+	
+	List<CompetitionMatchDto> findMatch(int limint,Integer matchType);
 }
