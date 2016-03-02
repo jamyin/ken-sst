@@ -165,12 +165,12 @@ public class EvaluatController extends BaseController{
 		}
 		EvaluatScoreDto esDto = new EvaluatScoreDto();
 		esDto.setEvaId(evaId);
-		esDto.setThumbnail(evaDto.getThumbnail());
 		esDto.setStartScore(sumScore);
 		esDto.setEndScore(sumScore);
 		List<EvaluatScoreDto> dataList = iEvaluatScoreService.findEvaluatScoreBySql(esDto);
 		if(!dataList.isEmpty()){
 			esDto = dataList.get(0);
+			esDto.setThumbnail(evaDto.getThumbnail());
 			result.setData(esDto);
 
 			//保存处理
