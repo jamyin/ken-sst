@@ -170,7 +170,17 @@
 				<div class="integr">
 					<div class="sub_tab"><span class="date">名次</span><span>球队</span><span class="score">胜/负/平</span><span>积分</span></div>
 					<ul>
-						<li><span class="date">1</span><span class="name"><img src="/static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/12/1</span><span>93</span></li>
+						<#if dataMap ??>
+							<#list dataMap.raceRecord as data>
+								<li>
+									<span class="date">${(data_index+1)!}</span>
+									<span class="name"><img src="${(data.teamIcon)!}" border="0">${(data.teamName)!}</span>
+									<span class="score">${(data.win)!}/${(data.lose)!}/${(data.draw)!}</span>
+									<span>${(data.win*3+data.draw)!}</span><!-- win*3+draw -->
+								</li>
+							</#list>
+						</#if>						
+<!-- 						<li><span class="date">1</span><span class="name"><img src="/static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/12/1</span><span>93</span></li>
 						<li><span class="date">2</span><span class="name"><img src="/static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>83</span></li>
 						<li><span class="date">3</span><span class="name"><img src="/static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>73</span></li>
 						<li><span class="date">4</span><span class="name"><img src="/static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>63</span></li>
@@ -179,7 +189,7 @@
 						<li><span class="date">7</span><span class="name"><img src="/static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>33</span></li>
 						<li><span class="date">8</span><span class="name"><img src="/static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>23</span></li>
 						<li><span class="date">9</span><span class="name"><img src="/static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>13</span></li>
-						<li><span class="date">10</span><span class="name"><img src="/static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>10</span></li>
+						<li><span class="date">10</span><span class="name"><img src="/static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>10</span></li> -->
 					</ul>
 				</div>
 			</div>
