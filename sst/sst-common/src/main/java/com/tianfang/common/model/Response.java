@@ -35,4 +35,9 @@ public class Response<T> implements Serializable {
 	@Setter
 	public T data;
 	
+	
+	@Getter
+	@Setter
+	public T parentData;
+	
 }
