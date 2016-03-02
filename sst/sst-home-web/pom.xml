@@ -161,6 +161,17 @@
 			<artifactId>sst-evaluat</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+				<dependency>
+			<groupId>com.tianfang</groupId>
+			<artifactId>sst-business</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.tianfang</groupId>
+			<artifactId>sst-business-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>com.baidu</groupId>
