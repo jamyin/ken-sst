@@ -1,22 +1,27 @@
 package com.tianfang.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
-import com.tianfang.common.model.Response;
+import com.tianfang.dto.CompRound;
 import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.message.service.INoticeService;
+import com.tianfang.train.dto.CompetitionMatchDto;
 import com.tianfang.train.dto.CompetitionNoticeDto;
+import com.tianfang.train.dto.CompetitionRoundDto;
 import com.tianfang.train.dto.CompetitionTeamDto;
+import com.tianfang.train.service.ICompetitionMatchService;
 import com.tianfang.train.service.ICompetitionNoticeService;
+import com.tianfang.train.service.ICompetitionRoundService;
 import com.tianfang.train.service.ICompetitionTeamService;
 
 /**
@@ -41,6 +46,10 @@ public class IndexController extends BaseController{
 	@Autowired
 	private INoticeService iNoticeService;
 	
+	@Autowired
+	private ICompetitionRoundService roundSerivce;
+	@Autowired
+	private ICompetitionMatchService matchService;
 	
 	@RequestMapping(value="index")
 	public ModelAndView index(){
@@ -48,6 +57,7 @@ public class IndexController extends BaseController{
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("authInfo", getAuthInfo());
 		map.put("raceNoteice", getRaceNotice());
+		map.put("newRace",getnewRace());
 		mv.addObject("dataMap", map);
 		mv.setViewName("/index");
 		return mv;
@@ -81,10 +91,10 @@ public class IndexController extends BaseController{
 	}
 	
 	/**
-	 * 获取最新赛程/最新赛果
+	 * 获取最新赛程
 	 */
-	public void getRaceResult(){
-		
+	public List<CompRound> getnewRace(){
+		return findCompRounds(""); 
 	}
 	
 	/**
@@ -109,6 +119,39 @@ public class IndexController extends BaseController{
 		CompetitionTeamDto dto = new CompetitionTeamDto();
 		PageResult<CompetitionTeamDto> datas = iCompetitionTeamService.findCompetitionTeamByParam(dto, query);
 		return datas.getResults();
+	}
+	
+	private List<CompRound> findCompRounds(String compId) {
+		List<CompRound> crs = null;
+		List<CompetitionRoundDto> rounds = roundSerivce.findRoundByCompId(compId);
+		if (null != rounds && rounds.size() > 0){
+			List<CompetitionMatchDto> matchs = matchService.findMatchByCompId(compId);
+			if (null != matchs && matchs.size() > 0){
+				Map<String, List<CompetitionMatchDto>> map = new HashMap<String, List<CompetitionMatchDto>>(rounds.size());
+				List<CompetitionMatchDto> temp;
+				for (CompetitionMatchDto match : matchs){
+					if (map.containsKey(match.getCroundId())){
+						map.get(match.getCroundId()).add(match);
+					} else{
+						temp = new ArrayList<CompetitionMatchDto>();
+						temp.add(match);
+						map.put(match.getCroundId(), temp);
+					}
+				}
+				
+				crs = new ArrayList<CompRound>(rounds.size());
+				for (CompetitionRoundDto round : rounds){
+					CompRound cr = new CompRound();
+					cr.setId(round.getId());
+					cr.setName(round.getName());
+					cr.setMatchs(map.get(round.getId()));
+					
+					crs.add(cr);
+				}
+			}
+		}
+		
+		return crs;
 	}
 	
 }
