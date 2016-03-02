@@ -29,6 +29,7 @@
     <module>sst-evaluat-api</module>
     <module>sst-business</module>
     <module>sst-business-api</module>
+    <module>sst-ssfl-web</module>
   </modules>
   
   	  <properties>

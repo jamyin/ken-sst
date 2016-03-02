@@ -42,6 +42,10 @@ public class EvaluatQuestionDto implements Serializable{
 	
 	@Setter
 	@Getter
+    private String thumbnail;
+	
+	@Setter
+	@Getter
 	private List<EvaluatAnswerDto> answerList;
 
    

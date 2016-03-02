@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.business.mapper.AlbumPicExMapper">
+
+	<select id="selectAlbumPicByPage" resultType="com.tianfang.business.dto.AlbumPictureDto"
+		parameterType="com.tianfang.business.pojo.AlbumPicture">
+		SELECT a.id,a.album_id as albumId,a.pic,a.last_update_time as
+		lastUpdateTime,a.create_time as createTime,a.stat,a.team_id as
+		teamId,a.pic_status as picStatus,a.pic_type as picType, b.title,b.stat as albumStat
+		<!-- c.name as teamName,c.stat as teamStat -->
+		FROM sst_album_picture a 
+		LEFT JOIN sst_album b on a.album_id = b.id 
+		<!-- LEFT JOIN sport_team c on a.team_id = c.id -->
+		WHERE a.stat =1 
+		<include refid="where_assistant_bypage" />
+		ORDER BY a.create_time desc
+		limit #{page.startNum}, #{page.pageSize}
+	</select>
+
+	<select id="selectAlbumPicByPageCount" resultType="java.lang.Long"
+		parameterType="com.tianfang.business.pojo.AlbumPicture">
+		SELECT count(*)
+		FROM sst_album_picture a 
+		LEFT JOIN sst_album b on a.album_id = b.id 
+		WHERE a.stat =1 
+		<include refid="where_assistant_bypage" />
+	</select>
+
+	<sql id="where_assistant_bypage">
+		<if test="albumPicture.picStatus != null">
+			and a.pic_status = #{albumPicture.picStatus}
+		</if>
+		<if
+			test="albumPicture.albumId != null and albumPicture.albumId != ''">
+			and a.album_id = #{albumPicture.albumId}
+		</if>
+		<if test="albumPicture.picType != null">
+			and a.pic_type = #{albumPicture.picType}
+	   </if>
+	</sql>
+
+</mapper> 
