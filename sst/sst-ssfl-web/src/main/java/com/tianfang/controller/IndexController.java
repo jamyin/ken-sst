@@ -1,5 +1,8 @@
 package com.tianfang.controller;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +12,8 @@ import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
+import com.tianfang.message.dto.NoticeDto;
+import com.tianfang.message.service.INoticeService;
 import com.tianfang.train.dto.CompetitionNoticeDto;
 import com.tianfang.train.dto.CompetitionTeamDto;
 import com.tianfang.train.service.ICompetitionNoticeService;
@@ -20,17 +25,30 @@ import com.tianfang.train.service.ICompetitionTeamService;
  */
 @Controller
 public class IndexController extends BaseController{
-
-	@Autowired
-	private ICompetitionTeamService cTeamService;
 	
 	@Autowired
-	private ICompetitionNoticeService noticeService;
+	private ICompetitionTeamService iCompetitionTeamService;
+	
+	/**
+	 * 联赛公告展示信息
+	 */
+	@Autowired
+	private ICompetitionNoticeService iCompetitionNoticeService;
+	
+	/**
+	 * 官方信息
+	 */
+	@Autowired
+	private INoticeService iNoticeService;
+	
 	
 	@RequestMapping(value="index")
 	public ModelAndView index(){
 		ModelAndView mv = getModelAndView();
-		
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		map.put("authInfo", getAuthInfo());
+		map.put("raceNoteice", getRaceNotice());
+		mv.addObject("dataMap", map);
 		mv.setViewName("/index");
 		return mv;
 	}
@@ -45,22 +63,21 @@ public class IndexController extends BaseController{
 	/**
 	 * 获取官方展示信息
 	 */
-	public void getAuthInfo(){
-		
+	public List<NoticeDto> getAuthInfo(){
+		PageQuery query = new PageQuery(6); // 公告条数限制为6条
+		NoticeDto dto = new NoticeDto();
+		PageResult<NoticeDto> datas = iNoticeService.findNoticeViewByPage(dto, query);
+		return datas.getResults();
 	}
 	
 	/**
 	 * 获取联赛公告展示信息
 	 */
-	public Response<PageResult<CompetitionNoticeDto>> getRaceNotice(){
-		
-		Response<PageResult<CompetitionNoticeDto>> response = new Response<PageResult<CompetitionNoticeDto>>();
+	public List<CompetitionNoticeDto> getRaceNotice(){
 		PageQuery query = new PageQuery(6); // 公告条数限制为6条
 		CompetitionNoticeDto dto = new CompetitionNoticeDto();
-		PageResult<CompetitionNoticeDto> datas = noticeService.findCompNoticeViewByPage(dto, query);
-		response.setStatus(DataStatus.HTTP_SUCCESS);
-		response.setData(datas);
-		return response;
+		PageResult<CompetitionNoticeDto> datas = iCompetitionNoticeService.findCompNoticeViewByPage(dto, query);
+		return datas.getResults();
 	}
 	
 	/**
@@ -87,16 +104,11 @@ public class IndexController extends BaseController{
 	/**
 	 * 获取积分展示信息
 	 */
-	public Response<PageResult<CompetitionTeamDto>> getRecord(){
-	
-		Response<PageResult<CompetitionTeamDto>> response = new Response<PageResult<CompetitionTeamDto>>();
+	public List<CompetitionTeamDto> getRecord(){
 		PageQuery query = new PageQuery(10);
 		CompetitionTeamDto dto = new CompetitionTeamDto();
-		PageResult<CompetitionTeamDto> datas = cTeamService.findCompetitionTeamByParam(dto, query);
-		response.setStatus(DataStatus.HTTP_SUCCESS);
-		response.setData(datas);
-		
-		return response;
+		PageResult<CompetitionTeamDto> datas = iCompetitionTeamService.findCompetitionTeamByParam(dto, query);
+		return datas.getResults();
 	}
 	
 }
