@@ -59,7 +59,8 @@ public class CompetitionRoundDao extends MyBatisBaseDao<CompetitionRound> {
 	 * 2016年2月2日下午1:55:49
 	 */
 	public int maxPageRanking(String compId){
-		return exMapper.maxPageRanking(compId);
+		Integer max = exMapper.maxPageRanking(compId);
+		return max == null? 0 : max ;
 	}
 	
 	/**
