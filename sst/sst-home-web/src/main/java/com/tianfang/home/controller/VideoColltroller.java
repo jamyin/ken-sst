@@ -3,19 +3,19 @@ package com.tianfang.home.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tianfang.business.dto.VideoDto;
 import com.tianfang.business.service.IVideoService;
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.PageResult;
+import com.tianfang.common.model.Response;
 import com.tianfang.common.util.StringUtils;
 
 @Controller
@@ -35,30 +35,21 @@ public class VideoColltroller extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value="/findAlbumList")
-	public PageResult<VideoDto> getVideoPage(ExtPageQuery page,VideoDto videoDto){
-		PageResult<VideoDto> pageList = new PageResult<VideoDto>();
+	@ResponseBody
+	public Response<PageResult<VideoDto>> getVideoPage(ExtPageQuery page,VideoDto videoDto){
+		Response<PageResult<VideoDto>> res = new Response<PageResult<VideoDto>>();
 		Map<String, Object> map = new HashMap<String, Object>();
 		byCriteriaPage(videoDto,map);
-		pageList = videoService.getCriteriaPage(page.changeToPageQuery(),map);
-		return pageList;
-	}
-	
-
-	/**
-	 * 跳转到视频播页面
-	 * @param id  videoId
-	 * @return
-	 */
-	@RequestMapping("/toVideo")
-	public ModelAndView toVideo(String id,HttpServletRequest request){
-		ModelAndView mv = getModelAndView();
-		Map<String,Object> map = new  HashMap<String, Object>();
-		map.put("id", id);
-		VideoDto Video = videoService.selectById(map);
-		Video.setVideo(Video.getVideo().replace("\\", "/"));
-		mv.addObject("result", Video);
-		mv.setViewName("video/video_details");
-		return mv;
+		PageResult<VideoDto> pageList = videoService.getCriteriaPage(page.changeToPageQuery(),map);
+		if(pageList != null){
+			res.setData(pageList);
+			res.setMessage("查询成功");
+			res.setStatus(DataStatus.HTTP_SUCCESS);
+			return res;
+		}
+		res.setMessage("查询失败");
+		res.setStatus(DataStatus.HTTP_FAILE);
+		return res;
 	}
 	
 	/**

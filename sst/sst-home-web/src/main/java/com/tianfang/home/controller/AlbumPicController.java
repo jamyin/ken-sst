@@ -5,11 +5,14 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tianfang.business.dto.AlbumPictureDto;
 import com.tianfang.business.service.IAlbumPicService;
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.PageResult;
+import com.tianfang.common.model.Response;
 
 /**
  * @author YIn
@@ -32,10 +35,20 @@ public class AlbumPicController extends BaseController{
 	 * @time:2015年11月13日 下午5:53:30
 	 */
 	@RequestMapping(value = "findAlbumPicByPage.do")
-	public PageResult<AlbumPictureDto> findAlbumPicByPage(AlbumPictureDto query, ExtPageQuery page) {
+	@ResponseBody
+	public Response<PageResult<AlbumPictureDto>> findAlbumPicByPage(AlbumPictureDto query, ExtPageQuery page) {
 		logger.info("AlbumPictureDto query : " + query);
+		Response<PageResult<AlbumPictureDto>> res = new Response<PageResult<AlbumPictureDto>>();
 		PageResult<AlbumPictureDto> result = iAlbumPicService.findAlbumPicByPage(query,
 				page.changeToPageQuery());
-		return result;
+		if(result != null){
+			res.setData(result);
+			res.setMessage("查询成功");
+			res.setStatus(DataStatus.HTTP_SUCCESS);
+			return res;
+		}
+		res.setMessage("查询失败");
+		res.setStatus(DataStatus.HTTP_FAILE);
+		return res;
 	}
 }
