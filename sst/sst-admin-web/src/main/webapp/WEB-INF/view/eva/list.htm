@@ -49,6 +49,7 @@
 												<th>测评标题</th>
 												<th>参与人数</th>
 												<th>本测评总分</th>
+												<th>本测评类型</th>
 												<th>排序</th>
 												<th class="hidden-phone"><i class="icon-time hidden-phone"></i>创建时间</th>
 												<th>状态</th>
@@ -66,6 +67,13 @@
 														<td>${(page.title)!}</td>
 														<td>${(page.joinNumber)!}</td>
 														<td>${(page.sumScore)!}</td>
+														<td>
+															<#if page.evaType ==1>
+																健康评测
+															<#else>
+																身体评测
+															</#if>
+														</td>
 														<td><input style="width:50px;" value="${(page.orderBy)!}"/></td>
 														<td class='hidden-phone'>${(page.createTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>
 														<td>
