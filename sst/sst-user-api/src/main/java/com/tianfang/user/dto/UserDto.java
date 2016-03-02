@@ -97,7 +97,7 @@ public class UserDto implements Serializable{
     private String mobile;
 	
 	/**
-	 * 用户类型(1，普通会员；2，教练；3，队长；4，裁判)
+	 * 用户类型(1，普通会员；2，教练；3，队长)
 	 */
 	@Getter
 	@Setter

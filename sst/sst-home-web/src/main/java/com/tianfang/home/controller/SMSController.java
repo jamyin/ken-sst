@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tianfang.common.constants.DataStatus;
-import com.tianfang.common.constants.SessionConstants;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.DateUtils;
 import com.tianfang.common.util.PropertiesUtils;
@@ -39,6 +38,7 @@ import com.tianfang.user.service.ISmsSendService;
 @RequestMapping(value = "sms")
 public class SMSController {
 	protected static final Log logger = LogFactory.getLog(SMSController.class);
+	public static final String SST_PHONE_NUMBER = "SST_MOBILE";
 
 	@Autowired
 	private ISmsSendService iSmsSendService;
@@ -57,21 +57,9 @@ public class SMSController {
 	 */
 	@RequestMapping(value = "send")
 	@ResponseBody
-	public Response<String> regMobileVal(String mobile, String captcha, HttpServletRequest request) {
+	public Response<String> regMobileVal(String mobile, HttpServletRequest request) {
 		Response<String> result = new Response<String>();			
 	
-		if(StringUtils.isEmpty(captcha)){
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("验证码为空！");
-			return result;
-		}
-		String randomPicSession = request.getSession().getAttribute("RandomCode").toString().toLowerCase();
-		if (!captcha.toLowerCase().equals(randomPicSession)) {
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("验证码输入错误！");
-			return result;
-		}
-		
 		if(!CheckSendMsg(redisTemplate, mobile, request)){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("发送短信过于频繁,请您稍后再试");
@@ -87,14 +75,15 @@ public class SMSController {
 		int randomNumber = (int) (Math.random() * 9000 + 1000);
 		String content = "温馨提示，为了保护您的隐私，请您在90秒内输入" + randomNumber + "验证码。";// 短信内容
 		iSmsSendService.sendSms(randomNumber, mobile, content);
-		String keyCode = "reg"+mobile ;
-		redisTemplate.opsForValue().set(keyCode, randomNumber, 90, TimeUnit.SECONDS);;
+		String keyCode = SST_PHONE_NUMBER+mobile ;
+		redisTemplate.opsForValue().set(keyCode, randomNumber, 90, TimeUnit.SECONDS);
+		result.setMessage("短信验证码发送成功!");
 		result.setStatus(DataStatus.HTTP_SUCCESS);
 		return result;
 	}
-
+	
 	/**
-	 * 验证手机
+	 * 验证手机(暂时不用)
 	 * @param session
 	 * @param validateCode
 	 * @param mobilePhone
@@ -102,24 +91,25 @@ public class SMSController {
 	 * @author xiang_wang
 	 * 2016年1月19日上午10:03:57
 	 */
+	@Deprecated
 	@RequestMapping(value = "validate")
 	@ResponseBody
-	public Response<String> validate(HttpSession session, String validateCode, String mobilePhone) {
+	public Response<String> validate(HttpSession session, String validateCode, String mobile) {
 		logger.debug("validateCode =" + validateCode);
 		Response<String> result = new Response<String>();
 		
-		if(validateCode == null || validateCode.equals("")){
+		if(StringUtils.isBlank(validateCode)){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("验证码为空！");
 			return result;
 		}
-		if (StringUtils.isEmpty(mobilePhone)) {
+		if (StringUtils.isEmpty(mobile)) {
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("手机为空！");
 			return result;
 		}
 		
-		String keyCode = SessionConstants.PHONE_NUMBER;
+		String keyCode = SST_PHONE_NUMBER+mobile;
 		if(redisTemplate.opsForValue().get(keyCode)==null || redisTemplate.opsForValue().get(keyCode).equals("")){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("验证码失效！");

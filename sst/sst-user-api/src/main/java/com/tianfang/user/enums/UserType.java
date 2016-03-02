@@ -2,7 +2,7 @@ package com.tianfang.user.enums;
 
 /**		
  * <p>Title: UserType </p>
- * <p>Description: 类描述:用户类型 1-普通用户,2-球员,3-队长,4-教练</p>
+ * <p>Description: 类描述:用户类型 1-普通用户,2-队长,3-教练</p>
  * <p>Copyright (c) 2015 </p>
  * <p>Company: 上海天坊信息科技有限公司</p>
  * @author xiang_wang	
@@ -13,7 +13,7 @@ package com.tianfang.user.enums;
  * <p>修改备注：</p>
  */
 public enum UserType {
-	GENERAL(1,"普通用户"), PLAYER(2,"球员"), CAPTAIN(3, "队长"), COACH(3, "教练");
+	GENERAL(1,"普通用户"), COACH(2, "教练"),CAPTAIN(3, "队长");
 	
 	UserType(int index,String value){
 		this.index =index;
