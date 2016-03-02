@@ -38,4 +38,8 @@ public class EvaluatScoreDto implements Serializable{
 	@Setter
 	@Getter
     private Integer stat;
+	
+	@Setter
+	@Getter
+    private String thumbnail;
 }

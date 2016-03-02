@@ -157,8 +157,15 @@ public class EvaluatController extends BaseController{
 	@ResponseBody
 	public Response<EvaluatScoreDto> doSubmit(String evaId,Integer sumScore,String userId){
 		Response<EvaluatScoreDto> result = new Response<EvaluatScoreDto>();
+		EvaluatDto evaDto = iEvaluatService.findEvaluatById(evaId);
+		if(evaDto==null){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("数据加载失败,请稍微重新再试");
+			return result;
+		}
 		EvaluatScoreDto esDto = new EvaluatScoreDto();
 		esDto.setEvaId(evaId);
+		esDto.setThumbnail(evaDto.getThumbnail());
 		esDto.setStartScore(sumScore);
 		esDto.setEndScore(sumScore);
 		List<EvaluatScoreDto> dataList = iEvaluatScoreService.findEvaluatScoreBySql(esDto);
