@@ -21,7 +21,7 @@ import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.message.dto.NoticeUsersDto;
 import com.tianfang.message.service.INoticeService;
 import com.tianfang.message.service.INoticeUsersService;
-import com.tianfang.user.dto.LoginUserDto;
+import com.tianfang.user.dto.UserDto;
 
 /**
  * SST给移动端接口-消息助手-公告
@@ -77,7 +77,7 @@ public class NoticeController extends BaseController {
 	@RequestMapping(value="/add")
 	public Response<String> addNotice(NoticeDto noticeDto){
 		Response<String> data = new Response<String>();
-		LoginUserDto dto = getLoginUser();
+		UserDto dto = getLoginUser();
 		noticeDto.setCreateUserId(dto.getId());
 		noticeDto.setCreateUserName(dto.getMobile());
 		int flag = noticeService.addNotice(noticeDto);
@@ -102,7 +102,7 @@ public class NoticeController extends BaseController {
 	@RequestMapping(value="/update")
 	public Response<String> updateNotice(NoticeDto noticeDto){
 		Response<String> data = new Response<String>();
-		LoginUserDto dto = getLoginUser();
+		UserDto dto = getLoginUser();
 		noticeDto.setCreateUserId(dto.getId());
 		noticeDto.setCreateUserName(dto.getMobile());
 		int flag = noticeService.updateNotice(noticeDto);
@@ -183,7 +183,7 @@ public class NoticeController extends BaseController {
 		Gson gson = new Gson();
 	    NoticeDto noticeDto =  gson.fromJson(jsonPara, NoticeDto.class);
 		Response<String> data = new Response<String>();
-		LoginUserDto dto = getLoginUser();
+		UserDto dto = getLoginUser();
 		noticeDto.setCreateUserId(dto.getId());
 		noticeDto.setCreateUserName(dto.getMobile());
 		int flag = noticeService.addNotice(noticeDto);
