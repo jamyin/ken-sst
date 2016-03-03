@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.constants.SessionConstants;
-import com.tianfang.common.digest.MD5Coder;
-import com.tianfang.common.exception.SystemException;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
@@ -98,25 +96,8 @@ public class UserController extends BaseController{
 			throw new SystemException(e.getMessage(), e);
 		}*/
 		String key = SMSController.SST_PHONE_NUMBER + dto.getMobile();
-		if(!StringUtils.isBlank(code)){
-			int num;
-			try {
-				num = Integer.parseInt(code);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-				result.setStatus(DataStatus.HTTP_FAILE);
-				result.setMessage("输入的短信验证码不是4位数字！");
-				return result;
-			}
-			if (redisTemplate.opsForValue().get(key) == null) {
-				result.setStatus(DataStatus.HTTP_FAILE);
-				result.setMessage("没有点击获取验证码！");
-				return result;
-			}if(!redisTemplate.opsForValue().get(key).equals(num)){
-				result.setStatus(DataStatus.HTTP_FAILE);
-				result.setMessage("手机验证码输入错误！");
-				return result;
-			}
+		if (checkCode(code, result, key) == 0){
+			return result;
 		}
 		try {
 			if (null != userService.checkMobile(dto.getMobile())) {
@@ -134,7 +115,7 @@ public class UserController extends BaseController{
 				LoginUserDto loginUserDto = new LoginUserDto(id, user.getNickName(), user.getPic(), user.getTeamId(), user.getMobile());
 				session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);
 				if(loginUserDto != null){
-					redisTemplate.opsForValue().set(id, loginUserDto);
+					redisTemplate.opsForValue().set(SST_USER+id, loginUserDto);
 				}
 				result.setData(user.getId());
 				result.setStatus(DataStatus.HTTP_SUCCESS);
@@ -176,13 +157,13 @@ public class UserController extends BaseController{
 			result.setMessage("输入的用户密码为空！");
 			return result;
 		}
-		String md5oldPwd;// 获取页面上输入的密码并加密校验
+		/*String md5oldPwd;// 获取页面上输入的密码并加密校验
 		try {
 			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPassword());
 		} catch (Exception e) {
 			throw new SystemException(e.getMessage(), e);
 		}
-		dto.setPassword(md5oldPwd);
+		dto.setPassword(md5oldPwd);*/
 		UserDto user = null;
 		try {
 			user = userService.checkUser(dto);
@@ -203,13 +184,159 @@ public class UserController extends BaseController{
 		LoginUserDto loginUserDto = new LoginUserDto(user.getId(), user.getNickName(), user.getPic(), user.getTeamId(), user.getMobile());
 		session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);
 		if(user != null){
-			redisTemplate.opsForValue().set(dto.getId(), loginUserDto);
+			redisTemplate.opsForValue().set(SST_USER+user.getId(), loginUserDto);
 		}
 		result.setData(loginUserDto.getId());
 		result.setStatus(DataStatus.HTTP_SUCCESS);
 		result.setMessage("用户登录成功！");
 		return result;
 	}
+	
+	/**
+	 * 用户重置密码接口
+	 * 
+	 * @param session
+	 * @param mobile
+	 * @param code
+	 * @param password
+	 * @param confirmPassword
+	 * @return
+	 */
+	@RequestMapping(value = "resetPassword")
+	@ResponseBody
+	public Response<String> resetPassword(HttpSession session, String mobile, @RequestParam(value = "code", required = false) String code, String password, String confirmPassword) {
+		Response<String> result = new Response<String>();
+		/* 移动端将密码加密后,传给服务器
+		 * String md5oldPwd;// 获取页面上输入的密码并加密校验
+		try {
+			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPassword());
+			dto.setPassword(md5oldPwd);
+		} catch (Exception e) {
+			throw new SystemException(e.getMessage(), e);
+		}*/
+		if (StringUtils.isBlank(password)){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("密码不能为空！");
+			return result;
+		}
+		if (!password.equals(confirmPassword)){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("二次密码输入不一致！");
+			return result;
+		}
+		String key = SMSController.SST_PHONE_NUMBER + mobile;
+		if (checkCode(code, result, key) == 0){
+			return result;
+		};
+		try {
+			UserDto dto = new UserDto();
+			dto.setMobile(mobile);
+			List<UserDto> users = userService.findUserByParam(dto);
+			if (null == users || users.size() == 0) {
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("手机号码未注册！");
+				return result;
+			}
+			UserDto user = users.get(0);
+			user.setPassword(password);
+			int size = userService.update(user);
+			if (size > 0) {
+				LoginUserDto loginUserDto = new LoginUserDto(user.getId(), user.getNickName(), user.getPic(), user.getTeamId(), user.getMobile());
+				session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);
+				if(loginUserDto != null){
+					redisTemplate.opsForValue().set(SST_USER+user.getId(), loginUserDto);
+				}
+				result.setData(user.getId());
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+				result.setMessage("恭喜您密码重置成功！");
+				return result;
+			} else {
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("对不起密码重置失败！");
+				return result;
+			}
+		} catch (Exception e) {
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage(e.getMessage());
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return result;
+	}
+
+	/**
+	 * 更换手机号码接口
+	 * 
+	 * @param session
+	 * @param mobile 新手机号码
+	 * @param oldMobile	原手机号码
+	 * @param code	新手机短信验证码
+	 * @param password	原手机密码
+	 * @return
+	 */
+	@RequestMapping(value = "changeMobile")
+	@ResponseBody
+	public Response<String> changeMobile(HttpSession session, String mobile, String oldMobile, @RequestParam(value = "code", required = false) String code, String password) {
+		Response<String> result = new Response<String>();
+		/* 移动端将密码加密后,传给服务器
+		 * String md5oldPwd;// 获取页面上输入的密码并加密校验
+		try {
+			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPassword());
+			dto.setPassword(md5oldPwd);
+		} catch (Exception e) {
+			throw new SystemException(e.getMessage(), e);
+		}*/
+		if (StringUtils.isBlank(password)){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("密码不能为空！");
+			return result;
+		}
+		String key = SMSController.SST_PHONE_NUMBER + mobile;
+		if (checkCode(code, result, key) == 0){
+			return result;
+		};
+		try {
+			UserDto dto = new UserDto();
+			dto.setMobile(oldMobile);
+			List<UserDto> users = userService.findUserByParam(dto);
+			if (null == users || users.size() == 0) {
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("原手机号码未注册！");
+				return result;
+			}
+			UserDto user = users.get(0);
+			if (!StringUtils.equals(user.getPassword(), password)){
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("密码输入错误！");
+				return result;
+			}
+			user.setMobile(mobile);
+			user.setPassword(password);
+			int size = userService.update(user);
+			if (size > 0) {
+				LoginUserDto loginUserDto = new LoginUserDto(user.getId(), user.getNickName(), user.getPic(), user.getTeamId(), user.getMobile());
+				session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);
+				if(loginUserDto != null){
+					redisTemplate.opsForValue().set(SST_USER+user.getId(), loginUserDto);
+				}
+				result.setData(user.getId());
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+				result.setMessage("恭喜您更换手机号成功！");
+				return result;
+			} else {
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("对不起更换手机号失败！");
+				return result;
+			}
+		} catch (Exception e) {
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage(e.getMessage());
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return result;
+	}
+	
 	
 	/**
 	 * @author YIn
@@ -822,4 +949,34 @@ public class UserController extends BaseController{
     	
     	return result;
     }
+    
+    /**
+	 * 校验短信验证码
+	 * 
+	 * @param code
+	 * @param result
+	 * @param key
+	 * @return
+	 */
+	private int checkCode(String code, Response<String> result, String key) {
+		if(!StringUtils.isBlank(code)){
+			int num = 0;
+			try {
+				num = Integer.parseInt(code);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("输入的短信验证码不是4位数字！");
+			}
+			if (redisTemplate.opsForValue().get(key) == null) {
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("没有点击获取验证码！");
+			}if(!redisTemplate.opsForValue().get(key).equals(num)){
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("手机验证码输入错误！");
+			}
+			return num;
+		}
+		return 0;
+	}
 }
