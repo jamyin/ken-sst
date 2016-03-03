@@ -100,6 +100,9 @@ public class UserDao extends MyBatisBaseDao<User> {
         	if (null != params.getUtype()){
         		criteria.andUtypeEqualTo(params.getUtype().intValue());
         	}
+        	if (StringUtils.isNotBlank(params.getPassword())){
+        		criteria.andPasswordEqualTo(params.getPassword());
+        	}
         }
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 	}
