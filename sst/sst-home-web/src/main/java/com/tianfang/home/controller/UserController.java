@@ -24,6 +24,7 @@ import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.DateUtils;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.home.utils.TigaseUtil;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.app.FriendApp;
@@ -110,15 +111,21 @@ public class UserController extends BaseController{
 				result.setMessage("注册失败！");
 				return result;
 			} else {
-				UserDto user = userService.getUserById(id);
-				session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
-				if(user != null){
-					redisTemplate.opsForValue().set(SST_USER+id, user);
+				if (TigaseUtil.registered(dto.getMobile(), dto.getPassword())){
+					UserDto user = userService.getUserById(id);
+					session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
+					if(user != null){
+						redisTemplate.opsForValue().set(SST_USER+id, user);
+					}
+					result.setData(user.getId());
+					result.setStatus(DataStatus.HTTP_SUCCESS);
+					result.setMessage("恭喜您注册成功！");
+					return result;
+				}else{
+					result.setStatus(DataStatus.HTTP_FAILE);
+					result.setMessage("对不起.注册失败！");
+					return result;
 				}
-				result.setData(user.getId());
-				result.setStatus(DataStatus.HTTP_SUCCESS);
-				result.setMessage("恭喜您注册成功！");
-				return result;
 			}
 		} catch (Exception e) {
 			result.setStatus(DataStatus.HTTP_FAILE);
@@ -201,7 +208,7 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "resetPassword")
 	@ResponseBody
-	public Response<String> resetPassword(HttpSession session, String mobile, @RequestParam(value = "code", required = false) String code, String password, String confirmPassword) {
+	public Response<String> resetPassword(HttpSession session, String mobile, @RequestParam(value = "code", required = false) String code, String password) {
 		Response<String> result = new Response<String>();
 		/* 移动端将密码加密后,传给服务器
 		 * String md5oldPwd;// 获取页面上输入的密码并加密校验
@@ -214,11 +221,6 @@ public class UserController extends BaseController{
 		if (StringUtils.isBlank(password)){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("密码不能为空！");
-			return result;
-		}
-		if (!password.equals(confirmPassword)){
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("二次密码输入不一致！");
 			return result;
 		}
 		String key = SMSController.SST_PHONE_NUMBER + mobile;
@@ -238,14 +240,20 @@ public class UserController extends BaseController{
 			user.setPassword(password);
 			int size = userService.update(user);
 			if (size > 0) {
-				session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
-				if(user != null){
-					redisTemplate.opsForValue().set(SST_USER+user.getId(), user);
+				if (TigaseUtil.resetPassword(user.getMobile(), user.getPassword())){
+					session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
+					if(user != null){
+						redisTemplate.opsForValue().set(SST_USER+user.getId(), user);
+					}
+					result.setData(user.getId());
+					result.setStatus(DataStatus.HTTP_SUCCESS);
+					result.setMessage("恭喜您密码重置成功！");
+					return result;
+				}else{
+					result.setStatus(DataStatus.HTTP_FAILE);
+					result.setMessage("对不起密码重置失败！");
+					return result;
 				}
-				result.setData(user.getId());
-				result.setStatus(DataStatus.HTTP_SUCCESS);
-				result.setMessage("恭喜您密码重置成功！");
-				return result;
 			} else {
 				result.setStatus(DataStatus.HTTP_FAILE);
 				result.setMessage("对不起密码重置失败！");

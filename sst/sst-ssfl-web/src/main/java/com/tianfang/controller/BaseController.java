@@ -12,7 +12,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.common.constants.SessionConstants;
-import com.tianfang.user.dto.LoginUserDto;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.service.IUserService;
 
@@ -58,8 +57,8 @@ public class BaseController {
 		return mv;
 	}
 
-	public LoginUserDto getUserAccountByUserId(){
-		LoginUserDto user = (LoginUserDto)getRequest().getSession().getAttribute(SessionConstants.LOGIN_USER_INFO);
+	public UserDto getUserAccountByUserId(){
+		UserDto user = (UserDto)getRequest().getSession().getAttribute(SessionConstants.LOGIN_USER_INFO);
 		if(user==null){
 			return null;
 		}
@@ -67,7 +66,7 @@ public class BaseController {
 	}
 
 	public String getSessionUserId(){
-		LoginUserDto user = (LoginUserDto)getRequest().getSession().getAttribute(SessionConstants.LOGIN_USER_INFO);
+		UserDto user = (UserDto)getRequest().getSession().getAttribute(SessionConstants.LOGIN_USER_INFO);
 		if(user==null){
 			return null;
 		}
