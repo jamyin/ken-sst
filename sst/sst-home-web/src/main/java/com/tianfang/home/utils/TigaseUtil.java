@@ -28,8 +28,8 @@ public class TigaseUtil {
 	static{
 		ip = PropertiesUtils.getProperty("tigaseTomcat");
 		suffix = PropertiesUtils.getProperty("tiagseSuffix");
-		REGISTERED_URL = REGISTERED_URL.replaceAll("${ip}", ip);
-		RESETPASSWORD_URL = RESETPASSWORD_URL.replaceAll("${ip}", ip);
+		REGISTERED_URL = REGISTERED_URL.replace("${ip}", ip);
+		RESETPASSWORD_URL = RESETPASSWORD_URL.replace("${ip}", ip);
 	}
 	
 	/**
