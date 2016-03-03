@@ -102,7 +102,7 @@ public class UserServiceImpl implements IUserService {
 		UserDto dto = new UserDto();
 		dto.setMobile(mobile);
 		List<UserDto> list = userDao.findUserByParam(dto);
-		if (null != list){
+		if (null != list && list.size() > 0){
 			return list.get(0);
 		}
 		return null;
