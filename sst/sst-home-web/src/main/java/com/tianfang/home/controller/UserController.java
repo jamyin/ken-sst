@@ -1,5 +1,6 @@
 package com.tianfang.home.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -386,7 +387,41 @@ public class UserController extends BaseController{
    	 }
    	return result;
     }
+    
+	/**
+	 * 根据条件查询用户信息接口
+	 * @author YIn
+	 * @time:2016年3月3日 下午3:36:45
+	 * @param userDto
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/findUser")
+	public Response<UserDto> findUser(UserDto userDto) {
+		Response<UserDto> result = new Response<UserDto>();
+		if (userDto == null) {
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("查询条件为空");
+			return result;
+		}
+		List<UserDto> list = new ArrayList<UserDto>();
+		try {
+			list = userService.findUserByParam(userDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (list.size() > 0) {
+			result.setStatus(DataStatus.HTTP_SUCCESS);
+			result.setData(list.get(0));
+			result.setMessage("查询成功");
+			return result;
+		}
+		result.setStatus(DataStatus.HTTP_FAILE);
+		result.setMessage("查询失败");
+		return result;
 
+	}
+    
 	/**
 	 * 异步校验用户登录状态
 	 * @return{"status":状态码(200-成功,500-失败),"message":"提示信息","data":UserDto(用户数据对象封装)}
