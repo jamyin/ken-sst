@@ -42,7 +42,7 @@ public class TigaseUtil {
 	 */
 	public static boolean registered(String mobile, String password){
 		checkAccountAndPassword(mobile, password);
-		Map<String, String> params = assemblyRequestParams(password, suffix);
+		Map<String, String> params = assemblyRequestParams(password, mobile);
 		String result = HttpClientUtil.sendPostRequestByJava(REGISTERED_URL, params);
 		return analysisResult(result);
 	}
@@ -56,7 +56,7 @@ public class TigaseUtil {
 	 * 2016年3月3日下午1:34:02
 	 */
 	public static boolean resetPassword(String mobile, String password){
-		Map<String, String> params = assemblyRequestParams(password, suffix);
+		Map<String, String> params = assemblyRequestParams(password, mobile);
 		String result = HttpClientUtil.sendPostRequestByJava(RESETPASSWORD_URL, params);
 		return analysisResult(result);
 	}
@@ -64,15 +64,15 @@ public class TigaseUtil {
 	/**
 	 * 组装请求参数
 	 * @param password
-	 * @param suffix
+	 * @param mobile
 	 * @return
 	 * @author xiang_wang
 	 * 2016年3月3日下午1:32:36
 	 */
 	private static Map<String, String> assemblyRequestParams(String password,
-			String suffix) {
+			String mobile) {
 		Map<String, String> params = new HashMap<String, String>(2);
-		params.put("userAccount", "mobile"+suffix);
+		params.put("userAccount", mobile+suffix);
 		params.put("password", password);
 		return params;
 	}
