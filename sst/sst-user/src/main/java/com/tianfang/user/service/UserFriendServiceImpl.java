@@ -27,6 +27,9 @@ public class UserFriendServiceImpl implements IUserFriendService {
 		UserFriend m = BeanUtils.createBeanByTarget(dto, UserFriend.class);
 		String id = UUIDGenerator.getUUID();
 		m.setId(id);
+		if (null == m.getCare()){
+			m.setCare(0);
+		}
 		userFriendDao.insertSelective(m);
 		return id;
 	}

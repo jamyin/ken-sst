@@ -32,11 +32,13 @@ import com.tianfang.user.dto.GroupDto;
 import com.tianfang.user.dto.MemoDto;
 import com.tianfang.user.dto.PlanDto;
 import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.dto.UserFriendDto;
 import com.tianfang.user.service.IEmailSendService;
 import com.tianfang.user.service.IGroupService;
 import com.tianfang.user.service.IMemoService;
 import com.tianfang.user.service.IPlanService;
 import com.tianfang.user.service.ISmsSendService;
+import com.tianfang.user.service.IUserFriendService;
 import com.tianfang.user.service.IUserService;
 
 /**		
@@ -73,6 +75,8 @@ public class UserController extends BaseController{
 	private IGroupService groupService;
 	@Autowired
 	private ITeamService teamService;
+	@Autowired
+	private IUserFriendService userFriendService;
 	
 	/**
 	 * 用户注册
@@ -466,6 +470,83 @@ public class UserController extends BaseController{
        
         return result;
     }
+    
+    /**
+     * 添加好友
+     * @param userId
+     * @param friend
+     * @return
+     * @author xiang_wang
+     * 2016年3月3日下午3:24:56
+     */
+    @RequestMapping(value="friend/add")
+    @ResponseBody
+    public Response<String> appendFriends(String userId, String friendId) {
+    	UserDto user = getUserByCache(userId);
+    	Response<String> result = new Response<String>();
+    	if (null != user){
+			try {
+				UserFriendDto uf = new UserFriendDto();
+				uf.setUserId(userId);
+				uf.setFriendId(friendId);
+				userFriendService.save(uf);
+				result.setMessage("添加成功");
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				result.setStatus(DataStatus.HTTP_FAILE);
+	    		result.setMessage("系统异常");
+			}
+    	}else{
+    		result.setStatus(DataStatus.HTTP_FAILE);
+    		result.setMessage("用户不存在");
+    	}
+       
+        return result;
+    }
+    
+    /**
+     * 添加好友关心
+     * @param userId
+     * @param id
+     * @return
+     * @author xiang_wang
+     * 2016年3月3日下午3:36:46
+     */
+    @RequestMapping(value="friend/care")
+    @ResponseBody
+    public Response<String> careFriends(String userId, String id) {
+    	UserDto user = getUserByCache(userId);
+    	Response<String> result = new Response<String>();
+    	if (null != user){
+			try {
+				UserFriendDto uf = userFriendService.getUserFriendById(id);
+				if (null != uf){
+					if (null == uf.getCare() || uf.getCare().intValue() == DataStatus.DISABLED){
+						uf.setCare(DataStatus.ENABLED);
+						result.setMessage("已关心");
+					}else{
+						uf.setCare(DataStatus.DISABLED);
+						result.setMessage("已取消");
+					}
+				}
+				userFriendService.update(uf);
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				result.setStatus(DataStatus.HTTP_FAILE);
+	    		result.setMessage("系统异常");
+			}
+    	}else{
+    		result.setStatus(DataStatus.HTTP_FAILE);
+    		result.setMessage("用户不存在");
+    	}
+       
+        return result;
+    }
+    
     
     /**
      * 获取日期用户训练计划
