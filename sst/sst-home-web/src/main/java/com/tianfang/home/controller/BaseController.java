@@ -19,6 +19,7 @@ import com.tianfang.user.service.IUserService;
 
 public class BaseController {
 	protected Logger logger = Logger.getLogger(BaseController.class);
+	public static final String SST_USER = "SSTUSER";
 	
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
@@ -36,7 +37,7 @@ public class BaseController {
 	 * @throws Exception 
 	 */
 	public UserDto getUserByCache(String userId){	
-		String keyCode = "SSTUSER"+userId;
+		String keyCode = SST_USER+userId;
 		UserDto dto = null;
 		if(null != redisTemplate.opsForValue().get(keyCode)){
 			dto = (UserDto)redisTemplate.opsForValue().get(keyCode);
