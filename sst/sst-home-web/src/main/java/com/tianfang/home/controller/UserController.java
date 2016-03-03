@@ -28,7 +28,6 @@ import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.app.FriendApp;
 import com.tianfang.user.dto.GroupDto;
-import com.tianfang.user.dto.LoginUserDto;
 import com.tianfang.user.dto.MemoDto;
 import com.tianfang.user.dto.PlanDto;
 import com.tianfang.user.dto.UserDto;
@@ -112,10 +111,9 @@ public class UserController extends BaseController{
 				return result;
 			} else {
 				UserDto user = userService.getUserById(id);
-				LoginUserDto loginUserDto = new LoginUserDto(id, user.getNickName(), user.getPic(), user.getTeamId(), user.getMobile());
-				session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);
-				if(loginUserDto != null){
-					redisTemplate.opsForValue().set(SST_USER+id, loginUserDto);
+				session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
+				if(user != null){
+					redisTemplate.opsForValue().set(SST_USER+id, user);
 				}
 				result.setData(user.getId());
 				result.setStatus(DataStatus.HTTP_SUCCESS);
@@ -181,12 +179,11 @@ public class UserController extends BaseController{
 			return result;
 		}
 
-		LoginUserDto loginUserDto = new LoginUserDto(user.getId(), user.getNickName(), user.getPic(), user.getTeamId(), user.getMobile());
-		session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);
+		session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
 		if(user != null){
-			redisTemplate.opsForValue().set(SST_USER+user.getId(), loginUserDto);
+			redisTemplate.opsForValue().set(SST_USER+user.getId(), user);
 		}
-		result.setData(loginUserDto.getId());
+		result.setData(user.getId());
 		result.setStatus(DataStatus.HTTP_SUCCESS);
 		result.setMessage("用户登录成功！");
 		return result;
@@ -241,10 +238,9 @@ public class UserController extends BaseController{
 			user.setPassword(password);
 			int size = userService.update(user);
 			if (size > 0) {
-				LoginUserDto loginUserDto = new LoginUserDto(user.getId(), user.getNickName(), user.getPic(), user.getTeamId(), user.getMobile());
-				session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);
-				if(loginUserDto != null){
-					redisTemplate.opsForValue().set(SST_USER+user.getId(), loginUserDto);
+				session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
+				if(user != null){
+					redisTemplate.opsForValue().set(SST_USER+user.getId(), user);
 				}
 				result.setData(user.getId());
 				result.setStatus(DataStatus.HTTP_SUCCESS);
@@ -314,10 +310,9 @@ public class UserController extends BaseController{
 			user.setPassword(password);
 			int size = userService.update(user);
 			if (size > 0) {
-				LoginUserDto loginUserDto = new LoginUserDto(user.getId(), user.getNickName(), user.getPic(), user.getTeamId(), user.getMobile());
-				session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);
-				if(loginUserDto != null){
-					redisTemplate.opsForValue().set(SST_USER+user.getId(), loginUserDto);
+				session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
+				if(user != null){
+					redisTemplate.opsForValue().set(SST_USER+user.getId(), user);
 				}
 				result.setData(user.getId());
 				result.setStatus(DataStatus.HTTP_SUCCESS);
@@ -377,8 +372,8 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "checkUser")
 	@ResponseBody	
-	public Response<LoginUserDto> checkUser(){
-		Response<LoginUserDto> data = new Response<LoginUserDto>();
+	public Response<UserDto> checkUser(){
+		Response<UserDto> data = new Response<UserDto>();
 		if(StringUtils.isEmpty(getSessionUserId())){
 			data.setStatus(DataStatus.HTTP_FAILE);
 			data.setMessage("用户不存在");
@@ -394,9 +389,8 @@ public class UserController extends BaseController{
 			logger.error(e.getMessage());
 			return data;
 		}
-		LoginUserDto userDto = new LoginUserDto(dto.getId(), dto.getNickName(), dto.getPic(), dto.getTeamId(), dto.getMobile());
 		data.setStatus(DataStatus.HTTP_SUCCESS);
-		data.setData(userDto);
+		data.setData(dto);
 		return data;
 	}
 	
