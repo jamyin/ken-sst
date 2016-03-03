@@ -308,6 +308,13 @@ public class UserController extends BaseController{
 				result.setMessage("原手机号码未注册！");
 				return result;
 			}
+			dto.setMobile(mobile);
+			users = userService.findUserByParam(dto);
+			if (null != users && users.size() > 0) {
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("新手机号码已注册！");
+				return result;
+			}
 			UserDto user = users.get(0);
 			if (!StringUtils.equals(user.getPassword(), password)){
 				result.setStatus(DataStatus.HTTP_FAILE);
@@ -318,14 +325,22 @@ public class UserController extends BaseController{
 			user.setPassword(password);
 			int size = userService.update(user);
 			if (size > 0) {
-				session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
-				if(user != null){
-					redisTemplate.opsForValue().set(SST_USER+user.getId(), user);
+				if (TigaseUtil.registered(mobile, password)){
+					session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
+					if(user != null){
+						redisTemplate.opsForValue().set(SST_USER+user.getId(), user);
+					}
+					result.setData(user.getId());
+					result.setStatus(DataStatus.HTTP_SUCCESS);
+					result.setMessage("恭喜您更换手机号成功！");
+					return result;
+				}else{
+					user.setMobile(oldMobile);
+					userService.update(user);
+					result.setStatus(DataStatus.HTTP_FAILE);
+					result.setMessage("对不起更换手机号失败！");
+					return result;
 				}
-				result.setData(user.getId());
-				result.setStatus(DataStatus.HTTP_SUCCESS);
-				result.setMessage("恭喜您更换手机号成功！");
-				return result;
 			} else {
 				result.setStatus(DataStatus.HTTP_FAILE);
 				result.setMessage("对不起更换手机号失败！");
