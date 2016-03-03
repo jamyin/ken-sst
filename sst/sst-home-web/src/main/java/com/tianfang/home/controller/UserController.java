@@ -973,10 +973,12 @@ public class UserController extends BaseController{
 			if (redisTemplate.opsForValue().get(key) == null) {
 				result.setStatus(DataStatus.HTTP_FAILE);
 				result.setMessage("没有点击获取验证码！");
-			}if(!redisTemplate.opsForValue().get(key).equals(num)){
-				result.setStatus(DataStatus.HTTP_FAILE);
-				result.setMessage("手机验证码输入错误！");
-			}
+			}else{
+				if(!redisTemplate.opsForValue().get(key).equals(num)){
+					result.setStatus(DataStatus.HTTP_FAILE);
+					result.setMessage("手机验证码输入错误！");
+				}
+			} 
 			return num;
 		}
 		return 0;
