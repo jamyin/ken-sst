@@ -3,6 +3,8 @@ package com.tianfang.train.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +15,7 @@ import lombok.Setter;
  * @Description: TODO
  * @
  */
+@JsonIgnoreProperties({"createTime","lastUpdateTime","stat","createTimeStr","lastUpdateTimeStr"})
 public class CompetitionApplyDto implements Serializable{
 	
 	private static final long serialVersionUID = 4933671747979370463L;

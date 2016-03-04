@@ -20,7 +20,7 @@ public class UserApplyTeamServiceImpl implements IUserApplyTeamService {
 	private UserApplyTeamDao userApplyTeamDao;
 
 	@Override
-	public String save(UserApplyTeamDto dto) throws Exception {
+	public String save(UserApplyTeamDto dto) {
 		checkObjIsNull(dto);
 		UserApplyTeam m = BeanUtils.createBeanByTarget(dto, UserApplyTeam.class);
 		String id = UUIDGenerator.getUUID();
@@ -30,7 +30,7 @@ public class UserApplyTeamServiceImpl implements IUserApplyTeamService {
 	}
 
 	@Override
-	public void del(String id) throws Exception {
+	public void del(String id) {
 		checkIdIsNull(id);
 		UserApplyTeam m = userApplyTeamDao.selectByPrimaryKey(id);
 		checkObjIsNotExist(m);
@@ -39,7 +39,7 @@ public class UserApplyTeamServiceImpl implements IUserApplyTeamService {
 	}
 
 	@Override
-	public void update(UserApplyTeamDto dto) throws Exception {
+	public void update(UserApplyTeamDto dto) {
 		checkObjIsNull(dto);
 		checkIdIsNull(dto.getId());
 		checkObjIsNotExist(userApplyTeamDao.selectByPrimaryKey(dto.getId()));
@@ -48,7 +48,7 @@ public class UserApplyTeamServiceImpl implements IUserApplyTeamService {
 	}
 
 	@Override
-	public UserApplyTeamDto getUserApplyTeamById(String id) throws Exception {
+	public UserApplyTeamDto getUserApplyTeamById(String id) {
 		checkIdIsNull(id);
 		UserApplyTeam m = userApplyTeamDao.selectByPrimaryKey(id);
 		UserApplyTeamDto dto = BeanUtils.createBeanByTarget(m, UserApplyTeamDto.class);
@@ -56,13 +56,13 @@ public class UserApplyTeamServiceImpl implements IUserApplyTeamService {
 	}
 
 	@Override
-	public List<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto) throws Exception {
+	public List<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto){
 		return userApplyTeamDao.findUserApplyTeamByParam(dto);
 	}
 
 	@Override
 	public PageResult<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto, PageQuery query)
-			throws Exception {
+			{
 		int total = userApplyTeamDao.countUserApplyTeamByParam(dto);
 		if (total > 0){
 			query.setTotal(total);

@@ -1017,6 +1017,37 @@ public class UserController extends BaseController{
     }
     
     /**
+     * 查询群组下所有用户信息
+     * @param userId
+     * @param id
+     * @return
+     * @author xiang_wang
+     * 2016年3月4日下午5:18:29
+     */
+    @RequestMapping(value="getGroup")
+    @ResponseBody
+    public Response<GroupDto> getGroup(String userId, String id){
+    	UserDto user = getUserByCache(userId);
+    	Response<GroupDto> result = new Response<GroupDto>();
+    	if (null != user){
+    		try {
+    			result.setStatus(DataStatus.HTTP_SUCCESS);
+				result.setData(groupService.getGroupById(id, true));
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				result.setStatus(DataStatus.HTTP_FAILE);
+	    		result.setMessage("系统异常");
+			}	
+    	}else{
+    		result.setStatus(DataStatus.HTTP_FAILE);
+    		result.setMessage("用户不存在");
+    	}
+    	
+    	return result;
+    }
+    
+    /**
      * 我的特别关注
      * @return {"status":状态码(200-成功,500-失败),"message":"提示信息","data":List<FriendApp>}
      * @author xiang_wang

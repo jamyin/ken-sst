@@ -8,15 +8,15 @@ import com.tianfang.user.dto.UserApplyTeamDto;
 
 public interface IUserApplyTeamService {
 
-	String save(UserApplyTeamDto dto) throws Exception;
+	String save(UserApplyTeamDto dto);
 	
-	void del(String id) throws Exception;
+	void del(String id);
 	
-	void update(UserApplyTeamDto dto) throws Exception;
+	void update(UserApplyTeamDto dto);
 	
-	UserApplyTeamDto getUserApplyTeamById(String id) throws Exception;
+	UserApplyTeamDto getUserApplyTeamById(String id);
 	
-	List<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto) throws Exception;
+	List<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto);
 	
-	PageResult<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto, PageQuery query) throws Exception;
+	PageResult<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto, PageQuery query);
 }

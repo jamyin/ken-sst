@@ -27,6 +27,7 @@ import com.tianfang.train.dto.CompetitionRoundDto;
 import com.tianfang.train.dto.CompetitionTeamDto;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.dto.TeamPlayerDatasDto;
+import com.tianfang.train.enums.AuditType;
 import com.tianfang.train.service.ICompetitionApplyService;
 import com.tianfang.train.service.ICompetitionMatchService;
 import com.tianfang.train.service.ICompetitionNewsService;
@@ -36,6 +37,8 @@ import com.tianfang.train.service.ICompetitionService;
 import com.tianfang.train.service.ICompetitionTeamService;
 import com.tianfang.train.service.ITeamPlayerDatasService;
 import com.tianfang.train.service.ITeamService;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.enums.UserType;
 
 /**		
  * <p>Title: CompController </p>
@@ -285,7 +288,30 @@ public class CompController extends BaseController {
 	}
 	
 	/**
-	 * 赛事报名接口
+	 * 赛事去报名接口
+	 * 
+	 * @param userId
+	 * @param compId
+	 * @return
+	 * @author xiang_wang
+	 * 2016年3月4日下午3:50:34
+	 */
+	@RequestMapping(value = "toApply")
+	@ResponseBody
+	public Response<CompetitionApplyDto> toApply(String userId, String compId){
+		Response<CompetitionApplyDto> result = new Response<CompetitionApplyDto>();
+		CompetitionApplyDto compApply = new CompetitionApplyDto();
+		compApply.setCreateUserId(userId);
+		compApply.setCompId(compId);
+		if (checkCompApply(result, compApply)){
+			result.setData(compApply);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 赛事报名提交接口
 	 * @param dto
 	 * @return
 	 * @author xiang_wang
@@ -293,26 +319,19 @@ public class CompController extends BaseController {
 	 */
 	@RequestMapping(value = "apply")
 	@ResponseBody
-	public Response<String> apply(CompetitionApplyDto dto){
-		Response<String> response = new Response<String>();
-		if (StringUtils.isBlank(dto.getCompId())){
-			response.setStatus(DataStatus.HTTP_FAILE);
-			response.setMessage("报名失败");
-			return response;
-		}
-		try {
-			CompetitionDto comp= compService.getCompById(dto.getCompId());
-			dto.setCompName(comp.getTitle());
+	public Response<String> apply(CompetitionApplyDto dto, String userId){
+		Response<String> result = new Response<String>();
+		CompetitionApplyDto compApply = new CompetitionApplyDto();
+		compApply.setCreateUserId(userId);
+		compApply.setCompId(dto.getCompId());
+		if (checkCompApply(result, compApply)){
+			dto.setCreateUserId(compApply.getCreateUserId());
+			dto.setCreateUserName(compApply.getCreateUserName());
 			applyService.addCompetitionApply(dto);
-			response.setStatus(DataStatus.HTTP_SUCCESS);
-			response.setMessage("报名成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setStatus(DataStatus.HTTP_FAILE);
-			response.setMessage("报名失败");
-			logger.error(e.getMessage());
+			result.setMessage("恭喜您,报名成功!");
 		}
-		return response;
+			
+		return result;
 	}
 	
 	/**
@@ -640,5 +659,80 @@ public class CompController extends BaseController {
 				}
 			}
 		}
+	}
+	
+	/**
+	 *校验赛事是否满足报名条件
+	 *条件:1.登陆后才可报名
+	 * 		2.只有队长才有只能报名
+	 * 		3.如果有待审核的报名请用户等待审核
+	 * 		4.如果报名成功.提示用户已报名
+	 * @param result
+	 * @param compApply
+	 * @return
+	 * @author xiang_wang
+	 * 2016年3月4日下午4:45:06
+	 */
+	private boolean checkCompApply(Response<?> result, CompetitionApplyDto compApply){
+		if (StringUtils.isBlank(compApply.getCreateUserId())){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("请先登录后报名");
+			return false;
+		}
+		if (StringUtils.isBlank(compApply.getCompId())){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("系统异常");
+			return false;
+		}
+		UserDto user = getUserByCache(compApply.getCreateUserId());
+    	if (null != user){
+    		// 只有队长才有权利创建和报名球队
+			if (null == user.getUtype() || user.getUtype() != UserType.CAPTAIN.getIndex()){
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("赶快通知您们的队长来报名吧~");
+				return false;
+			}
+			try {
+				if (StringUtils.isNotBlank(user.getTeamId())){
+					TeamDto team = teamService.getTeamById(user.getTeamId());
+					if (team.getStat() == DataStatus.ENABLED){
+						compApply.setTeamId(team.getId());
+						List<CompetitionApplyDto> list = applyService.findCompetitionApply(compApply);
+						if (null != list && list.size() > 0){
+							for (CompetitionApplyDto temp : list){
+								if (temp.getAuditType().intValue() == AuditType.UNAUDIT.getIndex()){
+									result.setStatus(DataStatus.HTTP_FAILE);
+									result.setMessage("赛事已申请,请耐心等待审核!");
+									return false;
+								}
+								if (temp.getAuditType().intValue() == AuditType.PASS.getIndex()){
+									result.setStatus(DataStatus.HTTP_FAILE);
+									result.setMessage("您已经报名成功了~");
+									return false;
+								}
+							}
+						}
+						compApply.setTeamIcon(team.getIcon());
+						compApply.setTeamName(team.getName());
+					}
+					compApply.setContacts(user.getNickName());
+					compApply.setMobile(user.getMobile());
+					compApply.setCreateUserName(user.getNickName());
+				}
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				result.setStatus(DataStatus.HTTP_FAILE);
+	    		result.setMessage("系统异常");
+	    		return false;
+			}
+    	}else{
+    		result.setStatus(DataStatus.HTTP_FAILE);
+    		result.setMessage("用户不存在");
+    		return false;
+    	}
+		
+		return true;
 	}
 }

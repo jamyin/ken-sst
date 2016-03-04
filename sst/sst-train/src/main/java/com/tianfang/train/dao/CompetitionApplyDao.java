@@ -64,6 +64,9 @@ public class CompetitionApplyDao extends MyBatisBaseDao<CompetitionApply> {
 			if (StringUtils.isNotBlank(competitionApply.getTeamName())){
 	    		criteria.andTeamNameLike("%"+competitionApply.getTeamName()+"%");
 	    	}
+			if (null != competitionApply.getAuditType()){
+				criteria.andAuditTypeEqualTo(competitionApply.getAuditType());
+			}
 		}
 		
     	criteria.andStatEqualTo(DataStatus.ENABLED);
