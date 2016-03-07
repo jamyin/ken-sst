@@ -3,6 +3,7 @@ package com.tianfang.user.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
@@ -14,6 +15,7 @@ import com.tianfang.user.dao.UserApplyTeamDao;
 import com.tianfang.user.dto.UserApplyTeamDto;
 import com.tianfang.user.pojo.UserApplyTeam;
 
+@Service
 public class UserApplyTeamServiceImpl implements IUserApplyTeamService {
 
 	@Autowired
