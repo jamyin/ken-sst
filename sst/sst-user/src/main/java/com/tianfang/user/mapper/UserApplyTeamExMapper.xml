@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.user.mapper.UserApplyTeamExMapper" >
+  <resultMap id="BaseResultMap" type="com.tianfang.user.dto.UserApplyTeamDto" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="stat" property="stat" jdbcType="INTEGER" />
+    <!-- 联表查询字段 -->
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+	<result column="gender" property="gender" jdbcType="INTEGER" />
+	<result column="province" property="province" jdbcType="VARCHAR" />
+	<result column="location" property="location" jdbcType="VARCHAR" />
+	<result column="detailed_address" property="detailedAddress" jdbcType="VARCHAR" />
+	<result column="birthday" property="birthday" jdbcType="VARCHAR" />
+	<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+	<result column="utype" property="utype" jdbcType="INTEGER" />
+	<result column="trainer_level" property="trainerLevel" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    a.id, a.team_id, a.user_id, a.status, a.reason, a.create_time, a.last_update_time, a.stat,b.nick_name,b.pic,b.gender,b.province,b.location,b.detailed_address,b.birthday,b.mobile,b.utype,b.trainer_level
+  </sql>
+  
+  <sql id="Example_Where_Clause" >
+	  <where >
+   		<if test="example.id != null">
+   		and a.id = ${example.id}
+   		</if>
+   		<if test="example.teamId != null">
+   		and a.team_id = ${example.teamId}
+   		</if>
+   		<if test="example.userId != null">
+   		and a.user_id = ${example.userId}
+   		</if>
+   		<if test="example.status != null">
+   		and a.status = ${example.status}
+   		</if>
+   		<if test="example.nickName != null">
+   		and b.nick_name = ${example.nickName}
+   		</if>
+   		<if test="example.gender != null">
+   		and b.gender = ${example.gender}
+   		</if>
+   		<if test="example.mobile != null">
+   		and b.mobile = ${example.mobile}
+   		</if>
+   		<if test="example.utype != null">
+   		and b.utype = ${example.utype}
+   		</if>
+   		<if test="example.trainerLevel != null">
+   		and b.trainer_level = ${example.trainerLevel}
+   		</if>
+   		and a.stat = 1 and b.stat = 1
+    </where>
+  </sql>
+  
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tianfang.user.dto.UserApplyTeamDto" >
+    select
+    <include refid="Base_Column_List" />
+   	from sst_user_apply_team as a left join sport_user as b on a.user_id = b.id
+   	<include refid="Example_Where_Clause" />
+   	order by a.create_time desc
+   	<if test="page.startNum != null and page.pageSize > page.startNum">
+   	limit ${page.startNum}, ${page.pageSize}
+   	</if>
+  </select>
+  
+   <select id="countByExample" parameterType="com.tianfang.user.dto.UserApplyTeamDto" resultType="java.lang.Integer" >
+    select count(*) from sst_user_apply_team as a left join sport_user as b on a.user_id = b.id
+    <include refid="Example_Where_Clause" />
+  </select>
+</mapper>

@@ -22,7 +22,7 @@ public class UserServiceImpl implements IUserService {
 	private UserDao userDao;
 
 	@Override
-	public String save(UserDto dto) throws Exception {
+	public String save(UserDto dto){
 		checkObjIsNullException(dto);
 		checkMobileIsException(dto.getMobile());
 		User user = BeanUtils.createBeanByTarget(dto, User.class);
@@ -33,7 +33,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public void del(String ids) throws Exception {
+	public void del(String ids){
 		String[] idArr = ids.split(",");
 		User user;
 		for (String id : idArr){
@@ -45,7 +45,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public int update(UserDto dto) throws Exception {
+	public int update(UserDto dto){
 		checkObjIsNullException(dto);
 		checkIdIsNullException(dto.getId());
 		checkObjIsNotExistException(userDao.selectByPrimaryKey(dto.getId()));
@@ -64,12 +64,12 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public List<UserDto> findUserByParam(UserDto dto) throws Exception {
+	public List<UserDto> findUserByParam(UserDto dto){
 		return userDao.findUserByParam(dto);
 	}
 
 	@Override
-	public PageResult<UserDto> findUserByParam(UserDto dto, PageQuery query) throws Exception {
+	public PageResult<UserDto> findUserByParam(UserDto dto, PageQuery query){
 		int total = userDao.countUserByParam(dto);
 		if (total > 0){
 			query.setTotal(total);
@@ -80,7 +80,7 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
-	public void joinTeam(String userId, String teamId) throws Exception {
+	public void joinTeam(String userId, String teamId){
 		checkIdIsNullException(userId);
 		User user = userDao.selectByPrimaryKey(userId);
 		checkObjIsNotExistException(user);
@@ -89,13 +89,13 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
-	public List<FriendApp> findFriendsByUserId(String userId) throws Exception {
+	public List<FriendApp> findFriendsByUserId(String userId){
 		checkIdIsNullException(userId);
 		return userDao.findFriendsByUserId(userId);
 	}
 	
 	@Override
-	public UserDto checkMobile(String mobile) throws Exception {
+	public UserDto checkMobile(String mobile){
 		if (StringUtils.isBlank(mobile)){
 			throw new RuntimeException("对不起,手机号码为空!");
 		}
@@ -109,7 +109,7 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
-	public UserDto checkUser(UserDto dto) throws Exception {
+	public UserDto checkUser(UserDto dto){
 		checkObjIsNullException(dto);
 		List<UserDto> list = userDao.findUserByParam(dto);
 		if (null != list && list.size() > 0){
@@ -119,7 +119,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public List<FriendApp> findCareFriends(String userId) throws Exception {
+	public List<FriendApp> findCareFriends(String userId){
 		checkIdIsNullException(userId);
 		return userDao.findCareFriends(userId);
 	}

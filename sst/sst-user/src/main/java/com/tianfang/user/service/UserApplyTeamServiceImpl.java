@@ -63,8 +63,7 @@ public class UserApplyTeamServiceImpl implements IUserApplyTeamService {
 	}
 
 	@Override
-	public PageResult<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto, PageQuery query)
-			{
+	public PageResult<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto, PageQuery query){
 		int total = userApplyTeamDao.countUserApplyTeamByParam(dto);
 		if (total > 0){
 			query.setTotal(total);
@@ -75,6 +74,18 @@ public class UserApplyTeamServiceImpl implements IUserApplyTeamService {
 		return null;
 	}
 
+	@Override
+	public PageResult<UserApplyTeamDto> findUserApplyTeamExByParam( UserApplyTeamDto dto, PageQuery query) {
+		int total = userApplyTeamDao.countUserApplyTeamExByParam(dto);
+		if (total > 0){
+			query.setTotal(total);
+			List<UserApplyTeamDto> results = userApplyTeamDao.findUserApplyTeamExByParam(dto, query);
+			return new PageResult<UserApplyTeamDto>(query, results);
+		}
+		
+		return null;
+	}
+	
 	private void checkObjIsNull(Object obj) {
 		if (null == obj){
 			throw new RuntimeException("对不起,用户申请球队记录对象为空!");

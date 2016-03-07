@@ -21,19 +21,19 @@ import com.tianfang.user.dto.UserDto;
  */
 public interface IUserService {
 	
-	String save(UserDto dto) throws Exception;
+	String save(UserDto dto);
 	
-	void del(String ids) throws Exception;
+	void del(String ids);
 	
-	int update(UserDto dto) throws Exception;
+	int update(UserDto dto);
 	
 	UserDto getUserById(String id);
 	
-	List<UserDto> findUserByParam(UserDto dto) throws Exception;
+	List<UserDto> findUserByParam(UserDto dto);
 	
-	PageResult<UserDto> findUserByParam(UserDto dto, PageQuery query) throws Exception;
+	PageResult<UserDto> findUserByParam(UserDto dto, PageQuery query);
 
-	void joinTeam(String userId, String teamId) throws Exception;
+	void joinTeam(String userId, String teamId);
 	
 	/**
 	 * 查询返回给移动端用户分组和好友信息
@@ -43,7 +43,7 @@ public interface IUserService {
 	 * @author xiang_wang
 	 * 2016年1月13日下午3:16:42
 	 */
-	List<FriendApp> findFriendsByUserId(String userId) throws Exception;
+	List<FriendApp> findFriendsByUserId(String userId);
 
 	/**
 	 * 校验手机号码是否注册过
@@ -53,7 +53,7 @@ public interface IUserService {
 	 * @author xiang_wang
 	 * 2016年1月18日下午3:58:04
 	 */
-	UserDto checkMobile(String mobile) throws Exception;
+	UserDto checkMobile(String mobile);
 
 	/**
 	 * 校验用户是否存在
@@ -63,7 +63,7 @@ public interface IUserService {
 	 * @author xiang_wang
 	 * 2016年1月18日下午4:34:03
 	 */
-	UserDto checkUser(UserDto dto) throws Exception;
+	UserDto checkUser(UserDto dto);
 	
 	/**
 	 * 特别关注
@@ -73,5 +73,5 @@ public interface IUserService {
 	 * @author xiang_wang
 	 * 2016年1月20日下午1:26:30
 	 */
-	List<FriendApp> findCareFriends(String userId) throws Exception;
+	List<FriendApp> findCareFriends(String userId);
 }

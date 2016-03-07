@@ -22,6 +22,13 @@ public class FriendApp implements Serializable{
 	private static final long serialVersionUID = 7418717909653328609L;
 
 	/**
+	 * 朋友好友关系主键id
+	 */
+	@Getter
+	@Setter
+	private String id;
+	
+	/**
 	 * 朋友id
 	 */
 	@Getter

@@ -13,6 +13,7 @@ import com.tianfang.common.mybatis.MyBatisBaseDao;
 import com.tianfang.common.util.BeanUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.user.dto.UserApplyTeamDto;
+import com.tianfang.user.mapper.UserApplyTeamExMapper;
 import com.tianfang.user.mapper.UserApplyTeamMapper;
 import com.tianfang.user.pojo.UserApplyTeam;
 import com.tianfang.user.pojo.UserApplyTeamExample;
@@ -23,6 +24,8 @@ public class UserApplyTeamDao extends MyBatisBaseDao<UserApplyTeam>{
 	@Getter
 	@Autowired
 	private UserApplyTeamMapper mapper;
+	@Autowired
+	private UserApplyTeamExMapper exMapper;
 
 	public List<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto){
 		return findUserApplyTeamByParam(dto, null);
@@ -44,6 +47,41 @@ public class UserApplyTeamDao extends MyBatisBaseDao<UserApplyTeam>{
 		UserApplyTeamExample.Criteria criteria = example.createCriteria();
         assemblyParams(dto, criteria);
 		return mapper.countByExample(example);
+	}
+	
+	/**
+	 * 自定义sql(联表查询)
+	 * @param dto
+	 * @return
+	 * @author xiang_wang
+	 * 2016年3月7日上午10:22:25
+	 */
+	public List<UserApplyTeamDto> findUserApplyTeamExByParam(UserApplyTeamDto dto){
+		return findUserApplyTeamExByParam(dto, null);
+	}
+	
+	/**
+	 * 自定义sql(联表查询)
+	 * @param dto
+	 * @param query
+	 * @return
+	 * @author xiang_wang
+	 * 2016年3月7日上午10:22:28
+	 */
+	public List<UserApplyTeamDto> findUserApplyTeamExByParam(UserApplyTeamDto dto, PageQuery query) {
+        List<UserApplyTeamDto> results = exMapper.selectByExample(dto, query);        
+		return results;
+	}
+	
+	/**
+	 * 自定义sql(联表查询)
+	 * @param dto
+	 * @return
+	 * @author xiang_wang
+	 * 2016年3月7日上午10:23:51
+	 */
+	public int countUserApplyTeamExByParam(UserApplyTeamDto dto){
+		return exMapper.countByExample(dto);
 	}
 	
 	/**
