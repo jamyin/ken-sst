@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tianfang.user.mapper.UserExMapper" >
 	<select id="findFriendsByUserId" resultType="com.tianfang.user.app.FriendApp" parameterType="java.lang.String">
-	   	SELECT a.user_id AS userId, d.mobile AS userMobile, c.id AS friendId, c.nick_name AS nickName, c.pic AS pic, c.mobile AS friendMobile, a.care AS care 
+	   	SELECT a.id, a.user_id AS userId, d.mobile AS userMobile, c.id AS friendId, c.nick_name AS nickName, c.pic AS pic, c.mobile AS friendMobile, a.care AS care 
 		FROM sst_user_friend AS a 
 		JOIN sport_user AS c ON c.id = a.friend_id AND c.stat = 1 
 		JOIN sport_user AS d ON d.id = a.user_id AND d.stat = 1 
@@ -10,7 +10,7 @@
 	</select>
 	
 	<select id="findCareFriends" resultType="com.tianfang.user.app.FriendApp" parameterType="java.lang.String">
-		SELECT a.user_id AS userId,d.mobile AS userMobile, c.id AS friendId, c.nick_name AS nickName, c.pic AS pic, c.mobile AS friendMobile, a.care AS care 
+		SELECT a.id, a.user_id AS userId,d.mobile AS userMobile, c.id AS friendId, c.nick_name AS nickName, c.pic AS pic, c.mobile AS friendMobile, a.care AS care 
 		FROM sst_user_friend AS a 
 		JOIN sport_user AS c ON c.id = a.friend_id AND c.stat = 1 
 		JOIN sport_user AS d ON d.id = a.user_id AND d.stat = 1 

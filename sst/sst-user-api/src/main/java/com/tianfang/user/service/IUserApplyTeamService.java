@@ -19,4 +19,14 @@ public interface IUserApplyTeamService {
 	List<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto);
 	
 	PageResult<UserApplyTeamDto> findUserApplyTeamByParam(UserApplyTeamDto dto, PageQuery query);
+	
+	/**
+	 * 自定义sql查询(联表查询)
+	 * @param dto
+	 * @param query
+	 * @return
+	 * @author xiang_wang
+	 * 2016年3月7日上午10:19:33
+	 */
+	PageResult<UserApplyTeamDto> findUserApplyTeamExByParam(UserApplyTeamDto dto, PageQuery query);
 }
