@@ -53,7 +53,7 @@ public class UserFriendDto implements Serializable{
 
 	@Getter
 	@Setter
-    private Date lastCreateTime;
+    private Date lastUpdateTime;
 
 	@Getter
 	@Setter
