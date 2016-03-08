@@ -2,8 +2,10 @@ package com.tianfang.user.service;
 
 import java.util.List;
 import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
@@ -17,7 +19,6 @@ import com.tianfang.user.pojo.User;
 
 @Service
 public class UserServiceImpl implements IUserService {
-	
 	@Autowired
 	private UserDao userDao;
 
@@ -46,6 +47,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public int update(UserDto dto){
+		
 		checkObjIsNullException(dto);
 		checkIdIsNullException(dto.getId());
 		checkObjIsNotExistException(userDao.selectByPrimaryKey(dto.getId()));

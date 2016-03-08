@@ -69,6 +69,13 @@ public class UserDto implements Serializable{
 	private String location;
 	
 	/**
+	 * 市
+	 */
+	@Getter
+	@Setter
+	private String area;
+	
+	/**
 	 * 地址详情
 	 */
 	@Getter
@@ -109,6 +116,13 @@ public class UserDto implements Serializable{
 	@Getter
 	@Setter
 	private Integer trainerLevel;
+	
+	/**
+	 * 二维码生成路径
+	 */
+	@Getter
+	@Setter
+	private String qrcode;
 
 	/**
 	 * 创建时间

@@ -195,10 +195,11 @@ public class TwoDimensionCode {
         return content;  
     }  
   
-   /* public static void main(String[] args) {  
-        String imgPath = "d:/qrcodes/xxx.png";  
-        String encoderContent = "Hello 大大、小小,welcome to QRCode!" + "\nMyblog [ http://sjsky.iteye.com ]" + "\nEMail [ sjsky007@gmail.com ]";  
-        TwoDimensionCode handler = new TwoDimensionCode();  
+    public static void main(String[] args) {  
+        String imgPath = "d:/qrcodes/85db5957-39ec-4750-aeaa-af78c9e2353a.png";  
+        String encoderContent = "85db5957-39ec-4750-aeaa-af78c9e2353a";  
+        encoderQRCode(encoderContent, imgPath);
+        /*TwoDimensionCode handler = new TwoDimensionCode();  
         handler.encoderQRCode(encoderContent, imgPath, "png");  
 	      try {  
 	          OutputStream output = new FileOutputStream(imgPath);  
@@ -212,6 +213,6 @@ public class TwoDimensionCode {
         String decoderContent = handler.decoderQRCode(imgPath);  
         System.out.println("解析结果如下：");  
         System.out.println(decoderContent);  
-        System.out.println("========decoder success!!!");  
-    }  */
+        System.out.println("========decoder success!!!");  */
+    }  
 }  

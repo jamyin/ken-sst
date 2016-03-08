@@ -25,6 +25,7 @@ import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.DateUtils;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.home.utils.QRCodeUtil;
 import com.tianfang.home.utils.TigaseUtil;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.service.ITeamService;
@@ -119,6 +120,9 @@ public class UserController extends BaseController{
 			} else {
 				if (TigaseUtil.registered(dto.getMobile(), dto.getPassword())){
 					UserDto user = userService.getUserById(id);
+					// 生成二维码
+					user.setQrcode(QRCodeUtil.createCode(user.getId()));
+					userService.update(user);
 					session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
 					if(user != null){
 						redisTemplate.opsForValue().set(SST_USER+id, user);
@@ -140,6 +144,41 @@ public class UserController extends BaseController{
 			logger.error(e.getMessage());
 		}
 		return result;
+	}
+	
+	/**
+	 * 获取用户验证码图片地址
+	 * @param userId
+	 * @return
+	 * @author xiang_wang
+	 * 2016年3月8日上午11:46:36
+	 */
+	@RequestMapping(value = "qrcode")
+	@ResponseBody
+	public Response<String> qrcode(String userId){
+		UserDto user = getUserByCache(userId);
+    	Response<String> result = new Response<String>();
+    	if (null != user){
+			try {
+				if (StringUtils.isBlank(user.getQrcode())){
+					user.setQrcode(QRCodeUtil.createCode(userId));
+					userService.update(user);
+				}
+				
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+				result.setData(user.getQrcode());
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				result.setStatus(DataStatus.HTTP_FAILE);
+	    		result.setMessage("系统异常");
+			}
+    	}else{
+    		result.setStatus(DataStatus.HTTP_FAILE);
+    		result.setMessage("用户不存在");
+    	}
+       
+        return result;
 	}
 	
 	/**
