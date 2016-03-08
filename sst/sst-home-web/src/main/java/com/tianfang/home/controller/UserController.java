@@ -164,7 +164,6 @@ public class UserController extends BaseController{
 					user.setQrcode(QRCodeUtil.createCode(userId));
 					userService.update(user);
 				}
-				
 				result.setStatus(DataStatus.HTTP_SUCCESS);
 				result.setData(user.getQrcode());
 			} catch (Exception e) {
