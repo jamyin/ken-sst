@@ -110,6 +110,7 @@ public class UserController extends BaseController{
 				result.setMessage("手机号码已经注册过！");
 				return result;
 			}
+			dto.setNickName(DataStatus._JUJU_); 		//设置昵称
 			String id = userService.save(dto);
 			if (StringUtils.isBlank(id)) {
 				result.setStatus(DataStatus.HTTP_FAILE);
