@@ -30,7 +30,7 @@ public class QRCodeUtil {
 	public static String createCode(String userId){
 		StringBuilder url = new StringBuilder();
 		url.append(QRCODE_URL).append(userId).append(SUFFIX);
-		TwoDimensionCode.encoderQRCode(userId, url.toString());
+		TwoDimensionCode.encoderQRCode(userId, url.toString()); 
 		return url.toString();
 	}
 }
