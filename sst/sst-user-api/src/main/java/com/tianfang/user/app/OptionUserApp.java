@@ -34,14 +34,21 @@ public class OptionUserApp implements Serializable{
 	@Getter
 	@Setter
 	private String nickName;
+	
+	/**
+	 * 用户头像
+	 */
+	@Getter
+	@Setter
+	private String pic;
 
 	public OptionUserApp() {
 		super();
 	}
 	
-	public OptionUserApp(String id, String nickName) {
-		super();
+	public OptionUserApp(String id, String nickName, String pic) {
 		this.id = id;
 		this.nickName = nickName;
+		this.pic = pic;
 	}
 }

@@ -3,6 +3,8 @@ package com.tianfang.user.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +20,7 @@ import lombok.Setter;
  * <p>修改时间：</p>
  * <p>修改备注：</p>
  */
+@JsonIgnoreProperties({"lastUpdateTime","stat"})
 public class VoteUserOptionDto implements Serializable {
 
 	private static final long serialVersionUID = -5211657415001773090L;

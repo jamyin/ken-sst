@@ -28,34 +28,34 @@
   
   <sql id="Example_Where_Clause" >
 	  <where >
+	 	a.stat = 1 and b.stat = 1
    		<if test="example.id != null">
-   		and a.id = ${example.id}
+   		and a.id = #{example.id,jdbcType=VARCHAR}
    		</if>
    		<if test="example.teamId != null">
-   		and a.team_id = ${example.teamId}
+   		and a.team_id = #{example.teamId,jdbcType=VARCHAR}
    		</if>
    		<if test="example.userId != null">
-   		and a.user_id = ${example.userId}
+   		and a.user_id = #{example.userId,jdbcType=VARCHAR}
    		</if>
    		<if test="example.status != null">
-   		and a.status = ${example.status}
+   		and a.status = #{example.status,jdbcType=INTEGER}
    		</if>
    		<if test="example.nickName != null">
-   		and b.nick_name = ${example.nickName}
+   		and b.nick_name = #{example.nickName,jdbcType=VARCHAR}
    		</if>
    		<if test="example.gender != null">
-   		and b.gender = ${example.gender}
+   		and b.gender = #{example.gender,jdbcType=INTEGER}
    		</if>
    		<if test="example.mobile != null">
-   		and b.mobile = ${example.mobile}
+   		and b.mobile = #{example.mobile,jdbcType=VARCHAR}
    		</if>
    		<if test="example.utype != null">
-   		and b.utype = ${example.utype}
+   		and b.utype = #{example.utype,jdbcType=INTEGER}
    		</if>
    		<if test="example.trainerLevel != null">
-   		and b.trainer_level = ${example.trainerLevel}
+   		and b.trainer_level = #{example.trainerLevel,jdbcType=INTEGER}
    		</if>
-   		and a.stat = 1 and b.stat = 1
     </where>
   </sql>
   

@@ -255,7 +255,6 @@ public class UserController extends BaseController{
 	 * @param mobile
 	 * @param code
 	 * @param password
-	 * @param confirmPassword
 	 * @return
 	 */
 	@RequestMapping(value = "resetPassword")
@@ -584,7 +583,6 @@ public class UserController extends BaseController{
 	
     /**
      * 移动端查询用户赛事好友
-     * @param session
      * @return {"status":状态码(200-成功,500-失败),"message":"提示信息","data":List<FriendApp>}
      * @author xiang_wang
      * 2016年1月19日上午10:13:04
@@ -615,7 +613,7 @@ public class UserController extends BaseController{
     /**
      * 添加好友
      * @param userId
-     * @param friend
+     * @param friendId
      * @return
      * @author xiang_wang
      * 2016年3月3日下午3:24:56
@@ -627,7 +625,15 @@ public class UserController extends BaseController{
     	Response<String> result = new Response<String>();
     	if (null != user){
 			try {
+
 				UserFriendDto uf = new UserFriendDto();
+				List<UserFriendDto> userFriend = userFriendService.findUserFriendByParam(uf);
+				if (null != userFriend || userFriend.size() > 0){
+					result.setStatus(DataStatus.HTTP_FAILE);
+					result.setMessage("好友已添加!");
+					return result;
+				}
+
 				uf.setUserId(userId);
 				uf.setFriendId(friendId);
 				userFriendService.save(uf);
@@ -691,7 +697,7 @@ public class UserController extends BaseController{
     
     /**
      * 获取日期用户训练计划
-     * @param date 查询时间
+     * @param planTimeStr 查询时间
      * @return {"status":状态码(200-成功,500-失败),"message":"提示信息","data":List<PlanDto>}
      * @author xiang_wang
      * 2016年1月19日上午10:28:38
