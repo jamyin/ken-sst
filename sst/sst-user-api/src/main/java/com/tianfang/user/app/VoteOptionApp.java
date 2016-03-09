@@ -37,6 +37,13 @@ public class VoteOptionApp implements Serializable{
 	private String text;
 	
 	/**
+	 * 选项图片
+	 */
+	@Getter
+	@Setter
+	private String pic;
+	
+	/**
 	 * 已投票用户
 	 */
 	@Getter
@@ -47,9 +54,10 @@ public class VoteOptionApp implements Serializable{
 		super();
 	}
 	
-	public VoteOptionApp(String id, String text) {
+	public VoteOptionApp(String id, String text, String pic) {
 		super();
 		this.id = id;
 		this.text = text;
+		this.pic = pic;
 	}
 }

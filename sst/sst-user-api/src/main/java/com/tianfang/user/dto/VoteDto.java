@@ -3,6 +3,8 @@ package com.tianfang.user.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +20,7 @@ import lombok.Setter;
  * <p>修改时间：</p>
  * <p>修改备注：</p>
  */
+@JsonIgnoreProperties({"lastUpdateTime","stat","tempId"})
 public class VoteDto implements Serializable{
 	
 	private static final long serialVersionUID = 1277533629330537386L;
@@ -34,13 +37,6 @@ public class VoteDto implements Serializable{
     private String title;
 
 	/**
-	 * 群组id
-	 */
-	@Setter
-	@Getter
-    private String groupId;	
-
-	/**
 	 * 允许投票项数
 	 */
 	@Setter
@@ -53,6 +49,13 @@ public class VoteDto implements Serializable{
 	@Setter
 	@Getter
     private Date endTime;
+	
+	/**
+	 * 是否已截止(0-未截止,1-已截止)
+	 */
+	@Setter
+	@Getter
+    private Integer overdue;
 
 	/**
 	 * 是否匿名
@@ -62,18 +65,18 @@ public class VoteDto implements Serializable{
     private Integer isAnonymous;
 
 	/**
-	 * 用户id
+	 * 发起人id
 	 */
 	@Setter
 	@Getter
-    private String userId;
+    private String publishId;
 
 	/**
-	 * 用户名称
+	 * 发起人
 	 */
 	@Setter
 	@Getter
-    private String userName;
+    private String publishName;
 
 	/**
 	 * 总投票次数
@@ -93,4 +96,25 @@ public class VoteDto implements Serializable{
 	@Setter
 	@Getter
     private Integer stat;			// 数据状态
+	
+	/**
+	 * 参与投票的用户
+	 */
+	@Getter
+	@Setter
+	private String userId;
+	
+	/**
+	 * 是否已投票(0-未投, 1-已投)
+	 */
+	@Getter
+	@Setter
+	private Integer selected;
+	
+	/**
+	 * 投票用户关联表主键id
+	 */
+	@Getter
+	@Setter
+	private String tempId;
 }

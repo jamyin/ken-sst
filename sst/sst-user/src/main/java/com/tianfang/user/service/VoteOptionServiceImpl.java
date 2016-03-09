@@ -22,7 +22,7 @@ public class VoteOptionServiceImpl implements IVoteOptionService {
 	private VoteOptionDao voteOptionDao;
 
 	@Override
-	public String save(VoteOptionDto dto) throws Exception {
+	public String save(VoteOptionDto dto){
 		checkObjIsNull(dto);
 		VoteOption m = BeanUtils.createBeanByTarget(dto, VoteOption.class);
 		String id = UUIDGenerator.getUUID();
@@ -32,7 +32,7 @@ public class VoteOptionServiceImpl implements IVoteOptionService {
 	}
 
 	@Override
-	public void del(String id) throws Exception {
+	public void del(String id){
 		checkIdIsNull(id);
 		VoteOption m = voteOptionDao.selectByPrimaryKey(id);
 		checkObjIsNotExist(m);
@@ -41,7 +41,7 @@ public class VoteOptionServiceImpl implements IVoteOptionService {
 	}
 
 	@Override
-	public void update(VoteOptionDto dto) throws Exception {
+	public void update(VoteOptionDto dto){
 		checkObjIsNull(dto);
 		checkIdIsNull(dto.getId());
 		checkObjIsNotExist(voteOptionDao.selectByPrimaryKey(dto.getId()));
@@ -50,7 +50,7 @@ public class VoteOptionServiceImpl implements IVoteOptionService {
 	}
 
 	@Override
-	public VoteOptionDto getVoteOptionById(String id) throws Exception {
+	public VoteOptionDto getVoteOptionById(String id){
 		checkIdIsNull(id);
 		VoteOption m = voteOptionDao.selectByPrimaryKey(id);
 		VoteOptionDto dto = BeanUtils.createBeanByTarget(m, VoteOptionDto.class);
@@ -58,13 +58,12 @@ public class VoteOptionServiceImpl implements IVoteOptionService {
 	}
 
 	@Override
-	public List<VoteOptionDto> findVoteOptionByParam(VoteOptionDto dto) throws Exception {
+	public List<VoteOptionDto> findVoteOptionByParam(VoteOptionDto dto){
 		return voteOptionDao.findVoteOptionByParam(dto);
 	}
 
 	@Override
-	public PageResult<VoteOptionDto> findVoteOptionByParam(VoteOptionDto dto, PageQuery query)
-			throws Exception {
+	public PageResult<VoteOptionDto> findVoteOptionByParam(VoteOptionDto dto, PageQuery query){
 		int total = voteOptionDao.countVoteOptionByParam(dto);
 		if (total > 0){
 			query.setTotal(total);

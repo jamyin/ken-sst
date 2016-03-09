@@ -20,15 +20,15 @@ import com.tianfang.user.dto.VoteOptionDto;
  */
 public interface IVoteOptionService {
 
-	String save(VoteOptionDto dto) throws Exception;
+	String save(VoteOptionDto dto);
 	
-	void del(String id) throws Exception;
+	void del(String id);
 	
-	void update(VoteOptionDto dto) throws Exception;
+	void update(VoteOptionDto dto);
 	
-	VoteOptionDto getVoteOptionById(String id) throws Exception;
+	VoteOptionDto getVoteOptionById(String id);
 	
-	List<VoteOptionDto> findVoteOptionByParam(VoteOptionDto dto) throws Exception;
+	List<VoteOptionDto> findVoteOptionByParam(VoteOptionDto dto);
 	
-	PageResult<VoteOptionDto> findVoteOptionByParam(VoteOptionDto dto, PageQuery query) throws Exception;
+	PageResult<VoteOptionDto> findVoteOptionByParam(VoteOptionDto dto, PageQuery query);
 }

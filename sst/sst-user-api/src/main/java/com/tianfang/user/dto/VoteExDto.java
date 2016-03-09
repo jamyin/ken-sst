@@ -62,14 +62,21 @@ public class VoteExDto implements Serializable{
 	 */
 	@Getter
 	@Setter
-	private String userId;
+	private String publishId;
 	
 	/**
 	 * 投票发起用户名称
 	 */
 	@Getter
 	@Setter
-	private String userName;
+	private String publishName;
+	
+	/**
+	 * 总投票次数
+	 */
+	@Getter
+	@Setter
+	private Integer amount;
 	
 	/**
 	 * 选项id
@@ -86,6 +93,13 @@ public class VoteExDto implements Serializable{
 	private String optionText;
 	
 	/**
+	 * 选项图片
+	 */
+	@Getter
+	@Setter
+	private String optionPic;
+	
+	/**
 	 * 投票用户id
 	 */
 	@Getter
@@ -97,5 +111,12 @@ public class VoteExDto implements Serializable{
 	 */
 	@Getter
 	@Setter
-	private String optionNickName;
+	private String optionUserNickName;
+	
+	/**
+	 * 投票用户头像
+	 */
+	@Getter
+	@Setter
+	private String optionUserPic;
 }

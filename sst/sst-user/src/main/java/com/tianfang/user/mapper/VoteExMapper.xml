@@ -1,13 +1,95 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tianfang.user.mapper.VoteExMapper" >
-	<select id="findVoteExById" resultType="com.tianfang.user.dto.VoteExDto" parameterType="string">
-	 	SELECT d.id AS voteId, d.title AS title, d.option_num AS optionNum, d.end_time AS endTime, d.is_anonymous AS isAnonymous, d.user_id AS userId, d.user_name AS userName,
-		a.id AS optionId, a.text AS optionText, c.id AS optionUserId, c.nick_name AS optionNickName
+	<resultMap id="BaseResultMap" type="com.tianfang.user.dto.VoteDto" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="option_num" property="optionNum" jdbcType="INTEGER" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="is_anonymous" property="isAnonymous" jdbcType="INTEGER" />
+    <result column="publish_id" property="publishId" jdbcType="VARCHAR" />
+    <result column="publish_name" property="publishName" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <!-- 联表查询字段 -->
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="selected" property="selected" jdbcType="INTEGER" />
+     <result column="temp_id" property="tempId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="findVoteExById" resultType="com.tianfang.user.dto.VoteExDto" parameterType="string">
+	 	SELECT d.id AS voteId, d.title AS title, d.option_num AS optionNum, d.end_time AS endTime, d.is_anonymous AS isAnonymous, d.publish_id AS publishId, d.publish_name AS publishName, d.amount AS amount, 
+		a.id AS optionId, a.text AS optionText, a.pic AS optionPic, c.id AS optionUserId, c.nick_name AS optionUserNickName, c.pic AS optionUserPic
 		FROM sst_vote_option AS a
 		LEFT JOIN sst_vote_user_option AS b ON a.id = b.option_id AND b.stat = 1
 		LEFT JOIN sport_user AS c ON c.id = b.user_id AND c.stat = 1
 		JOIN sst_vote AS d ON a.vote_id = d.id
 		WHERE d.id = #{id} AND d.stat = 1 AND a.stat =1 ORDER BY a.create_time DESC
 	</select>
+  
+  <sql id="Base_Column_List" >
+    a.id, a.title, a.option_num, a.end_time, a.is_anonymous, a.publish_id, a.publish_name, a.amount, a.create_time, b.user_id, b.selected, b.id AS temp_id 
+  </sql>
+  
+  <sql id="Example_Where_Clause" >
+	  <where >
+	  	a.stat = 1 and b.stat = 1
+	  	<if test="example.voteId != null">
+   		and a.id = #{example.voteId,jdbcType=VARCHAR}
+   		</if>
+   		<if test="example.userId != null">
+   		and b.user_id = #{example.userId,jdbcType=VARCHAR}
+   		</if>
+   		<if test="example.selected != null">
+   		and b.selected = #{example.selected,jdbcType=INTEGER}
+   		</if>
+   		<if test="example.overdue != null">
+   			<if test="example.overdue == 1">
+   				and a.end_time &lt; now()
+   			</if>
+   			<if test="example.overdue == 0">
+   				and a.end_time &gt; now()
+   			</if>
+   		</if>
+   		<if test="example.isAnonymous != null">
+   		and a.is_anonymous = #{example.isAnonymous,jdbcType=INTEGER}
+   		</if>
+    </where>
+  </sql>
+  
+  <select id="findVoteTempByParams" resultMap="BaseResultMap" parameterType="com.tianfang.user.dto.VoteParams" >
+    select
+    <include refid="Base_Column_List" />
+   	from sst_vote as a left join sst_vote_user_temp as b on a.id = b.vote_id
+   	<include refid="Example_Where_Clause" />
+   	order by a.create_time desc
+   	<if test="page.startNum != null and page.pageSize > page.startNum">
+   	limit ${page.startNum}, ${page.pageSize}
+   	</if>
+  </select>
+  
+   <select id="countVoteTempByParams" parameterType="com.tianfang.user.dto.VoteParams" resultType="java.lang.Integer" >
+    select count(*) from sst_vote as a left join sst_vote_user_temp as b on a.id = b.vote_id
+    <include refid="Example_Where_Clause" />
+  </select>
+
+
+  <insert id="insertBatchVoteOption" parameterType="java.util.List">  
+     insert into sst_vote_option (id, vote_id, text, 
+      pic, num, create_time, stat)
+    values 
+     <foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.id},#{item.voteId},#{item.text},#{item.pic},#{item.num},#{item.createTime},#{item.stat})  
+    </foreach> 
+  </insert>  
+
+  <insert id="insertBatchVoteUserTemp" parameterType="java.util.List">  
+     insert into sst_vote_user_temp (id, vote_id, user_id, 
+      selected, create_time, stat)
+    values 
+     <foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.id},#{item.voteId},#{item.userId},#{item.selected},#{item.createTime},#{item.stat})  
+    </foreach> 
+  </insert>  
+	
 </mapper>

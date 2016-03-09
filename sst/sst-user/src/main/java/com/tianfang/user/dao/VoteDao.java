@@ -10,14 +10,18 @@ import org.springframework.stereotype.Repository;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.mybatis.MyBatisBaseDao;
-import com.tianfang.common.util.BeanUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.user.dto.VoteDto;
 import com.tianfang.user.dto.VoteExDto;
+import com.tianfang.user.dto.VoteOptionDto;
+import com.tianfang.user.dto.VoteParams;
+import com.tianfang.user.dto.VoteUserTempDto;
 import com.tianfang.user.mapper.VoteExMapper;
 import com.tianfang.user.mapper.VoteMapper;
+import com.tianfang.user.mapper.VoteUserTempMapper;
 import com.tianfang.user.pojo.Vote;
 import com.tianfang.user.pojo.VoteExample;
+import com.tianfang.user.pojo.VoteUserTemp;
 
 @Repository
 public class VoteDao extends MyBatisBaseDao<Vote>{
@@ -25,15 +29,16 @@ public class VoteDao extends MyBatisBaseDao<Vote>{
 	@Autowired
 	@Getter
 	private VoteMapper mapper;
-	
 	@Autowired
 	private VoteExMapper voteExMapper;
+	@Autowired
+	private VoteUserTempMapper voteUserTempMapper;
 	
-	public List<VoteDto> findVoteByParam(VoteDto dto){
+	public List<Vote> findVoteByParam(VoteDto dto){
 		return findVoteByParam(dto, null);
 	}
 	
-	public List<VoteDto> findVoteByParam(VoteDto dto, PageQuery query) {
+	public List<Vote> findVoteByParam(VoteDto dto, PageQuery query) {
 		VoteExample example = new VoteExample();
 		VoteExample.Criteria criteria = example.createCriteria();
         assemblyParams(dto, criteria);
@@ -41,7 +46,11 @@ public class VoteDao extends MyBatisBaseDao<Vote>{
         	example.setOrderByClause("create_time desc limit "+query.getStartNum() +"," + query.getPageSize());
 		}
         List<Vote> results = mapper.selectByExample(example);        
-		return BeanUtils.createBeanListByTarget(results, VoteDto.class);
+		return results;
+	}
+	
+	public void updateVoteUserTemp(VoteUserTemp temp){
+		voteUserTempMapper.updateByPrimaryKeySelective(temp);
 	}
 	
 	public int countVoteByParam(VoteDto dto){
@@ -53,6 +62,39 @@ public class VoteDao extends MyBatisBaseDao<Vote>{
 	
 	public List<VoteExDto> findVoteExById(String id){
 		return voteExMapper.findVoteExById(id);
+	}
+	
+	public List<VoteDto> findVoteTempByParam(VoteParams params){
+		return findVoteTempByParam(params, null);
+	}
+	
+	public List<VoteDto> findVoteTempByParam(VoteParams params, PageQuery query) {
+		List<VoteDto> results = voteExMapper.findVoteTempByParams(params, query);
+		return results;
+	}
+	
+	public int countVoteTempByParam(VoteParams params){
+		return voteExMapper.countVoteTempByParams(params);
+	}
+	
+	/**
+	 * 批量保存投票选项
+	 * @param options
+	 * @author xiang_wang
+	 * 2016年3月9日下午3:05:14
+	 */
+	public void insertBatchVoteOption(List<VoteOptionDto> options){
+		voteExMapper.insertBatchVoteOption(options);
+	}
+	
+	/**
+	 * 批量保存投票用户关联表数据
+	 * @param temps
+	 * @author xiang_wang
+	 * 2016年3月9日下午3:05:16
+	 */
+	public void insertBatchVoteUserTemp(List<VoteUserTempDto> temps){
+		voteExMapper.insertBatchVoteUserTemp(temps);
 	}
 	
 	/**
@@ -70,11 +112,8 @@ public class VoteDao extends MyBatisBaseDao<Vote>{
         	if (StringUtils.isNotBlank(params.getTitle())){
         		criteria.andTitleLike("%"+params.getTitle().trim()+"%");
         	}
-        	if (StringUtils.isNotBlank(params.getGroupId())){
-        		criteria.andGroupIdEqualTo(params.getGroupId().trim());
-        	}
-        	if (StringUtils.isNotBlank(params.getUserId())){
-        		criteria.andUserIdEqualTo(params.getUserId().trim());
+        	if (StringUtils.isNotBlank(params.getPublishId())){
+        		criteria.andPublishIdEqualTo(params.getPublishId().trim());
         	}
         	if (null != params.getIsAnonymous()){
         		criteria.andIsAnonymousEqualTo(params.getIsAnonymous().intValue());

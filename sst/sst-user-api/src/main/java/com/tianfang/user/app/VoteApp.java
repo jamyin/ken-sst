@@ -52,6 +52,13 @@ public class VoteApp implements Serializable{
 	private Date endTime; 
 	
 	/**
+	 * 是否已截止(0-未截止,1-已截止)
+	 */
+	@Setter
+	@Getter
+	private Integer overdue;
+	
+	/**
 	 * 是否匿名
 	 */
 	@Getter
@@ -63,14 +70,21 @@ public class VoteApp implements Serializable{
 	 */
 	@Getter
 	@Setter
-	private String userId;
+	private String publishId;
 	
 	/**
 	 * 投票发起用户名称
 	 */
 	@Getter
 	@Setter
-	private String userName; 
+	private String publishName; 
+	
+	/**
+	 * 总投票次数
+	 */
+	@Getter
+	@Setter
+	private Integer amount;
 	
 	/**
 	 * 投票选项
@@ -84,14 +98,18 @@ public class VoteApp implements Serializable{
 	}	
 	
 	public VoteApp(String id, String title, Integer optionNum, Date endTime,
-			Integer isAnonymous, String userId, String userName) {
+			Integer isAnonymous, String publishId, String publishName, Integer amount) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.optionNum = optionNum;
 		this.endTime = endTime;
 		this.isAnonymous = isAnonymous;
-		this.userId = userId;
-		this.userName = userName;
+		this.publishId = publishId;
+		this.publishName = publishName;
+		this.amount = amount;
+		if (null != endTime){
+			this.overdue = new Date().getTime() < endTime.getTime() ? 0 : 1;
+		}
 	}
 }

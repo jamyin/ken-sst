@@ -6,6 +6,9 @@ import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.user.app.VoteApp;
 import com.tianfang.user.dto.VoteDto;
+import com.tianfang.user.dto.VoteOptionDto;
+import com.tianfang.user.dto.VoteParams;
+import com.tianfang.user.dto.VoteUserTempDto;
 
 /**		
  * <p>Title: IVoteService </p>
@@ -21,17 +24,49 @@ import com.tianfang.user.dto.VoteDto;
  */
 public interface IVoteService {
 
-	String save(VoteDto dto) throws Exception;
+	String save(VoteDto dto);
 	
-	void del(String id) throws Exception;
+	/**
+	 * 发布投票
+	 * @param dto
+	 * @param temps
+	 * @param options
+	 * @return
+	 * @author xiang_wang
+	 * 2016年3月9日下午2:55:36
+	 */
+	String save(VoteDto dto, List<VoteUserTempDto> temps, List<VoteOptionDto> options);
 	
-	void update(VoteDto dto) throws Exception;
+	void del(String id);
 	
-	VoteDto getVoteById(String id) throws Exception;
+	void update(VoteDto dto);
 	
-	List<VoteDto> findVoteByParam(VoteDto dto) throws Exception;
+	void update(VoteUserTempDto temp);
 	
-	PageResult<VoteDto> findVoteByParam(VoteDto dto, PageQuery query) throws Exception;
+	VoteDto getVoteById(String id);
 	
-	VoteApp getVoteAppById(String id) throws Exception;
+	List<VoteDto> findVoteByParam(VoteDto dto);
+	
+	PageResult<VoteDto> findVoteByParam(VoteDto dto, PageQuery query);
+	
+	VoteApp getVoteAppById(String id);
+	
+	/**
+	 * 关联sst_vote_user_temp表查询,根据指定参数查询
+	 * @param dto
+	 * @return
+	 * @author xiang_wang
+	 * 2016年3月8日下午5:11:09
+	 */
+	List<VoteDto> findVoteTempByParam(VoteParams params);
+	
+	/**
+	 * 关联sst_vote_user_temp表查询,根据指定参数分页查询
+	 * @param dto
+	 * @param query
+	 * @return
+	 * @author xiang_wang
+	 * 2016年3月8日下午5:11:11
+	 */
+	PageResult<VoteDto> findVoteTempByParam(VoteParams params, PageQuery query);
 }
