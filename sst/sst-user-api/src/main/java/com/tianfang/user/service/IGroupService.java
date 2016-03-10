@@ -5,6 +5,7 @@ import java.util.List;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.user.dto.GroupDto;
+import com.tianfang.user.dto.GroupUserDto;
 
 /**		
  * <p>Title: IGroupService </p>
@@ -21,6 +22,14 @@ import com.tianfang.user.dto.GroupDto;
 public interface IGroupService {
 	
 	String save(GroupDto dto) throws Exception;
+
+	/**
+	 * 保存用户聊天组
+	 * @param dto
+	 * @param gus
+     * @return
+     */
+	String save(GroupDto dto, List<GroupUserDto> gus);
 	
 	void del(String id) throws Exception;
 	

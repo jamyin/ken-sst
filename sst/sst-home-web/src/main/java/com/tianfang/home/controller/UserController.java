@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.tianfang.user.dto.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,6 @@ import com.tianfang.home.utils.TigaseUtil;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.app.FriendApp;
-import com.tianfang.user.dto.GroupDto;
-import com.tianfang.user.dto.MemoDto;
-import com.tianfang.user.dto.PlanDto;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.dto.UserFriendDto;
 import com.tianfang.user.service.IEmailSendService;
 import com.tianfang.user.service.IGroupService;
 import com.tianfang.user.service.IMemoService;
@@ -51,12 +47,12 @@ import com.tianfang.user.service.ISmsSendService;
 import com.tianfang.user.service.IUserFriendService;
 import com.tianfang.user.service.IUserService;
 
-/**		
+/**
  * <p>Title: UserController </p>
  * <p>Description: 类描述:与用户操作相关接口</p>
  * <p>Copyright (c) 2015 </p>
  * <p>Company: 上海天坊信息科技有限公司</p>
- * @author xiang_wang	
+ * @author xiang_wang
  * @date 2016年1月22日上午9:50:02
  * @version 1.0
  * <p>修改人：</p>
@@ -68,7 +64,7 @@ import com.tianfang.user.service.IUserService;
 public class UserController extends BaseController{
 	protected static final Log logger = LogFactory.getLog(UserController.class);
 	private static final String Y_M_D_H_M = "yyyy-MM-dd HH:mm";
-	
+
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 	@Autowired
@@ -1098,8 +1094,56 @@ public class UserController extends BaseController{
     	}
     	return result;
     }
-    
-    /**
+
+	/**
+	 * 创建群组接口
+	 * @param userId
+	 * @param friendIds
+	 * @author xiang_wang
+     * @return
+     */
+	@RequestMapping(value ="createGroup")
+	@ResponseBody
+	public Response<String> createGroup(String userId, String[] friendIds){
+		Response<String> result = new Response<String>();
+		UserDto user = getUserByCache(userId);
+		if (null == friendIds || friendIds.length == 0){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("未选择好友!");
+			return result;
+		}
+		if (null != user){
+			try {
+				String groupId = UUIDGenerator.getUUID();
+				List<GroupUserDto> gus = new ArrayList<GroupUserDto>(friendIds.length);
+				String name = getGroupName(friendIds, user, gus, groupId);
+
+				GroupDto dto = new GroupDto();
+				dto.setId(groupId);
+				dto.setStat(DataStatus.ENABLED);
+				dto.setCreateTime(new Date());
+				dto.setCreateUserId(user.getId());
+				dto.setCreateUserName(user.getNickName());
+				dto.setName(name);
+
+				groupService.save(dto, gus);
+
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("系统异常");
+			}
+		}else{
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("用户不存在");
+		}
+
+		return result;
+	}
+
+	/**
      * 我的群组
      * @return {"status":状态码(200-成功,500-失败),"message":"提示信息","data":List<GroupDto>}
      * @author xiang_wang
@@ -1256,5 +1300,45 @@ public class UserController extends BaseController{
 			return num;
 		}
 		return 0;
+	}
+
+	/**
+	 * 组装群组名称,并组装群组下用户集合
+	 * @param friendIds
+	 * @param user
+	 * @param gus
+	 * @param groupId
+	 * @return
+	 */
+	private String getGroupName(String[] friendIds, UserDto user, List<GroupUserDto> gus, String groupId) {
+		GroupUserDto gu;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0, len = friendIds.length; i < len; i++){
+			if (i < 2){
+				sb.append(userService.getUserById(friendIds[i]).getNickName()).append("、");
+			}
+			gu = new GroupUserDto();
+			gu.setGroupId(groupId);
+			gu.setUserId(friendIds[i]);
+			gu.setCreateTime(new Date());
+			gu.setStat(DataStatus.ENABLED);
+			gu.setId(UUIDGenerator.getUUID());
+
+			gus.add(gu);
+		}
+		gu = new GroupUserDto();
+		gu.setGroupId(groupId);
+		gu.setUserId(user.getId());
+		gu.setCreateTime(new Date());
+		gu.setStat(DataStatus.ENABLED);
+		gu.setId(UUIDGenerator.getUUID());
+
+		gus.add(gu);
+
+		sb.append(user.getNickName());
+		if (friendIds.length >= 2){
+			sb.append("...");
+		}
+		return sb.toString();
 	}
 }

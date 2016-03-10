@@ -6,4 +6,14 @@
 	FROM sst_group_user AS a, sport_user AS b
 	WHERE a.user_id = b.id AND a.stat = 1 AND b.stat = 1 AND a.group_id = #{groupId}
   </select>
+
+	<insert id="insertBatchGroupUser" parameterType="java.util.List">
+		insert into sst_group_user (id, group_id, user_id,
+		create_time, stat)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(#{item.id},#{item.groupId},#{item.userId},#{item.createTime},#{item.stat})
+		</foreach>
+	</insert>
+
 </mapper>

@@ -49,6 +49,10 @@ public class GroupUserDao extends MyBatisBaseDao<GroupUser> {
         assemblyParams(dto, criteria);
 		return mapper.countByExample(example);
 	}
+
+	public void insertBatchGroupUser(List<GroupUser> gus){
+		exMapper.insertBatchGroupUser(gus);
+	}
 	
 	public List<UserDto> findUsersByGroupId(String groupId){
 		return exMapper.findUsersByGroupId(groupId);

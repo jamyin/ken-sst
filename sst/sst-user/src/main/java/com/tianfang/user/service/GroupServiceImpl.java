@@ -2,6 +2,7 @@ package com.tianfang.user.service;
 
 import java.util.List;
 
+import com.tianfang.user.dto.GroupUserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import com.tianfang.user.dao.GroupUserDao;
 import com.tianfang.user.dto.GroupDto;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.pojo.Group;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GroupServiceImpl implements IGroupService {
@@ -33,6 +35,18 @@ public class GroupServiceImpl implements IGroupService {
 		m.setId(id);
 		groupDao.insertSelective(m);
 		return id;
+	}
+
+	@Override
+	@Transactional
+	public String save(GroupDto dto, List<GroupUserDto> gus){
+		checkObjIsNull(dto);
+		checkObjIsNull(gus);
+		Group m = BeanUtils.createBeanByTarget(dto, Group.class);
+		groupDao.insertSelective(m);
+
+
+		return dto.getId();
 	}
 
 	@Override
