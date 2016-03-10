@@ -1,5 +1,7 @@
 package com.tianfang.home.utils;
 
+import java.io.File;
+
 import com.tianfang.common.qrcode.TwoDimensionCode;
 import com.tianfang.common.util.PropertiesUtils;
 
@@ -17,8 +19,13 @@ import com.tianfang.common.util.PropertiesUtils;
  */
 public class QRCodeUtil {
 
-	private static final String QRCODE_URL = PropertiesUtils.getProperty("qrcode.url");
+	private static final String QRCODE_URL = PropertiesUtils.getProperty("upload.url");
+	private static final String basePath;
 	private static final String SUFFIX = ".png";
+	
+	static{
+		basePath = new StringBuilder(File.separator).append("upload").append(File.separator).append("qrcodes").append(File.separator).toString();
+	}
 	
 	/**
 	 * 根据用户id生成二维码
@@ -29,8 +36,8 @@ public class QRCodeUtil {
 	 */
 	public static String createCode(String userId){
 		StringBuilder url = new StringBuilder();
-		url.append(QRCODE_URL).append(userId).append(SUFFIX);
-		TwoDimensionCode.encoderQRCode(userId, url.toString()); 
-		return url.toString();
+		StringBuilder filePath = new StringBuilder(basePath).append(userId).append(SUFFIX);
+		TwoDimensionCode.encoderQRCode(userId, url.append(QRCODE_URL).append(filePath).toString());
+		return filePath.toString();
 	}
 }
