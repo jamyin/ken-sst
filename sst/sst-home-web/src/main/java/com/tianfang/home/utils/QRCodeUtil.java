@@ -18,7 +18,7 @@ import com.tianfang.common.util.PropertiesUtils;
 public class QRCodeUtil {
 
 	private static final String QRCODE_URL = PropertiesUtils.getProperty("qrcode.url");
-	private static final String SUFFIX = "png";
+	private static final String SUFFIX = ".png";
 	
 	/**
 	 * 根据用户id生成二维码
