@@ -624,7 +624,7 @@ public class UserController extends BaseController{
 
 				UserFriendDto uf = new UserFriendDto();
 				List<UserFriendDto> userFriend = userFriendService.findUserFriendByParam(uf);
-				if (null != userFriend || userFriend.size() > 0){
+				if (null != userFriend && userFriend.size() > 0){
 					result.setStatus(DataStatus.HTTP_FAILE);
 					result.setMessage("好友已添加!");
 					return result;
