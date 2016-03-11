@@ -996,8 +996,8 @@ public class UserController extends BaseController{
 				result.setMessage("查询成功");
 				result.setData(data);
 			}else{
-				result.setStatus(DataStatus.HTTP_FAILE);
-				result.setMessage("查询失败");
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+				result.setMessage("无数据");
 			}
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);
