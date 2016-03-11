@@ -104,6 +104,14 @@ public class UserDto implements Serializable{
     private String mobile;
 	
 	/**
+	 * 邮箱
+	 */
+	@Getter
+	@Setter
+	private String email;
+	
+	
+	/**
 	 * 用户类型(1，普通会员；2，教练；3，队长)
 	 */
 	@Getter
