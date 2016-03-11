@@ -103,6 +103,13 @@ public class UserDao extends MyBatisBaseDao<User> {
         	if (StringUtils.isNotBlank(params.getPassword())){
         		criteria.andPasswordEqualTo(params.getPassword());
         	}
+        	if (StringUtils.isNotBlank(params.getMobile())){
+        		criteria.andMobileEqualTo(params.getMobile());
+        	}
+        	if (StringUtils.isNotBlank(params.getEmail())){
+        		criteria.andEmailEqualTo(params.getEmail());
+        	}
+        	
         }
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 	}
