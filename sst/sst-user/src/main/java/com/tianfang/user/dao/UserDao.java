@@ -106,4 +106,12 @@ public class UserDao extends MyBatisBaseDao<User> {
         }
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 	}
+	
+		/**
+		 * @author YIn
+		 * @time:2016年3月10日 下午5:10:29
+		 */
+		public List<UserDto> findUserByGroupId(String groupId) {
+			return uExMapper.findUserByGroupId(groupId);
+		}
 }

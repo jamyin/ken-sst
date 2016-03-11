@@ -156,4 +156,13 @@ public class UserServiceImpl implements IUserService {
 			throw new RuntimeException("对不起,该手机号码已经注册过了!");
 		}
 	}
+	
+	/**
+	 * @author YIn
+	 * @time:2016年3月10日 下午5:09:52
+	 */
+	@Override
+	public List<UserDto> findUserByGroupId(String groupId) {
+		return userDao.findUserByGroupId(groupId);
+	}
 }

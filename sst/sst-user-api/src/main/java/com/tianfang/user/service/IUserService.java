@@ -74,4 +74,13 @@ public interface IUserService {
 	 * 2016年1月20日下午1:26:30
 	 */
 	List<FriendApp> findCareFriends(String userId);
+	
+	/**
+     * 根据群组Id查询用户信息 
+     * @author YIn
+     * @time:2016年3月10日 下午4:45:57
+     * @param groupId
+     * @return
+     */
+	List<UserDto> findUserByGroupId(String groupId);
 }

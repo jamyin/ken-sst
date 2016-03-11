@@ -1176,6 +1176,31 @@ public class UserController extends BaseController{
     }
     
     /**
+     * 根据群组Id查询用户信息 
+     * @author YIn
+     * @time:2016年3月10日 下午4:45:57
+     * @param groupId
+     * @return
+     */
+    @RequestMapping(value="findUserByGroupId")
+    @ResponseBody
+    public List<String> findUserByGroupId(String groupId){
+    	List<String> result = new ArrayList<String>();
+    	if(StringUtils.isEmpty(groupId)){
+    		return result;
+    	}
+    	List<UserDto> userList = userService.findUserByGroupId(groupId);
+    	if(userList == null || userList.size() == 0){
+    		return null;
+    	}
+    	List<String> mobileList = new ArrayList<String>();
+    	for(UserDto dto:userList){
+    		 mobileList.add(dto.getMobile());
+    	}
+    	return mobileList;
+    }
+    
+    /**
      * 查询群组下所有用户信息
      * @param userId
      * @param id
