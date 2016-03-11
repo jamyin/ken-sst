@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.tianfang.home.dto.AppGroupDatas;
 import com.tianfang.user.dto.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -1097,17 +1100,17 @@ public class UserController extends BaseController{
 
 	/**
 	 * 创建群组接口
-	 * @param userId
-	 * @param friendIds
+	 * @param jsonString
 	 * @author xiang_wang
      * @return
      */
 	@RequestMapping(value ="createGroup")
 	@ResponseBody
-	public Response<String> createGroup(String userId, String[] friendIds){
+	public Response<String> createGroup(String jsonString){
+		AppGroupDatas datas = JSON.parseObject(jsonString, AppGroupDatas.class);
 		Response<String> result = new Response<String>();
-		UserDto user = getUserByCache(userId);
-		if (null == friendIds || friendIds.length == 0){
+		UserDto user = getUserByCache(datas.getUserId());
+		if (null == datas.getFriendIds() || datas.getFriendIds().length == 0){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("未选择好友!");
 			return result;
@@ -1115,8 +1118,8 @@ public class UserController extends BaseController{
 		if (null != user){
 			try {
 				String groupId = UUIDGenerator.getUUID();
-				List<GroupUserDto> gus = new ArrayList<GroupUserDto>(friendIds.length);
-				String name = getGroupName(friendIds, user, gus, groupId);
+				List<GroupUserDto> gus = new ArrayList<GroupUserDto>(datas.getFriendIds().length);
+				String name = getGroupName(datas.getFriendIds(), user, gus, groupId);
 
 				GroupDto dto = new GroupDto();
 				dto.setId(groupId);
