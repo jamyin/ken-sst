@@ -1313,12 +1313,16 @@ public class UserController extends BaseController{
 	 * @param groupId
 	 * @return
 	 */
-	private String getGroupName(String[] friendIds, UserDto user, List<GroupUserDto> gus, String groupId) {
+	private String getGroupName(String[] friendIds, UserDto user, List<GroupUserDto> gus, String groupId) throws Exception {
 		GroupUserDto gu;
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0, len = friendIds.length; i < len; i++){
 			if (i < 2){
-				sb.append(userService.getUserById(friendIds[i]).getNickName()).append("、");
+				UserDto friend = userService.getUserById(friendIds[i]);
+				if (null == friend){
+					throw new RuntimeException("好友数据异常!");
+				}
+				sb.append(friend.getNickName()).append("、");
 			}
 			gu = new GroupUserDto();
 			gu.setGroupId(groupId);
