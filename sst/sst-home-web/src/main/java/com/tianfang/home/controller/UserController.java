@@ -1,32 +1,6 @@
 package com.tianfang.home.controller;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
-import com.tianfang.home.dto.AppGroupDatas;
-import com.tianfang.user.dto.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.constants.SessionConstants;
 import com.tianfang.common.ext.ExtPageQuery;
@@ -37,18 +11,32 @@ import com.tianfang.common.util.DateUtils;
 import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
+import com.tianfang.home.dto.AppGroupDatas;
 import com.tianfang.home.utils.QRCodeUtil;
 import com.tianfang.home.utils.TigaseUtil;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.app.FriendApp;
-import com.tianfang.user.service.IEmailSendService;
-import com.tianfang.user.service.IGroupService;
-import com.tianfang.user.service.IMemoService;
-import com.tianfang.user.service.IPlanService;
-import com.tianfang.user.service.ISmsSendService;
-import com.tianfang.user.service.IUserFriendService;
-import com.tianfang.user.service.IUserService;
+import com.tianfang.user.dto.*;
+import com.tianfang.user.service.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.elasticsearch.search.aggregations.bucket.significant.heuristics.JLHScore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * <p>Title: UserController </p>
@@ -246,7 +234,7 @@ public class UserController extends BaseController{
 		result.setMessage("用户登录成功！");
 		return result;
 	}
-	
+
 	/**
 	 * 用户重置密码接口
 	 * 
@@ -626,6 +614,8 @@ public class UserController extends BaseController{
 			try {
 
 				UserFriendDto uf = new UserFriendDto();
+                uf.setUserId(userId);
+                uf.setFriendId(friendId);
 				List<UserFriendDto> userFriend = userFriendService.findUserFriendByParam(uf);
 				if (null != userFriend && userFriend.size() > 0){
 					result.setStatus(DataStatus.HTTP_FAILE);
@@ -633,8 +623,6 @@ public class UserController extends BaseController{
 					return result;
 				}
 
-				uf.setUserId(userId);
-				uf.setFriendId(friendId);
 				userFriendService.save(uf);
 				result.setMessage("添加成功");
 				result.setStatus(DataStatus.HTTP_SUCCESS);
@@ -1118,7 +1106,7 @@ public class UserController extends BaseController{
 		if (null != user){
 			try {
 				String groupId = UUIDGenerator.getUUID();
-				List<GroupUserDto> gus = new ArrayList<GroupUserDto>(datas.getFriendIds().length);
+				List<GroupUserDto> gus = new ArrayList<>(datas.getFriendIds().length);
 				String name = getGroupName(datas.getFriendIds(), user, gus, groupId);
 
 				GroupDto dto = new GroupDto();
@@ -1156,7 +1144,7 @@ public class UserController extends BaseController{
     @ResponseBody
     public Response<List<GroupDto>> myGroups(String userId){
     	UserDto user = getUserByCache(userId);
-    	Response<List<GroupDto>> result = new Response<List<GroupDto>>();
+    	Response<List<GroupDto>> result = new Response<>();
     	if (null != user){
     		try {
     			result.setStatus(DataStatus.HTTP_SUCCESS);
