@@ -50,7 +50,7 @@ public class GroupUserDao extends MyBatisBaseDao<GroupUser> {
 		return mapper.countByExample(example);
 	}
 
-	public void insertBatchGroupUser(List<GroupUser> gus){
+	public void insertBatchGroupUser(List<GroupUserDto> gus){
 		exMapper.insertBatchGroupUser(gus);
 	}
 	

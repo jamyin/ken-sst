@@ -44,7 +44,7 @@ public class GroupServiceImpl implements IGroupService {
 		checkObjIsNull(gus);
 		Group m = BeanUtils.createBeanByTarget(dto, Group.class);
 		groupDao.insertSelective(m);
-
+		groupUserDao.insertBatchGroupUser(gus);
 
 		return dto.getId();
 	}
