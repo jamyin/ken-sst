@@ -1,5 +1,28 @@
 package com.tianfang.home.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.alibaba.fastjson.JSON;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.constants.SessionConstants;
@@ -17,26 +40,19 @@ import com.tianfang.home.utils.TigaseUtil;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.app.FriendApp;
-import com.tianfang.user.dto.*;
-import com.tianfang.user.service.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.elasticsearch.search.aggregations.bucket.significant.heuristics.JLHScore;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
+import com.tianfang.user.dto.GroupDto;
+import com.tianfang.user.dto.GroupUserDto;
+import com.tianfang.user.dto.MemoDto;
+import com.tianfang.user.dto.PlanDto;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.dto.UserFriendDto;
+import com.tianfang.user.service.IEmailSendService;
+import com.tianfang.user.service.IGroupService;
+import com.tianfang.user.service.IMemoService;
+import com.tianfang.user.service.IPlanService;
+import com.tianfang.user.service.ISmsSendService;
+import com.tianfang.user.service.IUserFriendService;
+import com.tianfang.user.service.IUserService;
 
 /**
  * <p>Title: UserController </p>
@@ -1184,6 +1200,31 @@ public class UserController extends BaseController{
     	List<String> mobileList = new ArrayList<String>();
     	for(UserDto dto:userList){
     		 mobileList.add(dto.getMobile());
+    	}
+    	return mobileList;
+    }
+    
+    /**
+     * 根据群组Id查询用户信息  -加后缀
+     * @author YIn
+     * @time:2016年3月10日 下午4:45:57
+     * @param groupId
+     * @return
+     */
+    @RequestMapping(value="findUsersByGroupId")
+    @ResponseBody
+    public List<String> findUsersByGroupId(String groupId){
+    	List<String> result = new ArrayList<String>();
+    	if(StringUtils.isEmpty(groupId)){
+    		return result;
+    	}
+    	List<UserDto> userList = userService.findUserByGroupId(groupId);
+    	if(userList == null || userList.size() == 0){
+    		return null;
+    	}
+    	List<String> mobileList = new ArrayList<String>();
+    	for(UserDto dto:userList){
+    		 mobileList.add(dto.getMobile() + "#" + PropertiesUtils.getProperty("project"));
     	}
     	return mobileList;
     }
