@@ -87,17 +87,22 @@
 		
 			<div class="vid_box">
 				<h2><span>视频专区</span><a href="###">更多</a></h2>
-				<div class="vid_main">
-					<img src="/static/img/vid.png" border="0">
+				<div class="vid_main">			
+					<img src="/static/img/vid.png" border="0" style="width:587px;height:342px;">
 					<div class="picker">
 						<div class="pi_wrap">
 							<ul move=0>
-								<li class="cur"><img src="/static/img/vid_picker.png" border="0"><span>1正在播放：【集锦】切尔西5-1纽卡 佩刀两球科斯塔传射建功</span></li>
-								<li><img src="/static/img/vid_picker.png" border="0"><span>2【集锦】切尔西5-1纽卡 佩刀两球科斯塔传射建功</span></li>
-								<li><img src="/static/img/vid_picker.png" border="0"><span>3【集锦】切尔西5-1纽卡 佩刀两球科斯塔传射建功</span></li>
-								<li><img src="/static/img/vid_picker.png" border="0"><span>4【集锦】切尔西5-1纽卡 佩刀两球科斯塔传射建功</span></li>
-								<li><img src="/static/img/vid_picker.png" border="0"><span>5【集锦】切尔西5-1纽卡 佩刀两球科斯塔传射建功</span></li>
-								<li><img src="/static/img/vid_picker.png" border="0"><span>6【集锦】切尔西5-1纽卡 佩刀两球科斯塔传射建功</span></li>
+								<#if dataMap ??>
+									<#list dataMap.videos as data>
+										<#if data_index lt 6>
+											<#if data_index == 0 >
+												<li class="cur"><img src="${(data.videoThumb)!}" border="0"><span>${(data.videoName)!}</span></li>			
+											<#else>
+												<li><img src="${(data.videoThumb)!}" border="0"><span>${(data.videoName)!}</span></li>			
+											</#if>
+										</#if>
+									</#list>
+								</#if>
 							</ul>
 						</div>
 						<div class="prev"></div>
@@ -105,9 +110,13 @@
 					</div>
 				</div>
 				<ul class="vid_other">
-					<li><img src="/static/img/vid2.jpg" border="0"><i></i><span>梅西双响巴萨2-0客胜阿森纳</span></li>
-					<li><img src="/static/img/vid2.jpg" border="0"><i></i><span>梅西双响巴萨2-0客胜阿森纳</span></li>
-					<li><img src="/static/img/vid2.jpg" border="0"><i></i><span>梅西双响巴萨2-0客胜阿森纳</span></li>
+					<#if dataMap ??>
+						<#list dataMap.videos as data>
+							<#if data_index gt 5 && data_index lt 9>
+								<li><img src="${(data.videoThumb)!}" border="0"><i></i><span>${(data.videoName)!}</span></li>			
+							</#if>
+						</#list>
+					</#if>				
 				</ul>
 			</div>
 		

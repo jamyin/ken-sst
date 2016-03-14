@@ -1,23 +1,22 @@
 package com.tianfang.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tianfang.business.dto.VideoDto;
+import com.tianfang.business.service.IVideoService;
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
-import com.tianfang.dto.CompRound;
 import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.message.service.INoticeService;
 import com.tianfang.train.dto.CompetitionMatchDto;
 import com.tianfang.train.dto.CompetitionNoticeDto;
-import com.tianfang.train.dto.CompetitionRoundDto;
 import com.tianfang.train.dto.CompetitionTeamDto;
 import com.tianfang.train.service.ICompetitionMatchService;
 import com.tianfang.train.service.ICompetitionNoticeService;
@@ -30,6 +29,8 @@ import com.tianfang.train.service.ICompetitionTeamService;
  */
 @Controller
 public class IndexController extends BaseController{
+	
+	private static Integer TOPNUM = 9 ;
 	
 	@Autowired
 	private ICompetitionTeamService iCompetitionTeamService;
@@ -51,6 +52,12 @@ public class IndexController extends BaseController{
 	@Autowired
 	private ICompetitionMatchService matchService;
 	
+	/**
+	 * 视频
+	**/
+	@Autowired
+	private IVideoService iVideoService;
+	
 	@RequestMapping(value="index")
 	public ModelAndView index(){
 		ModelAndView mv = getModelAndView();
@@ -60,6 +67,7 @@ public class IndexController extends BaseController{
 		map.put("newRace",getnewRace());
 		map.put("newRaceResult",getnewRaceResult());
 		map.put("raceRecord",getRecord());
+		map.put("videos",getVideos());
 		mv.addObject("dataMap", map);
 		mv.setViewName("/index");
 		return mv;
@@ -116,8 +124,8 @@ public class IndexController extends BaseController{
 	/**
 	 * 获取视频展示信息
 	 */
-	public void getVideos(){
-		
+	public List<VideoDto> getVideos(){
+		return iVideoService.findVideoByTop(TOPNUM, DataStatus.ENABLED);
 	}
 	
 	/**
