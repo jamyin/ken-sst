@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+	<div class="wrapper">
+		<div class="sub_ban">
+			<span>专题图集</span>
+			<a href="pics_more.html#">更多</a>
+		</div>
+		<div class="pics_box">
+			<ul>
+				<#if dataMap ??>
+					<#list dataMap.pictures as data>
+						<li>
+							<a href="###"><img src="${(data.thumbnail)!}" border="0"><p><span>${(data.title)!}</span>${(data.createTime?string('yyyy-MM-dd HH:mm'))}</p></a>
+						</li>
+					</#list>
+				</#if>
+<!-- 				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li> -->
+			</ul>
+		</div>
+		<div class="sub_ban">
+			<span>视频专区</span>
+			<a href="videos_more.html">更多</a>
+		</div>
+		<div class="video_box">
+			<ul>
+				<#if dataMap ??>
+					<#list dataMap.videos as data>
+							<li>
+								<a href="###"><img src="${(data.videoThumb)!}" data-video="${(data.video)!}" border="0"><p><span>${(data.videoName)!}</span>${(data.createTime?string('yyyy-MM-dd HH:mm'))}</p><i></i></a>
+							</li>
+							<!-- <li><img src="${(data.videoThumb)!}" data-video="${(data.video)!}" border="0"><i></i><span>${(data.videoName)!}</span></li> -->			
+					</#list>
+				</#if>			
+<!-- 				<li><a href="###"><img src="static/img/simple_v.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p><i></i></a></li>
+				<li><a href="###"><img src="static/img/simple_v.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p><i></i></a></li>
+				<li><a href="###"><img src="static/img/simple_v.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p><i></i></a></li>
+				<li><a href="###"><img src="static/img/simple_v.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p><i></i></a></li>
+				<li><a href="###"><img src="static/img/simple_v.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p><i></i></a></li>
+				<li><a href="###"><img src="static/img/simple_v.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p><i></i></a></li>
+				<li><a href="###"><img src="static/img/simple_v.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p><i></i></a></li>
+				<li><a href="###"><img src="static/img/simple_v.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p><i></i></a></li>
+ -->		</ul>
+		</div>
+	</div>
+	<script src="/static/js/footer.js"></script>
+</body>
+</html>

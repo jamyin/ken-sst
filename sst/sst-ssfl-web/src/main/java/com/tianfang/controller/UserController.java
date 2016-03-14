@@ -192,7 +192,8 @@ public class UserController extends BaseController{
     	ModelAndView mv = getModelAndView();
     	mv.setViewName("/forget");
         return mv;
-    }
+    }  
+    
     
     /**
      * 获取图片验证码
