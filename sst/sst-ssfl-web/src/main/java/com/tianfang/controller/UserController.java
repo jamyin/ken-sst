@@ -134,7 +134,7 @@ public class UserController extends BaseController{
 			HttpServletRequest request) {
 		Response<String> result = new Response<String>();
 		UserDto dto = new UserDto();
-		dto.setEmail(email);
+		dto.setMobile(email);
 		List<UserDto> list = userService.findUserByParam(dto);
 		if (list == null || list.size() <= 0) {
 			result.setStatus(-1);
@@ -192,8 +192,7 @@ public class UserController extends BaseController{
     	ModelAndView mv = getModelAndView();
     	mv.setViewName("/forget");
         return mv;
-    }  
-    
+    }
     
     /**
      * 获取图片验证码
@@ -337,18 +336,16 @@ public class UserController extends BaseController{
         if (validateCode.equals(checkCode)) {
         	UserDto dto = new UserDto();
         	dto.setEmail(email);
-        	List<UserDto> list = userService.findUserByParam(dto);
-        	if(list == null || list.size() == 0){
-        		result.setStatus(DataStatus.HTTP_SUCCESS);
-                result.setMessage("此手邮箱没注册过请先注册！");
-                return result;
-        	}
-        	list.get(0).setPassword(md5oldPwd);
-            Integer flag = userService.update(list.get(0));
+        	dto.setPassword(md5oldPwd);
+            Integer flag = userService.update(dto);
             if (flag ==1) {
                 result.setStatus(DataStatus.HTTP_SUCCESS);
                 result.setMessage("邮箱找回密码成功！");
             }
+            if (flag == -1) {
+                result.setStatus(DataStatus.HTTP_SUCCESS);
+                result.setMessage("此手邮箱没注册过请先注册！");
+            } 
             if (flag == 0) {
               result.setStatus(DataStatus.HTTP_FAILE);
               result.setMessage("邮箱验证失败！");   
@@ -392,16 +389,4 @@ public class UserController extends BaseController{
 	}
 	
 
-	/**
-	 * 用户注册
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/regiest")
-    public ModelAndView regiest(HttpServletRequest request){
-    	ModelAndView mv = getModelAndView();
-    	mv.setViewName("/regiest");
-        return mv;
-    }
-	
 }
