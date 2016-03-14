@@ -103,8 +103,8 @@ public class InformationServiceImpl implements IInformationService {
 	}
 
 	@Override
-	public List<InformationDto> findInformationByTop(Integer topNum,Integer enabled) {
-		List<Information> dataList = informationDao.findInformationByTop(topNum,enabled);
+	public List<InformationDto> findInformationByTop(Integer topNum,Integer enabled,Integer parentType) {
+		List<Information> dataList = informationDao.findInformationByTop(topNum,enabled,parentType);
 		List<InformationDto> objList = BeanUtils.createBeanListByTarget(dataList, InformationDto.class);
 		return objList;
 	}

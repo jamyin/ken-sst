@@ -40,6 +40,17 @@ public class IndexController extends BaseController{
 	
 	private static Integer TOPNUM_NINETEEN = 19 ;
 	
+	enum InfoType{
+		ZERO(0),ONE(1);
+		private int value = 0;
+	    private InfoType(int value) {    //    必须是private的，否则编译错误
+	        this.value = value;
+	    }
+	    public int value() {
+	        return this.value;
+	    }	    
+	}
+	
 	@Autowired
 	private ICompetitionTeamService iCompetitionTeamService;
 	
@@ -101,7 +112,7 @@ public class IndexController extends BaseController{
 	 * 获取滚动条相关的信息
 	 */
 	public List<InformationDto> getInfomatation(){
-		return iInformationService.findInformationByTop(TOPNUM_NINETEEN, DataStatus.ENABLED);
+		return iInformationService.findInformationByTop(TOPNUM_NINETEEN, DataStatus.ENABLED,InfoType.ZERO.value());
 //		return iAlbumService.findalbumByTop(TOPNUM_FOUR, DataStatus.ENABLED);
 	}
 	

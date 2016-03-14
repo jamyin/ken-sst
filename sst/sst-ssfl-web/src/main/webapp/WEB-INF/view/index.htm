@@ -24,7 +24,26 @@
 				</ul>
 			</div>
 			<div class="hotnews">
-				<div class="row">
+				<#if dataMap ??>
+					<#list dataMap.infomation as data>
+						<!-- ${(data_index)!} && ${((data_index)%4)!} -->
+						<#if ((data_index) % 4) == 0>
+							<div class="row">
+							<p class="tit">${(data.title)!}</p>
+							<p>
+						</#if>
+								<a href="###">${(data.title)!}</a> |
+							<!-- 	<a href="###">老不如小老不如小 曼城后防天团门将开挂也难救</a> | 
+								<a class="red" href="###">真值1亿！蓝军最强真神王者归来</a> | 
+								<a href="###">曼城10点超红魔</a> -->
+						<#if ((data_index) % 4) == 3>
+							</p>
+							</div>
+							<div class="dot_line"></div>
+						</#if>							
+					</#list>
+				</#if>			
+				<!-- <div class="row">
 					<p class="tit">1聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传</p>
 					<p><a href="###">佩工：2理由致被迫大轮换111111</a> | <a href="###">老不如小老不如小 曼城后防天团门将开挂也难救</a> | <a class="red" href="###">真值1亿！蓝军最强真神王者归来</a> | <a href="###">曼城10点超红魔</a></p>
 				</div>
@@ -38,7 +57,7 @@
 					<p class="tit">足总杯八强战抽签：切尔西大战埃弗顿 </p>
 					<p><a href="###">佩工：2理由致被迫大轮换</a> | <a href="###">老不如小老不如小 曼城后防天团门将开挂也难救</a> | <a class="red" href="###">真值1亿！蓝军最强真神王者归来</a> | <a href="###">曼城10点超红魔</a></p>
 				</div>
-				<div class="dot_line"></div>
+				<div class="dot_line"></div> -->
 			</div>
 		</div>
 		

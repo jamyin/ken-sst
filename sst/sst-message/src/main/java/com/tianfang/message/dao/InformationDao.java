@@ -71,12 +71,15 @@ public class InformationDao extends MyBatisBaseDao<Information>{
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 	}
 
-	public List<Information> findInformationByTop(Integer topNum,Integer enabled) {
+	public List<Information> findInformationByTop(Integer topNum,Integer enabled,Integer parentType) {
 		InformationExample example = new InformationExample();
 		InformationExample.Criteria criteria = example.createCriteria();
 				
 		criteria.andStatEqualTo(enabled);
-		example.setOrderByClause("limit "+topNum);	
+		
+		criteria.andParentTypeEqualTo(parentType);
+		
+		example.setOrderByClause(" create_time desc limit "+topNum);
 	
 		return mapper.selectByExample(example);
 	}
