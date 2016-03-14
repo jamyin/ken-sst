@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html>
 
-<!--
-	<head>
+<!-- 	<head>
 		<meta charset="UTF-8">
 		<link rel="icon" type="image/gif" href="static/img/favicon.ico">
 		<title>上超联赛-忘记密码</title>
 		<script src="static/js/jquery-2.1.3.min.js"></script>
 		<script src="static/js/common.js"></script>
 		<link href="static/css/regiest.css" rel="stylesheet" />
-	</head>
--->
+	</head> -->
 <#include "/common/head.htm"/>
 	<body>
-		<div class="header">
+		<!-- <div class="header">
 			<div class="wrapper">
 				<div class="topbar">
 					<a class="logo" href="###"></a>
@@ -33,41 +31,47 @@
 				</div>
 
 			</div>
-		</div>
+		</div> -->
 
 		<div class="wrapper">
 			<div class="reg-con-hd">
 				<h1 class="reg-con-bd">找回密码</h1>
 				<div class="reg-con"><span class="hd cur js-mobile">手机用户找回密码</span><span class="sp"></span><span class="hd js-email">邮箱用户找回密码</span></div>
+				<div class="forms">
 				<div class="reg-con-cen mobile">
 					<ul>
 						<li>
-							<label for="">输入账号</label>
-							<input type="text" name="" id="" value="" placeholder="请输入手机号码" /></li>
+							<label for="">手机账号</label>
+							<input type="text" name="mobile" id="mobile" value="" placeholder="请输入注册手机" /> <span class="inf">请输入手机账号</span></li>
 						<li>
 							<label for="">输入新密码</label>
-							<input type="text" name="" id="" value="" placeholder="" /><span class="red">*</span><span class="inf">注册成功后即可使用手机号登陆</span></li>
+							<input type="text" name="new_pwd" id="new_pwd" value="" placeholder="请输入密码" /> <span class="inf">请输入新密码</span></li>
 						<li>
 							<label for="">确认新密码</label>
-							<input  class="js-pwdh" type="password" name="" id="" value="" placeholder="" />
-							<input  class="hide js-pwd" type="text" name="" id="" value="" placeholder="" />
-							<img class="show-eye" src="static/img/show-eye.png"/>
-							<span class="red">*</span><span class="inf">6~16位，英文（区分大小写）、数字或常用符号</span></li>
+							<input  class="js-pwdh" type="password" name="confirm_pwd" id="confirm_pwd" value="" placeholder="请确认新密码" />
+							<input  class="hide js-pwd" type="text" name="" id="" value="" placeholder="请确认新密码" />
+							<img class="show-eye" src="/static/img/show-eye.png"/>
+							<span class="inf">6~16位，英文（区分大小写）、数字或常用符号</span></li>
+						<li>
+							<label for="">图片验证</label>
+							<input class="va-code" type="text" name="picCaptcha" id="picCaptcha" value="" onblur="myFunction()"/>
+							<img class="vcode" src="/user/drawRandom.htm"  onclick="refreshImage();" style="cursor:pointer"/>
+							<span class="inf"><a class="change" href="###" onclick="refreshImage();">看不清？换一个</a></span></li>
 						<li>
 							<label for="">短信验证</label>
-							<input class="va-code" type="text" name="" id="" value=""/>
-							<input class="getcode" type="button" name="" id="" value="点击获取"/>
-							<span class="inf">免费获取手机验证码</span></li>
+							<input class="va-code" type="text" name="telcaptcha" id="telcaptcha" value=""/>
+							<input class="getcode" type="button" name="" id="" value="点击获取" onclick="sendMessage(this)"/>
+							<span class="inf">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;免费获取手机验证码</span></li>
 						<li>
 							<label for=""></label>
-							<input class="reg-mobile" type="button" id="" value="提交" /></li>
+							<input class="reg-mobile" type="button" id="reg-mobile" value="提交" /></li>
 					</ul>
 				</div>
 				<div class="reg-con-cen email hide">
 					<ul>
 						<li>
 							<label for="">邮箱账号</label>
-							<input type="text" name="" id="" value="" placeholder="请输入注册邮箱" /><span class="red">*</span><span class="inf">请输入邮箱地址</span></li>
+							<input type="text" name="mail" id="mail" value="" placeholder="请输入注册邮箱" /><span class="inf">请输入邮箱地址</span></li>
 						<!--<li>
 							<label for="">设置密码</label>
 							<input  class="js-pwdh-e" type="password" name="" id="" value="" placeholder="" />
@@ -75,20 +79,36 @@
 							<img class="show-eye" src="static/img/show-eye.png"/>
 							<span class="red">*</span><span class="inf">6~16位，英文（区分大小写）、数字或常用符号</span></li>-->
 						<li>
+							<label for="">邮箱验证</label>
+							<input class="va-code" type="text" name="mailcaptcha" id="mailcaptcha" value=""/>
+							<input class="getcode" type="button" name="mailcaptcha" id="mailcaptcha" value="点击获取" onclick="sendMail(this)"/>
+							<span class="inf">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;获取邮箱验证码</span></li>
+						<!-- <li>
 							<label for="">验证码</label>
 							<input class="va-code" type="text" name="" id="" value=""/>
-							<img class="vcode" src="static/img/vcode.png"/>
-							<span class="inf"><a class="change" href="###">看不清？换一个</a></span></li>
+							<img class="vcode" src="/static/img/vcode.png"/>
+							<span class="inf"><a class="change" href="###">看不清？换一个</a></span></li> -->
+						<li>
+							<label for="">输入新密码</label>
+							<input type="text" name="new_pwd_m" id="new_pwd_m" value="" placeholder="请输入密码" /><span class="red">*</span><span class="inf">请输入新密码</span></li>
+						<li>
+							<label for="">确认新密码</label>
+							<input  class="js-pwdh" type="password" name="confirm_pwd_m" id="confirm_pwd_m" value="" placeholder="请确认新密码" />
+							<input  class="hide js-pwd" type="text" name="" id="" value="" placeholder="请确认新密码" />
+							<img class="show-eye" src="/static/img/show-eye.png"/>
+							<span class="red">*</span><span class="inf">6~16位，英文（区分大小写）、数字或常用符号</span></li>
 						<li>
 							<label for=""></label>
-							<input class="reg-mobile" type="button" id="" value="下一步" /></li>
+							<input class="reg-mobile" type="button" id="reg-mail" value="提交" /></li>
 					</ul>
+				</div>
 				</div>
 			</div>
 		</div>
-		<script src="static/js/footer.js"></script>
-		<script src="static/js/regiest.js"></script>
+		<!-- <script src="static/js/footer.js"></script>
+		<script src="static/js/regiest.js"></script> -->
 	</body>
-<#include "/common/footer.htm"/>
-
+ <#include "/common/foot.htm"/> 
+ <script src="/static/js/footer.js"></script>
+ <script src="/static/js/regiest.js"></script>
 </html>
