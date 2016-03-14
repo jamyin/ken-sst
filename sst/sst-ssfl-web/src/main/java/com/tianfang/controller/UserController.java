@@ -192,7 +192,8 @@ public class UserController extends BaseController{
     	ModelAndView mv = getModelAndView();
     	mv.setViewName("/forget");
         return mv;
-    }
+    }  
+    
     
     /**
      * 获取图片验证码
@@ -389,4 +390,16 @@ public class UserController extends BaseController{
 	}
 	
 
+	/**
+	 * 用户注册
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/regiest")
+    public ModelAndView regiest(HttpServletRequest request){
+    	ModelAndView mv = getModelAndView();
+    	mv.setViewName("/regiest");
+        return mv;
+    }
+	
 }
