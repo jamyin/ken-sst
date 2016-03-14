@@ -96,21 +96,21 @@ public class UserController extends BaseController{
 //			mobilePhone=oldusersDto.getMobileNo();
 //		}
 		
-		if(!CheckSendMsg(redisTemplate, mobilePhone, request)){
+		/*if(!CheckSendMsg(redisTemplate, mobilePhone, request)){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("发送短信过于频繁,请您稍后再试");
 			return result;			
-		}
+		}*/
 
-		if(!CheckSendMsg(redisTemplate, mobilePhone)){
+		/*if(!CheckSendMsg(redisTemplate, mobilePhone)){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("超过当天最多的发送次数");
 			return result;
-		}
+		}*/
 		
 		int randomNumber = (int) (Math.random() * 9000 + 1000);
 		String content = "温馨提示，为了保护您的隐私，请您在90秒内输入" + randomNumber + "验证码。";// 短信内容
-		String returnString = iSmsSendService.sendSms(randomNumber, mobilePhone, content);
+		//String returnString = iSmsSendService.sendSms(randomNumber, mobilePhone, content);
 //		String keyCode = SessionConstants.PHONE_NUMBER+loginUserDto.getId();
 		String keyCode = mobilePhone + "forget";
 		redisTemplate.opsForValue().set(keyCode, randomNumber, 90, TimeUnit.SECONDS);
@@ -187,10 +187,10 @@ public class UserController extends BaseController{
 		return result;
 	}
     
-    @RequestMapping("/forgot")
+    @RequestMapping("/forget")
     public ModelAndView index(HttpServletRequest request){
     	ModelAndView mv = getModelAndView();
-    	mv.setViewName("/forgot");
+    	mv.setViewName("/forget");
         return mv;
     }
     
@@ -276,6 +276,11 @@ public class UserController extends BaseController{
         Response<String> result = new Response<String>();
         String md5oldPwd = MD5Coder.encodeMD5Hex(password);
         String keyCode = mobilePhone + "forget";
+        if(validateCode ==null){
+            result.setStatus(DataStatus.HTTP_FAILE);
+            result.setMessage("验证码失效！");
+            return result;
+        }
         if(redisTemplate.opsForValue().get(keyCode)==null || redisTemplate.opsForValue().get(keyCode).equals("")){
             result.setStatus(DataStatus.HTTP_FAILE);
             result.setMessage("验证码失效！");
@@ -285,16 +290,18 @@ public class UserController extends BaseController{
         if (validateCode.equals(checkCode)) {
         	UserDto dto = new UserDto();
         	dto.setMobile(mobilePhone);
-        	dto.setPassword(md5oldPwd);
-            Integer flag = userService.update(dto);
+    		List<UserDto> list = userService.findUserByParam(dto);
+    		if(list == null || list.size() == 0){
+    			 result.setStatus(DataStatus.HTTP_SUCCESS);
+                 result.setMessage("此手机号码没注册过请先注册！");
+                 return result;
+    		}
+    		list.get(0).setPassword(md5oldPwd);
+            Integer flag = userService.update(list.get(0));
             if (flag == 1) {
                 result.setStatus(DataStatus.HTTP_SUCCESS);
                 result.setMessage("手机找回密码成功！");
             }
-            if (flag == -1) {
-                result.setStatus(DataStatus.HTTP_SUCCESS);
-                result.setMessage("此手机号码没注册过请先注册！");
-            } 
             if(flag == 0){
               result.setStatus(DataStatus.HTTP_FAILE);
               result.setMessage("手机验证失败！");   
