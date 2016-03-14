@@ -8,12 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tianfang.business.dto.AlbumDto;
 import com.tianfang.business.dto.VideoDto;
+import com.tianfang.business.service.IAlbumService;
 import com.tianfang.business.service.IVideoService;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
+import com.tianfang.message.dto.InformationDto;
 import com.tianfang.message.dto.NoticeDto;
+import com.tianfang.message.service.IInformationService;
 import com.tianfang.message.service.INoticeService;
 import com.tianfang.train.dto.CompetitionMatchDto;
 import com.tianfang.train.dto.CompetitionNoticeDto;
@@ -31,6 +35,10 @@ import com.tianfang.train.service.ICompetitionTeamService;
 public class IndexController extends BaseController{
 	
 	private static Integer TOPNUM = 9 ;
+	
+	private static Integer TOPNUM_FOUR = 4 ;
+	
+	private static Integer TOPNUM_NINETEEN = 19 ;
 	
 	@Autowired
 	private ICompetitionTeamService iCompetitionTeamService;
@@ -57,6 +65,20 @@ public class IndexController extends BaseController{
 	**/
 	@Autowired
 	private IVideoService iVideoService;
+	/**
+	 * 相册
+	 */
+	@Autowired
+	private IAlbumService iAlbumService;
+	
+	/**
+	 * 
+		 * 此方法描述的是：新闻资讯
+		 * @author: cwftalus@163.com
+		 * @version: 2016年3月14日 下午2:59:50
+	 */
+	@Autowired
+	private IInformationService iInformationService;
 	
 	@RequestMapping(value="index")
 	public ModelAndView index(){
@@ -68,6 +90,8 @@ public class IndexController extends BaseController{
 		map.put("newRaceResult",getnewRaceResult());
 		map.put("raceRecord",getRecord());
 		map.put("videos",getVideos());
+		map.put("pictures",getPictures());
+		map.put("infomation",getInfomatation());
 		mv.addObject("dataMap", map);
 		mv.setViewName("/index");
 		return mv;
@@ -76,8 +100,9 @@ public class IndexController extends BaseController{
 	/**
 	 * 获取滚动条相关的信息
 	 */
-	public void getRollCon(){
-		
+	public List<InformationDto> getInfomatation(){
+		return iInformationService.findInformationByTop(TOPNUM_NINETEEN, DataStatus.ENABLED);
+//		return iAlbumService.findalbumByTop(TOPNUM_FOUR, DataStatus.ENABLED);
 	}
 	
 	/**
@@ -117,8 +142,8 @@ public class IndexController extends BaseController{
 	/**
 	 * 获取精彩图集
 	 */
-	public void getPictures(){
-		
+	public List<AlbumDto> getPictures(){
+		return iAlbumService.findalbumByTop(TOPNUM_FOUR, DataStatus.ENABLED);
 	}
 	
 	/**

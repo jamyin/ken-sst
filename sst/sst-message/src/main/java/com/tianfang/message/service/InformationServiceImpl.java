@@ -101,4 +101,11 @@ public class InformationServiceImpl implements IInformationService {
 			throw new RuntimeException("对不起,资讯对象不存在!");
 		}
 	}
+
+	@Override
+	public List<InformationDto> findInformationByTop(Integer topNum,Integer enabled) {
+		List<Information> dataList = informationDao.findInformationByTop(topNum,enabled);
+		List<InformationDto> objList = BeanUtils.createBeanListByTarget(dataList, InformationDto.class);
+		return objList;
+	}
 }

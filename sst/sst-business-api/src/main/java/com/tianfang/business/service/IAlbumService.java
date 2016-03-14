@@ -69,4 +69,6 @@ public interface IAlbumService {
 	 * @return
 	 */
 	List<AlbumDto> findAlbum(AlbumDto albumDto);
+
+	List<AlbumDto> findalbumByTop(Integer tOPNUM, Integer enabled);
 }

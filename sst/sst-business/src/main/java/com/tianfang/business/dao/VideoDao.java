@@ -137,7 +137,7 @@ public class VideoDao extends MyBatisBaseDao<Video>{
 	public List<Video> findVideoByTop(int i,Integer videoStatus) {
 		VideoExample example = new VideoExample();
 		Criteria criteria = example.createCriteria();
-	
+		
 		criteria.andVideoStatusEqualTo(videoStatus);
 		
 		criteria.andStatEqualTo(DataStatus.ENABLED);

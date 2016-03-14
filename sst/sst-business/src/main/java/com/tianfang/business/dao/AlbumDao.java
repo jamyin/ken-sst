@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.tianfang.business.mapper.AlbumMapper;
 import com.tianfang.business.pojo.Album;
 import com.tianfang.business.pojo.AlbumExample;
+import com.tianfang.business.pojo.VideoExample;
 import com.tianfang.business.pojo.AlbumExample.Criteria;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
@@ -77,5 +78,16 @@ public class AlbumDao extends MyBatisBaseDao<Album>{
         assemblyParams(album, criteria);   //组装参数
         List<Album> result = mapper.selectByExample(example);  
         return result;
+	}
+
+	public List<Album> findalbumByTop(Integer topNum, Integer enabled) {
+		AlbumExample example = new AlbumExample();
+		Criteria criteria = example.createCriteria();
+		
+		criteria.andStatEqualTo(enabled);
+
+		example.setOrderByClause(" page_ranking asc limit "+topNum);	
+	
+		return mapper.selectByExample(example);
 	}
 }

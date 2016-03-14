@@ -70,4 +70,14 @@ public class InformationDao extends MyBatisBaseDao<Information>{
         }
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 	}
+
+	public List<Information> findInformationByTop(Integer topNum,Integer enabled) {
+		InformationExample example = new InformationExample();
+		InformationExample.Criteria criteria = example.createCriteria();
+				
+		criteria.andStatEqualTo(enabled);
+		example.setOrderByClause("limit "+topNum);	
+	
+		return mapper.selectByExample(example);
+	}
 }

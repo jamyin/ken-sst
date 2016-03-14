@@ -15,7 +15,7 @@
 						<figure text="4聚焦足总杯-切尔西5-1曼城 阿扎尔1射2聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传传"><img src="/static/img/silde.jpg" border="0"></figure>
 					</div>
   				</div>
-				<div class="text_tip"><p>1聚焦足总杯-切尔西5-1曼城 阿扎尔1射2聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传传</p></div>
+				<div class="text_tip"><p>z聚焦足总杯-切尔西5-1曼城 阿扎尔1射2聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传传22222222222222</p></div>
 				<ul id="position">
 					<li class="on"></li>
 					<li class=""></li>
@@ -25,8 +25,8 @@
 			</div>
 			<div class="hotnews">
 				<div class="row">
-					<p class="tit">聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传</p>
-					<p><a href="###">佩工：2理由致被迫大轮换</a> | <a href="###">老不如小老不如小 曼城后防天团门将开挂也难救</a> | <a class="red" href="###">真值1亿！蓝军最强真神王者归来</a> | <a href="###">曼城10点超红魔</a></p>
+					<p class="tit">1聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传</p>
+					<p><a href="###">佩工：2理由致被迫大轮换111111</a> | <a href="###">老不如小老不如小 曼城后防天团门将开挂也难救</a> | <a class="red" href="###">真值1亿！蓝军最强真神王者归来</a> | <a href="###">曼城10点超红魔</a></p>
 				</div>
 				<div class="dot_line"></div>
 				<div class="row">
@@ -38,6 +38,7 @@
 					<p class="tit">足总杯八强战抽签：切尔西大战埃弗顿 </p>
 					<p><a href="###">佩工：2理由致被迫大轮换</a> | <a href="###">老不如小老不如小 曼城后防天团门将开挂也难救</a> | <a class="red" href="###">真值1亿！蓝军最强真神王者归来</a> | <a href="###">曼城10点超红魔</a></p>
 				</div>
+				<div class="dot_line"></div>
 			</div>
 		</div>
 		
@@ -79,16 +80,31 @@
 		
 			<div class="pics_box">
 				<h2><span>精彩图集</span><a href="###">更多</a></h2>
-				<div class="img_a"><img src="/static/img/simple1.jpg" border="0"><span>苏神一人超阿森纳4名枪 神迹史上第3梅西仰视</span></div>
+				<#if dataMap ??>
+					<#assign priceClass = ["a","b","c","d"]>
+					<#list dataMap.pictures as data>
+						<div class="img_${priceClass[data_index]}">
+							<img src="${(data.thumbnail)!}" border="0"><span>${(data.title)!}</span>
+						</div>
+					</#list>
+				</#if>
+<!-- 				<div class="img_a"><img src="/static/img/simple1.jpg" border="0"><span>苏神一人超阿森纳4名枪 神迹史上第3梅西仰视</span></div>
 				<div class="img_b"><img src="/static/img/simple2.jpg" border="0"><span>巴萨2-0客胜阿森纳</span></div>
 				<div class="img_c"><img src="/static/img/simple3.jpg" border="0"><span>身价最贵球队难奈</span></div>
-				<div class="img_d"><img src="/static/img/simple4.jpg" border="0"><span>身价最贵球队难奈10人鱼腩</span></div>
+				<div class="img_d"><img src="/static/img/simple4.jpg" border="0"><span>身价最贵球队难奈10人鱼腩</span></div> -->
 			</div>
 		
 			<div class="vid_box">
 				<h2><span>视频专区</span><a href="###">更多</a></h2>
 				<div class="vid_main">			
-					<img src="/static/img/vid.png" border="0" style="width:587px;height:342px;">
+					<div class="vid_container" id="videoClick"><a href="###" onclick="videoPlay_do();"><img src="static/img/vid.png" border="0"><i></i></a></div>
+					<object id="videoPlay" style="display: none;" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="587" height="342">
+					    <param name="movie" value="/static/video/splvplayer.swf" />
+					    <param name="quality" value="high" />
+					    <param name="allowFullScreen" value="true" />
+					    <param id="flashVars" name="FlashVars" value="vcastr_file=http://jujusports.cn/upload/20151208/5e33ffe13b69421ba20cd5347c89320e.flv&LogoText=www.jujusports.cn&BufferTime=3&IsAutoPlay=1" />
+					    <embed id="flashVarsEmbed" src="/static/video/splvplayer.swf" allowfullscreen="true" flashvars="vcastr_file=http://jujusports.cn/upload/20151208/5e33ffe13b69421ba20cd5347c89320e.flv&LogoText=www.jujusports.cn&BufferTime=3&IsAutoPlay=1" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="587" height="342"></embed>
+					</object>
 					<div class="picker">
 						<div class="pi_wrap">
 							<ul move=0>
@@ -96,9 +112,9 @@
 									<#list dataMap.videos as data>
 										<#if data_index lt 6>
 											<#if data_index == 0 >
-												<li class="cur"><img src="${(data.videoThumb)!}" border="0"><span>${(data.videoName)!}</span></li>			
+												<li class="cur"><img src="${(data.videoThumb)!}" data-video="${(data.video)!}" border="0" onclick="openVideo(this);"><span>${(data.videoName)!}</span></li>			
 											<#else>
-												<li><img src="${(data.videoThumb)!}" border="0"><span>${(data.videoName)!}</span></li>			
+												<li><img src="${(data.videoThumb)!}" data-video="${(data.video)!}" border="0" onclick="openVideo(this);"><span>${(data.videoName)!}</span></li>			
 											</#if>
 										</#if>
 									</#list>
@@ -108,20 +124,34 @@
 						<div class="prev"></div>
 						<div class="next"></div>
 					</div>
+					<script type="text/javascript">
+						function videoPlay_do(){
+							$("#videoClick").css("display","none");
+							$("#videoPlay").css("display","");
+						}
+					</script>					
 				</div>
 				<ul class="vid_other">
 					<#if dataMap ??>
 						<#list dataMap.videos as data>
 							<#if data_index gt 5 && data_index lt 9>
-								<li><img src="${(data.videoThumb)!}" border="0"><i></i><span>${(data.videoName)!}</span></li>			
+								<li><img src="${(data.videoThumb)!}" data-video="${(data.video)!}" border="0"><i></i><span>${(data.videoName)!}</span></li>			
 							</#if>
 						</#list>
 					</#if>				
 				</ul>
 			</div>
-		
-		
-		
+			<script type="text/javascript">
+				function openVideo(othis){
+					var u = document.getElementById("videoPlay").value;
+					alert(u);
+					$("#videoClick").css("display","none");
+					$("#videoPlay").css("display","");
+					var flashVars_v = "vcastr_file="+$(othis).attr("data-video")+"&LogoText=www.jujusports.cn&BufferTime=3&IsAutoPlay=1";
+					document.getElementById("videoPlay").value = flashVars_v;
+					//$("#videoPlay").val(flashVars_v)
+				}
+			</script>			
 			<div class="rl_box">
 				<div class="tab"><a class="cur" href="###" tag="match">最新赛程</a> | <a href="###" tag="match_result">最新赛果</a><a class="more" href="###">更多</a></div>
 				<div class="match show">
@@ -161,7 +191,7 @@
 									<span>${(data.visitingTeamName)!}</span>
 								</li>
 							</#list>
-						</#if>						
+						</#if>
 <!-- 						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
 						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
 						<li><span class="date">04/15</span><span>重庆力帆</span><span class="score"><strong>3</strong>:1</span><span>天津泰达亿</span></li>
@@ -210,6 +240,10 @@
 	$(function(){	
 		setList()
 
+		$(".vid_other li").on("click",function(){
+			alert();
+		})
+		
 		$('.nav > ul > li').hover(function(){
 			var n = $(this).attr('tag')
 			$('.nav > .mark').css('left', n+'px')

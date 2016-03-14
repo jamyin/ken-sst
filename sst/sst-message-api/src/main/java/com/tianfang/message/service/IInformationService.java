@@ -19,4 +19,6 @@ public interface IInformationService {
 	List<InformationDto> findInformationByParam(InformationDto dto);
 	
 	PageResult<InformationDto> findInformationByParam(InformationDto dto, PageQuery query);
+
+	List<InformationDto> findInformationByTop(Integer topNum,Integer enabled);
 }
