@@ -112,5 +112,12 @@ public class AlbumPicServiceImpl implements IAlbumPicService {
 		return data;
 	}
 
+	@Override
+	public List<AlbumPictureDto> findTeamAlbumPic(AlbumPictureDto albumPictureDto) {
+		List<AlbumPicture> albumPicPicList = albumPicDao.findTeamAlbumPic(albumPictureDto);
+		List<AlbumPictureDto> dataList = BeanUtils.createBeanListByTarget(albumPicPicList, AlbumPictureDto.class);
+		return dataList;
+	}
+
 
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.google.common.base.Objects;
 import com.tianfang.business.dto.AlbumPictureDto;
 import com.tianfang.business.mapper.AlbumPicExMapper;
 import com.tianfang.business.mapper.AlbumPictureMapper;
@@ -78,5 +79,30 @@ public class AlbumPicDao extends MyBatisBaseDao<AlbumPicture>{
     		criteria.andTitleLike("%" +albumPic.getTitle()+"%");
     	}
     	criteria.andStatEqualTo(DataStatus.ENABLED);
+	}
+
+	public List<AlbumPicture> findTeamAlbumPic(AlbumPictureDto albumPictureDto) {
+		AlbumPictureExample example = new AlbumPictureExample();
+		Criteria criteria = example.createCriteria();
+		if(!StringUtils.isEmpty(albumPictureDto.getTeamId())){
+			criteria.andTeamIdEqualTo(albumPictureDto.getTeamId());	
+		}
+
+		if(!StringUtils.isEmpty(albumPictureDto.getAlbumId())){
+			criteria.andAlbumIdEqualTo(albumPictureDto.getAlbumId());	
+		}
+		
+		if(albumPictureDto.getPicType()!=null){
+			criteria.andPicTypeEqualTo(albumPictureDto.getPicType());
+		}
+		if(albumPictureDto.getPicStatus()!=null){
+			criteria.andPicStatusEqualTo(albumPictureDto.getPicStatus());
+		}
+
+		criteria.andStatEqualTo(DataStatus.ENABLED);
+		if(!Objects.equal(albumPictureDto.getLimit(),null)){
+			example.setOrderByClause("create_time desc limit " + albumPictureDto.getLimit());
+		}
+		return mapper.selectByExample(example);
 	}
 }
