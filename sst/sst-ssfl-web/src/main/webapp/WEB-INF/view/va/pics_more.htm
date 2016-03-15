@@ -21,7 +21,6 @@
 						<li><a href="###"><img src="${(data.thumbnail)!}" border="0"><p><span>${(data.title)!}</span>${(data.createTime?string('yyyy-MM-dd HH:mm'))!}</p></a></li>		
 					</#list>
 				</#if>
-				
 				<!-- <li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
 				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
 				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
@@ -40,16 +39,22 @@
 			</ul>
 		</div>
 		<div class="pagenav">
-			<a href="###"><</a>
+			<#include "/common/pagenav.htm"/>
+<!-- 			<a href="###"><</a>
 			<a class="cur" href="###">1</a>
 			<a href="###">2</a>
 			<a href="###">3</a>
 			<a href="###">4</a>
 			<a href="###">5</a>
 			<a href="###">6</a>
-			<a href="###">></a>
+			<a href="###">></a> -->
 		</div>
 	</div>
 	<script src="/static/js/footer.js"></script>
+	<script type="text/javascript">
+		function gotoPage(currPage){
+			window.location.href = "/va/a/more.htm?currPage="+currPage;
+		}
+	</script>
 </body>
 </html>
