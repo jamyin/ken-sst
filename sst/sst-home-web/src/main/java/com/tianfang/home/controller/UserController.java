@@ -1406,4 +1406,34 @@ public class UserController extends BaseController{
 		}
 		return sb.toString();
 	}
+	
+	
+	/**
+	 * 
+		 * 此方法描述的是：我所属的群
+		 * @author: cwftalus@163.com
+		 * @version: 2016年3月15日 上午9:47:25
+	 */
+    @RequestMapping(value="belongGroups")
+    @ResponseBody
+    public Response<List<GroupDto>> myBelongGroups(String userId){
+    	UserDto user = getUserByCache(userId);
+    	Response<List<GroupDto>> result = new Response<>();
+    	if (null != user){
+    		try {
+    			result.setStatus(DataStatus.HTTP_SUCCESS);
+				result.setData(groupService.findGroupByUserId(userId));
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				result.setStatus(DataStatus.HTTP_FAILE);
+	    		result.setMessage("系统异常");
+			}	
+    	}else{
+    		result.setStatus(DataStatus.HTTP_FAILE);
+    		result.setMessage("用户不存在");
+    	}
+    	
+    	return result;
+    }
 }

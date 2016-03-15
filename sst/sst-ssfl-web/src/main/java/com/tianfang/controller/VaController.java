@@ -60,14 +60,13 @@ public class VaController extends BaseController {
 	}
 
 	@RequestMapping(value = "/a/more")
-	public ModelAndView pictures() {
+	public ModelAndView pictures(PageQuery page) {
 		ModelAndView mv = getModelAndView();
-		HashMap<String, Object> map = new HashMap<String, Object>();
 
-		map.put("videos",getVideos());
-		map.put("pictures",getPictures());
+		AlbumDto albumDto = new AlbumDto();
+		PageResult<AlbumDto> pageList = iAlbumService.findAlbumByPage(albumDto, page);
 		
-		mv.addObject("dataMap", map);
+		mv.addObject("pageList", pageList);
 		mv.setViewName("/va/pics_more");
 		return mv;
 	}
