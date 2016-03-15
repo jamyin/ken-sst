@@ -3,6 +3,7 @@ package com.tianfang.user.service;
 import java.util.List;
 
 import com.tianfang.user.dto.GroupUserDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import com.tianfang.user.dao.GroupUserDao;
 import com.tianfang.user.dto.GroupDto;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.pojo.Group;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -127,5 +129,11 @@ public class GroupServiceImpl implements IGroupService {
 		if (StringUtils.isBlank(userId)){
 			throw new RuntimeException("对不起,群组对象用户ID为空!");
 		}
+	}
+
+	@Override
+	public List<GroupDto> findGroupsByUserId(String userId) throws Exception {
+		checkUserIdIsNull(userId);
+		return groupDao.findGroupsByUserId(userId);
 	}
 }

@@ -13,6 +13,7 @@ import com.tianfang.common.mybatis.MyBatisBaseDao;
 import com.tianfang.common.util.BeanUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.user.dto.GroupDto;
+import com.tianfang.user.mapper.GroupExMapper;
 import com.tianfang.user.mapper.GroupMapper;
 import com.tianfang.user.pojo.Group;
 import com.tianfang.user.pojo.GroupExample;
@@ -24,6 +25,10 @@ public class GroupDao extends MyBatisBaseDao<Group> {
 	@Getter
 	private GroupMapper mapper;
 
+	@Autowired
+	@Getter
+	private GroupExMapper mapperex;
+	
 	public List<GroupDto> findGroupByParam(GroupDto dto){
 		return findGroupByParam(dto, null);
 	}
@@ -66,5 +71,10 @@ public class GroupDao extends MyBatisBaseDao<Group> {
         	}
         }
 		criteria.andStatEqualTo(DataStatus.ENABLED);
+	}
+
+	public List<GroupDto> findGroupsByUserId(String userId) {
+		// TODO Auto-generated method stub
+		return mapperex.findGroupsByUserId(userId);
 	}
 }
