@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html>
-<#include "/common/head.htm"/>
+<head>
+	<#include "/common/head.htm"/>
+	<script src="/static/js/layer-1.9/extend/layer.ext.js"></script>
+</head>
+<body>
+	<div class="header">
+		<#include "/common/header.htm"/>
+	</div>
+
 	<div class="wrapper">
 		<div class="sub_ban">
 			<span>专题图集</span>
@@ -11,7 +19,9 @@
 				<#if dataMap ??>
 					<#list dataMap.pictures as data>
 						<li>
-							<a href="###"><img src="${(data.thumbnail)!}" border="0"><p><span>${(data.title)!}</span>${(data.createTime?string('yyyy-MM-dd HH:mm'))}</p></a>
+							<a href="###" rel="list" albumId-id='${(data.id)!}' class="lightbox">
+								<img src="${(data.thumbnail)!}" border="0"><p><span>${(data.title)!}</span>${(data.createTime?string('yyyy-MM-dd HH:mm'))}</p>
+							</a>
 						</li>
 					</#list>
 				</#if>
@@ -51,5 +61,20 @@
 		</div>
 	</div>
 	<script src="/static/js/footer.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$('.lightbox').each(function(index){
+				$(this).click(function() {
+					var albumId = $(this).attr('albumId-id');
+					$.getJSON('/va/fpicList.htm?albumId='+albumId, function(json){
+						console.log(json);
+					    layer.photos({
+					        photos: json //格式见API文档手册页
+					    });
+					});
+				});
+			});
+		});
+	</script>	
 </body>
 </html>
