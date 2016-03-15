@@ -1,0 +1,62 @@
+<!-- 分页展示个数 ,这个值只能为奇数-->
+<!-- 页面的跳转功能请实现 gotoPageVideo(page) 函数-->
+<#assign show_num = 7>
+<#if dataList?? && dataList.total gt 0> 
+<div class="pagenav herald">
+	<#if dataList.currPage gt 1 >
+		<a href="javascript:gotoPageVideo(1)">首页</a>
+	<#else>
+		<a href="javascript:;">首页</a>
+	</#if>
+	<#if (dataList.currPage-1) gt 0 >
+		<a href="javascript:gotoPageVideo(${dataList.currPage - 1})">上一页</a>
+	<#else>
+		<a href="javascript:;">上一页</a>
+	</#if>
+	<#if dataList.totalPage lte show_num>
+		<#list 1..dataList.totalPage as i>
+			<a <#if dataList.currPage == i>class="cur"<#else>href="javascript:gotoPageVideo(${i})"</#if> >${i}</a>
+		</#list>
+	<#else>
+		<#if dataList.currPage lte ((show_num + 1)/2)>
+			<#if dataList.currPage gt 1>
+				<#list 1..(dataList.currPage-1) as i>
+					<a href="javascript:gotoPageVideo(${i})">${i}</a>
+				</#list>
+			</#if>
+			<a class="cur">${dataList.currPage}</a>
+			<#list 1..(show_num - dataList.currPage) as i>
+				<a href="javascript:gotoPageVideo(${dataList.currPage + i})">${dataList.currPage + i}</a>
+			</#list>
+		<#else>
+			<#if (dataList.totalPage - dataList.currPage) lt ((show_num - 1)/2) >
+				<#list (dataList.totalPage - show_num + 1)..dataList.totalPage as i>
+					<#if dataList.currPage == i>
+						<a class="cur">${i}</a>
+					<#else>
+						<a href="javascript:gotoPageVideo(${i})">${i}</a>
+					</#if>
+				</#list>
+			<#else>
+				<#list ((show_num - 1)/2)..1 as i>
+					<a href="javascript:gotoPageVideo(${dataList.currPage - i})">${dataList.currPage - i}</a>
+				</#list>
+				<a class="cur">${dataList.currPage}</a>
+				<#list 1..((show_num - 1)/2) as i>
+					<a href="javascript:gotoPageVideo(${dataList.currPage + i})">${dataList.currPage + i}</a>
+				</#list>
+			</#if>
+		</#if>
+	</#if>
+	<#if (dataList.currPage + 1) lte dataList.totalPage >
+		<a href="javascript:gotoPageVideo(${dataList.currPage + 1})">下一页</a>
+	<#else>
+		<a href="javascript:;">下一页</a>
+	</#if>
+	<#if dataList.currPage lt dataList.totalPage>
+		<a href="javascript:gotoPageVideo(${dataList.totalPage})">末页</a>
+	<#else>
+		<a href="javascript:;">末页</a>
+	</#if>
+</div>
+</#if>		

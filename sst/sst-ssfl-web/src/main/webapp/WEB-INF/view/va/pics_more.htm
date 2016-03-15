@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<#include "/common/head.htm"/>
+</head>
+
+<body>
+	<div class="header">
+		<#include "/common/header.htm"/>
+	</div>
+	
+	
+	<div class="wrapper">
+		<div class="sub_ban">
+			<span>专题图集</span>
+		</div>
+		<div class="pics_box">
+			<ul>
+				<#if pageList ??>
+					<#list pageList.getResults() as data>
+						<li><a href="###"><img src="${(data.thumbnail)!}" border="0"><p><span>${(data.title)!}</span>${(data.createTime?string('yyyy-MM-dd HH:mm'))!}</p></a></li>		
+					</#list>
+				</#if>
+				
+				<!-- <li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li>
+				<li><a href="###"><img src="static/img/simple.jpg" border="0"><p><span>西行漫记  完美赢家T9凑齐人生最后一拼图凑齐人生最后一拼图</span>2016-02-25 04:21:58</p></a></li> -->
+			</ul>
+		</div>
+		<div class="pagenav">
+			<a href="###"><</a>
+			<a class="cur" href="###">1</a>
+			<a href="###">2</a>
+			<a href="###">3</a>
+			<a href="###">4</a>
+			<a href="###">5</a>
+			<a href="###">6</a>
+			<a href="###">></a>
+		</div>
+	</div>
+	<script src="/static/js/footer.js"></script>
+</body>
+</html>

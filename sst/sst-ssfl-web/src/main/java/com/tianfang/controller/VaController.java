@@ -52,6 +52,7 @@ public class VaController extends BaseController {
 		ModelAndView mv = getModelAndView();
 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
+		page.setPageSize(16);
 		PageResult<VideoDto> pageList = iVideoService.getCriteriaPage(page, paramMap);
 		
 		mv.addObject("pageList", pageList);
@@ -64,6 +65,7 @@ public class VaController extends BaseController {
 		ModelAndView mv = getModelAndView();
 
 		AlbumDto albumDto = new AlbumDto();
+		page.setPageSize(16);
 		PageResult<AlbumDto> pageList = iAlbumService.findAlbumByPage(albumDto, page);
 		
 		mv.addObject("pageList", pageList);
