@@ -35,18 +35,6 @@ import com.tianfang.user.service.IUserService;
  * <p>修改时间：</p>
  * <p>修改备注：</p>
  */
-/**		
- * <p>Title: TeamController </p>
- * <p>Description: 类描述:TODO</p>
- * <p>Copyright (c) 2015 </p>
- * <p>Company: 上海天坊信息科技有限公司</p>
- * @author xiang_wang	
- * @date 2016年3月7日上午11:31:14
- * @version 1.0
- * <p>修改人：</p>
- * <p>修改时间：</p>
- * <p>修改备注：</p>
- */
 @Controller
 @RequestMapping(value = "team")
 public class TeamController extends BaseController{
@@ -235,6 +223,12 @@ public class TeamController extends BaseController{
 		}
 		UserDto user = getUserByCache(userId);
     	if (null != user){
+			if (user.getUtype() == UserType.CAPTAIN.getIndex()){
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("队长请创建自己的球队");
+				return false;
+			}
+
     		UserApplyTeamDto dto = new UserApplyTeamDto();
     		dto.setUserId(userId);
     		dto.setTeamId(teamId);
