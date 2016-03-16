@@ -261,4 +261,29 @@ public class UserDto implements Serializable{
 	@Setter
     @Getter
     private String description;
+	
+	@Getter
+	@Setter
+    private String createTimeStr;
+	
+	/**
+	 * 最后登录时间-页面显示
+	 */
+	@Getter
+	@Setter
+	private String lastLoginTimeStr;
+	
+	/**
+	 * 球队Name
+	 */
+	@Getter
+	@Setter
+    private String teamName;	
+	
+	/**
+	 * 球队标志
+	 */
+	@Getter
+	@Setter
+    private String teamIcon;
 }
