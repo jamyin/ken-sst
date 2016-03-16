@@ -533,6 +533,40 @@ public class UserController extends BaseController{
 		return result;
 
 	}
+	/**
+	 * 根据条件查询用户信息接口(连表查询用户球队的名字和图标)
+	 * @author YIn
+	 * @time:2016年3月16日 上午11:34:54
+	 * @param userDto
+	 * @return
+	 */
+	 
+	@ResponseBody
+	@RequestMapping("/findUserInfo")
+	public Response<UserDto> findUserInfo(UserDto userDto) {
+		Response<UserDto> result = new Response<UserDto>();
+		if (userDto == null) {
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("查询条件为空");
+			return result;
+		}
+		List<UserDto> list = new ArrayList<UserDto>();
+		try {
+			list = userService.findUserInfo(userDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (list.size() > 0) {
+			result.setStatus(DataStatus.HTTP_SUCCESS);
+			result.setData(list.get(0));
+			result.setMessage("查询成功");
+			return result;
+		}
+		result.setStatus(DataStatus.HTTP_FAILE);
+		result.setMessage("查询失败");
+		return result;
+		
+	}
     
 	/**
 	 * 异步校验用户登录状态

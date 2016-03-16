@@ -33,6 +33,19 @@ public class UserServiceImpl implements IUserService {
 		return id;
 	}
 
+	public UserDto regiest(UserDto dto) {
+		User user = BeanUtils.createBeanByTarget(dto, User.class);
+		int result = userDao.insertSelective(user);
+		UserDto userDto = new UserDto();
+		if (result > 0) {
+			userDto = BeanUtils.createBeanByTarget(user, UserDto.class);
+			return userDto;
+		} else {
+			return null;
+		}
+	}
+	
+	
 	@Override
 	public void del(String ids){
 		String[] idArr = ids.split(",");
@@ -68,6 +81,16 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public List<UserDto> findUserByParam(UserDto dto){
 		return userDao.findUserByParam(dto);
+	}
+
+	/**
+	 * @author YIn
+	 * @time:2016年3月16日 上午11:36:20
+	 */
+	@Override
+	public List<UserDto> findUserInfo(UserDto userDto) {
+
+		return userDao.findUserInfo(userDto);
 	}
 
 	@Override
@@ -165,4 +188,5 @@ public class UserServiceImpl implements IUserService {
 	public List<UserDto> findUserByGroupId(String groupId) {
 		return userDao.findUserByGroupId(groupId);
 	}
+
 }

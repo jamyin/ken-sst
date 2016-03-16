@@ -76,6 +76,27 @@ public class UserDto implements Serializable{
 	private String area;
 	
 	/**
+	 * 对应省份-页面显示
+	 */
+	@Getter
+	@Setter
+	private String provinceStr;
+	
+	/**
+	 * 用户所在地 区域 -页面显示
+	 */
+	@Getter
+	@Setter
+	private String locationStr;
+	
+	/**
+	 * 市  -页面显示
+	 */
+	@Getter
+	@Setter
+	private String areaStr;
+	
+	/**
 	 * 地址详情
 	 */
 	@Getter
@@ -159,4 +180,37 @@ public class UserDto implements Serializable{
 	@Getter
 	@Setter
 	private Date lastLoginTime;
+	
+	/**
+	 * 创建时间-页面显示
+	 */
+	@Getter
+	@Setter
+    private String createTimeStr;
+	
+	/**
+	 * 最后登录时间-页面显示
+	 */
+	@Getter
+	@Setter
+	private String lastLoginTimeStr;
+	
+	/**
+	 * 球队Name
+	 */
+	@Getter
+	@Setter
+    private String teamName;	
+	
+	/**
+	 * 球队标志
+	 */
+	@Getter
+	@Setter
+    private String teamIcon;
+	
+	
+	@Setter
+    @Getter
+    private String userAccount; //登录时的用户账号
 }

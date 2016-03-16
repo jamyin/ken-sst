@@ -31,9 +31,25 @@ public interface IUserService {
 	
 	List<UserDto> findUserByParam(UserDto dto);
 	
+	/**
+	 * 根据条件查询用户信息接口(连表查询用户球队的名字和图标)
+	 * @author YIn
+	 * @time:2016年3月16日 上午11:36:00
+	 * @param userDto
+	 * @return
+	 */
+	List<UserDto> findUserInfo(UserDto userDto);
+	
 	PageResult<UserDto> findUserByParam(UserDto dto, PageQuery query);
 
 	void joinTeam(String userId, String teamId);
+	
+	/**
+	 * 用户注册
+	 * @param dto
+	 * @return
+	 */
+	public UserDto regiest(UserDto dto);
 	
 	/**
 	 * 查询返回给移动端用户分组和好友信息

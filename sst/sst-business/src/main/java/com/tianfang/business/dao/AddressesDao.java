@@ -30,9 +30,9 @@ public class AddressesDao extends MyBatisBaseDao<Addresses>{
 	 * @param criteria
 	 */
 	private void assemblyParams(Addresses addresses, Criteria criteria) {
-		/*if (StringUtils.isNotBlank(album.getId())){
-    		criteria.andIdEqualTo(album.getId());
-    	}*/
+		if (addresses.getId() != null){
+    		criteria.andIdEqualTo(addresses.getId());
+    	}
 		if (addresses.getLevel() != null){
     		criteria.andLevelEqualTo(addresses.getLevel());
     	}
