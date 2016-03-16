@@ -37,12 +37,6 @@
         <dependent-module archiveName="sst-evaluat-api-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sst-evaluat-api/sst-evaluat-api">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="sst-business-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sst-business/sst-business">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="sst-business-api-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sst-business-api/sst-business-api">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="java-output-path" value="/tianfang-home/target/classes"/>
         <property name="context-root" value="sst-admin"/>
     </wb-module>

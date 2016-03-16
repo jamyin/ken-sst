@@ -22,4 +22,13 @@
 		WHERE a.id IN (SELECT user_id FROM sst_group_user b WHERE b.group_id = #{groupId} AND b.stat = 1)
 		AND a.stat = 1
 	</select>
+	
+	<select id="findUserInfo" resultType="com.tianfang.user.dto.UserDto" parameterType="com.tianfang.user.dto.UserDto">
+		SELECT a.id, a.email,a.mobile, a.nick_name as nickName,a.gender,a.utype,a.province,a.area, a.location, a.pic ,  a.last_login_time as lastLoginTime,
+		a.last_update_time as lastUpdateTime, a.create_time as createTime, a.stat, a.birthday, b.id as teamId, b.name as teamName
+		FROM sport_user a
+		Left JOIN sst_team b
+		ON a.team_id = b.id
+		WHERE a.user_id = #{userId} AND a.stat = 1
+	</select>
 </mapper>

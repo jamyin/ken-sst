@@ -41,64 +41,64 @@
 					<ul>
 						<li>
 							<label for="">身份选择</label>
-							<select name="">
+							<select name="mobile_user_type" id="mobile_user_type">
 								<option value="">请选择您的身份</option>
 								<option value="2">教练</option>
 								<option value="1">队员</option>
-							</select>
+							</select><span class="red" style="margin-left: 20px;"></span>
 							</li>
 						<li>
 							<label for="">手机号码</label>
-							<input type="text" name="" id="" value="" placeholder="" /><span class="red">*</span><span class="inf">注册成功后即可使用手机号登陆</span></li>
+							<input type="text" name="mobile" id="mobile" value="" placeholder="" /><span class="inf" style="margin-left: 20px;">注册成功后即可使用手机号登陆</span></li>
 						<li>
 							<label for="">设置密码</label>
-							<input  class="js-pwdh" type="password" name="" id="" value="" placeholder="" />
+							<input  class="js-pwdh" type="password" name="phone_password" id="phone_password" value="" placeholder="" />
 							<input  class="hide js-pwd" type="text" name="" id="" value="" placeholder="" />
 							<img class="show-eye" src="/static/img/show-eye.png"/>
-							<span class="red">*</span><span class="inf">6~16位，英文（区分大小写）、数字或常用符号</span></li>
+							<span class="inf" style="margin-left: 20px;">6~16位，英文（区分大小写）、数字或常用符号</span></li>
 						<li>
 							<label for="">短信验证</label>
-							<input class="va-code" type="text" name="" id="" value=""/>
-							<input class="getcode" type="button" name="" id="" value="点击获取"/>
+							<input class="va-code" type="text" name="randomPic" id="randomPic" value=""/>
+							<input class="getcode" type="button" name="" id="getCaptcha" value="点击获取"/>
 							<span class="inf">免费获取手机验证码</span></li>
 						<li>
 							<label for=""></label>
-							<input class="check" type="checkbox" name="" id="" value="" placeholder="" /><span class="inf">同意<a href="###">《相关服务协议》</a></span></li>
+							<input class="check" type="checkbox" name="agreement" id="agreement" value="" placeholder="" /><span class="inf">同意<a href="###">《相关服务协议》</a></span><span id="agreementspan"></span></li>
 						<li>
 							<label for=""></label>
-							<input class="reg-mobile" type="button" id="" value="立即注册" /></li>
+							<input class="reg-mobile" type="button" id="mobileSub" value="立即注册" /></li>
 					</ul>
 				</div>
 				<div class="reg-con-cen email hide">
 					<ul>
 						<li>
 							<label for="">身份选择</label>
-							<select name="">
+							<select name="email_user_type" id="email_user_type">
 								<option value="">请选择您的身份</option>
 								<option value="2">教练</option>
 								<option value="1">队员</option>
-							</select>
+							</select><span class="red" style="margin-left: 20px;"></span>
 							</li>
 						<li>
 							<label for="">邮箱账号</label>
-							<input type="text" name="" id="" value="" placeholder="" /><span class="red">*</span><span class="inf">请输入邮箱地址</span></li>
+							<input type="text" name="email" id="email" value="" placeholder="" /><span class="inf" style="margin-left: 20px;">请输入邮箱地址</span></li>
 						<li>
 							<label for="">设置密码</label>
-							<input  class="js-pwdh-e" type="password" name="" id="" value="" placeholder="" />
+							<input  class="js-pwdh-e" type="password" name="email_password" id="email_password" value="" placeholder="" />
 							<input  class="hide js-pwd-e" type="text" name="" id="" value="" placeholder="" />
 							<img class="show-eye" src="/static/img/show-eye.png"/>
-							<span class="red">*</span><span class="inf">6~16位，英文（区分大小写）、数字或常用符号</span></li>
+							<span class="inf" style="margin-left: 20px;">6~16位，英文（区分大小写）、数字或常用符号</span></li>
 						<li>
 							<label for="">验证码</label>
-							<input class="va-code" type="text" name="" id="" value=""/>
-							<img class="vcode" src="/static/img/vcode.png"/>
-							<span class="inf"><a class="change" href="###">看不清？换一个</a></span></li>
+							<input class="va-code" type="text" name="picCaptcha" id="picCaptcha" value=""/>
+							<img class="vcode" src="/user/drawRandom.htm"  onclick="refreshImage();" style="cursor:pointer"/>
+							<span class="inf"><a class="change" href="###" onclick="refreshImage();">看不清？换一个</a></span></li>
 						<li>
 							<label for=""></label>
-							<input class="check" type="checkbox" name="" id="" value="" placeholder="" /><span class="inf">同意<a href="###">《相关服务协议》</a></span></li>
+							<input class="check" type="checkbox" name="email_agreement" id="email_agreement" value="" placeholder="" /><span class="inf">同意<a href="###">《相关服务协议》</a></span><span id="agreementemailspan"></span></li>
 						<li>
 							<label for=""></label>
-							<input class="reg-mobile" type="button" id="" value="立即注册" /></li>
+							<input class="reg-mobile" type="button" id="emailSub" value="立即注册" /></li>
 					</ul>
 				</div>
 			</div>
