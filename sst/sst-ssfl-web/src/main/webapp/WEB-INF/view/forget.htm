@@ -9,7 +9,9 @@
 		<script src="static/js/common.js"></script>
 		<link href="static/css/regiest.css" rel="stylesheet" />
 	</head> -->
+<head>
 <#include "/common/head.htm"/>
+</head>
 	<body>
 		<!-- <div class="header">
 			<div class="wrapper">
@@ -32,7 +34,9 @@
 
 			</div>
 		</div> -->
-
+	<div class="header">
+		<#include "/common/header.htm"/>
+	</div>
 		<div class="wrapper">
 			<div class="reg-con-hd">
 				<h1 class="reg-con-bd">找回密码</h1>
@@ -71,7 +75,7 @@
 					<ul>
 						<li>
 							<label for="">邮箱账号</label>
-							<input type="text" name="mail" id="mail" value="" placeholder="请输入注册邮箱" /><span class="inf">请输入邮箱地址</span></li>
+							<input type="text" name="mail" id="mail" value="" placeholder="请输入注册邮箱" />&nbsp;&nbsp;&nbsp;&nbsp;<span class="inf">请输入邮箱地址</span></li>
 						<!--<li>
 							<label for="">设置密码</label>
 							<input  class="js-pwdh-e" type="password" name="" id="" value="" placeholder="" />
@@ -111,4 +115,5 @@
  <#include "/common/foot.htm"/> 
  <script src="/static/js/footer.js"></script>
  <script src="/static/js/regiest.js"></script>
+ <script src="/static/js/forget.js"></script>
 </html>
