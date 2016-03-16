@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.servlet.http.HttpSession;
 
 import com.tianfang.common.constants.SessionConstants;
-import com.tianfang.user.dto.LoginUserDto;
+import com.tianfang.dto.LoginUserDto;
 /**
  * @author YIn
  * @time:2015年11月19日 下午6:50:58
