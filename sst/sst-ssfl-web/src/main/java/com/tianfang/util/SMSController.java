@@ -95,35 +95,46 @@ public class SMSController {
 //		return result;
 //	}
 	
-	/**
-	 * 手机号码注册（无图片验证）
-	 * BY YIn 20150702
-	 * */
-	@RequestMapping(value = "/regMobile")
-	@ResponseBody
-	public Response<String> regMobile(String mobilePhone,HttpServletRequest request) {
-		Response<String> result = new Response<String>();
-		
-//		if(!CheckSendMsg(redisTemplate, mobilePhone, request)){
+//	/**
+//	 * 手机号码注册（无图片验证）
+//	 * BY YIn 20150702
+//	 * */
+//	@RequestMapping(value = "/regMobile")
+//	@ResponseBody
+//	public Response<String> regMobile(String mobilePhone,String picCaptcha,HttpServletRequest request) {
+//		Response<String> result = new Response<String>();
+//		if(StringUtils.isEmpty(picCaptcha)){
 //			result.setStatus(DataStatus.HTTP_FAILE);
-//			result.setMessage("发送短信过于频繁,请您稍后再试");
-//			return result;			
-//		}
-//		
-//		if(!CheckSendMsg(redisTemplate, mobilePhone)){
-//			result.setStatus(DataStatus.HTTP_FAILE);
-//			result.setMessage("超过当天最多的发送次数");
+//			result.setMessage("验证码为空！");
 //			return result;
 //		}
-		
-		int randomNumber = (int) (Math.random() * 9000 + 1000);
-		String content = "温馨提示，为了保护您的隐私，请您在90秒内输入" + randomNumber + "验证码。";// 短信内容
-		String returnString = iSmsSendService.sendSms(randomNumber, mobilePhone, content);
-		String keyCode = "reg"+mobilePhone ;
-		redisTemplate.opsForValue().set(keyCode, randomNumber, 90, TimeUnit.SECONDS);;
-		result.setStatus(DataStatus.HTTP_SUCCESS);
-		return result;
-	}
+//		String randomPicSession = request.getSession().getAttribute("RandomCode").toString().toLowerCase();
+//		if (!picCaptcha.toLowerCase().equals(randomPicSession)) {
+//			result.setStatus(DataStatus.HTTP_FAILE);
+//			result.setMessage("验证码输入错误！");
+//			return result;
+//		}
+//		
+////		if(!CheckSendMsg(redisTemplate, mobilePhone, request)){
+////			result.setStatus(DataStatus.HTTP_FAILE);
+////			result.setMessage("发送短信过于频繁,请您稍后再试");
+////			return result;			
+////		}
+////		
+////		if(!CheckSendMsg(redisTemplate, mobilePhone)){
+////			result.setStatus(DataStatus.HTTP_FAILE);
+////			result.setMessage("超过当天最多的发送次数");
+////			return result;
+////		}
+//		
+//		int randomNumber = (int) (Math.random() * 9000 + 1000);
+//		String content = "温馨提示，为了保护您的隐私，请您在90秒内输入" + randomNumber + "验证码。";// 短信内容
+//		String returnString = iSmsSendService.sendSms(randomNumber, mobilePhone, content);
+//		String keyCode = "reg"+mobilePhone ;
+//		redisTemplate.opsForValue().set(keyCode, randomNumber, 90, TimeUnit.SECONDS);;
+//		result.setStatus(DataStatus.HTTP_SUCCESS);
+//		return result;
+//	}
 	
 	/**
 	 * 注册发送验证码
@@ -160,6 +171,7 @@ public class SMSController {
 		
 		int randomNumber = (int) (Math.random() * 9000 + 1000);
 		String content = "温馨提示，为了保护您的隐私，请您在90秒内输入" + randomNumber + "验证码。";// 短信内容
+		logger.debug("randomNumber="+randomNumber);
 		String returnString = iSmsSendService.sendSms(randomNumber, mobilePhone, content);
 		String keyCode = "reg"+mobilePhone ;
 		redisTemplate.opsForValue().set(keyCode, randomNumber, 90, TimeUnit.SECONDS);;
