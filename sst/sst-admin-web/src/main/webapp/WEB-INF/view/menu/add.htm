@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Form Elements - Ace Admin</title>
+		<meta name="description" content="Common form elements and layouts" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<#include "../../admin/head.htm"/>
+		<link href="${base}/static/css/course.css" rel="stylesheet" type="text/css" />
+		<link href="${base}/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+		<!-- <script type="text/javascript" src="${base}/plugins/uploadify/jquery-1.3.2.min.js"></script> -->
+ 		<script type="text/javascript" src="${base}/plugins/uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="${base}/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+	</head>
+	<body>
+		<div class="container-fluid" id="main-container">
+			<div id="main-content" class="clearfix" style="margin-left:0px;">
+					<div id="page-content" class="clearfix">
+						<div class="row-fluid">
+							<!-- PAGE CONTENT BEGINS HERE -->
+							<form id="submitForm" class="form-horizontal" action="${base}/sport/home/menu/save.do" method="POST">
+								<input type="hidden" id="issingle" name="issingle" value="1"/>
+								<input type="hidden" id="content" name="content" value=""/>
+								<input type="hidden" id="picture" name="picture" value=""/>
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-1">中文名</label>
+									<div class="course_add_input">
+										<input type="text" name="cname" class="span6" id="form-field-1" placeholder="中文名">
+									</div>
+								</div>	
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-1">英文名</label>
+									<div class="course_add_input">
+										<input type="text" name="ename" class="span6" id="form-field-1" placeholder="英文名">
+									</div>
+								</div>	
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-1">菜单链接</label>
+									<div class="course_add_input">
+										<input type="text" name="menuUrl" class="span6" id="form-field-1" placeholder="菜单链接">
+									</div>
+								</div>		
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-1">菜单级</label>
+										<select  name="menuType" id="menuType" data-placeholder="菜单级" style="vertical-align:top;margin-left:20px;" onchange="changeForm(this.value)">
+											<#list menuTypes as type>
+												<option value="${type.getIndex()!}">${type.getName()}</option>
+											</#list>
+										</select>
+								</div>	
+								<div class="control-group hidden" id="secondlevelmenu">
+									<label class="course_add_label" for="form-field-1">上级菜单</label>
+										<select  name="parentId" id="parentId" data-placeholder="上级菜单" style="vertical-align:top;margin-left:20px;">
+										</select>
+								</div>	
+								
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-1">页面模板</label>
+										<select  name="activityType" id="activityType" data-placeholder="页面模板" style="vertical-align:top;margin-left:20px;">
+											<#list acTypes as type>
+												<option value="${type.getIndex()!}">${type.getName()}</option>
+											</#list>
+										</select>
+								</div>	
+										
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-1">视频类型</label>
+										<select  name="videoType" id="videoType" data-placeholder="视频类型" style="vertical-align:top;margin-left:20px;">
+											<#list videoTypes as type>
+												<option value="${type.getIndex()!}">${type.getName()}</option>
+											</#list>
+										</select>
+								</div>			
+										
+								<div class="control-group" style="margin-left:-90px;">
+									<label class="control-label" for="form-input-readonly">是否单页</label>
+										<div class="controls" id="form-radio-show">
+											<label class="span2">
+												<input name="form-field-radio" checked="checked" type="radio" value="1"/><span class="lbl">是</span>
+											</label>
+											<label class="span2">
+												<input name="form-field-radio" type="radio" value="0"/><span class="lbl">否</span>
+											</label>
+										</div>
+								</div>	
+								
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-2">图片</label>
+									<div class="course_add_input">
+										<input multiple type="file" id="id-input-file-3"/>
+									</div>
+									<div class="course_add_input">
+										<img id="img_show" alt="" src="" style="width:60px;height:60px;"/>
+									</div>									
+								</div>
+								
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-1">简单描述</label>
+									<div class="course_add_input">
+										<input type="text" name="summary" class="span10" id="form-field-1" placeholder="简单描述">
+									</div>
+								</div>
+										
+								<div class="control-group">
+									<label class="course_add_label">描述</label>
+									<div class="course_add_input">
+										<script id="editor" type="text/plain" style="width:95%;height:200px;"></script>
+									</div>
+								</div>
+								
+								<div class="form-actions">
+									<button id='savebutton' class="btn btn-info" type="button"><i class="icon-ok"></i>保存</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn" type="reset" id="close"><i class="icon-undo"></i>关闭</button>
+									<!-- <button id="resetbutton" class="btn" type="reset"><i class="icon-undo"></i>取消</button> -->
+								</div>
+							 </form>
+							<!-- PAGE CONTENT ENDS HERE -->
+						 </div><!--/row-->
+					</div><!--/#page-content-->
+			</div><!-- #main-content -->
+		</div><!--/.fluid-container#main-container-->
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only"></i>
+		</a>
+		<!-- basic scripts -->
+		<!-- <script src="${base}/static/1.9.1/jquery.min.js"></script> -->
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+		</script>
+		
+		<script src="${base}/static/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		
+		<!--[if lt IE 9]>
+		<script type="text/javascript" src="${base}/static/js/excanvas.min.js"></script>
+		<![endif]-->
+		<script type="text/javascript" src="${base}/static/js/jquery-ui-1.10.2.custom.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/fuelux.spinner.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-timepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/date.js"></script>
+		<script type="text/javascript" src="${base}/static/js/daterangepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-colorpicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.autosize-min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.inputlimiter.1.3.1.min.js"></script>
+		<!-- ace scripts -->
+		<script src="${base}/static/js/ace-elements.min.js"></script>
+		<script src="${base}/static/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+		
+		
+		<!--[if lt IE 9]>
+		<script type="text/javascript" src="js/excanvas.min.js"></script>
+		<![endif]
+		<script type="text/javascript" src="js/jquery-ui-1.10.2.custom.min.js"></script>
+		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
+		<script type="text/javascript" src="js/fuelux.spinner.js"></script>
+		<script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-timepicker.min.js"></script>
+		<script type="text/javascript" src="js/date.js"></script>
+		<script type="text/javascript" src="js/daterangepicker.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-colorpicker.min.js"></script>
+		<script type="text/javascript" src="js/jquery.knob.min.js"></script>
+		<script type="text/javascript" src="js/jquery.autosize-min.js"></script>
+		<script type="text/javascript" src="js/jquery.inputlimiter.1.3.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery.maskedinput.min.js"></script>-->
+		<!-- ace scripts -->
+		<script src="js/ace-elements.min.js"></script>
+		<script src="js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+		
+	<link href="${base}/plugins/umeditor1.2.2/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/umeditor.min.js"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/lang/zh-cn/zh-cn.js"></script>		
+		
+		<!-- layer 弹出框处理 -->
+		<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+		
+		<script type="text/javascript">
+		var um = UM.getEditor('editor');
+		
+		function changeForm(val){
+			$("#secondlevelmenu").addClass("hidden");
+			$("#parentId").val('');
+			var menuType=$("#menuType").val();
+			if (menuType > 1) {
+				$.ajax({
+					type : "POST",
+					url : "${base}/sport/home/menu/selectMenumType.do",
+					data :  {
+						menuType : menuType
+					},
+					async:false,
+					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+					success : function(data) {// 成功返回之后调用的函数
+						var jsondata = data;// eval('(' + data + ')');
+						if (jsondata != null && jsondata.length > 0) {
+							var html = "";
+							for (var i = 0; i < jsondata.length; i++) {
+								var id = jsondata[i].id;
+								var cName = jsondata[i].cname == null? '' : jsondata[i].cname;
+								html += '<option value=\"'+id+'\">'+cName+'</option>';
+							}
+							$("#parentId").html(html);
+							$("#secondlevelmenu").removeClass("hidden");
+						}else{
+							layer.alert("对不起,暂无上级菜单数据!", {
+			    				shade: [0.9, '#000'],
+			    			    icon: 3,
+			    			    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+			    			}); 
+						}
+					},
+					complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						
+					},
+					error : function() {// 调用出错执行的函数
+					}
+				});
+			}
+			return;
+		}
+		
+		$(function() {
+			
+			$("#id-input-file-3").uploadify({
+	            'uploader': '${base}/plugins/uploadify/uploadify.swf',
+	            'script':"${base}/file/upload.htm",
+	            'cancelImg': '${base}/plugins/uploadify/cancel.png',
+	            'queueID': 'fileQueue',
+	            'auto': true,
+	            //'multi':true,
+	            'buttonText': 'select',
+	            'simUploadLimit' : 1,
+	            'queueSizeLimit' : 1,
+	            'sizeLimit':1024*1024*10,
+	            'fileDesc' : 'pictures',
+	            'fileExt': '*.gif;*.png;*.jpg',
+	            onComplete: function(event, queueID, fileObj, response, data) {
+	                var dataObj = eval("("+response+")");
+	                if(dataObj.status == 200){
+	                	parent.layer.msg('图片上传成功', {
+							shade: [0.9, '#000'],
+						    icon: 6,
+						    time: 800 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							$("#img_show").attr("src",'${imgurl}'+dataObj.filePath);
+						});                
+						$("#picture").val(dataObj.filePath);
+	                }else{
+	                	layer.alert("对不起2," + fileObj.name + "上传失败!<br/>请选择小于10M的图片文件", {
+		    				shade: [0.9, '#000'],
+		    			    icon: 3,
+		    			    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+		    			}); 
+	                }
+	            },
+	            onSelect:function(){
+	            },
+	            onError: function(event, queueID, fileObj) {
+	            	layer.alert("对不起1," + fileObj.name + "上传失败!<br/>请选择小于10M的图片文件", {
+	    				shade: [0.9, '#000'],
+	    			    icon: 3,
+	    			    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+	    			}); 
+	            }
+	        });				
+			
+			$("#form-radio-show label input").on('click',function(){
+				$("#issingle").val($(this).val());
+			});
+			
+			
+			$("#resetbutton").on('click',function(){
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				parent.layer.close(index);
+			});
+			
+			$("#savebutton").on('click',function(){
+				var content = UM.getEditor('editor').getContent();
+				$("#content").val(content);
+				if (null == $("[name=cname]").val() || '' == $("[name=cname]").val()) {
+					layer.alert('中文名不能为空~', { icon: 7 });
+					return;
+				}
+				var ajaxParams = $("#submitForm").serialize();
+				$.ajax({
+					type : "POST",
+					url : "${base}/sport/home/menu/save.do",
+					data : ajaxParams,
+					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+					beforeSend : function() {
+						$("#msg").html("logining");
+					},
+					success : function(data) {// 成功返回之后调用的函数
+						var jsondata = data;// eval('(' + data + ')');
+						if(data.success){
+							parent.layer.msg(data.msg, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								parent.reload_page();
+								var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+								parent.layer.close(index);
+							}); 							
+						}else{
+							parent.layer.msg(data.msg, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+							}); 	
+						}
+						//console.log(data.success);
+					},
+					complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						
+					},
+					error : function() {// 调用出错执行的函数
+					}
+				});
+			});
+							
+			$('#id-input-file-1 , #id-input-file-2').ace_file_input({
+				no_file:'No File ...',
+				btn_choose:'Choose',
+				btn_change:'Change',
+				droppable:false,
+				onchange:null,
+				thumbnail:false //| true | large
+				//whitelist:'gif|png|jpg|jpeg'
+				//blacklist:'exe|php'
+				//onchange:''
+				//
+			});
+		});
+		
+		$('#close').click(function(){
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
+		});
+		</script>
+	</body>
+</html>
