@@ -76,6 +76,27 @@ public class UserDto implements Serializable{
 	private String area;
 	
 	/**
+	 * 对应省份-页面显示
+	 */
+	@Getter
+	@Setter
+	private String provinceStr;
+	
+	/**
+	 * 用户所在地 区域 -页面显示
+	 */
+	@Getter
+	@Setter
+	private String locationStr;
+	
+	/**
+	 * 市  -页面显示
+	 */
+	@Getter
+	@Setter
+	private String areaStr;
+	
+	/**
 	 * 地址详情
 	 */
 	@Getter
