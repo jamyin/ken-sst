@@ -181,6 +181,10 @@ public class UserDto implements Serializable{
 	@Setter
 	private Date lastLoginTime;
 	
+	@Setter
+    @Getter
+    private String userAccount; //登录时的用户账号
+	
 	/**
 	 * 创建时间-页面显示
 	 */
@@ -208,9 +212,4 @@ public class UserDto implements Serializable{
 	@Getter
 	@Setter
     private String teamIcon;
-	
-	
-	@Setter
-    @Getter
-    private String userAccount; //登录时的用户账号
 }
