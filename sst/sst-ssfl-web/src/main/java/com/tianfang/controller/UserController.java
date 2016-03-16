@@ -18,17 +18,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.constants.SessionConstants;
 import com.tianfang.common.digest.MD5Coder;
+import com.tianfang.common.exception.SystemException;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.tools.RandomPicTools;
 import com.tianfang.common.util.DateUtils;
 import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.user.dto.LoginUserDto;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.service.IEmailSendService;
 import com.tianfang.user.service.ISmsSendService;
@@ -192,9 +195,8 @@ public class UserController extends BaseController{
     	ModelAndView mv = getModelAndView();
     	mv.setViewName("/forget");
         return mv;
-    }  
-    
-    
+    }
+      
     /**
      * 获取图片验证码
      * @param reponse
@@ -391,15 +393,100 @@ public class UserController extends BaseController{
 	
 
 	/**
-	 * 用户注册
+	 * 用户注册页面
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/regiest")
-    public ModelAndView regiest(HttpServletRequest request){
+	@RequestMapping("/toRegiest")
+    public ModelAndView regiest(){
     	ModelAndView mv = getModelAndView();
     	mv.setViewName("/regiest");
         return mv;
     }
 	
+	/**
+	 * 用户注册
+	 * @param session
+	 * @param sportUserReqDto
+	 * @param randomPic
+	 * @return
+	 */
+	@RequestMapping(value = "/register")
+	@ResponseBody
+	public Response<UserDto> register(
+			HttpSession session,
+			UserDto sportUserReqDto,
+			@RequestParam(value = "randomPic", required = false) String randomPic) {
+		logger.debug("SportUserReqDto：" + sportUserReqDto);
+		Response<UserDto> result = new Response<UserDto>();
+		//sportUserReqDto.setUtype(UserTypeEnum.NORMALUSER.getIndex());
+		String md5oldPwd;// 获取页面上输入的密码并加密校验
+		try {
+			md5oldPwd = MD5Coder.encodeMD5Hex(sportUserReqDto.getPassword());
+			sportUserReqDto.setPassword(md5oldPwd);
+		} catch (Exception e) {
+			throw new SystemException(e.getMessage(), e);
+		}
+		String key = "";
+		if(StringUtils.isBlank(sportUserReqDto.getMobile())){
+			 key = "reg" + sportUserReqDto.getEmail();
+		}else{
+			 key = "reg" + sportUserReqDto.getMobile();
+		}
+		if(!StringUtils.isBlank(randomPic)){
+			int num;
+			try {
+				num = Integer.parseInt(randomPic);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("输入的短信验证码不是4位数字！");
+				return result;
+			}
+			if (redisTemplate.opsForValue().get(key) == null) {
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("没有点击获取验证码！");
+				return result;
+			}if(!redisTemplate.opsForValue().get(key).equals(num)){
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("手机验证码输入错误！");
+				return result;
+			}
+		}
+		if (null != userService.checkUser(sportUserReqDto)) {
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("用户名已存在！");
+			return result;
+		}
+		UserDto dto = userService.regiest(sportUserReqDto);
+		if (dto == null) {
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("注册失败！");
+			return result;
+		} else {
+			/*LoginUserDto loginUserDto = new LoginUserDto();
+			loginUserDto.setId(loginUserDto.getId());
+			loginUserDto.setType(loginUserDto.getType());
+			session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);*/
+			if(!StringUtils.isEmpty(dto.getEmail())){
+				dto.setUserAccount(dto.getEmail());
+			}
+			if(!StringUtils.isEmpty(dto.getMobile())){
+				dto.setUserAccount(dto.getMobile());
+			}
+			UserDto userInfo = userService.checkUser(dto);
+			LoginUserDto loginUserDto = new LoginUserDto();
+			loginUserDto.setId(userInfo.getId());
+			loginUserDto.setType(userInfo.getUtype());
+			session.setAttribute(SessionConstants.LOGIN_USER_INFO, loginUserDto);
+			if(userInfo != null){
+				//result.setData(sportUserReqDto.getUserAccount());
+				loginUserDto.setUserAccount(sportUserReqDto.getUserAccount());
+				redisTemplate.opsForValue().set(userInfo.getId(), loginUserDto);
+			}
+			result.setStatus(DataStatus.HTTP_SUCCESS);
+			result.setMessage("恭喜您注册成功！");
+			return result;
+		}
+	}
 }
