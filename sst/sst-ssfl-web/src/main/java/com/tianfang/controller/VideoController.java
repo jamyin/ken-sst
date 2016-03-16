@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +23,6 @@ import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.StringUtils;
-import com.tianfang.user.dto.LoginUserDto;
 import com.tianfang.user.service.IUserService;
 /**
  * 视频信息
