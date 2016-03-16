@@ -31,7 +31,6 @@ import com.tianfang.common.tools.RandomPicTools;
 import com.tianfang.common.util.DateUtils;
 import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
-import com.tianfang.user.dto.LoginUserDto;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.service.IEmailSendService;
 import com.tianfang.user.service.ISmsSendService;
