@@ -3,6 +3,8 @@
 <head>
 	<#include "/common/head.htm"/>
 	<script src="/static/js/layer-1.9/extend/layer.ext.js"></script>
+	<link type="text/css" href="/static/plugins/layerModel/layerModel.css" rel="stylesheet" />
+	<script type="text/javascript" src="/static/plugins/layerModel/jquery.layerModel.js"></script>	
 </head>
 <body>
 	<div class="header">
@@ -44,7 +46,7 @@
 				<#if dataMap ??>
 					<#list dataMap.videos as data>
 							<li>
-								<a href="###"><img src="${(data.videoThumb)!}" data-video="${(data.video)!}" border="0"><p><span>${(data.videoName)!}</span>${(data.createTime?string('yyyy-MM-dd HH:mm'))}</p><i></i></a>
+								<a href="###" obj-id="${(data.id)!}"><img src="${(data.videoThumb)!}" data-video="${(data.video)!}" border="0"><p><span>${(data.videoName)!}</span>${(data.createTime?string('yyyy-MM-dd HH:mm'))}</p><i></i></a>
 							</li>
 							<!-- <li><img src="${(data.videoThumb)!}" data-video="${(data.video)!}" border="0"><i></i><span>${(data.videoName)!}</span></li> -->			
 					</#list>
@@ -63,6 +65,14 @@
 	<script src="/static/js/footer.js"></script>
 	<script type="text/javascript">
 		$(function() {
+			
+				//点击打开视频
+			$(".video_box li a").on("click", function() {
+				var id= $(this).attr("obj-id");
+				//clickCount(id);
+				$('<iframe width="600px" height="500px;" scrolling="yes" src="/video/toVideo.htm?id='+id+'"></iframe>').layerModel();	
+			}); 				
+		
 			$('.lightbox').each(function(index){
 				$(this).click(function() {
 					var albumId = $(this).attr('albumId-id');
