@@ -51,4 +51,11 @@ public interface IGroupService {
 	PageResult<GroupDto> findGroupByParam(GroupDto dto, PageQuery query) throws Exception;
 	
 	List<GroupDto> findGroupByUserId(String userId) throws Exception;
+	/**
+	 * 
+		 * 此方法描述的是：根据group_user 表中的user_id 查找group_id
+		 * @author: cwftalus@163.com
+		 * @version: 2016年3月15日 上午9:52:57
+	 */
+	List<GroupDto> findGroupsByUserId(String userId) throws Exception;
 }

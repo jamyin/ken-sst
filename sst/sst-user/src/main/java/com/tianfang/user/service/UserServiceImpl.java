@@ -33,6 +33,19 @@ public class UserServiceImpl implements IUserService {
 		return id;
 	}
 
+	public UserDto regiest(UserDto dto) {
+		User user = BeanUtils.createBeanByTarget(dto, User.class);
+		int result = userDao.insertSelective(user);
+		UserDto userDto = new UserDto();
+		if (result > 0) {
+			userDto = BeanUtils.createBeanByTarget(user, UserDto.class);
+			return userDto;
+		} else {
+			return null;
+		}
+	}
+	
+	
 	@Override
 	public void del(String ids){
 		String[] idArr = ids.split(",");

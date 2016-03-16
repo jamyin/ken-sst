@@ -36,6 +36,13 @@ public interface IUserService {
 	void joinTeam(String userId, String teamId);
 	
 	/**
+	 * 用户注册
+	 * @param dto
+	 * @return
+	 */
+	public UserDto regiest(UserDto dto);
+	
+	/**
 	 * 查询返回给移动端用户分组和好友信息
 	 * @param userId
 	 * @return FriendAppList

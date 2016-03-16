@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import com.tianfang.business.dao.AlbumDao;
 import com.tianfang.business.dao.AlbumPicDao;
 import com.tianfang.business.dto.AlbumDto;
-import com.tianfang.business.dto.VideoDto;
 import com.tianfang.business.pojo.Album;
-import com.tianfang.business.pojo.Video;
 import com.tianfang.business.service.IAlbumService;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
@@ -129,6 +127,12 @@ public class AlbumServiceImpl implements IAlbumService {
 		List<Album> dataList = albumDao.findalbumByTop(topNum,enabled);
 		List<AlbumDto> objList = BeanUtils.createBeanListByTarget(dataList, AlbumDto.class);
 		return objList;
+	}
+
+	@Override
+	public AlbumDto getAlbumById(String albumId) {
+		Album album  = albumDao.selectByPrimaryKey(albumId);
+		return BeanUtils.createBeanByTarget(album, AlbumDto.class);
 	}
 
 }

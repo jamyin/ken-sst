@@ -1,0 +1,62 @@
+<!-- 分页展示个数 ,这个值只能为奇数-->
+<!-- 页面的跳转功能请实现 gotoPage(page) 函数-->
+<#assign show_num = 7>
+<#if pageList?? && pageList.total gt 0> 
+<div class="pagenav herald">
+<!-- 	<#if pageList.currPage gt 1 >
+		<a href="###"><</a>
+	<#else>
+		<a href="###"><</a>
+	</#if> -->
+	<#if (pageList.currPage-1) gt 0 >
+		<a href="javascript:gotoPage(${pageList.currPage - 1})"><</a>
+	<#else>
+		<a href="###"><</a>
+	</#if>
+	<#if pageList.totalPage lte show_num>
+		<#list 1..pageList.totalPage as i>
+			<a <#if pageList.currPage == i>class="cur"<#else>href="javascript:gotoPage(${i})"</#if> >${i}</a>
+		</#list>
+	<#else>
+		<#if pageList.currPage lte ((show_num + 1)/2)>
+			<#if pageList.currPage gt 1>
+				<#list 1..(pageList.currPage-1) as i>
+					<a href="javascript:gotoPage(${i})">${i}</a>
+				</#list>
+			</#if>
+			<a class="cur">${pageList.currPage}</a>
+			<#list 1..(show_num - pageList.currPage) as i>
+				<a href="javascript:gotoPage(${pageList.currPage + i})">${pageList.currPage + i}</a>
+			</#list>
+		<#else>
+			<#if (pageList.totalPage - pageList.currPage) lt ((show_num - 1)/2) >
+				<#list (pageList.totalPage - show_num + 1)..pageList.totalPage as i>
+					<#if pageList.currPage == i>
+						<a class="cur">${i}</a>
+					<#else>
+						<a href="javascript:gotoPage(${i})">${i}</a>
+					</#if>
+				</#list>
+			<#else>
+				<#list ((show_num - 1)/2)..1 as i>
+					<a href="javascript:gotoPage(${pageList.currPage - i})">${pageList.currPage - i}</a>
+				</#list>
+				<a class="cur">${pageList.currPage}</a>
+				<#list 1..((show_num - 1)/2) as i>
+					<a href="javascript:gotoPage(${pageList.currPage + i})">${pageList.currPage + i}</a>
+				</#list>
+			</#if>
+		</#if>
+	</#if>
+	<#if (pageList.currPage + 1) lte pageList.totalPage >
+		<a href="javascript:gotoPage(${pageList.currPage + 1})">></a>
+	<#else>
+		<a href="###">></a>
+	</#if>
+<!-- 	<#if pageList.currPage lt pageList.totalPage>
+		<a href="javascript:gotoPage(${pageList.totalPage})">末页</a>
+	<#else>
+		<a href="javascript:;">末页</a>
+	</#if> -->
+</div>
+</#if>		

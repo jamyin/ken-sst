@@ -159,4 +159,8 @@ public class UserDto implements Serializable{
 	@Getter
 	@Setter
 	private Date lastLoginTime;
+	
+	@Setter
+    @Getter
+    private String userAccount; //登录时的用户账号
 }

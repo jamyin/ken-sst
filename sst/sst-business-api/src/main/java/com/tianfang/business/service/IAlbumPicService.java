@@ -1,5 +1,7 @@
 package com.tianfang.business.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.tianfang.business.dto.AlbumPictureDto;
@@ -70,6 +72,8 @@ public interface IAlbumPicService {
 	 */
 	PageResult<AlbumPictureDto> findAlbumPicByPage(AlbumPictureDto query,
 			PageQuery changeToPageQuery);
+
+	List<AlbumPictureDto> findTeamAlbumPic(AlbumPictureDto albumPictureDto);
 	
 	
 	
