@@ -3,13 +3,8 @@ package com.tianfang.controller;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -25,11 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tianfang.business.dto.AddressesDto;
-import com.tianfang.business.service.IAddressesService;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.constants.SessionConstants;
 import com.tianfang.common.digest.MD5Coder;
@@ -39,7 +31,6 @@ import com.tianfang.common.tools.RandomPicTools;
 import com.tianfang.common.util.DateUtils;
 import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
-import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.service.IEmailSendService;
 import com.tianfang.user.service.ISmsSendService;
@@ -69,9 +60,6 @@ public class UserController extends BaseController{
     
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-	
-	@Autowired
-	private IAddressesService iAddressesService;
     
 	@RequestMapping(value = "/SMS/send")
 	@ResponseBody
@@ -401,154 +389,6 @@ public class UserController extends BaseController{
 		return true;
 	}
 	
-	/**
-	 * 去用户详情页面
-	 * @return
-	 */
-	@RequestMapping("/userInfo")
-	public ModelAndView toUserInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session){
-		ModelAndView mv = getModelAndView();
-		//UserDto userDto =  (UserDto) session.getAttribute(SessionConstants.LOGIN_USER_INFO);
-		UserDto dto =  new UserDto();
-		dto.setId("7e207fef-4312-4b20-935c-14e9f4d67665");
-		UserDto userDto = userService.findUserByParam(dto).get(0);
-		userDto.setCreateTimeStr(DateUtils.format(userDto.getCreateTime(),DateUtils.YMD_DASH));
-		userDto.setLastLoginTimeStr(DateUtils.format(userDto.getLastLoginTime(),DateUtils.YMD_DASH_WITH_TIME));
-		
-		//获取用户所在省
-		if(StringUtils.isNotEmpty(userDto.getProvince())){
-			AddressesDto addr =new AddressesDto();
-			addr.setId(Integer.valueOf(userDto.getProvince()));
-			List<AddressesDto> list = iAddressesService.findAddressList(addr);
-			if(list != null && list.size() > 0){
-				userDto.setProvinceStr(list.get(0).getName());
-			}
-		}else{
-			userDto.setProvinceStr(null);
-		}
-		
-		//获取用户所在市
-		if(StringUtils.isNotEmpty(userDto.getArea())){
-			AddressesDto addr =new AddressesDto();
-			addr.setId(Integer.valueOf(userDto.getArea()));
-			List<AddressesDto> list = iAddressesService.findAddressList(addr);
-			if(list != null && list.size() > 0){
-				userDto.setAreaStr(list.get(0).getName());
-			}
-		}else{
-			userDto.setAreaStr(null);
-		}
-		
-		//获取用户所在地区
-		if(StringUtils.isNotEmpty(userDto.getLocation())){
-			AddressesDto addr =new AddressesDto();
-			addr.setId(Integer.valueOf(userDto.getLocation()));
-			List<AddressesDto> list = iAddressesService.findAddressList(addr);
-			if(list != null && list.size() > 0){
-				userDto.setLocationStr(list.get(0).getName());
-			}
-		}else{
-			userDto.setLocationStr(null);
-		}
-		
-		AddressesDto addrDto = new AddressesDto();
-		addrDto.setLevel(1);
-		List<AddressesDto> provinceList = iAddressesService.findAddressList(addrDto);
-		mv.addObject("provinceList", provinceList);
-		mv.addObject("userInfo", userDto);
-		mv.setViewName("/person");
-		return mv;
-	}
-	
-	/**
-	 * @author YIn
-	 * @time:2016年2月3日 上午9:46:24
-	 * @param userDto
-	 * @return
-	 */
-    @ResponseBody
-    @RequestMapping("/edit") 
-    public Response<String> edit(UserDto userDto,@RequestParam(value = "file",required = false)  MultipartFile file,
-			HttpServletRequest request,HttpServletResponse response){
-     Response<String> result = new Response<String>();
-     if(userDto == null ){
-    	 result.setStatus(DataStatus.HTTP_FAILE);
-		 result.setMessage("用户信息为空");
-		 return result;
-     }
-   	int stat = 0;
-	try {
-        if (file != null) {
-//          Response<UploadDto> res = uploadPic(myfile, request, response);
-        	Map<String, String> map = uploadImages(file , request);
-        	userDto.setPic(map.get("fileUrl"));
-        }
-		stat = userService.update(userDto);
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-   	 if(stat == 0){
-   		 result.setStatus(DataStatus.HTTP_FAILE);
-		 result.setMessage("修改用户信息失败");
-   	 }else{
-   		 result.setStatus(DataStatus.HTTP_SUCCESS);
-		 result.setMessage("修改用户信息成功");
-   	 }
-   	return result;
-    }
-    
-    @ResponseBody
-    @RequestMapping("/uploadImages.do"   )  
-    public Map<String, String> uploadImages(@RequestParam("file") MultipartFile file,HttpServletRequest request){      	
-    	//String context = "/upload";
-		String realPath = PropertiesUtils.getProperty("upload.url");
-		String fileDe = DateUtils.format(new Date(), DateUtils.YMD);
-		String path = "";
-		String filePath = "";
-		String fileName = ""; //重新新命名
-		String realName = "";
-		Map<String, String> m = new HashMap<String, String>();
-    	if(file.isEmpty()){
-    		System.out.println("请选择需要上传的文件!");  
-    		m.put("message", "请选择需要上传的文件!");
-	       	return m;
-    	}else{
-    			realName = file.getOriginalFilename();
- 	            System.out.println("fileName4---------->" + realName); 
- 	            if(file.getSize()> DataStatus._FILESIZE_){
- 	       		System.out.println("上传图片大小不允许超过1M");
- 	       		m.put("message", "上传图片大小不允许超过1M");
- 	       		return m;
- 	            }
- 	                int pre = (int) System.currentTimeMillis();  
- 	                path = realPath + "/" + fileDe;
- 	                fileName = this.getUploadFileName(file.getOriginalFilename());
- 	                filePath = path  + "/" + fileName;
- 	                File f = new File(path);
- 	                //如果文件夹不存在则创建    
- 	                if(!f.exists() && !f.isDirectory()) {
- 	                  f.mkdir();    
- 	                }
- 	                try {  
- 	                	file.transferTo(new File(path + "/" + fileName));
- 	                    int finaltime = (int) System.currentTimeMillis();  
- 	                    System.out.println("上传3共耗时：" + (finaltime - pre) + "毫秒");  
- 	                }catch (FileNotFoundException e) {
- 	                    e.printStackTrace();
- 	                }catch (IOException e) {  
- 	                    e.printStackTrace();  
- 	                }  
-    	}
-        System.out.println("上传成功4"); 
-        m.put("fileUrl", filePath);
-        m.put("realName", realName);
-        return m;  
-    }
-    
-    public  String getUploadFileName(String fileName) {
-  		String tempFile = fileName.substring(fileName.lastIndexOf(".")+1);
-  		return UUIDGenerator.getUUID32Bit() + "." + tempFile;
-  	}
 
 	/**
 	 * 用户注册页面

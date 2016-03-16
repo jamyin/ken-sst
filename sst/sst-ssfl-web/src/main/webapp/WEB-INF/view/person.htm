@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
-<!-- 	<head>
+
+	<head>
 		<meta charset="UTF-8">
 		<link rel="icon" type="image/gif" href="static/img/favicon.ico">
 		<title>个人中心</title>
 		<script src="static/js/jquery-2.1.3.min.js"></script>
 		<script src="static/js/common.js"></script>
 		<link href="static/css/regiest.css" rel="stylesheet" />
-	</head> -->
-	<#include "/common/head.htm"/>
+	</head>
+
 	<body>
-		<!-- <div class="header">
+		<div class="header">
 			<div class="wrapper">
 				<div class="topbar">
 					<a class="logo" href="###"></a>
@@ -28,20 +29,16 @@
 					<div class="mark"></div>
 					</li>
 				</div>
+
 			</div>
-		</div> -->
+		</div>
 
 		<div class="wrapper">
 			<div class="aside">
 				<div class="avator">
-					<!-- <img class="uimg" src="static/img/title-ico.png" /> -->
-					<#if userInfo.pic ??>
-						<img class="uimg" src="${(userInfo.pic)!}" />
-					<#else>
-						<img class="uimg" src="/static/img/icon-tx.png" />
-					</#if>
+					<img class="uimg" src="static/img/title-ico.png" />
 					<span class="uname">
-						${(userInfo.nickName)!}
+						jackery
 					</span>
 				</div>
 				<div class="per-nav">
@@ -55,84 +52,55 @@
 			</div>
 			<div class="welcom">
 				欢迎来到用户中心！
-				<label>注册时间：</label><span>${(userInfo.createTimeStr)!}</span>
-				<label>上次登录时间：</label><span>${(userInfo.lastLoginTimeStr)!}</span>
+				<label>注册时间：</label><span>2015-10-10</span>
+				<label>上次登录时间：</label><span>2015-10-10   15:41:32</span>
 			</div>
 			<div class="basic">
 				<div class="uhd">
-					<h1 class="basichd">基本资料<span class="basic-edit" data-status="edit"  style="cursor:pointer;">编辑</span></h1>
+					<h1 class="basichd">基本资料<span class="basic-edit" data-status="edit">编辑</span></h1>
 				</div>
 				<div class="ucon">
 					<ul class="ucon-form">
 						<li>
 							<label class="lf" for="">登录名</label>
-							<input class="" type="text" name="" id="" value="${(userInfo.mobile)!}" />
+							<input class="" type="text" name="" id="" value="1503555555" />
 						</li>
 						<li>
 							<label class="lf head" for="">头像</label>
-							<#if userInfo.pic ??>
-								<img class="utouxiang" src="${(userInfo.pic)!}" />
-							<#else>
-								<img class="utouxiang" src="/static/img/icon-tx.png" />
-							</#if>
+							<img class="utouxiang" src="static/img/icon-tx.png" />
 							<a class="uploadbt hide" href="###">上传图片</a>
 						</li>
 						<li>
 							<label class="lf" for="">昵称</label>
-							<input class="" type="text" name="" id=""  value="${(userInfo.nickName)!}" />
+							<input class="" type="text" name="" id="" value="完颜张康" />
 						</li>
 						<li>
 							<label class="lf" for="">性别</label>
-								<#if userInfo.gender == 1>
-									<input class="hide" type="radio" name="sex" id="male" value="1"/>
-									<label class="sex male check hide" for="male">男</label>
-									<input class="hide" type="radio" name="sex" id="female" value="2" />
-									<label class="sex female hide" for="female">女</label>
-									<span class="js-sex show-inf">男</span>
-								<#elseif userInfo.gender == 2>
-									<input class="hide" type="radio" name="sex" id="male" value="1"/>
-									<label class="sex male hide" for="male">男</label>
-									<input class="hide" type="radio" name="sex" id="female" value="2"/>
-									<label class="sex female check hide" for="female">女</label>
-									<span class="js-sex show-inf">女</span>
-								<#else>
-									<input class="hide" type="radio" name="sex" id="male" value="1"/>
-									<label class="sex male check hide" for="male">男</label>
-									<input class="hide" type="radio" name="sex" id="female" value="2"/>
-									<label class="sex female hide" for="female">女</label>
-									<span class="js-sex show-inf"></span>
-								</#if>
+							<input class="hide" type="radio" name="sex" id="male" value="1" checked="checked" />
+							<label class="sex male check hide" for="male">男</label>
+							<input class="hide" type="radio" name="sex" id="female" value="2" />
+							<label class="sex female hide" for="female">女</label>
+							<span class="js-sex show-inf">男</span>
 						</li>
 						<li>
-							<label class="lf" for="" id="address">所在地</label>
+							<label class="lf" for="">所在地</label>
 							<select class="pro hide" name="">
-							<#if provinceList?? >	
-								<#list provinceList as page>
-									<option value="${(page.id)!}">${(page.name)!}</option>
-								</#list>
-							</#if>
+								<option value="">上海</option>
+								<option value="">北京</option>
+								<option value="">广东广东广东广东广东广东广东广东广东广东</option>
 							</select>
 							<select class="city hide" name="">
 								<option value="">闸北</option>
 								<option value="">静安</option>
 							</select>
-							<select class="city hide" name="">
-								<option value="">闸北</option>
-								<option value="">静安</option>
-							</select>
-							<span class="js-addr show-inf">
-								${(userInfo.provinceStr)!} &nbsp;&nbsp;${(userInfo.areaStr)!} &nbsp;&nbsp; ${(userInfo.locationStr)!}
-							</span>
+							<span class="js-addr show-inf">上海闸北</span>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</div>
-<!-- 	<script src="static/js/footer.js"></script>
-		<script src="static/js/regiest.js"></script> -->
+		<script src="static/js/footer.js"></script>
+		<script src="static/js/regiest.js"></script>
 	</body>
-		 <#include "/common/foot.htm"/> 
-		 <script src="/static/js/footer.js"></script>
-		 <script src="/static/js/regiest.js"></script>
-		 <script src="/static/js/person.js"></script>
+
 </html>

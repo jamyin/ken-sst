@@ -186,8 +186,103 @@ public class UserDto implements Serializable{
     private String userAccount; //登录时的用户账号
 	
 	/**
-	 * 创建时间-页面显示
+	 * 中文名
 	 */
+	@Setter
+    @Getter
+	private String cname;
+
+	/**
+	 * 英文名
+	 */
+	@Setter
+    @Getter
+    private String ename;
+
+	/**
+	 * 证件图片
+	 */
+	@Setter
+    @Getter
+    private String papersPic;
+
+	/**
+	 * 在团队中的位置，比如左边锋
+	 */
+	@Setter
+    @Getter
+    private String position;
+
+	/**
+	 * 缩略图url
+	 */
+	@Setter
+    @Getter
+    private String microPic;
+
+	/**
+	 * 是否可见（0：不可见，1：可见）
+	 */
+	@Setter
+    @Getter
+    private Integer visibleStat;
+
+	/**
+	 * 
+	 */
+	@Setter
+    @Getter
+    private Integer audit;
+
+	/**
+	 * QQ第三方登录ID
+	 */
+	@Setter
+    @Getter
+    private String qq;
+
+	/**
+	 * 微信第三方登录ID                 
+	 */
+	@Setter
+    @Getter
+    private String weixin;
+
+	/**
+	 * 新浪第三方登录ID
+	 */
+	@Setter
+    @Getter
+    private String sina;
+
+	/**
+	 * 座机号码
+	 */
+	@Setter
+    @Getter
+    private String telephone;
+
+	/**
+	 * 邮编
+	 */
+	@Setter
+    @Getter
+    private String postcode;
+
+	/**
+	 * 培训主讲人(0:不是;1:是培训主讲人)
+	 */
+	@Setter
+    @Getter
+    private Integer lecturer;
+
+	/**
+	 * 自我介绍
+	 */
+	@Setter
+    @Getter
+    private String description;
+	
 	@Getter
 	@Setter
     private String createTimeStr;

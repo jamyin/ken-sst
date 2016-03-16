@@ -54,15 +54,6 @@ public class UserDao extends MyBatisBaseDao<User> {
         List<User> results = mapper.selectByExample(example);        
 		return BeanUtils.createBeanListByTarget(results, UserDto.class);
 	}
-
-	/**
-	 * @author YIn
-	 * @time:2016年3月16日 上午11:36:59
-	 */
-	public List<UserDto> findUserInfo(UserDto userDto){
-
-		return uExMapper.findUserInfo(userDto);
-	}
 	
 	public int countUserByParam(UserDto dto){
 		UserExample example = new UserExample();
@@ -130,5 +121,4 @@ public class UserDao extends MyBatisBaseDao<User> {
 		public List<UserDto> findUserByGroupId(String groupId) {
 			return uExMapper.findUserByGroupId(groupId);
 		}
-
 }

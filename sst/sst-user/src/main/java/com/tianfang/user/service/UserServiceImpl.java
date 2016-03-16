@@ -83,16 +83,6 @@ public class UserServiceImpl implements IUserService {
 		return userDao.findUserByParam(dto);
 	}
 
-	/**
-	 * @author YIn
-	 * @time:2016年3月16日 上午11:36:20
-	 */
-	@Override
-	public List<UserDto> findUserInfo(UserDto userDto) {
-
-		return userDao.findUserInfo(userDto);
-	}
-
 	@Override
 	public PageResult<UserDto> findUserByParam(UserDto dto, PageQuery query){
 		int total = userDao.countUserByParam(dto);
@@ -188,5 +178,4 @@ public class UserServiceImpl implements IUserService {
 	public List<UserDto> findUserByGroupId(String groupId) {
 		return userDao.findUserByGroupId(groupId);
 	}
-
 }
