@@ -35,4 +35,12 @@ public interface UserExMapper {
 	 * @return
 	 */
 	List<UserDto> findUserByGroupId(String groupId);
+	
+	/**
+	 * 根据条件查询用户信息接口(连表查询用户球队的名字和图标)
+	 * @author YIn
+	 * @time:2016年3月16日 上午11:38:33
+	 * @return
+	 */
+	List<UserDto> findUserInfo(UserDto userDto);
 }
