@@ -59,6 +59,12 @@ public class TeamController extends BaseController{
     public Response<String> apply(String userId, String teamId) {
 		Response<String> result = new Response<String>();
 		if (checkUserApplyTeam(result, userId, teamId)){
+			UserApplyTeamDto dto = new UserApplyTeamDto();
+			dto.setTeamId(teamId);
+			dto.setUserId(userId);
+			dto.setStatus(AuditType.UNAUDIT.getIndex());
+			userApplyTeamService.save(dto);
+
 			result.setStatus(DataStatus.HTTP_SUCCESS);
 			result.setMessage("申请成功,请耐心等待队长审核...");
 		}
