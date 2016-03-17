@@ -1,10 +1,10 @@
 package com.tianfang.controller;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.tianfang.admin.dto.HomeMenuDto;
+import com.tianfang.admin.service.IHomeMenuService;
+import com.tianfang.common.constants.SessionConstants;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.service.IUserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,11 +12,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tianfang.admin.dto.HomeMenuDto;
-import com.tianfang.admin.service.IHomeMenuService;
-import com.tianfang.common.constants.SessionConstants;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.service.IUserService;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class BaseController {
 	protected Logger logger = Logger.getLogger(BaseController.class);
