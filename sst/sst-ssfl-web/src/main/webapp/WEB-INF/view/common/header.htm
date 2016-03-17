@@ -4,7 +4,15 @@
 		<ul>
 			<#if menuList ??>
 				<#list menuList as menu>
-					<li class="cur" tag="${(menu_index * 140)}"><a href="${(menu.menuUrl)!}">${(menu.cname)!}<br><span>${(menu.ename)!}</span></a></li>
+					<li class="cur" tag="${(menu_index * 140)}">
+						<#if menu.issingle == 1>
+							<a href="/menu/index.htm?mId=${(menu.id)!}">
+						<#else>
+							<a href="${(menu.menuUrl)!}">							
+						</#if>
+							${(menu.cname)!}<br><span>${(menu.ename)!}</span>
+						</a>
+					</li>
 				</#list>
 			</#if>
 <!-- 			<li class="cur" tag="0"><a href="/index.htm">首 页<br><span>HOME</span></a></li>
