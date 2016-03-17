@@ -1,6 +1,5 @@
 package com.tianfang.controller;
 
-import com.tianfang.business.service.IAddressesService;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.digest.MD5Coder;
 import com.tianfang.common.model.Response;
@@ -40,9 +39,7 @@ public class SafeController extends BaseController{
 	private IUserService userService;
 	@Autowired
 	private INotificationsService notificationsService;
-	@Autowired
-	private IAddressesService addressService;
-	
+
 	/**
 	 * 账户安全首页
 	 * @return
