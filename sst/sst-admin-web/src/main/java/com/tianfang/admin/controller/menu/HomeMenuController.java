@@ -13,6 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.admin.controller.BaseController;
 import com.tianfang.admin.dto.HomeMenuDto;
+import com.tianfang.admin.enums.ActivityTypeEnums;
+import com.tianfang.admin.enums.MenuTypeEnums;
+import com.tianfang.admin.enums.VideoTypeEnums;
 import com.tianfang.admin.service.IHomeMenuService;
 import com.tianfang.admin.utils.PageData;
 import com.tianfang.common.ext.ExtPageQuery;
@@ -36,9 +39,9 @@ protected static final Log logger = LogFactory.getLog(HomeMenuController.class);
          mv.addObject("pageList", results);
          mv.addObject("params", dto);
          mv.addObject("alls", iHomeMenuService.findAll());
-//         mv.addObject("menuTypes", MenuTypeEnums.getValus());
-//         mv.addObject("acTypes", ActivityTypeEnums.getValus());
-//         mv.addObject("videoTypes", VideoTypeEnums.getValus());
+         mv.addObject("menuTypes", MenuTypeEnums.getValus());
+         mv.addObject("acTypes", ActivityTypeEnums.getValus());
+         mv.addObject("videoTypes", VideoTypeEnums.getValus());
          return mv;
     }
     
@@ -46,10 +49,10 @@ protected static final Log logger = LogFactory.getLog(HomeMenuController.class);
     public ModelAndView openAddView(){
         logger.info("打开新增菜单页面");
         ModelAndView mv = this.getModelAndView();
-        mv.setViewName("/sport/menu/add");
-//        mv.addObject("menuTypes", MenuTypeEnums.getValus());
-//        mv.addObject("acTypes", ActivityTypeEnums.getValus());
-//        mv.addObject("videoTypes", VideoTypeEnums.getValus());
+        mv.setViewName("/menu/add");
+        mv.addObject("menuTypes", MenuTypeEnums.getValus());
+        mv.addObject("acTypes", ActivityTypeEnums.getValus());
+        mv.addObject("videoTypes", VideoTypeEnums.getValus());
         return mv;
     }
     
@@ -95,8 +98,8 @@ protected static final Log logger = LogFactory.getLog(HomeMenuController.class);
     @RequestMapping("/save")
     @ResponseBody
     public Map<String, Object> save(HomeMenuDto homeMenuDto) {
-//    	if (null != HomeMenuDto.getMenuType() && HomeMenuDto.getMenuType().intValue() == MenuTypeEnums.ONE.getIndex()) {
-//    		HomeMenuDto.setParentId("0");
+//    	if (null != homeMenuDto.getMenuType() && homeMenuDto.getMenuType().intValue() == MenuTypeEnums.ONE.getIndex()) {
+//    		homeMenuDto.setParentId("0");
 //    	}
         Integer result = iHomeMenuService.save(homeMenuDto);
         if (result == 1) {
@@ -113,15 +116,15 @@ protected static final Log logger = LogFactory.getLog(HomeMenuController.class);
         pd = this.getPageData();
         String id = pd.getString("id");
         HomeMenuDto homeMenuDto = iHomeMenuService.findById(id);     
-//        if (null != HomeMenuDto.getParentId() && !"0".equals(HomeMenuDto.getParentId().trim()) && null != HomeMenuDto.getMenuType() && HomeMenuDto.getMenuType().intValue() > 1){
+//        if (null != homeMenuDto.getParentId() && !"0".equals(homeMenuDto.getParentId().trim()) && null != homeMenuDto.getMenuType() && homeMenuDto.getMenuType().intValue() > 1){
 //        	List<HomeMenuDto> HomeMenuDtos = iHomeMenuService.findByMenuType(homeMenuDto.getMenuType() - 1);
 //        	mv.addObject("parents", HomeMenuDtos);
 //        }
-        mv.setViewName("/sport/menu/edit");
+        mv.setViewName("/menu/edit");
         mv.addObject("data", homeMenuDto);
-//        mv.addObject("menuTypes", MenuTypeEnums.getValus());
-//        mv.addObject("acTypes", ActivityTypeEnums.getValus());
-//        mv.addObject("videoTypes", VideoTypeEnums.getValus());
+        mv.addObject("menuTypes", MenuTypeEnums.getValus());
+        mv.addObject("acTypes", ActivityTypeEnums.getValus());
+        mv.addObject("videoTypes", VideoTypeEnums.getValus());
         
         return mv;
     }
