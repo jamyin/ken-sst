@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tianfang.business.dto.AddressesDto;
+import com.tianfang.business.service.IAddressesService;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.constants.SessionConstants;
 import com.tianfang.common.digest.MD5Coder;
@@ -57,6 +59,9 @@ public class UserController extends BaseController{
     
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired
+	private IAddressesService addressesService;
     
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -358,6 +363,55 @@ public class UserController extends BaseController{
             return result;
         }
     }
+    
+    /**
+	 * 去用户详情页面
+	 * @return
+	 */
+	@RequestMapping("/toPerson")
+	public ModelAndView toPerson(HttpServletRequest request,HttpServletResponse response,HttpSession session){
+		ModelAndView mv = getModelAndView();
+		//LoginUserDto logDto= (LoginUserDto) session.getAttribute(SessionConstants.LOGIN_USER_INFO);
+		UserDto userDto = new UserDto();
+		userDto.setId("7e207fef-4312-4b20-935c-14e9f4d67665");
+		List<UserDto> list = userService.findUserByParam(userDto);
+		if(list == null || list.size() == 0){
+			return null;
+		}
+//		userInfo.setLastLoginTimeStr(session.getAttribute("lastloginTime")+"");
+		//获取全部区县数据
+		/*List<SportAddressesDto> lis = new ArrayList<SportAddressesDto>();
+		addresses.setParentId("1");
+		lis = addressService.getDistrict(addresses);*/
+//		mv.addObject(attributeName, attributeValue)
+		//mv.addObject("result", lis);
+		UserDto dto = list.get(0);
+		if(dto.getCreateTime() != null){
+			dto.setCreateTimeStr(DateUtils.format(dto.getCreateTime(), DateUtils.YMD_DASH));
+		}
+		if(dto.getLastLoginTime() != null){
+			dto.setLastLoginTimeStr(DateUtils.format(dto.getLastLoginTime(), DateUtils.YMD_DASH_WITH_TIME));
+		}
+		
+		AddressesDto province = new AddressesDto();
+		province.setId(Integer.valueOf(dto.getProvince()));
+		List<AddressesDto> provinceList = addressesService.findAddressList(province);
+		dto.setProvinceStr(provinceList.get(0).getName());
+		
+		AddressesDto area = new AddressesDto();
+		area.setId(Integer.valueOf(dto.getArea()));
+		List<AddressesDto> areaList = addressesService.findAddressList(area);
+		dto.setAreaStr(areaList.get(0).getName());
+		
+		AddressesDto location = new AddressesDto();
+		location.setId(Integer.valueOf(dto.getLocation()));
+		List<AddressesDto> locationList = addressesService.findAddressList(location);
+		dto.setLocationStr(locationList.get(0).getName());
+		
+		mv.addObject("userInfo", dto);
+		mv.setViewName("/person");
+		return mv;
+	}
     
     public static Boolean CheckSendMsg(final RedisTemplate<String, Object> redisTemplate,final String mobilePhone,HttpServletRequest request){
     	String keySessionId = mobilePhone + DateUtils.format(new Date(), DateUtils.YMD_DASH)+"diff";
