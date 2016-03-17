@@ -40,7 +40,7 @@ public class AddressesController extends BaseController{
 	 * @describe  查询区:LEVEL = 3 AND parent_id ="市Id" 
 	 * @return
 	 */
-	@RequestMapping(value = "findAddress.do")
+	@RequestMapping(value = "findAddress")
 	@ResponseBody
 	public Response<List<AddressesDto>> findAddress(AddressesDto dto){
 	Response<List<AddressesDto>> result = new Response<List<AddressesDto>>();
