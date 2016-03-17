@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.model.Response;
 
 /**
  *@author  作者 E-mail:jamhihi@126.com 
@@ -37,26 +38,25 @@ import com.tianfang.common.constants.DataStatus;
 public class UploadTool {
     @ResponseBody
     @RequestMapping("/upload.do"   )  
-    public Map<String, String> upload(@RequestParam("file") MultipartFile file,HttpServletRequest request){      	
-    	//String context = "/upload";
+    public Response<String> upload(@RequestParam("file") MultipartFile file,HttpServletRequest request){      	
+    	Response<String> res = new Response<String>();
 		String realPath = PropertiesUtils.getProperty("upload.url");
 		String fileDe = DateUtils.format(new Date(), DateUtils.YMD);
 		String path = "";
 		String filePath = "";
 		String fileName = ""; //重新新命名
 		String realName = "";
-		Map<String, String> m = new HashMap<String, String>();
     	if(file.isEmpty()){
-    		System.out.println("请选择需要上传的文件!");  
-    		m.put("message", "请选择需要上传的文件!");
-	       	return m;
+    		System.out.println("请选择需要上传的文件!");
+    		res.setMessage("请选择需要上传的文件");
+	       	return res;
     	}else{
     			realName = file.getOriginalFilename();
  	            System.out.println("fileName4---------->" + realName); 
  	            if(file.getSize()> DataStatus._FILESIZE_){
  	       		System.out.println("上传图片大小不允许超过1M");
- 	       		m.put("message", "上传图片大小不允许超过1M");
- 	       		return m;
+ 	       		res.setMessage("上传图片大小不允许超过1M");
+ 	       		return res;
  	            }
  	                int pre = (int) System.currentTimeMillis();  
  	                path = realPath + "/" + fileDe;
@@ -70,17 +70,16 @@ public class UploadTool {
  	                try {  
  	                	file.transferTo(new File(path + "/" + fileName));
  	                    int finaltime = (int) System.currentTimeMillis();  
- 	                    System.out.println("上传3共耗时：" + (finaltime - pre) + "毫秒");  
+ 	                    System.out.println("上传共耗时：" + (finaltime - pre) + "毫秒");  
  	                }catch (FileNotFoundException e) {
  	                    e.printStackTrace();
  	                }catch (IOException e) {  
  	                    e.printStackTrace();  
  	                }  
     	}
-        System.out.println("上传成功4"); 
-        m.put("fileUrl", filePath);
-        m.put("realName", realName);
-        return m;  
+        System.out.println("上传成功"); 
+        res.setData(filePath);
+        return res;  
     }
     
     public  String getUploadFileName(String fileName) {
