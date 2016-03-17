@@ -1,16 +1,5 @@
 package com.tianfang.controller;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.tianfang.business.service.IAddressesService;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.digest.MD5Coder;
@@ -20,6 +9,16 @@ import com.tianfang.user.dto.NotificationsDto;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.service.INotificationsService;
 import com.tianfang.user.service.IUserService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**		
  * <p>Title: SafeController </p>
@@ -109,19 +108,7 @@ public class SafeController extends BaseController{
 	public Response<String> changeReminding(NotificationsDto dto){
 		Response<String> response = new Response<String>();
 		try {
-			if (StringUtils.isBlank(dto.getId())){
-				String userId = getSessionUserId();
-				NotificationsDto data = notificationsService.getNotificationsByUserId(userId);
-				if (null == data){
-					dto.setOwnerId(userId);
-					notificationsService.save(dto);
-				}else{
-					dto.setId(data.getId());
-					notificationsService.update(dto);	
-				}
-			}else{
-				notificationsService.update(dto);	
-			}
+			changeNotifications(dto);
 			response.setMessage("恭喜您,安全提醒更改成功!");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,7 +117,7 @@ public class SafeController extends BaseController{
 		}
 		return response;
 	}
-	
+
 	/**
 	 * 更换安全邮箱地址
 	 * @param dto
@@ -151,19 +138,7 @@ public class SafeController extends BaseController{
 			return response;
 		}
 		try {
-			if (StringUtils.isBlank(dto.getId())){
-				String userId = getSessionUserId();
-				NotificationsDto data = notificationsService.getNotificationsByUserId(userId);
-				if (null == data){
-					dto.setOwnerId(userId);
-					notificationsService.save(dto);
-				}else{
-					dto.setId(data.getId());
-					notificationsService.update(dto);	
-				}
-			}else{
-				notificationsService.update(dto);	
-			}
+			changeNotifications(dto);
 			response.setMessage("恭喜您,安全邮箱更改成功!");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -196,7 +171,29 @@ public class SafeController extends BaseController{
 		}
 		return response;	
 	}
-	
+
+	/**
+	 * 新增或者更新安全提醒逻辑
+	 * @param dto
+	 * @Author wangxiang
+	 * @Date 2016/3/17 11:11
+	 */
+	private void changeNotifications(NotificationsDto dto) {
+		if (StringUtils.isBlank(dto.getId())){
+			String userId = getSessionUserId();
+			NotificationsDto data = notificationsService.getNotificationsByUserId(userId);
+			if (null == data){
+				dto.setOwnerId(userId);
+				notificationsService.save(dto);
+			}else{
+				dto.setId(data.getId());
+				notificationsService.update(dto);
+			}
+		}else{
+			notificationsService.update(dto);
+		}
+	}
+
 	/**
 	 * 校验email格式是否正确
 	 * @param email

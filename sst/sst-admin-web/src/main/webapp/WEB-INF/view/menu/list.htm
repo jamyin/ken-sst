@@ -37,7 +37,7 @@
 						<div class="row-fluid">
 <!-- PAGE CONTENT BEGINS HERE -->
 		<div class="row-fluid">
-			<form action="${base}/sport/home/menu/findPage.do" method="post" name="submitForm" id="submitForm">
+			<form action="${base}/menu/findPage.do" method="post" name="submitForm" id="submitForm">
 				<input type="hidden" id="currPage" name="page" value="${(pageList.currPage)!}"/>
 					<table border="0">
 						<tbody>
@@ -102,7 +102,7 @@
 									<td>${(page.ename)!}</td>
 									<td>
 										<#list menuTypes as type>
-												<#if page.menuType == type.getIndex()>${type.getName()}</#if>
+												<#if page.menuType?eval == type.getIndex()>${type.getName()}</#if>
 										</#list>
 									</td>
 									<td>
@@ -262,7 +262,7 @@
 				    area: ['800px', '800px'],
 				    fix: false, //不固定
 				    maxmin: true,
-				    content: '${base}/sport/home/menu/openEditView.do?id='+id
+				    content: '${base}/menu/openEditView.do?id='+id
 				});				
 				//console.log($(this).attr("data-obj-id"));
 			});
@@ -276,7 +276,7 @@
 					if (_new != _old){
 						$.ajax({
 				             type: "POST",
-				             url: "${base}/sport/home/menu/updateOrder.do",
+				             url: "${base}/menu/updateOrder.do",
 				             data: {id:id,menuOrder:_new},
 				             dataType: "json",
 				             success: function(data){
@@ -322,7 +322,7 @@
 				layer.confirm('确定要更改发布状态吗？', {icon: 3}, function(index){
 					$.ajax({
 			             type: "POST",
-			             url: "${base}/sport/info/release.do",
+			             url: "${base}/info/release.do",
 			             data: {id:id,releaseStat:stat},
 			             dataType: "json",
 			             success: function(data){
@@ -355,7 +355,7 @@
 				layer.confirm('确定要删除吗？', {icon: 3}, function(index){
 				$.ajax({
 		             type: "POST",
-		             url: "${base}/sport/home/menu/delete.do",
+		             url: "${base}/menu/delete.do",
 		             data: {ids:ids},
 		             
 		             dataType: "json",
@@ -402,7 +402,7 @@
 					    
 					    $.ajax({
 				             type: "POST",
-				             url: "${base}/sport/home/menu/delete.do",
+				             url: "${base}/menu/delete.do",
 				             data: {ids:ids},
 				             dataType: "json",
 				             success: function(data){
@@ -449,7 +449,7 @@
 				    area: ['800px', '800px'],
 				    fix: false, //不固定
 				    maxmin: true,
-				    content: '${base}/sport/home/menu/openAddView.do'
+				    content: '${base}/menu/openAddView.do'
 				});
 			});
 			

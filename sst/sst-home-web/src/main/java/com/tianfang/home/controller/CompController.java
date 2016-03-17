@@ -1,10 +1,18 @@
 package com.tianfang.home.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.model.PageQuery;
+import com.tianfang.common.model.PageResult;
+import com.tianfang.common.model.Response;
+import com.tianfang.common.util.StringUtils;
+import com.tianfang.common.util.UUIDGenerator;
+import com.tianfang.home.dto.CompRound;
+import com.tianfang.train.dto.*;
+import com.tianfang.train.enums.AuditType;
+import com.tianfang.train.service.*;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.enums.UserType;
+import com.tianfang.user.service.IUserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,33 +20,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tianfang.common.constants.DataStatus;
-import com.tianfang.common.model.PageQuery;
-import com.tianfang.common.model.PageResult;
-import com.tianfang.common.model.Response;
-import com.tianfang.common.util.StringUtils;
-import com.tianfang.home.dto.CompRound;
-import com.tianfang.train.dto.CompetitionApplyDto;
-import com.tianfang.train.dto.CompetitionDto;
-import com.tianfang.train.dto.CompetitionMatchDto;
-import com.tianfang.train.dto.CompetitionNewsDto;
-import com.tianfang.train.dto.CompetitionNoticeDto;
-import com.tianfang.train.dto.CompetitionRoundDto;
-import com.tianfang.train.dto.CompetitionTeamDto;
-import com.tianfang.train.dto.TeamDto;
-import com.tianfang.train.dto.TeamPlayerDatasDto;
-import com.tianfang.train.enums.AuditType;
-import com.tianfang.train.service.ICompetitionApplyService;
-import com.tianfang.train.service.ICompetitionMatchService;
-import com.tianfang.train.service.ICompetitionNewsService;
-import com.tianfang.train.service.ICompetitionNoticeService;
-import com.tianfang.train.service.ICompetitionRoundService;
-import com.tianfang.train.service.ICompetitionService;
-import com.tianfang.train.service.ICompetitionTeamService;
-import com.tianfang.train.service.ITeamPlayerDatasService;
-import com.tianfang.train.service.ITeamService;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.enums.UserType;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**		
  * <p>Title: CompController </p>
@@ -76,6 +61,8 @@ public class CompController extends BaseController {
 	private ITeamPlayerDatasService playerDatasService;
 	@Autowired
 	private ICompetitionNewsService cnewsService;
+	@Autowired
+	private IUserService userService;
 	
 	/**
 	 * 赛事分页查询接口
@@ -321,12 +308,8 @@ public class CompController extends BaseController {
 	@ResponseBody
 	public Response<String> apply(CompetitionApplyDto dto, String userId){
 		Response<String> result = new Response<String>();
-		CompetitionApplyDto compApply = new CompetitionApplyDto();
-		compApply.setCreateUserId(userId);
-		compApply.setCompId(dto.getCompId());
-		if (checkCompApply(result, compApply)){
-			dto.setCreateUserId(compApply.getCreateUserId());
-			dto.setCreateUserName(compApply.getCreateUserName());
+		dto.setCreateUserId(userId);
+		if (checkCompApply(result, dto)){
 			applyService.addCompetitionApply(dto);
 			result.setMessage("恭喜您,报名成功!");
 		}
@@ -366,7 +349,7 @@ public class CompController extends BaseController {
 	/**
 	 * 通过比赛日期查询当天的比赛
 	 * @param compId
-	 * @param date
+	 * @param matchDate
 	 * @return
 	 * @author xiang_wang
 	 * 2016年2月22日下午4:07:47
@@ -590,7 +573,7 @@ public class CompController extends BaseController {
 	/**
 	 * 根据日期获得当天的比赛数据
 	 * @param compId
-	 * @param date
+	 * @param matchDate
 	 * @return
 	 * @author xiang_wang
 	 * 2016年2月22日下午4:05:24
@@ -663,10 +646,11 @@ public class CompController extends BaseController {
 	
 	/**
 	 *校验赛事是否满足报名条件
-	 *条件:1.登陆后才可报名
+	 *条件:	1.登陆后才可报名
 	 * 		2.只有队长才有只能报名
 	 * 		3.如果有待审核的报名请用户等待审核
 	 * 		4.如果报名成功.提示用户已报名
+	 * 		5.如果没有teamId则创建球队并报名
 	 * @param result
 	 * @param compApply
 	 * @return
@@ -684,7 +668,7 @@ public class CompController extends BaseController {
 			result.setMessage("系统异常");
 			return false;
 		}
-		UserDto user = getUserByCache(compApply.getCreateUserId());
+		UserDto user = userService.getUserById(compApply.getCreateUserId());
     	if (null != user){
     		// 只有队长才有权利创建和报名球队
 			if (null == user.getUtype() || user.getUtype() != UserType.CAPTAIN.getIndex()){
@@ -693,32 +677,82 @@ public class CompController extends BaseController {
 				return false;
 			}
 			try {
+				TeamDto team = null;
+				boolean isCreate = false; // 是否需要创建球队
 				if (StringUtils.isNotBlank(user.getTeamId())){
-					TeamDto team = teamService.getTeamById(user.getTeamId());
-					if (team.getStat() == DataStatus.ENABLED){
-						compApply.setTeamId(team.getId());
-						List<CompetitionApplyDto> list = applyService.findCompetitionApply(compApply);
-						if (null != list && list.size() > 0){
-							for (CompetitionApplyDto temp : list){
-								if (temp.getAuditType().intValue() == AuditType.UNAUDIT.getIndex()){
-									result.setStatus(DataStatus.HTTP_FAILE);
-									result.setMessage("赛事已申请,请耐心等待审核!");
-									return false;
-								}
-								if (temp.getAuditType().intValue() == AuditType.PASS.getIndex()){
-									result.setStatus(DataStatus.HTTP_FAILE);
-									result.setMessage("您已经报名成功了~");
-									return false;
-								}
-							}
+					team = teamService.getTeamById(user.getTeamId());
+					if (null == team.getStat() || team.getStat() == DataStatus.ENABLED){
+						// 如果球队信息有更改,则更新球队信息
+						boolean flag = false;
+						if (!team.getIcon().equals(compApply.getTeamIcon())){
+							team.setIcon(compApply.getTeamIcon());
+							flag = true;
 						}
-						compApply.setTeamIcon(team.getIcon());
-						compApply.setTeamName(team.getName());
+						if (!team.getName().equals(compApply.getTeamName())){
+							team.setName(compApply.getTeamName());
+							flag = true;
+						}
+						if (!team.getContacts().equals(compApply.getContacts())){
+							team.setContacts(compApply.getContacts());
+							flag = true;
+						}
+						if (!team.getMobile().equals(compApply.getMobile())){
+							team.setMobile(compApply.getMobile());
+							flag = true;
+						}
+						if (flag){
+							teamService.updateTeam(team);
+						}
+					}else{
+						isCreate = true;
 					}
-					compApply.setContacts(user.getNickName());
-					compApply.setMobile(user.getMobile());
-					compApply.setCreateUserName(user.getNickName());
+				}else{
+					isCreate = true;
 				}
+
+				if (isCreate){
+					// 队长没有球队,则创建球队
+					String teamId = UUIDGenerator.getUUID();
+					team = new TeamDto();
+					team.setId(teamId);
+					team.setIcon(compApply.getTeamIcon());
+					team.setName(compApply.getTeamName());
+					team.setContacts(compApply.getContacts());
+					team.setMobile(compApply.getMobile());
+					team.setCreateUserId(user.getId());
+					team.setCreateUserName(user.getNickName());
+					team.setStat(DataStatus.ENABLED);
+					teamService.addTeam(team);
+
+					// 更新用户表,添加球队信息
+					user.setTeamId(teamId);
+					userService.update(user);
+				}
+
+				CompetitionApplyDto param = new CompetitionApplyDto();
+				param.setCompId(compApply.getCompId());
+				param.setTeamId(team.getId());
+				List<CompetitionApplyDto> list = applyService.findCompetitionApply(param);
+				if (null != list && list.size() > 0){
+					for (CompetitionApplyDto temp : list){
+						if (temp.getAuditType().intValue() == AuditType.UNAUDIT.getIndex()){
+							result.setStatus(DataStatus.HTTP_FAILE);
+							result.setMessage("赛事已申请,请耐心等待审核!");
+							return false;
+						}
+						if (temp.getAuditType().intValue() == AuditType.PASS.getIndex()){
+							result.setStatus(DataStatus.HTTP_FAILE);
+							result.setMessage("您已经报名成功了~");
+							return false;
+						}
+					}
+				}
+				compApply.setTeamId(team.getId());
+				compApply.setTeamIcon(team.getIcon());
+				compApply.setTeamName(team.getName());
+				compApply.setContacts(user.getNickName());
+				compApply.setMobile(user.getMobile());
+				compApply.setCreateUserName(user.getNickName());
 				result.setStatus(DataStatus.HTTP_SUCCESS);
 			} catch (Exception e) {
 				e.printStackTrace();

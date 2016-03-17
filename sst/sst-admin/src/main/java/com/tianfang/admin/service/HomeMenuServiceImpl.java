@@ -69,13 +69,17 @@ public class HomeMenuServiceImpl implements IHomeMenuService {
 	}
 	
 	public HomeMenuDto findById(String id) {
-		HomeMenu HomeMenu = homeMenuDao.selectByPrimaryKey(id);
-		return BeanUtils.createBeanByTarget(HomeMenu, HomeMenuDto.class);
+		HomeMenu homeMenu = homeMenuDao.selectByPrimaryKey(id);
+		if(homeMenu!=null){
+			return BeanUtils.createBeanByTarget(homeMenu, HomeMenuDto.class);
+		}else{
+			return null;
+		}
 	}
 	
 	public Integer edit(HomeMenuDto dto) {
-		HomeMenu HomeMenu = BeanUtils.createBeanByTarget(dto, HomeMenu.class);
-		return homeMenuDao.updateByPrimaryKeySelective(HomeMenu);
+		HomeMenu homeMenu = BeanUtils.createBeanByTarget(dto, HomeMenu.class);
+		return homeMenuDao.updateByPrimaryKeySelective(homeMenu);
 	}
 	
 	public Integer delete(String ids) {
