@@ -1,14 +1,5 @@
 package com.tianfang.home.controller;
 
-import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
@@ -22,6 +13,14 @@ import com.tianfang.user.enums.AuditType;
 import com.tianfang.user.enums.UserType;
 import com.tianfang.user.service.IUserApplyTeamService;
 import com.tianfang.user.service.IUserService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**		
  * <p>Title: TeamController </p>
@@ -60,7 +59,7 @@ public class TeamController extends BaseController{
     public Response<String> apply(String userId, String teamId) {
 		Response<String> result = new Response<String>();
 		if (checkUserApplyTeam(result, userId, teamId)){
-			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setStatus(DataStatus.HTTP_SUCCESS);
 			result.setMessage("申请成功,请耐心等待队长审核...");
 		}
 		return result;
