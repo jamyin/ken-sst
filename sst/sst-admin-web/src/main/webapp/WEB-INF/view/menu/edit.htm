@@ -5,7 +5,7 @@
 		<title>Form Elements - Ace Admin</title>
 		<meta name="description" content="Common form elements and layouts" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<#include "../../admin/head.htm"/>
+		<#include "/common/head.htm"/>
 		<link href="${base}/static/css/course.css" rel="stylesheet" type="text/css" />
 		<link href="${base}/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
 		<!-- <script type="text/javascript" src="${base}/plugins/uploadify/jquery-1.3.2.min.js"></script> -->
@@ -18,7 +18,7 @@
 					<div id="page-content" class="clearfix">
 						<div class="row-fluid">
 							<!-- PAGE CONTENT BEGINS HERE -->
-							<form id="submitForm" class="form-horizontal" action="${base}/sport/home/menu/save.do" method="POST">
+							<form id="submitForm" class="form-horizontal" action="${base}/menu/save.do" method="POST">
 								<input type="hidden" id="issingle" name="issingle" value="${(data.issingle)!}"/>
 								<input type="hidden" id="content" name="content" value=""/>
 								<input type="hidden" id="id" name="id" value="${(data.id)!}"/>
@@ -45,7 +45,7 @@
 									<label class="course_add_label" for="form-field-1">菜单级</label>
 										<select  name="menuType" id="menuType" data-placeholder="菜单级" style="vertical-align:top;margin-left:20px;" onchange="changeForm(this.value)">
 											<#list menuTypes as type>
-												<option <#if data.menuType == type.getIndex()> selected="selected"</#if> value="${type.getIndex()!}">${type.getName()}</option>
+												<option <#if data.menuType?eval == type.getIndex()> selected="selected"</#if> value="${type.getIndex()!}">${type.getName()}</option>
 											</#list>
 										</select>
 								</div>
@@ -217,7 +217,7 @@
 			if (menuType > 1) {
 				$.ajax({
 					type : "POST",
-					url : "${base}/sport/home/menu/selectMenumType.do",
+					url : "${base}/menu/selectMenumType.do",
 					data :  {
 						menuType : menuType
 					},
@@ -316,7 +316,7 @@
 				var ajaxParams = $("#submitForm").serialize();
 				$.ajax({
 					type : "POST",
-					url : "${base}/sport/home/menu/edit.do",
+					url : "${base}/menu/edit.do",
 					data : ajaxParams,
 					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
 					beforeSend : function() {

@@ -1,5 +1,6 @@
 package com.tianfang.controller;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tianfang.admin.dto.HomeMenuDto;
+import com.tianfang.admin.service.IHomeMenuService;
 import com.tianfang.common.constants.SessionConstants;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.service.IUserService;
@@ -23,6 +26,9 @@ public class BaseController {
 
 	@Autowired
 	private IUserService iUserService;
+	
+    @Autowired
+    private IHomeMenuService iHomeMenuService;
 
 
 	/**
@@ -48,12 +54,16 @@ public class BaseController {
 	public ModelAndView getModelAndView(){
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("user", getUserAccountByUserId());
+		mv.addObject("menuList", getMenuList());
+		
 		return mv;
 	}
 
 	public ModelAndView getUserModelAndView(String userId) throws Exception{
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("user", getUserByCache(userId));
+		mv.addObject("menuList", getMenuList());
+		
 		return mv;
 	}
 
@@ -79,5 +89,10 @@ public class BaseController {
 	public HttpServletRequest getRequest() {
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		return request;
+	}
+	
+	
+	public List<HomeMenuDto> getMenuList(){
+		return iHomeMenuService.findAll();
 	}
 }
