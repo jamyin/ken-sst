@@ -74,7 +74,7 @@
 					<ul class="ucon-form">
 						<li>
 							<label class="lf" for="">登录名</label>
-							<input class="" type="text" name="mobile" id="" value="${(userInfo.mobile)!}" />
+							<input class="" type="text" name="mobile" id="" value="${(userInfo.mobile)!}" readonly="readonly" />
 						</li>
 						<li>
 							<label class="lf head" for="">头像</label>
@@ -104,7 +104,7 @@
 						<li>
 							<label class="lf" for="">性别</label>
 								<#if userInfo.gender == 1>
-									<input class="hide" type="radio" name="gender" id="male" value="1"/>
+									<input class="hide" type="radio" name="gender" id="male" value="1" checked="chekced"/>
 									<label class="sex male check hide" for="male">男</label>
 									<input class="hide" type="radio" name="gender" id="female" value="2" />
 									<label class="sex female hide" for="female">女</label>
@@ -112,11 +112,11 @@
 								<#elseif userInfo.gender == 2>
 									<input class="hide" type="radio" name="gender" id="male" value="1"/>
 									<label class="sex male hide" for="male">男</label>
-									<input class="hide" type="radio" name="gender" id="female" value="2"/>
+									<input class="hide" type="radio" name="gender" id="female" value="2"  checked="chekced"/>
 									<label class="sex female check hide" for="female">女</label>
 									<span class="js-sex show-inf">女</span>
 								<#else>
-									<input class="hide" type="radio" name="gender" id="male" value="1"/>
+									<input class="hide" type="radio" name="gender" id="male" value="1"  checked="chekced"/>
 									<label class="sex male check hide" for="male">男</label>
 									<input class="hide" type="radio" name="gender" id="female" value="2"/>
 									<label class="sex female hide" for="female">女</label>
