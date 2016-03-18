@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<#include "/common/head.htm"/>
+</head>
+
+<body>
+	<div class="header">
+		<#include "/common/header.htm"/>
+	</div>
+	
+	
+	<div class="wrapper">
+		<div class="sub_ban">
+			<span>新闻公告</span>
+		</div>
+		<div class="main_box">
+			<div class="news_box">
+				<ul>
+				<#if dataMap.pageList ??>
+					<#list dataMap.pageList.getResults() as data>
+						<li>
+							<h2>${(data.title)!}</h2>
+							<span class="dec">${(data.summary)!}<a href="/info/details.htm?infoId=${(data.id)!}">[详细]</a></span>
+							<span class="time">${(data.createTime?string('yyyy-MM-dd HH:mm'))!}</span>
+							<a class="share" href="###">分享</a>
+						</li>	
+					</#list>
+				</#if>				
+					<!-- <li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li>
+					<li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li>
+					<li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li>
+					<li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li>
+					<li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li>
+					<li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li>
+					<li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li>
+					<li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li>
+					<li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li> -->
+				
+				</ul>
+				<div class="pagenav">
+					<#include "/common/pagenav.htm"/>
+				</div>
+			</div>
+		
+			<div class="rl_box">
+				<div class="tab"><a class="cur" href="###" tag="match">积分榜</a></div>
+				<div class="integr">
+					<div class="sub_tab"><span class="date">名次</span><span>球队</span><span class="score">胜/负/平</span><span>积分</span></div>
+					<ul>
+						<#if dataMap ??>
+							<#list dataMap.raceRecord as data>
+								<li>
+									<span class="date">${(data_index+1)!}</span>
+									<span class="name"><img src="${(data.teamIcon)!}" border="0">${(data.teamName)!}</span>
+									<span class="score">${(data.win)!}/${(data.lose)!}/${(data.draw)!}</span>
+									<span>${(data.win*3+data.draw)!}</span><!-- win*3+draw -->
+								</li>
+							</#list>
+						</#if>						
+						<!-- 
+						<li><span class="date">1</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/12/1</span><span>93</span></li>
+						<li><span class="date">2</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>83</span></li>
+						<li><span class="date">3</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>73</span></li>
+						<li><span class="date">4</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>63</span></li>
+						<li><span class="date">5</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>53</span></li>
+						<li><span class="date">6</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>43</span></li>
+						<li><span class="date">7</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>33</span></li>
+						<li><span class="date">8</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>23</span></li>
+						<li><span class="date">9</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>13</span></li>
+						<li><span class="date">10</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>10</span></li>
+						 -->
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="/static/js/footer.js"></script>
+	<script>
+	$(function(){	
+		setList()
+	});
+	function gotoPage(currPage){
+		window.location.href = "/info/index.htm?currPage="+currPage;
+	};
+	function setList(){
+		$('.rl_box .match ul li:last, .rl_box .integr ul li:last').css('border','0')
+		$('.rl_box .match_result ul li:odd').addClass('cl')
+		$('.rl_box .integr ul li:first').addClass('cl')
+		for(var i=0;i<3;i++){
+			$('.rl_box .integr ul').find('li').eq(i).find('.date').addClass('hl')
+		}
+		$('.news_box ul li:last').css("border","0")
+	}
+	</script>
+</body>
+</html>
