@@ -5,17 +5,24 @@
 			<#if menuList ??>
 				<#list menuList as menu>
 					<li class="cur" tag="${(menu_index * 140)}">
-						<#if menu.issingle == 1>
-							<a href="/menu/index.htm?mId=${(menu.id)!}">
+						<#if menu.homeMenuDto.issingle == 1>
+							<a href="/menu/index.htm?mId=${(menu.homeMenuDto.id)!}">
 						<#else>
-							<a href="${(menu.menuUrl)!}">							
+							<a href="${(menu.homeMenuDto.menuUrl)!}">							
 						</#if>
-							${(menu.cname)!}<br><span>${(menu.ename)!}</span>
+							${(menu.homeMenuDto.cname)!}<br><span>${(menu.homeMenuDto.ename)!}</span>
 						</a>
+						<#if (menu.secondList??)>
+							<p>
+								<#list menu.secondList as ssm>
+									<a href="${(ssm.menuUrl)!}">${(ssm.cname)!}</a>
+								</#list>
+							</a>
+						</#if>
 					</li>
 				</#list>
 			</#if>
-<!-- 			<li class="cur" tag="0"><a href="/index.htm">首 页<br><span>HOME</span></a></li>
+<!-- 		<li class="cur" tag="0"><a href="/index.htm">首 页<br><span>HOME</span></a></li>
 			<li tag="140"><a href="/index.htm">新闻公告<br><span>NEWS</span></a></li>
 			<li tag="280"><a href="/index.htm">数据中心<br><span>DATA</span></a></li>
 			<li tag="420"><a href="/va/index.htm">视频图集<br><span>VIDEO</span></a></li>
