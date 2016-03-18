@@ -148,7 +148,7 @@ public class UserController extends BaseController{
 			HttpServletRequest request) {
 		Response<String> result = new Response<String>();
 		UserDto dto = new UserDto();
-		dto.setMobile(email);
+		dto.setEmail(email);
 		List<UserDto> list = userService.findUserByParam(dto);
 		if (list == null || list.size() <= 0) {
 			result.setStatus(-1);
@@ -291,12 +291,12 @@ public class UserController extends BaseController{
         String keyCode = mobilePhone + "forget";
         if(validateCode ==null){
             result.setStatus(DataStatus.HTTP_FAILE);
-            result.setMessage("验证码失效！");
+            result.setMessage("短信验证码失效！");
             return result;
         }
         if(redisTemplate.opsForValue().get(keyCode)==null || redisTemplate.opsForValue().get(keyCode).equals("")){
             result.setStatus(DataStatus.HTTP_FAILE);
-            result.setMessage("验证码失效！");
+            result.setMessage("短信验证码失效！");
             return result;
         }
         String checkCode = redisTemplate.opsForValue().get(keyCode).toString();
@@ -347,18 +347,21 @@ public class UserController extends BaseController{
         }
         String checkCode = redisTemplate.opsForValue().get(keyCode).toString();
         if (validateCode.equals(checkCode)) {
+        	
         	UserDto dto = new UserDto();
         	dto.setEmail(email);
-        	dto.setPassword(md5oldPwd);
-            Integer flag = userService.update(dto);
+    		List<UserDto> list = userService.findUserByParam(dto);
+    		if(list == null || list.size() == 0){
+    			 result.setStatus(DataStatus.HTTP_SUCCESS);
+                 result.setMessage("此邮箱没注册过请先注册！");
+                 return result;
+    		}
+    		list.get(0).setPassword(md5oldPwd);
+            Integer flag = userService.update(list.get(0));
             if (flag ==1) {
                 result.setStatus(DataStatus.HTTP_SUCCESS);
                 result.setMessage("邮箱找回密码成功！");
             }
-            if (flag == -1) {
-                result.setStatus(DataStatus.HTTP_SUCCESS);
-                result.setMessage("此手邮箱没注册过请先注册！");
-            } 
             if (flag == 0) {
               result.setStatus(DataStatus.HTTP_FAILE);
               result.setMessage("邮箱验证失败！");   
