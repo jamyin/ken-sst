@@ -64,6 +64,7 @@
 			</div>
 			<form id="userInfo">
 			<input type="hidden" id="id" name="id" value="${(userInfo.id)!}">
+			<input type="text" id="provinceHidd" name="provinceHidd" value="${(userInfo.province)!}">
 			<div class="basic">
 				<div class="uhd">
 					<h1 class="basichd">基本资料<span class="basic-edit" data-status="edit"  style="cursor:pointer;" id="edit">编辑</span></h1>
@@ -76,12 +77,20 @@
 						</li>
 						<li>
 							<label class="lf head" for="">头像</label>
-							<#if userInfo.pic ??>
+							<div class="preview">
+									<#if userInfo.pic??>
+										<img id="imgShow" src="${(userInfo.pic)!}" border="0"/>
+									<#else>
+										<img id="imgShow" src="/static/img/icon-tx.png" border="0"/>
+									</#if>
+									<input id="user-flag" type="button" value=""><input type="hidden" id="hidImgName" /> 
+							</div>
+							<!-- <#if userInfo.pic ??>
 								<img class="utouxiang" src="${(userInfo.pic)!}" />
 							<#else>
 								<img class="utouxiang" id="imgShow" src="/static/img/icon-tx.png" />
 							</#if>
-							<a class="uploadbt hide" href="###" id="upload">上传图片</a><input type="hidden" id="hidImgName" /> 
+							<a class="uploadbt hide" href="###" id="upload">上传图片</a><input type="hidden" id="hidImgName" />  -->
 							
 							<!-- <div class="preview">
 									<label class="browse" for="team-flag"><img id="imgShow" src="/static/img/preview.png" border="0"/></label>
@@ -116,12 +125,19 @@
 						</li>
 						<li>
 							<label class="lf" for="" id="address">所在地</label>
-							<select class="pro hide" name="province" id="province">
+							<!-- <select class="pro hide" name="province" id="province">
 							<#if allProvince?? >	
 								<option value="" selected="selected">请选择</option>
 								<#list allProvince as page>
 										<option value="${(page.id)?replace(',','')!}" title="${(page.name)!}">${(page.name)!}</option>
 								</#list>
+							</#if>
+							</select> -->
+							<select class="pro hide" name="province" id="province">
+							<#if userInfo.provinceStr?? >
+								<option value="${(userInfo.province)!}" selected="selected">${(userInfo.provinceStr)!}</option>
+							<#else>	
+								<option value="">请选择</option>
 							</#if>
 							</select>
 							<select class="city hide" name="area" id="area">
