@@ -56,9 +56,7 @@ public class LoginController extends BaseController{
 			response.setStatus(DataStatus.HTTP_FAILE);
 			return response;
 		}
-		LoginUserDto seuserDto = new LoginUserDto();
-		seuserDto.setId(userDto.getId());
-		session.setAttribute(SessionConstants.LOGIN_USER_INFO, seuserDto);
+		session.setAttribute(SessionConstants.LOGIN_USER_INFO, userDto);
 		// 添加用户登陆安全提醒
 		sendRemind(userDto.getId(), Point.Login);
 		return response;
