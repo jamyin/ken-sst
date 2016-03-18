@@ -1,5 +1,10 @@
 <div class="wrapper">
-	<div class="topbar"><a class="logo" href="/index.htm"></a><div class="login_status"><a class="p_center" href="/user/toPerson.htm">个人中心</a> <a class="login_btn" href="###">登录</a> <a href="/user/toRegiest.htm">注册</a></div></div>
+	<div class="topbar"><a class="logo" href="/index.htm"></a>
+		<div class="login_status">
+			<a class="p_center" href="/user/toPerson.htm">个人中心</a>
+			<#if user ??><#else><a class="login_btn" href="###">登录</a><a href="/user/toRegiest.htm">注册</a></#if>
+		</div>
+	</div>
 	<div class="nav">
 		<ul>
 			<#if menuList ??>
@@ -84,7 +89,7 @@ $(function(){
 			data:ajaxParams,
 			success:function(data){
 				if(data.status == 200){
-					layer.msg('同上', {
+					layer.msg('登陆成功', {
 						  icon: 1,
 						  time: 2000 //2秒关闭（如果不配置，默认是3秒）
 						}, function(){
