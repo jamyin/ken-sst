@@ -10,6 +10,7 @@
 	</head> -->
 <head>
 <#include "/common/head.htm"/>
+<script src="/static/js/AjaxUpload.js"></script>
 </head>
 	<body>
 		<!-- <div class="header">
@@ -40,7 +41,7 @@
 				<div class="avator">
 					<!-- <img class="uimg" src="static/img/title-ico.png" /> -->
 					<#if userInfo.pic ??>
-						<img class="uimg" src="${(userInfo.pic)!}" />
+						<img class="uimg" src="${(userInfo.pic)!}"/>
 					<#else>
 						<img class="uimg" src="/static/img/icon-tx.png" />
 					</#if>
@@ -64,7 +65,7 @@
 			</div>
 			<form id="userInfo">
 			<input type="hidden" id="id" name="id" value="${(userInfo.id)!}">
-			<input type="text" id="provinceHidd" name="provinceHidd" value="${(userInfo.province)!}">
+			<input type="hidden" id="provinceHidd" name="provinceHidd" value="${(userInfo.province)!}">
 			<div class="basic">
 				<div class="uhd">
 					<h1 class="basichd">基本资料<span class="basic-edit" data-status="edit"  style="cursor:pointer;" id="edit">编辑</span></h1>
@@ -77,14 +78,13 @@
 						</li>
 						<li>
 							<label class="lf head" for="">头像</label>
-							<div class="preview">
 									<#if userInfo.pic??>
-										<img id="imgShow" src="${(userInfo.pic)!}" border="0"/>
+										<img  class="utouxiang" id="imgShow" src="${(userInfo.pic)!}" border="0"/>
 									<#else>
-										<img id="imgShow" src="/static/img/icon-tx.png" border="0"/>
+										<img class="utouxiang" id="imgShow" src="/static/img/icon-tx.png" border="0"/>
 									</#if>
-									<input id="user-flag" type="button" value=""><input type="hidden" id="hidImgName" /> 
-							</div>
+									<a class="uploadbt hide" href="###" id="user-flag">上传图片</a>
+									<input type="hidden" id="hidImgName" name="pic" value="${(userInfo.pic)!}"/> 
 							<!-- <#if userInfo.pic ??>
 								<img class="utouxiang" src="${(userInfo.pic)!}" />
 							<#else>
@@ -155,7 +155,7 @@
 							</#if>
 							</select>
 							<span class="js-addr show-inf">
-								${(userInfo.provinceStr)!} &nbsp;&nbsp;${(userInfo.areaStr)!} &nbsp;&nbsp; ${(userInfo.locationStr)!}
+								${(userInfo.provinceStr)!} &nbsp;${(userInfo.areaStr)!} &nbsp; ${(userInfo.locationStr)!}
 							</span>
 						</li>
 					</ul>
