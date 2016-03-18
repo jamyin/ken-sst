@@ -1,5 +1,8 @@
 package com.tianfang.common.util;
 
+import com.alibaba.fastjson.JSON;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -7,10 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.alibaba.fastjson.JSON;
 
 /**		
  * <p>Title: IpUtils </p>
@@ -46,7 +45,7 @@ public class IpUtils {
 	}
 	
 	public static void main(String[] args) {
-		String ip = "220.248.16.78";
+		String ip = "10.10.11.79";
 		String city = getCity(ip);
 		System.out.println(city);
 	}
@@ -59,6 +58,9 @@ public class IpUtils {
 	 * 2016年3月16日上午10:24:18
 	 */
 	public static String getCity(String ip){
+		if (ip.equals("127.0.0.1")){
+			return null;
+		}
 		Address add = null;
 		try {
 			add = getAddress(ip);
@@ -80,6 +82,10 @@ public class IpUtils {
 	 * 2016年3月16日上午10:11:11
 	 */
 	public static Address getAddress(String ip) throws Exception {
+		if (ip.equals("127.0.0.1")){
+			return null;
+		}
+
 		if (!isIpv4(ip)){
 			throw new RuntimeException("ip地址不合法");
 		}

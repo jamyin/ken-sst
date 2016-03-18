@@ -47,7 +47,7 @@ public class SafeController extends BaseController{
 	 * 2016年3月16日上午11:54:35
 	 */
 	@RequestMapping(value = "index")
-	private ModelAndView index(){
+	public ModelAndView index(){
 		ModelAndView mv = new ModelAndView("safe");
 		String userId = getSessionUserId();
 		// 安全提醒 and 安全邮箱
@@ -85,6 +85,7 @@ public class SafeController extends BaseController{
 			user.setPassword(MD5Coder.encodeMD5Hex(newPwd));
 			userService.update(user);
 			response.setMessage("恭喜您,密码修改成功!");
+			sendRemind(userId, Point.ChangePwd);
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setMessage("系统异常!");

@@ -1,18 +1,16 @@
 package com.tianfang.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.base.Objects;
-import com.tianfang.common.alipay.sign.MD5;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.digest.MD5Coder;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 
@@ -53,6 +51,8 @@ public class LoginController extends BaseController{
 			response.setStatus(DataStatus.HTTP_FAILE);
 			return response;
 		}
+		// 添加用户登陆安全提醒
+		sendRemind(userDto.getId(), Point.Login);
 		return response;
 	}
 
