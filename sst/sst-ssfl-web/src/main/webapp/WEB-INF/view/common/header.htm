@@ -31,8 +31,10 @@
 			<div id="login_container"></div>
 		</ul>
 			<ul>
-				<li><label class="user"></label><input id="login_username" name="userAccount" type="text" placeholder="邮箱/手机"></li>
-				<li><label class="password"></label><input id="login_password" name="password" type="password" placeholder="登录密码"></li>
+				<form id="login_form">
+					<li><label class="user"></label><input id="login_username" name="userAccount" type="text" placeholder="邮箱/手机"></li>
+					<li><label class="password"></label><input id="login_password" name="password" type="password" placeholder="登录密码"></li>
+				</form>
 				<input id="re_pw" type="checkbox">&nbsp;&nbsp;<label class="rem" for="re_pw">两周内自动登录</label>
 				<input type="button" class="login_submit" value="登   录">
 				<p class="tip">还不是聚运动会员，<a href="/user/toRegiest.htm">立即注册！</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/user/forget.htm" style="color:red;">忘记密码？</a></p>
@@ -58,7 +60,31 @@ $(function(){
 	})
 	$('.rem').on('click',function(){
 		$(this).toggleClass('cur')
-	})
+	});
+	
+	
+	$(".login_submit").on('click',function(){
+		var ajaxParams = $("#login_form").serialize();
+		$.ajax({
+			url:'/login/do.htm',
+			type: 'POST',  
+			dataType: 'json',
+			data:ajaxParams,
+			success:function(data){
+				if(data.status == 200){
+					layer.msg('同上', {
+						  icon: 1,
+						  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+						  window.location.reload();//登陆成功刷新当前页面 
+						});
+				}else{
+					layer.msg(data.message);
+				}
+			}
+		})
+	});
+
 });
 
 function open_login(n){
