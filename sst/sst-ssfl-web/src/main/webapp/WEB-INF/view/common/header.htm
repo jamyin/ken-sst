@@ -15,7 +15,12 @@
 						<#if (menu.secondList??)>
 							<p>
 								<#list menu.secondList as ssm>
-									<a href="${(ssm.menuUrl)!}">${(ssm.cname)!}</a>
+									<#if ssm.issingle == 1>
+										<a href="/menu/index.htm?mId=${(ssm.id)!}">${(ssm.cname)!}</a>
+									<#else>
+										<a href="${(ssm.menuUrl)!}">${(ssm.cname)!}</a>
+									</#if>								
+									
 								</#list>
 							</a>
 						</#if>
