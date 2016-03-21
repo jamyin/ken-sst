@@ -3,8 +3,13 @@ package com.tianfang.controller;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -20,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.business.dto.AddressesDto;
@@ -33,6 +39,7 @@ import com.tianfang.common.tools.RandomPicTools;
 import com.tianfang.common.util.DateUtils;
 import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.service.IEmailSendService;
 import com.tianfang.user.service.ISmsSendService;
@@ -141,7 +148,7 @@ public class UserController extends BaseController{
 			HttpServletRequest request) {
 		Response<String> result = new Response<String>();
 		UserDto dto = new UserDto();
-		dto.setMobile(email);
+		dto.setEmail(email);
 		List<UserDto> list = userService.findUserByParam(dto);
 		if (list == null || list.size() <= 0) {
 			result.setStatus(-1);
@@ -284,12 +291,12 @@ public class UserController extends BaseController{
         String keyCode = mobilePhone + "forget";
         if(validateCode ==null){
             result.setStatus(DataStatus.HTTP_FAILE);
-            result.setMessage("验证码失效！");
+            result.setMessage("短信验证码失效！");
             return result;
         }
         if(redisTemplate.opsForValue().get(keyCode)==null || redisTemplate.opsForValue().get(keyCode).equals("")){
             result.setStatus(DataStatus.HTTP_FAILE);
-            result.setMessage("验证码失效！");
+            result.setMessage("短信验证码失效！");
             return result;
         }
         String checkCode = redisTemplate.opsForValue().get(keyCode).toString();
@@ -340,18 +347,21 @@ public class UserController extends BaseController{
         }
         String checkCode = redisTemplate.opsForValue().get(keyCode).toString();
         if (validateCode.equals(checkCode)) {
+        	
         	UserDto dto = new UserDto();
         	dto.setEmail(email);
-        	dto.setPassword(md5oldPwd);
-            Integer flag = userService.update(dto);
+    		List<UserDto> list = userService.findUserByParam(dto);
+    		if(list == null || list.size() == 0){
+    			 result.setStatus(DataStatus.HTTP_SUCCESS);
+                 result.setMessage("此邮箱没注册过请先注册！");
+                 return result;
+    		}
+    		list.get(0).setPassword(md5oldPwd);
+            Integer flag = userService.update(list.get(0));
             if (flag ==1) {
                 result.setStatus(DataStatus.HTTP_SUCCESS);
                 result.setMessage("邮箱找回密码成功！");
             }
-            if (flag == -1) {
-                result.setStatus(DataStatus.HTTP_SUCCESS);
-                result.setMessage("此手邮箱没注册过请先注册！");
-            } 
             if (flag == 0) {
               result.setStatus(DataStatus.HTTP_FAILE);
               result.setMessage("邮箱验证失败！");   
@@ -378,13 +388,6 @@ public class UserController extends BaseController{
 		if(list == null || list.size() == 0){
 			return null;
 		}
-//		userInfo.setLastLoginTimeStr(session.getAttribute("lastloginTime")+"");
-		//获取全部区县数据
-		/*List<SportAddressesDto> lis = new ArrayList<SportAddressesDto>();
-		addresses.setParentId("1");
-		lis = addressService.getDistrict(addresses);*/
-//		mv.addObject(attributeName, attributeValue)
-		//mv.addObject("result", lis);
 		UserDto dto = list.get(0);
 		if(dto.getCreateTime() != null){
 			dto.setCreateTimeStr(DateUtils.format(dto.getCreateTime(), DateUtils.YMD_DASH));
@@ -393,25 +396,130 @@ public class UserController extends BaseController{
 			dto.setLastLoginTimeStr(DateUtils.format(dto.getLastLoginTime(), DateUtils.YMD_DASH_WITH_TIME));
 		}
 		
+		//根据省Id查询省名称
+		if(StringUtils.isNotEmpty(dto.getProvince())){
 		AddressesDto province = new AddressesDto();
-		province.setId(Integer.valueOf(dto.getProvince()));
+		province.setId(Integer.valueOf(dto.getProvince().replace(",", "")));
 		List<AddressesDto> provinceList = addressesService.findAddressList(province);
 		dto.setProvinceStr(provinceList.get(0).getName());
+		}
 		
+		//根据市Id查询市名称
+		if(StringUtils.isNotEmpty(dto.getArea())){
 		AddressesDto area = new AddressesDto();
-		area.setId(Integer.valueOf(dto.getArea()));
+		area.setId(Integer.valueOf(dto.getArea().replace(",", "")));
 		List<AddressesDto> areaList = addressesService.findAddressList(area);
 		dto.setAreaStr(areaList.get(0).getName());
+		}
 		
+		//根据地区Id查询地区名称
+		if(StringUtils.isNotEmpty(dto.getLocation())){
 		AddressesDto location = new AddressesDto();
-		location.setId(Integer.valueOf(dto.getLocation()));
+		location.setId(Integer.valueOf(dto.getLocation().replace(",", "")));
 		List<AddressesDto> locationList = addressesService.findAddressList(location);
 		dto.setLocationStr(locationList.get(0).getName());
+		}
 		
+		//获取所有的省份
+		AddressesDto addr = new AddressesDto();
+		addr.setLevel(1); //省份
+		List<AddressesDto> allProvince = addressesService.findAddressList(addr);
+		
+		mv.addObject("allProvince", allProvince);
 		mv.addObject("userInfo", dto);
 		mv.setViewName("/person");
 		return mv;
 	}
+	
+	/**
+	 * @author YIn
+	 * @time:2016年2月3日 上午9:46:24
+	 * @param userDto
+	 * @return
+	 */
+    @ResponseBody
+    @RequestMapping("/edit") 
+    public Response<String> edit(UserDto userDto,@RequestParam(value = "file",required = false)  MultipartFile file,
+			HttpServletRequest request,HttpServletResponse response){
+     Response<String> result = new Response<String>();
+     if(userDto == null ){
+    	 result.setStatus(DataStatus.HTTP_FAILE);
+		 result.setMessage("用户信息为空");
+		 return result;
+     }
+   	int stat = 0;
+	try {
+        if (file != null) {
+//          Response<UploadDto> res = uploadPic(myfile, request, response);
+        	Map<String, String> map = uploadImages(file , request);
+        	userDto.setPic(map.get("fileUrl"));
+        }
+		stat = userService.update(userDto);
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+   	 if(stat == 0){
+   		 result.setStatus(DataStatus.HTTP_FAILE);
+		 result.setMessage("修改用户信息失败");
+   	 }else{
+   		 result.setStatus(DataStatus.HTTP_SUCCESS);
+		 result.setMessage("修改用户信息成功");
+   	 }
+   	return result;
+    }
+    
+    @ResponseBody
+    @RequestMapping("/uploadImages.do"   )  
+    public Map<String, String> uploadImages(@RequestParam("file") MultipartFile file,HttpServletRequest request){      	
+    	//String context = "/upload";
+		String realPath = PropertiesUtils.getProperty("upload.url");
+		String fileDe = DateUtils.format(new Date(), DateUtils.YMD);
+		String path = "";
+		String filePath = "";
+		String fileName = ""; //重新新命名
+		String realName = "";
+		Map<String, String> m = new HashMap<String, String>();
+    	if(file.isEmpty()){
+    		System.out.println("请选择需要上传的文件!");  
+    		m.put("message", "请选择需要上传的文件!");
+	       	return m;
+    	}else{
+    			realName = file.getOriginalFilename();
+ 	            System.out.println("fileName4---------->" + realName); 
+ 	            if(file.getSize()> DataStatus._FILESIZE_){
+ 	       		System.out.println("上传图片大小不允许超过1M");
+ 	       		m.put("message", "上传图片大小不允许超过1M");
+ 	       		return m;
+ 	            }
+ 	                int pre = (int) System.currentTimeMillis();  
+ 	                path = realPath + "/" + fileDe;
+ 	                fileName = this.getUploadFileName(file.getOriginalFilename());
+ 	                filePath = path  + "/" + fileName;
+ 	                File f = new File(path);
+ 	                //如果文件夹不存在则创建    
+ 	                if(!f.exists() && !f.isDirectory()) {
+ 	                  f.mkdir();    
+ 	                }
+ 	                try {  
+ 	                	file.transferTo(new File(path + "/" + fileName));
+ 	                    int finaltime = (int) System.currentTimeMillis();  
+ 	                    System.out.println("上传3共耗时：" + (finaltime - pre) + "毫秒");  
+ 	                }catch (FileNotFoundException e) {
+ 	                    e.printStackTrace();
+ 	                }catch (IOException e) {  
+ 	                    e.printStackTrace();  
+ 	                }  
+    	}
+        System.out.println("上传成功4"); 
+        m.put("fileUrl", filePath);
+        m.put("realName", realName);
+        return m;  
+    }
+    
+    public  String getUploadFileName(String fileName) {
+  		String tempFile = fileName.substring(fileName.lastIndexOf(".")+1);
+  		return UUIDGenerator.getUUID32Bit() + "." + tempFile;
+  	}
     
     public static Boolean CheckSendMsg(final RedisTemplate<String, Object> redisTemplate,final String mobilePhone,HttpServletRequest request){
     	String keySessionId = mobilePhone + DateUtils.format(new Date(), DateUtils.YMD_DASH)+"diff";

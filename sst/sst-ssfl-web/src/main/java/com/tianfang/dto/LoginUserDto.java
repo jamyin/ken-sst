@@ -36,4 +36,18 @@ public class LoginUserDto implements Serializable{
 	@Getter
 	@Setter
 	private String teamId;
+	
+	/**
+	 * 手机号码
+	 */
+	@Getter
+	@Setter
+    private String mobile;
+	
+	/**
+	 * 邮箱
+	 */
+	@Getter
+	@Setter
+	private String email;
 }

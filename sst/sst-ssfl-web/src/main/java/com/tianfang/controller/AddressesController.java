@@ -1,4 +1,4 @@
-package com.tianfang.home.controller;
+package com.tianfang.controller;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ import com.tianfang.business.dto.AddressesDto;
 import com.tianfang.business.service.IAddressesService;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.Response;
+import com.tianfang.common.util.StringUtils;
 
 
 /**
@@ -44,6 +45,9 @@ public class AddressesController extends BaseController{
 	@ResponseBody
 	public Response<List<AddressesDto>> findAddress(AddressesDto dto){
 	Response<List<AddressesDto>> result = new Response<List<AddressesDto>>();
+	if(StringUtils.isNotEmpty(dto.getParentId())){
+		dto.setParentId(dto.getParentId().replace(",", ""));
+	}
 	List<AddressesDto> provinceList = iAddressesService.findAddressList(dto);
 	if(provinceList.size()>0){
 		result.setStatus(DataStatus.HTTP_SUCCESS);

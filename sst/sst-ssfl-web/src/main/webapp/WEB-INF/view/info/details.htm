@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<#include "/common/head.htm"/>
+</head>
+
+<body>
+	<div class="header">
+		<#include "/common/header.htm"/>
+	
+	<div class="wrapper">
+		<div class="sub_ban btl">
+			<span>新闻公告</span>
+		</div>
+		<div class="news_detail">
+			<div class="d_title">
+				<p>${(dataInfo.title)!}</p>
+				<span>${(dataInfo.createTime?string('yyyy-MM-dd HH:mm'))!}</span>
+				<a class="share" href="###">分享</a>
+			</div>
+			<div class="d_cont">
+				${(dataInfo.content)!}
+			</div>
+		</div>
+		
+	</div>
+	<script src="static/js/footer.js"></script>
+	<script>
+	$(function(){	
+		setList()
+	})
+	function setList(){
+		$('.news_box ul li:last').css("border","0")
+	}
+	</script>
+</body>
+</html>

@@ -5,12 +5,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.tianfang.admin.dto.HomeMenuDto;
+import com.tianfang.admin.dto.MenuDto;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 
 @Service
 public interface IHomeMenuService {
-	/*public List<MenuDto> findSportHomeMenuList(HomeMenuDto dto);*/
+	public List<MenuDto> findHomeMenuList(HomeMenuDto dto);
 	
 	public PageResult<HomeMenuDto> findPage(HomeMenuDto dto,PageQuery page);
 	

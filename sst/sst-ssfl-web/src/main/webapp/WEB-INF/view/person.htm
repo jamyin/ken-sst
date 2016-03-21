@@ -10,6 +10,7 @@
 	</head> -->
 <head>
 <#include "/common/head.htm"/>
+<script src="/static/js/AjaxUpload.js"></script>
 </head>
 	<body>
 		<!-- <div class="header">
@@ -40,7 +41,7 @@
 				<div class="avator">
 					<!-- <img class="uimg" src="static/img/title-ico.png" /> -->
 					<#if userInfo.pic ??>
-						<img class="uimg" src="${(userInfo.pic)!}" />
+						<img class="uimg" src="${(userInfo.pic)!}"/>
 					<#else>
 						<img class="uimg" src="/static/img/icon-tx.png" />
 					</#if>
@@ -62,76 +63,105 @@
 				<label>注册时间：</label><span>${(userInfo.createTimeStr)!}</span>
 				<label>上次登录时间：</label><span>${(userInfo.lastLoginTimeStr)!}</span>
 			</div>
+			<form id="userInfo">
+			<input type="hidden" id="id" name="id" value="${(userInfo.id)!}">
+			<input type="hidden" id="provinceHidd" name="provinceHidd" value="${(userInfo.province)!}">
 			<div class="basic">
 				<div class="uhd">
-					<h1 class="basichd">基本资料<span class="basic-edit" data-status="edit"  style="cursor:pointer;">编辑</span></h1>
+					<h1 class="basichd">基本资料<span class="basic-edit" data-status="edit"  style="cursor:pointer;" id="edit">编辑</span></h1>
 				</div>
 				<div class="ucon">
 					<ul class="ucon-form">
 						<li>
 							<label class="lf" for="">登录名</label>
-							<input class="" type="text" name="" id="" value="${(userInfo.mobile)!}" />
+							<input class="" type="text" name="mobile" id="" value="${(userInfo.mobile)!}" readonly="readonly" />
 						</li>
 						<li>
 							<label class="lf head" for="">头像</label>
-							<#if userInfo.pic ??>
+									<#if userInfo.pic??>
+										<img  class="utouxiang" id="imgShow" src="${(userInfo.pic)!}" border="0"/>
+									<#else>
+										<img class="utouxiang" id="imgShow" src="/static/img/icon-tx.png" border="0"/>
+									</#if>
+									<a class="uploadbt hide" href="###" id="user-flag">上传图片</a>
+									<input type="hidden" id="hidImgName" name="pic" value="${(userInfo.pic)!}"/> 
+							<!-- <#if userInfo.pic ??>
 								<img class="utouxiang" src="${(userInfo.pic)!}" />
 							<#else>
-								<img class="utouxiang" src="/static/img/icon-tx.png" />
+								<img class="utouxiang" id="imgShow" src="/static/img/icon-tx.png" />
 							</#if>
-							<a class="uploadbt hide" href="###">上传图片</a>
+							<a class="uploadbt hide" href="###" id="upload">上传图片</a><input type="hidden" id="hidImgName" />  -->
+							
+							<!-- <div class="preview">
+									<label class="browse" for="team-flag"><img id="imgShow" src="/static/img/preview.png" border="0"/></label>
+									<input id="team-flag" type="button" value="浏览图片"> 
+							</div> -->
 						</li>
 						<li>
 							<label class="lf" for="">昵称</label>
-							<input class="" type="text" name="" id=""  value="${(userInfo.nickName)!}" />
+							<input class="" type="text" name="nickName" id=""  value="${(userInfo.nickName)!}" />
 						</li>
 						<li>
 							<label class="lf" for="">性别</label>
 								<#if userInfo.gender == 1>
-									<input class="hide" type="radio" name="sex" id="male" value="1"/>
+									<input class="hide" type="radio" name="gender" id="male" value="1" checked="chekced"/>
 									<label class="sex male check hide" for="male">男</label>
-									<input class="hide" type="radio" name="sex" id="female" value="2" />
+									<input class="hide" type="radio" name="gender" id="female" value="2" />
 									<label class="sex female hide" for="female">女</label>
 									<span class="js-sex show-inf">男</span>
 								<#elseif userInfo.gender == 2>
-									<input class="hide" type="radio" name="sex" id="male" value="1"/>
+									<input class="hide" type="radio" name="gender" id="male" value="1"/>
 									<label class="sex male hide" for="male">男</label>
-									<input class="hide" type="radio" name="sex" id="female" value="2"/>
+									<input class="hide" type="radio" name="gender" id="female" value="2"  checked="chekced"/>
 									<label class="sex female check hide" for="female">女</label>
 									<span class="js-sex show-inf">女</span>
 								<#else>
-									<input class="hide" type="radio" name="sex" id="male" value="1"/>
+									<input class="hide" type="radio" name="gender" id="male" value="1"  checked="chekced"/>
 									<label class="sex male check hide" for="male">男</label>
-									<input class="hide" type="radio" name="sex" id="female" value="2"/>
+									<input class="hide" type="radio" name="gender" id="female" value="2"/>
 									<label class="sex female hide" for="female">女</label>
 									<span class="js-sex show-inf"></span>
 								</#if>
 						</li>
 						<li>
 							<label class="lf" for="" id="address">所在地</label>
-							<select class="pro hide" name="province" id="province">
-							<#if provinceList?? >	
-									<option value="">请选择</option>
-								<#list provinceList as page>
-									<option value="${(page.id)!}">${(page.name)!}</option>
+							<!-- <select class="pro hide" name="province" id="province">
+							<#if allProvince?? >	
+								<option value="" selected="selected">请选择</option>
+								<#list allProvince as page>
+										<option value="${(page.id)?replace(',','')!}" title="${(page.name)!}">${(page.name)!}</option>
 								</#list>
+							</#if>
+							</select> -->
+							<select class="pro hide" name="province" id="province">
+							<#if userInfo.provinceStr?? >
+								<option value="${(userInfo.province)!}" selected="selected">${(userInfo.provinceStr)!}</option>
+							<#else>	
+								<option value="">请选择</option>
 							</#if>
 							</select>
 							<select class="city hide" name="area" id="area">
-								<option value="">闸北</option>
-								<option value="">静安</option>
+							<#if userInfo.areaStr?? >
+								<option value="${(userInfo.area)!}">${(userInfo.areaStr)!}</option>
+							<#else>	
+								<option value="">请选择</option>
+							</#if>
 							</select>
 							<select class="city hide" name="location" id="location">
-								<option value="">闸北</option>
-								<option value="">静安</option>
+							<#if userInfo.areaStr?? >
+								<option value="${(userInfo.location)!}">${(userInfo.locationStr)!}</option>
+							<#else>	
+								<option value="">请选择</option>
+							</#if>
 							</select>
 							<span class="js-addr show-inf">
-								${(userInfo.provinceStr)!} &nbsp;&nbsp;${(userInfo.areaStr)!} &nbsp;&nbsp; ${(userInfo.locationStr)!}
+								${(userInfo.provinceStr)!} &nbsp;${(userInfo.areaStr)!} &nbsp; ${(userInfo.locationStr)!}
 							</span>
 						</li>
 					</ul>
 				</div>
 			</div>
+		</form>
 		</div>
 <!-- 	<script src="static/js/footer.js"></script>
 		<script src="static/js/regiest.js"></script> -->

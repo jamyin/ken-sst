@@ -2,43 +2,24 @@
 <html>
 
 	<head>
-		<meta charset="UTF-8">
-		<link rel="icon" type="image/gif" href="/static/img/favicon.ico">
-		<title>个人中心</title>
-		<script src="/static/js/jquery-2.1.3.min.js"></script>
-		<script src="/static/js/common.js"></script>
-		<link href="/static/css/regiest.css" rel="stylesheet" />
+		<#include "/common/head.htm"/>
 	</head>
 
 	<body>
 		<div class="header">
-			<div class="wrapper">
-				<div class="topbar">
-					<a class="logo" href="###"></a>
-					<div class="login_status"><a class="p_center" href="###">个人中心</a> <a href="###">登陆</a> <a href="###">注册</a></div>
-				</div>
-				<div class="nav">
-					<ul>
-						<li class="cur" tag="0"><a href="index.html">首 页<br><span>HOME</span></a></li>
-						<li tag="140"><a href="index.html">新闻公告<br><span>NEWS</span></a></li>
-						<li tag="280"><a href="index.html">数据中心<br><span>DATA</span></a></li>
-						<li tag="420"><a href="index.html">视频图集<br><span>VIDEO</span></a></li>
-						<li tag="560"><a href="index.html">参赛球队<br><span>TEAM</span></a></li>
-						<li tag="700"><a href="index.html">商务合作<br><span>COOPERATION</span></a></li>
-					</ul>
-					<div class="mark"></div>
-					</li>
-				</div>
-
-			</div>
+			<#include "/common/header.htm"/>
 		</div>
 
 		<div class="wrapper">
 			<div class="aside">
 				<div class="avator">
-					<img class="uimg" src="/static/img/title-ico.png" />
+					<#if userInfo??>
+						<img class="uimg" src="${(userInfo.pic)!}"/>
+						<#else>
+							<img class="uimg" src="/static/img/icon-tx.png" />
+					</#if>
 					<span class="uname">
-						jackery
+						${(userInfo.nickName)!}
 					</span>
 				</div>
 				<div class="per-nav">
@@ -52,8 +33,8 @@
 			</div>
 			<div class="welcom">
 				欢迎来到用户中心！
-				<label>注册时间：</label><span>2015-10-10</span>
-				<label>上次登录时间：</label><span>2015-10-10   15:41:32</span>
+				<label>注册时间：</label><span>${(userInfo.createTimeStr)!}</span>
+				<label>上次登录时间：</label><span>${(userInfo.lastLoginTimeStr)!}</span>
 			</div>
 			<div class="safeD">
 				<div class="uhd">
@@ -63,21 +44,21 @@
 					<ul class="usafe-form">
 						<li class="bod">
 							<h2 class="usafehd">修改密码</h2>
-							<label class="usafecen" for="">已设置安全密码</label>
+							<label class="usafecen" for="change_pwd_span">已设置安全密码</label>
 							<span class="usafert" id="change_pwd_span">设置</span>
 							<div class="usafetip hide">
 								<form action="" id="change_pwd_form">
 									<ul class="usafe-credential">
 										<li>
-											<label for="">原密码</label>
+											<label for="oldPwd">原密码</label>
 											<input type="password" name="oldPwd" id="oldPwd" value="" placeholder="请填写原密码" />
 										</li>
 										<li>
-											<label for="">新密码</label>
+											<label for="newPwd">新密码</label>
 											<input type="password" name="newPwd" id="newPwd" value="" placeholder="请填写新密码" />
 										</li>
 										<li>
-											<label for="">确认新密码</label>
+											<label for="newPwd2">确认新密码</label>
 											<input type="password" name="newPwd2" id="newPwd2" value="" placeholder="请确认新密码" />
 										</li>
 									</ul>
@@ -87,7 +68,7 @@
 						</li>
 						<li class="bod">
 							<h2 class="usafehd">安全提醒</h2>
-							<label id="change_reminding_label" class="usafecen <#if reminding == 0>safe-not</#if>" for=""><#if reminding == 0>未<#else>已</#if>设置安全提醒</label>
+							<label id="change_reminding_label" class="usafecen <#if reminding == 0>safe-not</#if>" for="change_reminding_span"><#if reminding == 0>未<#else>已</#if>设置安全提醒</label>
 							<span class="usafert" id="change_reminding_span" data-show="fase">设置</span>
 							<div class="usafetip hide">
 								<form action="" id="change_reminding_form">
@@ -126,7 +107,7 @@
 						</li>
 						<li class="bod">
 							<h2 class="usafehd">安全邮箱</h2>
-							<label class="usafecen <#if settingEmail == 0>safe-not</#if>" id="change_email_label"  for=""><#if settingEmail == 0>未<#else>已</#if>设置安全邮箱</label>
+							<label class="usafecen <#if settingEmail == 0>safe-not</#if>" id="change_email_label"  for="change_email_span"><#if settingEmail == 0>未<#else>已</#if>设置安全邮箱</label>
 							<span class="usafert" id="change_email_span" data-fill="<#if settingEmail == 0>false<#else>true</#if>"><#if settingEmail == 0>设置<#else>更换安全邮箱</#if></span>
 							<div class="usafetip hide">
 								<form action="" id="change_email_form">
@@ -149,34 +130,29 @@
 								<form action="" id="change_paper_form">
 									<ul class="usafe-credential">
 										<li>
-											<label for="">真实姓名</label>
+											<label for="cname">真实姓名</label>
 											<input type="text" name="cname" id="cname" value="${(user.cname)!}" placeholder="请填写真实的名字" />
 										</li>
-										<li>
-											<label for="">所在地区</label>
-											<select class="pro" name="">
-												<option value="">上海</option>
-												<option value="">北京</option>
-											</select>
-											<select class="city" name="">
-												<option value="">上海</option>
-												<option value="">北京</option>
-											</select>
+										<li id="location_area">
+											<label>所在地区</label>
+											<select name="province" class="prov"></select>
+											<select name="area" class="city" disabled="disabled"></select>
+											<select name="location" class="dist" disabled="disabled"></select>
 										</li>
 										<li>
-											<label for="">详细地址</label>
+											<label for="detailedAddress">详细地址</label>
 											<input type="text" name="detailedAddress" id="detailedAddress" value="${(user.detailedAddress)!}" placeholder="请填写地址信息" />
 										</li>
 										<li>
-											<label for="">邮政编码</label>
+											<label for="postcode">邮政编码</label>
 											<input type="text" name="postcode" id="postcode" value="${(user.postcode)!}" placeholder="请填写邮编信息" />
 										</li>
 										<li>
-											<label for="">手机号码</label>
-											<input type="text" readonly="readonly" value="${(user.mobile)!}" placeholder="请填写手机号码" />
+											<label for="mobile">手机号码</label>
+											<input type="text" readonly="readonly" id="mobile" value="${(user.mobile)!}" placeholder="请填写手机号码" />
 										</li>
 										<li>
-											<label for="">座机号码</label>
+											<label for="telephone">座机号码</label>
 											<input type="text" name="telephone" id="telephone" value="${(user.telephone)!}" placeholder="座机号码" />
 										</li>
 									</ul>
@@ -189,8 +165,23 @@
 			</div>
 		</div>
 		<script src="/static/js/footer.js"></script>
-		<script src="/static/js/regiest.js"></script>
+		<script src="/static/js/jquery.cityselect.js"></script>
 		<script src="/static/js/safe.js"></script>
+		<script>
+			$("#location_area").citySelect({
+				url: "/api/addr.htm",
+				<#if  user.province?? && user.province != ''>
+					prov: ${(user.province)!},
+				</#if>
+				<#if user.area?? && user.area != ''>
+					city: ${(user.area)!},
+				</#if>
+				<#if user.location?? && user.location != ''>
+					dist: ${(user.location)!},
+				</#if>
+				nodata: "none"
+			});
+		</script>
 	</body>
 
 </html>
