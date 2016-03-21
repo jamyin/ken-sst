@@ -7,34 +7,101 @@
 <body>
 	<div class="header">
 		<#include "/common/header.htm"/>
-	
-	
+		
 	<div class="wrapper">
 		<div class="enroll_title">填写报名球队信息</div>
-		<div class="form_box">
-			<h2>必填项目</h2>
-			<ul>
-				<li><label>所在区域：</label></li>
-				<li><label>球队名称：</label><input type="text" placeholder="请输入球队名称"></li>
-				<li><label>球队联系人：</label><input type="text" placeholder="请输入球队联系人"></li>
-				<li><label>联系方式：</label><input type="text" placeholder="请输入联系方式"></li>
-				<li><label>企业/俱乐部名称：</label><input type="text" placeholder="请输入企业/俱乐部名称"></li>
-			</ul>
-		</div>
-		<div class="form_box">
-			<h2>选填项目</h2>
-			<ul>
-				<li><label>球队主场：</label><input type="text" placeholder="请输入球队主场"></li>
-				<li><label>成立时间：</label></li>
-				<li><label>成员人数：</label><input type="text" placeholder="请输入成员人数"></li>
-				<li><label>球队队徽：</label></li>
-				<li><label>团队简介：</label></li>
-			</ul>
-		</div>
+		<form id="enroll_form">
+			<div class="form_box">
+				<h2>必填项目</h2>
+				<ul>
+					<li id="location_area"><label>所在区域：</label>
+						<select name="province" class="prov"></select>
+						<select name="area" class="city" disabled="disabled"></select>
+						<select name="location" class="dist" disabled="disabled"></select>
+					</li>
+					<li><label>球队名称：</label><input type="text" placeholder="请输入球队名称"><i>*</i></li>
+					<li><label>球队联系人：</label><input type="text" placeholder="请输入球队联系人"><i>*</i></li>
+					<li><label>联系方式：</label><input type="text" placeholder="请输入联系方式"><i>*</i></li>
+					<li><label>企业/俱乐部名称：</label><input type="text" placeholder="请输入企业/俱乐部名称"><i>*</i></li>
+				</ul>
+			</div>
+			<div class="form_box">
+				<h2>选填项目</h2>
+				<ul>
+					<li><label>球队主场：</label><input type="text" placeholder="请输入球队主场"></li>
+					<li><label>成立时间：</label><select id="year"><option disabled selected>---请选择---</option></select><select id="month"><option disabled selected>---请选择---</option></select><select id="day"><option disabled selected>---请选择---</option></select></li>
+					<li><label>成员人数：</label><input type="text" placeholder="请输入成员人数"></li>
+					<li><label>球队队徽：</label><div class="portrait"><img src="/static/img/team_a.png" border="0"><a href="###"></a></div></li>
+					<li><label>团队简介：</label><textarea placeholder="团队简介"></textarea></li>
+					<li><label>验证码：</label><input class="short" type="text" placeholder="验证码"><img src="/static/img/qc.png" border="0"></li>
+				</ul>
+				<a class="submit" href="###">创建</a>
+			</div>
+		</form>
 	</div>
 	<script src="/static/js/footer.js"></script>
+	<script src="/static/js/jquery.cityselect.js"></script>
 	<script>
-
+			$("#location_area").citySelect({
+				url: "/api/addr.htm",
+				<#if user ??>
+					<#if  user.province?? && user.province != ''>
+						prov: ${(user.province)!},
+					</#if>
+					<#if user.area?? && user.area != ''>
+						city: ${(user.area)!},
+					</#if>
+					<#if user.location?? && user.location != ''>
+						dist: ${(user.location)!},
+					</#if>
+				<#else>
+					prov: 1,						
+				</#if>
+				nodata: "none"
+			});
+		</script>
+	<script>
+		$(function(){
+			$(".submit").on("click",function(){
+				var _param = $("#enroll_form").serialize();
+				//console.log("_param"+_param);
+				$.ajax({
+					url : '/enroll/submit.htm',
+					type : 'POST',
+					data : _param,
+					dataType : 'json',
+					success : function(data) {
+						if(data.status == 200){
+							layer.msg('球队创建成功', {
+								  icon: 1,
+								  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+									window.location.href = "/index.htm"; 
+								});							
+							
+						}else{
+							layer.msg(data.message);
+						}
+					}
+				});				
+			});
+			
+			var curyear = 2016, curmonth = 3, curday = 21;
+			var _yHtml,_mHtml,_dHtml;
+			for(var y=curyear-50;y<curyear;y++){
+				_yHtml += '<option>'+ y +'</option>'
+			}
+			$('#year').append(_yHtml)
+			for(var m=1;m<13;m++){
+				_mHtml += '<option>'+ m +'</option>'
+			}
+			$('#month').append(_mHtml)
+			for(var d=1;d<32;d++){
+				_dHtml += '<option>'+ d +'</option>'
+			}
+			$('#day').append(_dHtml)
+			
+		})
 	</script>
 </body>
 </html>
