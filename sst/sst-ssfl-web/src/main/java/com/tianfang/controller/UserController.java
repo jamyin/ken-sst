@@ -382,12 +382,15 @@ public class UserController extends BaseController{
 	@RequestMapping("/toPerson")
 	public ModelAndView toPerson(HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		ModelAndView mv = getModelAndView();
-		LoginUserDto logDto= (LoginUserDto) session.getAttribute(SessionConstants.LOGIN_USER_INFO);
-		UserDto userDto = new UserDto();
-		userDto.setId(logDto.getId());
+		UserDto userDto= (UserDto) session.getAttribute(SessionConstants.LOGIN_USER_INFO);
+		if(userDto == null){
+			mv.setViewName("/index");
+			return mv;
+		}
 		List<UserDto> list = userService.findUserByParam(userDto);
 		if(list == null || list.size() == 0){
-			return null;
+			mv.setViewName("/index");
+			return mv;
 		}
 		UserDto dto = list.get(0);
 		if(dto.getCreateTime() != null){
