@@ -1,16 +1,23 @@
 package com.tianfang.controller;
 
-import com.google.common.base.Objects;
-import com.tianfang.common.constants.DataStatus;
-import com.tianfang.common.digest.MD5Coder;
-import com.tianfang.common.model.Response;
-import com.tianfang.common.util.StringUtils;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.service.IUserService;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.common.base.Objects;
+import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.constants.SessionConstants;
+import com.tianfang.common.digest.MD5Coder;
+import com.tianfang.common.model.Response;
+import com.tianfang.common.util.BeanUtils;
+import com.tianfang.common.util.StringUtils;
+import com.tianfang.dto.LoginUserDto;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.service.IUserService;
 
 /**
  * 
@@ -29,7 +36,7 @@ public class LoginController extends BaseController{
 	
 	@RequestMapping(value=("do"))
 	@ResponseBody
-	private Response<String> login(String userAccount,String password){
+	private Response<String> login(String userAccount,String password,HttpSession session){
 		Response<String> response = new Response<String>();
 		UserDto dto = new UserDto();
 		if(StringUtils.isEmpty(userAccount)){
@@ -51,6 +58,7 @@ public class LoginController extends BaseController{
 			response.setStatus(DataStatus.HTTP_FAILE);
 			return response;
 		}
+		session.setAttribute(SessionConstants.LOGIN_USER_INFO, userDto);
 		// 添加用户登陆安全提醒
 		sendRemind(userDto.getId(), Point.Login);
 		return response;
@@ -69,6 +77,20 @@ public class LoginController extends BaseController{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
+	}
+	
+	@RequestMapping(value=("load"))
+	@ResponseBody
+	private Response<LoginUserDto> load(){
+		Response<LoginUserDto> response = new Response<LoginUserDto>();
+		UserDto userDto = getUserAccountByUserId();
+		if(Objects.equal(userDto, null)){
+			response.setStatus(DataStatus.HTTP_FAILE);
+		}else{
+			LoginUserDto lUserDto = BeanUtils.createBeanByTarget(userDto, LoginUserDto.class);
+			response.setData(lUserDto);
+		}
+		return response;
 	}
 
 }

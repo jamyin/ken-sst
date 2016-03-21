@@ -1,14 +1,19 @@
 <div class="wrapper">
-	<div class="topbar"><a class="logo" href="/index.htm"></a><div class="login_status"><a class="p_center" href="/user/toPerson.htm">个人中心</a> <a class="login_btn" href="###">登录</a> <a href="/user/toRegiest.htm">注册</a></div></div>
+	<div class="topbar"><a class="logo" href="/index.htm"></a>
+		<div class="login_status">
+			<a class="p_center" href="/user/toPerson.htm">个人中心</a>
+			<#if user ??><#else><a class="login_btn" href="###">登录</a><a href="/user/toRegiest.htm">注册</a></#if>
+		</div>
+	</div>
 	<div class="nav">
 		<ul>
 			<#if menuList ??>
 				<#list menuList as menu>
-					<li class="cur" tag="${(menu_index * 140)}">
+					<li class="<#if cur==menu_index>cur</#if>" tag="${(menu_index * 140)}">
 						<#if menu.homeMenuDto.issingle == 1>
-							<a href="/menu/index.htm?mId=${(menu.homeMenuDto.id)!}">
+							<a href="/menu/index.htm?mId=${(menu.homeMenuDto.id)!}&cur=${(menu_index)}">
 						<#else>
-							<a href="${(menu.homeMenuDto.menuUrl)!}">							
+							<a href="${(menu.homeMenuDto.menuUrl)!}?cur=${(menu_index)}">							
 						</#if>
 							${(menu.homeMenuDto.cname)!}<br><span>${(menu.homeMenuDto.ename)!}</span>
 						</a>
@@ -16,11 +21,10 @@
 							<p>
 								<#list menu.secondList as ssm>
 									<#if ssm.issingle == 1>
-										<a href="/menu/index.htm?mId=${(ssm.id)!}">${(ssm.cname)!}</a>
+										<a href="/menu/index.htm?mId=${(ssm.id)!}&cur=${(menu_index)}">${(ssm.cname)!}</a>
 									<#else>
-										<a href="${(ssm.menuUrl)!}">${(ssm.cname)!}</a>
-									</#if>								
-									
+										<a href="${(ssm.menuUrl)!}?cur=${(menu_index)}">${(ssm.cname)!}</a>
+									</#if>
 								</#list>
 							</a>
 						</#if>
@@ -84,7 +88,7 @@ $(function(){
 			data:ajaxParams,
 			success:function(data){
 				if(data.status == 200){
-					layer.msg('同上', {
+					layer.msg('登陆成功', {
 						  icon: 1,
 						  time: 2000 //2秒关闭（如果不配置，默认是3秒）
 						}, function(){
