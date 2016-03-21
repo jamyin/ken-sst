@@ -48,7 +48,7 @@ public class SafeController extends BaseController{
 	 */
 	@RequestMapping(value = "index")
 	public ModelAndView index(){
-		ModelAndView mv = new ModelAndView("safe");
+		ModelAndView mv = getModelAndView();
 		String userId = getSessionUserId();
 		// 安全提醒 and 安全邮箱
 		NotificationsDto noti = notificationsService.getNotificationsByUserId(userId);
@@ -59,7 +59,8 @@ public class SafeController extends BaseController{
 		mv.addObject("reminding", getReminding(noti));
 		mv.addObject("settingEmail", getEmail(noti));
 		mv.addObject("paper", getPaper(user));
-		
+		mv.setViewName("safe");
+
 		return mv;
 	}
 
