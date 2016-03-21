@@ -2,6 +2,7 @@
 <html>
 <head>
 	<#include "/common/head.htm"/>
+	<#assign cur = 1 >  
 </head>
 
 <body>
@@ -20,12 +21,15 @@
 					<#list dataMap.pageList.getResults() as data>
 						<li>
 							<h2>${(data.title)!}</h2>
-							<span class="dec">${(data.summary)!}<a href="/info/details.htm?infoId=${(data.id)!}">[详细]</a></span>
+							<span class="dec">${(data.summary)!}<a href="/info/details.htm?infoId=${(data.id)!}&cur=${(cur)!}">[详细]</a></span>
 							<span class="time">${(data.createTime?string('yyyy-MM-dd HH:mm'))!}</span>
-							<a class="share" href="###">分享</a>
+							<!-- <a class="share" href="###">分享</a> -->
+							<div class="bdsharebuttonbox">
+								<a href="#" data-id="${(data.id)!}" class="bds_more share" data-cmd="more">分享</a>
+							</div>
 						</li>	
 					</#list>
-				</#if>				
+				</#if>
 					<!-- <li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li>
 					<li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li>
 					<li><h2>关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛关于举办2015-2016“上超杯”上海业余足球联赛</h2><span class="dec">据央视CCTV5体育新闻官方微博消息中超新军河北华夏幸福队签下喀麦隆国脚姆比亚，目前俱乐部方面尚未正式对外宣布。此前关于举办此前关于举办此前关于举办。<a href="###">[详细]</a></span><span class="time">2016-01-29  08：39</span><a class="share" href="###">分享</a></li>
@@ -38,6 +42,7 @@
 				
 				</ul>
 				<div class="pagenav">
+					<#assign pageList = dataMap.pageList>
 					<#include "/common/pagenav.htm"/>
 				</div>
 			</div>
@@ -75,12 +80,45 @@
 		</div>
 	</div>
 	<script src="/static/js/footer.js"></script>
+	
+	<script type="text/javascript">
+        //全局变量，动态的文章ID
+        var ShareId = "";
+        //绑定所有分享按钮所在A标签的鼠标移入事件，从而获取动态ID
+        $(function () {
+            $(".bdsharebuttonbox a").mouseover(function () {
+                ShareId = $(this).attr("data-id");
+            });
+        });
+        /* 
+        * 动态设置百度分享URL的函数,具体参数
+        * cmd为分享目标id,此id指的是插件中分析按钮的ID
+        *，我们自己的文章ID要通过全局变量获取
+        * config为当前设置，返回值为更新后的设置。
+        */
+        function SetShareUrl(cmd, config) {            
+            if (ShareId) {
+                config.bdUrl = "${(wwwdomain)!}/info/details.htm?infoId="+ShareId+"&cur=${(cur)!}";    
+            }
+            return config;
+        }
+        //插件的配置部分，注意要记得设置onBeforeClick事件，主要用于获取动态的文章ID
+        window._bd_share_config = {
+            "common": {
+                onBeforeClick:SetShareUrl,"bdSnsKey":{},"bdText":"","bdMini":"2"
+                ,"bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"12"
+            }, "share": {}
+        };
+        //插件的JS加载部分
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+    </script>	
+	
 	<script>
 	$(function(){	
 		setList()
 	});
 	function gotoPage(currPage){
-		window.location.href = "/info/index.htm?currPage="+currPage;
+		window.location.href = "${(request_url)!}?cur=${(cur)!}&currPage="+currPage;
 	};
 	function setList(){
 		$('.rl_box .match ul li:last, .rl_box .integr ul li:last').css('border','0')

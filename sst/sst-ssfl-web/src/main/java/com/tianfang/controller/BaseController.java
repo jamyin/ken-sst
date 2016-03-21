@@ -79,7 +79,8 @@ public class BaseController {
 		mv.addObject("user", getUserAccountByUserId());
 		mv.addObject("menuList", getMenuList());
 		mv.addObject("cur",StringToInteger(getRequest().getParameter("cur")));
-		
+		mv.addObject("request_url",getRequest().getRequestURI());
+		mv.addObject("wwwdomain",PropertiesUtils.getProperty("wwwdomain"));
 		return mv;
 	}
 	
