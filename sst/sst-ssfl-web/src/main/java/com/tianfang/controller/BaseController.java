@@ -80,8 +80,17 @@ public class BaseController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("user", getUserAccountByUserId());
 		mv.addObject("menuList", getMenuList());
+		mv.addObject("cur",StringToInteger(getRequest().getParameter("cur")));
 		
 		return mv;
+	}
+	
+	public Integer StringToInteger(String value){
+		if(!StringUtils.isEmpty(value)){
+			return Integer.valueOf(value);
+		}else{
+			return 0;
+		}
 	}
 
 	public ModelAndView getUserModelAndView(String userId) throws Exception{
