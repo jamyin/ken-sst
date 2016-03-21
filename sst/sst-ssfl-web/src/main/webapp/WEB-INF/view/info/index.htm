@@ -39,6 +39,7 @@
 				
 				</ul>
 				<div class="pagenav">
+					<#assign pageList = dataMap.pageList>
 					<#include "/common/pagenav.htm"/>
 				</div>
 			</div>
@@ -81,7 +82,8 @@
 		setList()
 	});
 	function gotoPage(currPage){
-		window.location.href = "/info/index.htm?currPage="+currPage;
+		
+		window.location.href = "${(request_url)!}?cur=${(cur)!}&currPage="+currPage;
 	};
 	function setList(){
 		$('.rl_box .match ul li:last, .rl_box .integr ul li:last').css('border','0')
