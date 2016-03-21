@@ -28,7 +28,7 @@
 				</ul>
 			</div>
 			<div class="hotnews">
-				<#if dataMap ??>
+				<#if dataMap ?? && dataMap.raceRecord ??>
 					<#list dataMap.infomation as data>
 						<!-- ${(data_index)!} && ${((data_index)%4)!} -->
 						<#if ((data_index) % 4) == 0>
