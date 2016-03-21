@@ -108,12 +108,11 @@ public class BaseController {
 	}
 
 	public String getSessionUserId(){
-		return "40b41478-1094-49da-b21a-9ab7c7cbb42f";
-		/*UserDto user = (UserDto)getRequest().getSession().getAttribute(SessionConstants.LOGIN_USER_INFO);
+		UserDto user = (UserDto)getRequest().getSession().getAttribute(SessionConstants.LOGIN_USER_INFO);
 		if(user==null){
 			return null;
 		}
-		return user.getId();*/
+		return user.getId();
 	}
 
 	/**
