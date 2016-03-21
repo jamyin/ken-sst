@@ -80,6 +80,7 @@ public class BaseController {
 		mv.addObject("menuList", getMenuList());
 		mv.addObject("cur",StringToInteger(getRequest().getParameter("cur")));
 		mv.addObject("request_url",getRequest().getRequestURI());
+		mv.addObject("wwwdomain",PropertiesUtils.getProperty("wwwdomain"));
 		return mv;
 	}
 	
