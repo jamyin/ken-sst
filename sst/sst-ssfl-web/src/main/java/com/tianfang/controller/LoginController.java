@@ -3,10 +3,10 @@ package com.tianfang.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Objects;
 import com.tianfang.common.constants.DataStatus;
@@ -91,6 +91,14 @@ public class LoginController extends BaseController{
 			response.setData(lUserDto);
 		}
 		return response;
+	}
+	
+	@RequestMapping(value=("out"))
+	private ModelAndView out(){
+		
+		getRequest().removeAttribute(SessionConstants.LOGIN_USER_INFO);
+		
+		return new ModelAndView("redirect:/index.htm");
 	}
 
 }

@@ -19,20 +19,20 @@
 						<select name="area" class="city" disabled="disabled"></select>
 						<select name="location" class="dist" disabled="disabled"></select>
 					</li>
-					<li><label>球队名称：</label><input type="text" placeholder="请输入球队名称"><i>*</i></li>
-					<li><label>球队联系人：</label><input type="text" placeholder="请输入球队联系人"><i>*</i></li>
-					<li><label>联系方式：</label><input type="text" placeholder="请输入联系方式"><i>*</i></li>
+					<li><label>球队名称：</label><input id="name" name="name" type="text" placeholder="请输入球队名称"><i>*</i></li>
+					<li><label>球队联系人：</label><input id="contacts" name="contacts" type="text" placeholder="请输入球队联系人"><i>*</i></li>
+					<li><label>联系方式：</label><input id="mobile" name="mobile" type="text" placeholder="请输入联系方式"><i>*</i></li>
 					<li><label>企业/俱乐部名称：</label><input type="text" placeholder="请输入企业/俱乐部名称"><i>*</i></li>
 				</ul>
 			</div>
 			<div class="form_box">
 				<h2>选填项目</h2>
 				<ul>
-					<li><label>球队主场：</label><input type="text" placeholder="请输入球队主场"></li>
+					<li><label>球队主场：</label><input id="address" name="address" type="text" placeholder="请输入球队主场"></li>
 					<li><label>成立时间：</label><select id="year"><option disabled selected>---请选择---</option></select><select id="month"><option disabled selected>---请选择---</option></select><select id="day"><option disabled selected>---请选择---</option></select></li>
 					<li><label>成员人数：</label><input type="text" placeholder="请输入成员人数"></li>
 					<li><label>球队队徽：</label><div class="portrait"><img src="/static/img/team_a.png" border="0"><a href="###"></a></div></li>
-					<li><label>团队简介：</label><textarea placeholder="团队简介"></textarea></li>
+					<li><label>团队简介：</label><textarea id="summary" name="summary" placeholder="团队简介"></textarea></li>
 					<li><label>验证码：</label><input class="short" type="text" placeholder="验证码"><img src="/static/img/qc.png" border="0"></li>
 				</ul>
 				<a class="submit" href="###">创建</a>
@@ -63,8 +63,14 @@
 	<script>
 		$(function(){
 			$(".submit").on("click",function(){
+				<#if user ??>
+				<#else>
+					open_login();
+					return false;					
+				</#if>
 				var _param = $("#enroll_form").serialize();
 				//console.log("_param"+_param);
+				
 				$.ajax({
 					url : '/enroll/submit.htm',
 					type : 'POST',
