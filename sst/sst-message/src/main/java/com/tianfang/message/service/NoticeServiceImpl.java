@@ -10,10 +10,10 @@ import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.util.BeanUtils;
+import com.tianfang.common.util.StringUtils;
 import com.tianfang.message.dao.NoticeDao;
 import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.message.pojo.Notice;
-import com.tianfang.message.service.INoticeService;
 
 
 @Service
@@ -106,5 +106,18 @@ public class NoticeServiceImpl implements INoticeService {
 		}
 		return new PageResult<NoticeDto>(page, dtoList);
 	}
+	
+	
+	@Override
+	public NoticeDto findNoticeById(String infoId) {
+		if (StringUtils.isBlank(infoId)){
+			throw new RuntimeException("对不起,主键ID为空!");
+		}
+		Notice notice = noticeDao.selectByPrimaryKey(infoId);
+		if (null != notice && notice.getStat() == DataStatus.ENABLED){
+			return BeanUtils.createBeanByTarget(notice, NoticeDto.class);
+		}
+		return null;
+	}	
 
 }

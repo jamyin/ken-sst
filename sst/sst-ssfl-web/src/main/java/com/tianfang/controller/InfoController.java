@@ -25,7 +25,7 @@ import com.tianfang.train.service.ICompetitionTeamService;
 public class InfoController extends BaseController{
 	
 	enum InfoTitle{
-		ZERO("官方信息"),ONE("赛事新闻"),THREE("联赛公告");
+		ZERO("官方信息"),ONE("赛事新闻"),TWO("联赛公告");
 		private String value = "官方信息";
 	    private InfoTitle(String value) {    //    必须是private的，否则编译错误
 	        this.value = value;
@@ -59,9 +59,9 @@ public class InfoController extends BaseController{
 	public ModelAndView index(InformationDto dto,PageQuery query){
 		ModelAndView mv = getModelAndView();
 		HashMap<String,Object> map = new HashMap<String,Object>();
-		System.out.println("zeor = "+InfoTitle.ZERO);
 		map.put("pageList",getInfomatation(dto,query));
 		map.put("raceRecord",getRecord());
+		map.put("infoTitle", InfoTitle.ONE.value);
 		mv.addObject("dataMap", map);
 		mv.setViewName("/info/index");
 		return mv;
@@ -86,7 +86,7 @@ public class InfoController extends BaseController{
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		query.setPageSize(10);
 		PageResult<NoticeDto> datas = iNoticeService.findNoticeViewByPage(dto, query);
-		
+		map.put("infoTitle", InfoTitle.ZERO.value);
 		map.put("pageList",datas);
 		mv.addObject("dataMap", map);
 		mv.setViewName("/info/index");
@@ -103,6 +103,7 @@ public class InfoController extends BaseController{
 		query.setPageSize(10);
 		PageResult<CompetitionNoticeDto> datas = iCompetitionNoticeService.findCompNoticeViewByPage(dto, query);
 		HashMap<String,Object> map = new HashMap<String,Object>();
+		map.put("infoTitle", InfoTitle.TWO.value);
 		map.put("pageList",datas);
 		mv.addObject("dataMap", map);
 		mv.setViewName("/info/index");

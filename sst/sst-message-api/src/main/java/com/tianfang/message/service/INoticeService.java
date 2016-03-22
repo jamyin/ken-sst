@@ -61,5 +61,13 @@ public interface INoticeService {
 	 * @return
 	 */
 	PageResult<NoticeDto> findNoticeViewByPage(NoticeDto noticeDto, PageQuery page);
+	
+	/**
+	 * 
+		 * 此方法描述的是 根据infoId获取数据
+		 * @author: cwftalus@163.com
+		 * @version: 2016年3月22日 下午3:48:42
+	 */
+	NoticeDto findNoticeById(String infoId);
 
 }
