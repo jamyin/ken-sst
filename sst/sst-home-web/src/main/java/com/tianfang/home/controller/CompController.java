@@ -4,6 +4,7 @@ import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
+import com.tianfang.common.util.HtmlRegexpUtil;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.dto.CompRound;
@@ -13,6 +14,7 @@ import com.tianfang.train.service.*;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.enums.UserType;
 import com.tianfang.user.service.IUserService;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +65,8 @@ public class CompController extends BaseController {
 	private ICompetitionNewsService cnewsService;
 	@Autowired
 	private IUserService userService;
-	
+	@Autowired
+	private ITeamResultService iTeamResultService;
 	/**
 	 * 赛事分页查询接口
 	 * @param dto
@@ -263,6 +266,14 @@ public class CompController extends BaseController {
 		Response<TeamDto> response = new Response<TeamDto>();
 		try {
 			TeamDto team = teamService.getTeamById(id);
+			
+			team.setSummary(HtmlRegexpUtil.filterHtml(team.getSummary()));
+			
+			TeamResultDto trDto = new TeamResultDto();
+			trDto.setTeamId(id);
+			List<TeamResultDto> resultList = iTeamResultService.findTeamResultByParam(trDto);
+			team.setDataList(resultList);
+			
 			response.setStatus(DataStatus.HTTP_SUCCESS);
 			response.setData(team);
 		} catch (Exception e) {
