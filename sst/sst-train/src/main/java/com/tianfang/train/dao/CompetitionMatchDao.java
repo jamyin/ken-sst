@@ -189,4 +189,12 @@ public class CompetitionMatchDao extends MyBatisBaseDao<CompetitionMatch> {
         List<CompetitionMatch> result = mapper.selectByExample(example);  
 		return result;
 	}
+	
+	public List<CompetitionMatch> selectCompetitionMatchByTeamId(String teamId,PageQuery page) {
+		return exMapper.selectCompetitionMatchByTeamId(teamId, page);
+	}
+	
+	public Integer countCompetitionMatchByTeamId(String teamId) {
+		return exMapper.countCompetitionMatchByTeamId(teamId);
+	}
 }

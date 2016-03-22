@@ -9,9 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tianfang.common.model.PageQuery;
+import com.tianfang.common.model.PageResult;
 import com.tianfang.train.constants.TeamPlayerPositionEnum;
+import com.tianfang.train.dto.CompetitionMatchDto;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.dto.TeamPlayerDto;
+import com.tianfang.train.service.ICompetitionMatchService;
 import com.tianfang.train.service.ITeamPlayerService;
 import com.tianfang.train.service.ITeamService;
 
@@ -26,6 +30,9 @@ public class TeamInfoController extends BaseController{
 	
 	@Autowired
 	private ITeamPlayerService iTeamPlayerService;
+	
+	@Autowired
+	private ICompetitionMatchService iCompetitionMatchService;
 	
 	/**
 	 * 获取球队信息
@@ -62,5 +69,14 @@ public class TeamInfoController extends BaseController{
 		return mv;
 	}
 	
-
+	@RequestMapping("/getTeamHerald")
+	public ModelAndView getTeamHerald(String id,PageQuery query) {
+		ModelAndView mv = this.getModelAndView();
+		PageResult<CompetitionMatchDto> competitionMatchDtos = iCompetitionMatchService.selectCompetitionMatchByTeamId(id,query);
+		TeamDto teamDto = iTeamService.getTeamById(id);
+		mv.addObject("pageList", competitionMatchDtos);
+		mv.addObject("teamDto", teamDto);
+		mv.setViewName("/team/team-herald");
+		return mv;
+	}
 }
