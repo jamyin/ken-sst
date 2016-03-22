@@ -1,6 +1,7 @@
 package com.tianfang.controller;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.common.base.Objects;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
+import com.tianfang.common.util.HtmlRegexpUtil;
 import com.tianfang.controller.IndexController.InfoType;
 import com.tianfang.message.dto.InformationDto;
 import com.tianfang.message.dto.NoticeDto;
@@ -62,15 +65,26 @@ public class InfoController extends BaseController{
 		map.put("pageList",getInfomatation(dto,query));
 		map.put("raceRecord",getRecord());
 		map.put("infoTitle", InfoTitle.ONE.value);
+		map.put("infoType", InfoTitle.ONE);
 		mv.addObject("dataMap", map);
 		mv.setViewName("/info/index");
 		return mv;
 	}
 	
 	@RequestMapping(value="details")
-	public ModelAndView details(String infoId){
+	public ModelAndView details(String infoType,String infoId){
 		ModelAndView mv = getModelAndView();
-		InformationDto dataInfo = iInformationService.getInformationById(infoId);
+		Object dataInfo = null;
+		if(Objects.equal(infoType, InfoTitle.ZERO.toString())){
+			dataInfo = iNoticeService.findNoticeById(infoId);
+			mv.addObject("infoTitle", InfoTitle.ZERO.value);
+		}else if(Objects.equal(infoType, InfoTitle.ONE.toString())){
+			dataInfo = iInformationService.getInformationById(infoId);
+			mv.addObject("infoTitle", InfoTitle.ONE.value);
+		}else if(Objects.equal(infoType, InfoTitle.TWO.toString())){
+			dataInfo = iCompetitionNoticeService.getNoticeById(infoId);
+			mv.addObject("infoTitle", InfoTitle.TWO.value);
+		}
 		mv.addObject("dataInfo", dataInfo);
 		mv.setViewName("/info/details");
 		return mv;
@@ -87,6 +101,7 @@ public class InfoController extends BaseController{
 		query.setPageSize(10);
 		PageResult<NoticeDto> datas = iNoticeService.findNoticeViewByPage(dto, query);
 		map.put("infoTitle", InfoTitle.ZERO.value);
+		map.put("infoType", InfoTitle.ZERO);
 		map.put("pageList",datas);
 		mv.addObject("dataMap", map);
 		mv.setViewName("/info/index");
@@ -104,11 +119,25 @@ public class InfoController extends BaseController{
 		PageResult<CompetitionNoticeDto> datas = iCompetitionNoticeService.findCompNoticeViewByPage(dto, query);
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("infoTitle", InfoTitle.TWO.value);
+		map.put("infoType", InfoTitle.TWO);
 		map.put("pageList",datas);
 		mv.addObject("dataMap", map);
 		mv.setViewName("/info/index");
 		return mv;
 	}
+	
+	public void changeProperty(PageResult<Object> objects){
+		Iterator<Object> its = objects.getResults().iterator();
+		while(its.hasNext()){
+			Object obj = its.next();
+			if(obj instanceof NoticeDto){
+				((NoticeDto) obj).setContent(HtmlRegexpUtil.filterHtml(((NoticeDto) obj).getContent()));
+			}else if (obj instanceof CompetitionNoticeDto){
+				((CompetitionNoticeDto) obj).setContent(HtmlRegexpUtil.filterHtml(((CompetitionNoticeDto) obj).getContent()));
+			}
+		}
+	}
+	
 	
 	/**
 	 * 获取滚动条相关的信息
