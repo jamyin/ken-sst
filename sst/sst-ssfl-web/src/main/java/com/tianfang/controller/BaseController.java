@@ -1,18 +1,5 @@
 package com.tianfang.controller;
 
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.tianfang.admin.dto.MenuDto;
 import com.tianfang.admin.service.IHomeMenuService;
 import com.tianfang.common.constants.SessionConstants;
@@ -26,6 +13,17 @@ import com.tianfang.user.service.IEmailSendService;
 import com.tianfang.user.service.INotificationsService;
 import com.tianfang.user.service.ISmsSendService;
 import com.tianfang.user.service.IUserService;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class BaseController {
@@ -81,7 +79,8 @@ public class BaseController {
 		mv.addObject("user", getUserAccountByUserId());
 		mv.addObject("menuList", getMenuList());
 		mv.addObject("cur",StringToInteger(getRequest().getParameter("cur")));
-		
+		mv.addObject("request_url",getRequest().getRequestURI());
+		mv.addObject("wwwdomain",PropertiesUtils.getProperty("wwwdomain"));
 		return mv;
 	}
 	

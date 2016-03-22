@@ -384,13 +384,13 @@ public class UserController extends BaseController{
 		ModelAndView mv = getModelAndView();
 		UserDto userDto= (UserDto) session.getAttribute(SessionConstants.LOGIN_USER_INFO);
 		if(userDto == null){
-			mv.setViewName("/index");
-			return mv;
+			return new ModelAndView("redirect:/index.htm");
+//			return mv;
 		}
 		List<UserDto> list = userService.findUserByParam(userDto);
 		if(list == null || list.size() == 0){
-			mv.setViewName("/index");
-			return mv;
+			return new ModelAndView("redirect:/index.htm");
+//			return mv;
 		}
 		UserDto dto = list.get(0);
 		if(dto.getCreateTime() != null){

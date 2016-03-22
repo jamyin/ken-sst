@@ -10,5 +10,10 @@
          #{item.createTime},#{item.lastUpdateTime},#{item.stat})  
     </foreach> 
   </insert>  
-	
+
+    <select id="getLast" resultType="com.tianfang.message.dto.NoticeDto" parameterType="java.lang.String">
+        select b.*,a.readstat as ReadStat from sst_notice_users as a left join sst_notice as b on a.notice_id = b.id
+        where a.user_id = #{userId} order by b.create_time desc limit 0,1;
+    </select>
+
 </mapper> 

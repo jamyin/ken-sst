@@ -17,11 +17,20 @@
 			<span class="step3">第三步<br>提交信息完成报名</span>
 			<span class="step4">第四步<br>可在个人中心—我的球<br>队里继续补充球队信息</span>
 		</div>
-		<a class="sure_btn" href="/enroll/form.htm">我已了解，我要报名</a>
+		<a class="sure_btn" href="##">我已了解，我要报名</a>
 	</div>
 	<script src="/static/js/footer.js"></script>
-	<script>
-
+	<script type="text/javascript">
+	$(function(){
+		$(".sure_btn").on("click",function(){
+			<#if user ??>
+				window.location.href = "/enroll/form.htm?cur=1";
+			<#else>
+				open_login();
+				return false;					
+			</#if>				
+		});		
+	})
 	</script>
 </body>
 </html>
