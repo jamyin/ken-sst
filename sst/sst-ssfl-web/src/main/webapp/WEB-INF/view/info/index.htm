@@ -9,7 +9,6 @@
 	<div class="header">
 		<#include "/common/header.htm"/>
 	
-	
 	<div class="wrapper">
 		<div class="sub_ban">
 			<span>${(dataMap.infoTitle)!}</span>
@@ -20,8 +19,15 @@
 				<#if dataMap.pageList ??>
 					<#list dataMap.pageList.getResults() as data>
 						<li>
-							<h2>${(data.title)!}</h2>
-							<span class="dec">${(data.summary)!}<a href="/info/details.htm?infoId=${(data.id)!}&cur=${(cur)!}">[详细]</a></span>
+							<h2><a href="/info/details.htm?infoId=${(data.id)!}&cur=${(cur)!}">${(data.title)!}</a></h2>
+							<span class="dec">
+								<#if dataMap.infoType == "ONE">
+									${(data.summary)!}	
+								<#else>
+									${(data.content)!}
+								</#if>
+								<a href="/info/details.htm?infoType=${(dataMap.infoType)!}&infoId=${(data.id)!}&cur=${(cur)!}">[详细]</a>
+							</span>
 							<span class="time">${(data.createTime?string('yyyy-MM-dd HH:mm'))!}</span>
 							<!-- <a class="share" href="###">分享</a> -->
 							<div class="bdsharebuttonbox">
