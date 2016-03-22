@@ -96,7 +96,11 @@ public class LoginController extends BaseController{
 	@RequestMapping(value=("out"))
 	private ModelAndView out(){
 		
-		getRequest().removeAttribute(SessionConstants.LOGIN_USER_INFO);
+//<<<<<<< HEAD
+		getRequest().getSession().removeAttribute(SessionConstants.LOGIN_USER_INFO);
+//=======
+//		getRequest().removeAttribute(SessionConstants.LOGIN_USER_INFO);
+//>>>>>>> refs/remotes/origin/ssfl
 		
 		return new ModelAndView("redirect:/index.htm");
 	}
