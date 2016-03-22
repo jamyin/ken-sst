@@ -2,6 +2,9 @@
 <html>
 <head>
 	<#include "/common/head.htm"/>
+	<link href="/static/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+	<script type="text/javascript" src="/static/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>		
 </head>
 
 <body>
@@ -11,13 +14,14 @@
 	<div class="wrapper">
 		<div class="enroll_title">填写报名球队信息</div>
 		<form id="enroll_form">
+			<input type="hidden" id="icon" name="icon"/>
 			<div class="form_box">
 				<h2>必填项目</h2>
 				<ul>
 					<li id="location_area"><label>所在区域：</label>
 						<select name="province" class="prov"></select>
-						<select name="area" class="city" disabled="disabled"></select>
-						<select name="location" class="dist" disabled="disabled"></select>
+						<select name="city" class="city" disabled="disabled"></select>
+						<select name="area" class="dist" disabled="disabled"></select>
 					</li>
 					<li><label>球队名称：</label><input id="team_name" name="name" type="text" placeholder="请输入球队名称"><i>*</i></li>
 					<li><label>球队联系人：</label><input id="team_leader" name="contacts" type="text" placeholder="请输入球队联系人"><i>*</i></li>
@@ -31,9 +35,16 @@
 					<li><label>球队主场：</label><input id="address" name="address" type="text" placeholder="请输入球队主场"></li>
 					<li><label>成立时间：</label><select id="year"><option disabled selected>---请选择---</option></select><select id="month"><option disabled selected>---请选择---</option></select><select id="day"><option disabled selected>---请选择---</option></select></li>
 					<li><label>成员人数：</label><input type="text" placeholder="请输入成员人数"></li>
-					<li><label>球队队徽：</label><div class="portrait"><img src="/static/img/team_a.png" border="0"><a href="###"></a></div></li>
+					<li><label>球队队徽：</label>
+						<div class="portrait">
+							<img id="team_url" src="/static/img/team_a.png" border="0">
+						</div>
+					</li>
+					<li><label></label>
+						<a id="uploadObj" href="###"></a>
+					</li>					
 					<li><label>团队简介：</label><textarea id="summary" name="summary" placeholder="团队简介"></textarea></li>
-					<li><label>验证码：</label><input class="short" type="text" placeholder="验证码"><img src="/static/img/qc.png" border="0"></li>
+					<!-- <li><label>验证码：</label><input class="short" type="text" placeholder="验证码"><img src="/static/img/qc.png" border="0"></li> -->
 				</ul>
 				<a class="submit" href="###">创建</a>
 			</div>
@@ -122,23 +133,63 @@
 				
 			//验证表单错误提示
 			function alert_redtext(d,t){
-				$('#' +d).focus().siblings('i').html(t).addClass('warning')
+				$('#' +d).focus().siblings('i').html(t).addClass('warning');
 			}			
 			
 			var curyear = 2016, curmonth = 3, curday = 21;
 			var _yHtml,_mHtml,_dHtml;
 			for(var y=curyear-50;y<curyear;y++){
-				_yHtml += '<option>'+ y +'</option>'
+				_yHtml += '<option>'+ y +'</option>';
 			}
-			$('#year').append(_yHtml)
+			$('#year').append(_yHtml);
 			for(var m=1;m<13;m++){
-				_mHtml += '<option>'+ m +'</option>'
+				_mHtml += '<option>'+ m +'</option>';
 			}
-			$('#month').append(_mHtml)
+			$('#month').append(_mHtml);
 			for(var d=1;d<32;d++){
-				_dHtml += '<option>'+ d +'</option>'
+				_dHtml += '<option>'+ d +'</option>';
 			}
-			$('#day').append(_dHtml)
+			$('#day').append(_dHtml);
+			
+			
+			$("#uploadObj").uploadify({
+	            'uploader': '/static/plugins/uploadify/uploadify.swf',
+	            'script':"/file/upload.htm",
+	            'cancelImg': '/static/plugins/uploadify/cancel.png',
+	            'queueID': 'fileQueue',
+	            'auto': true,
+	            'multi':true,
+	            'buttonText': 'select',
+	            //'buttonImg':'/static/plugins/uploadify/picture.png',
+	            'simUploadLimit' : 4,
+	            'queueSizeLimit' : 4,
+	            'sizeLimit':1024*1024*10,
+	            'fileExt': '*.gif;*.png;*.jpg',
+	            'fileDesc':'请选择gif,png,jpg文件',
+	            onComplete: function(event, queueID, fileObj, response, data) {
+	                var dataObj = eval("("+response+")");
+	                if(dataObj.status == 200){
+	                	parent.layer.msg('图片上传成功', {
+							shade: [0.9, '#000'],
+						    icon: 1,
+						    time: 800 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							//$("<div><img class='uploaded-pic' style='width:100px;height:100px;' src='"+dataObj.filePath+"' alt=''/><a href='##'></a></div>").appendTo($(".uploaded-pic-div"));							
+							//$("<input type='hidden' name='pictureList' value="+dataObj.filePath+">").appendTo($("#pictureList"));
+						});                
+	                	//console.log(dataObj.filePath);
+	                	$("#team_url").attr("src",dataObj.filePath);
+						$("#icon").val(dataObj.filePath);
+	                }else{
+	                	layer.msg("文件:" + fileObj.name + "上传失败");
+	                }
+	            },
+	            onSelect:function(){
+	            },
+	            onError: function(event, queueID, fileObj) {
+	                layer.msg("文件:" + fileObj.name + "上传失败");
+	            }
+	        });				
 			
 		})
 	</script>
