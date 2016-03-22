@@ -19,10 +19,10 @@
 						<select name="area" class="city" disabled="disabled"></select>
 						<select name="location" class="dist" disabled="disabled"></select>
 					</li>
-					<li><label>球队名称：</label><input id="name" name="name" type="text" placeholder="请输入球队名称"><i>*</i></li>
-					<li><label>球队联系人：</label><input id="contacts" name="contacts" type="text" placeholder="请输入球队联系人"><i>*</i></li>
-					<li><label>联系方式：</label><input id="mobile" name="mobile" type="text" placeholder="请输入联系方式"><i>*</i></li>
-					<li><label>企业/俱乐部名称：</label><input type="text" placeholder="请输入企业/俱乐部名称"><i>*</i></li>
+					<li><label>球队名称：</label><input id="team_name" name="name" type="text" placeholder="请输入球队名称"><i>*</i></li>
+					<li><label>球队联系人：</label><input id="team_leader" name="contacts" type="text" placeholder="请输入球队联系人"><i>*</i></li>
+					<li><label>联系方式：</label><input id="telephone" name="mobile" type="text" placeholder="请输入联系方式"><i>*</i></li>
+					<li><label>企业/俱乐部名称：</label><input id="club_name" type="text" placeholder="请输入企业/俱乐部名称"><i>*</i></li>
 				</ul>
 			</div>
 			<div class="form_box">
@@ -68,9 +68,11 @@
 					open_login();
 					return false;					
 				</#if>
+				if(!check_form()){
+					return false;
+				}
 				var _param = $("#enroll_form").serialize();
 				//console.log("_param"+_param);
-				
 				$.ajax({
 					url : '/enroll/submit.htm',
 					type : 'POST',
@@ -91,6 +93,37 @@
 					}
 				});				
 			});
+			
+			//验证表单
+			function check_form(){
+				//登陆名
+				var TeamName = $.trim($("#team_name").val());
+				if (TeamName.length <= 0) {
+					alert_redtext('team_name','队伍名不能为空')
+						return false;
+				}
+				var TeamLeader = $.trim($("#team_leader").val());
+				if (TeamLeader.length <= 0) {
+					alert_redtext('team_leader','负责人不能为空')
+						return false;
+				}
+				var Telephone = $.trim($("#telephone").val());
+				if (Telephone.length <= 0) {
+					alert_redtext('telephone','联系方式不能为空')
+						return false;
+				}
+				var ClubName = $.trim($("#club_name").val());
+				if (ClubName.length <= 0) {
+					alert_redtext('club_name','企业/俱乐部名称不能为空')
+						return false;
+				}
+				return true;
+			}
+				
+			//验证表单错误提示
+			function alert_redtext(d,t){
+				$('#' +d).focus().siblings('i').html(t).addClass('warning')
+			}			
 			
 			var curyear = 2016, curmonth = 3, curday = 21;
 			var _yHtml,_mHtml,_dHtml;
