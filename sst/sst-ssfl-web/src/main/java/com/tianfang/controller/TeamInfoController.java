@@ -69,6 +69,12 @@ public class TeamInfoController extends BaseController{
 		return mv;
 	}
 	
+	/**
+	 * 分页根据球队ID查询
+	 * @param id
+	 * @param query
+	 * @return
+	 */
 	@RequestMapping("/getTeamHerald")
 	public ModelAndView getTeamHerald(String id,PageQuery query) {
 		ModelAndView mv = this.getModelAndView();
