@@ -1,11 +1,11 @@
 package com.tianfang.common.model;
 
-import java.io.Serializable;
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.io.Serializable;
+import java.util.List;
 
 @ToString
 public class PageResult<T> implements Serializable{
@@ -69,10 +69,12 @@ public class PageResult<T> implements Serializable{
 	 * 2015年11月23日上午11:10:37
 	 */
 	private void setTotalPage(long total, int pageSize){
-		if (total%pageSize == 0){
-			this.totalPage = total/pageSize;
-		}else{
-			this.totalPage = total/pageSize + 1;
+		if(pageSize > 0){
+			if (total%pageSize == 0){
+				this.totalPage = total/pageSize;
+			}else{
+				this.totalPage = total/pageSize + 1;
+			}
 		}
 	}
 }

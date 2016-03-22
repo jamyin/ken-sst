@@ -91,5 +91,10 @@
         (#{item.id},#{item.voteId},#{item.userId},#{item.selected},#{item.createTime},#{item.stat})  
     </foreach> 
   </insert>  
-	
+
+    <select id="getLast" resultType="com.tianfang.user.dto.VoteDto" parameterType="java.lang.String">
+        select a.*, b.selected from sst_vote as a left join sst_vote_user_temp as b on a.id = b.vote_id
+        where b.user_id = #{userId}
+        order by a.create_time desc limit 0,1
+    </select>
 </mapper>

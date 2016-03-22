@@ -1,27 +1,21 @@
 package com.tianfang.user.dao;
 
-import java.util.List;
-
-import lombok.Getter;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.mybatis.MyBatisBaseDao;
 import com.tianfang.common.util.StringUtils;
-import com.tianfang.user.dto.VoteDto;
-import com.tianfang.user.dto.VoteExDto;
-import com.tianfang.user.dto.VoteOptionDto;
-import com.tianfang.user.dto.VoteParams;
-import com.tianfang.user.dto.VoteUserTempDto;
+import com.tianfang.user.dto.*;
 import com.tianfang.user.mapper.VoteExMapper;
 import com.tianfang.user.mapper.VoteMapper;
 import com.tianfang.user.mapper.VoteUserTempMapper;
 import com.tianfang.user.pojo.Vote;
 import com.tianfang.user.pojo.VoteExample;
 import com.tianfang.user.pojo.VoteUserTemp;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class VoteDao extends MyBatisBaseDao<Vote>{
@@ -96,7 +90,10 @@ public class VoteDao extends MyBatisBaseDao<Vote>{
 	public void insertBatchVoteUserTemp(List<VoteUserTempDto> temps){
 		voteExMapper.insertBatchVoteUserTemp(temps);
 	}
-	
+
+	public VoteDto getLast(String userId){
+		return voteExMapper.getLast(userId);
+	}
 	/**
 	 * 组装查询参数
 	 * @param params

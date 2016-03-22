@@ -2,6 +2,7 @@ package com.tianfang.train.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -88,6 +89,9 @@ public class TeamDto implements Serializable {
 	@Setter
 	private String createTimeStr; //页面显示创建时间
 	
+	@Getter
+	@Setter
+	private List<TeamResultDto> dataList;
 	
 	@Getter
 	@Setter

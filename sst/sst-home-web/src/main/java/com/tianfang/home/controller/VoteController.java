@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.tianfang.user.pojo.Vote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,6 @@ import com.tianfang.user.dto.VoteOptionDto;
 import com.tianfang.user.dto.VoteParams;
 import com.tianfang.user.dto.VoteUserOptionDto;
 import com.tianfang.user.dto.VoteUserTempDto;
-import com.tianfang.user.service.IVoteOptionService;
 import com.tianfang.user.service.IVoteService;
 import com.tianfang.user.service.IVoteUserOptionService;
 
@@ -56,8 +56,6 @@ public class VoteController extends BaseController{
 	
 	@Autowired
 	private IVoteService voteService;
-	@Autowired
-	private IVoteOptionService voteOptionService;
 	@Autowired
 	private IVoteUserOptionService voteUserOptionService;
 
@@ -198,7 +196,7 @@ public class VoteController extends BaseController{
 	/**
 	 * 发起投票接口
 	 * @param vote
-	 * @param userIds
+	 * @param userId
 	 * @return
 	 * @author xiang_wang
 	 * 2016年3月9日下午1:11:40
@@ -243,6 +241,25 @@ public class VoteController extends BaseController{
     	}
 		
 		return result;
+	}
+
+	/**
+	 * 根据用户id获取最新一条投票信息
+	 * @param userId
+	 * @return
+     */
+	@RequestMapping(value = "getLast")
+	@ResponseBody
+	public Response<VoteDto> getLast(String userId){
+		Response<VoteDto> response = new Response<VoteDto>();
+		if (StringUtils.isBlank(userId)){
+			response.setStatus(DataStatus.HTTP_FAILE);
+			response.setMessage("请求参数异常");
+			return response;
+		}
+		VoteDto last = voteService.getLast(userId);
+		response.setData(last);
+		return response;
 	}
 
 	/**

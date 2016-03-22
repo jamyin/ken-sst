@@ -1,7 +1,5 @@
 package com.tianfang.user.service;
 
-import java.util.List;
-
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.user.app.VoteApp;
@@ -9,6 +7,8 @@ import com.tianfang.user.dto.VoteDto;
 import com.tianfang.user.dto.VoteOptionDto;
 import com.tianfang.user.dto.VoteParams;
 import com.tianfang.user.dto.VoteUserTempDto;
+
+import java.util.List;
 
 /**		
  * <p>Title: IVoteService </p>
@@ -53,7 +53,7 @@ public interface IVoteService {
 	
 	/**
 	 * 关联sst_vote_user_temp表查询,根据指定参数查询
-	 * @param dto
+	 * @param params
 	 * @return
 	 * @author xiang_wang
 	 * 2016年3月8日下午5:11:09
@@ -62,11 +62,19 @@ public interface IVoteService {
 	
 	/**
 	 * 关联sst_vote_user_temp表查询,根据指定参数分页查询
-	 * @param dto
+	 * @param params
 	 * @param query
 	 * @return
 	 * @author xiang_wang
 	 * 2016年3月8日下午5:11:11
 	 */
 	PageResult<VoteDto> findVoteTempByParam(VoteParams params, PageQuery query);
+
+	/**
+	 * 根据用户id获取最新一条投票信息
+	 *
+	 * @param userId
+	 * @return
+     */
+	VoteDto getLast(String userId);
 }

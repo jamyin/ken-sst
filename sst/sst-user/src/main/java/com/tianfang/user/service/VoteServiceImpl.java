@@ -1,17 +1,5 @@
 package com.tianfang.user.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
@@ -22,13 +10,15 @@ import com.tianfang.user.app.OptionUserApp;
 import com.tianfang.user.app.VoteApp;
 import com.tianfang.user.app.VoteOptionApp;
 import com.tianfang.user.dao.VoteDao;
-import com.tianfang.user.dto.VoteDto;
-import com.tianfang.user.dto.VoteExDto;
-import com.tianfang.user.dto.VoteOptionDto;
-import com.tianfang.user.dto.VoteParams;
-import com.tianfang.user.dto.VoteUserTempDto;
+import com.tianfang.user.dto.*;
 import com.tianfang.user.pojo.Vote;
 import com.tianfang.user.pojo.VoteUserTemp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 @Service
 public class VoteServiceImpl implements IVoteService {
@@ -138,6 +128,10 @@ public class VoteServiceImpl implements IVoteService {
 			return new PageResult<VoteDto>(query, votes);
 		}
 		return null;
+	}
+
+	public VoteDto getLast(String userId){
+		return voteDao.getLast(userId);
 	}
 
 	private VoteApp voteExToVoteApp(String id, List<VoteExDto> dtos){

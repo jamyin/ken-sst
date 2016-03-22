@@ -1,15 +1,10 @@
 package com.tianfang.user.mapper;
 
-import java.util.List;
-
+import com.tianfang.common.model.PageQuery;
+import com.tianfang.user.dto.*;
 import org.apache.ibatis.annotations.Param;
 
-import com.tianfang.common.model.PageQuery;
-import com.tianfang.user.dto.VoteDto;
-import com.tianfang.user.dto.VoteExDto;
-import com.tianfang.user.dto.VoteOptionDto;
-import com.tianfang.user.dto.VoteParams;
-import com.tianfang.user.dto.VoteUserTempDto;
+import java.util.List;
 
 public interface VoteExMapper {
 	
@@ -56,4 +51,11 @@ public interface VoteExMapper {
 	 * 2016年3月9日下午3:05:16
 	 */
 	void insertBatchVoteUserTemp(List<VoteUserTempDto> temps);
+
+	/**
+	 * 根据用户id 查询最新一条投票信息
+	 * @param userId
+	 * @return
+     */
+	VoteDto getLast(String userId);
 }

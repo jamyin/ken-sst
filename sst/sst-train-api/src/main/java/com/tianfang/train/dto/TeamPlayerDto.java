@@ -63,6 +63,10 @@ public class TeamPlayerDto implements Serializable{
 	@Setter
     private Integer position;
 
+	@Getter
+	@Setter
+	private String positionStr;
+	
 	/**
 	 * 头像
 	 */

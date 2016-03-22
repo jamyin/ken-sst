@@ -1,12 +1,5 @@
 package com.tianfang.train.service;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
@@ -17,6 +10,12 @@ import com.tianfang.train.dao.CompetitionMatchDao;
 import com.tianfang.train.dto.CompetitionMatchDto;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.pojo.CompetitionMatch;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 
 @Service
@@ -131,12 +130,12 @@ public class CompetitionMatchServiceImpl implements ICompetitionMatchService {
 		int total = competitionMatchDao.selectAccount(competitionMatchDto);
 		page.setTotal(total);
 		List<CompetitionMatchDto> dtoList = BeanUtils.createBeanListByTarget(list, CompetitionMatchDto.class);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		for(CompetitionMatchDto dto : dtoList){
 			if(dto.getCreateTime() != null){
-			dto.setCreateTimeStr(sdf.format(dto.getCreateTime()));}
+				dto.setCreateTimeStr(sdf.format(dto.getCreateTime()));}
 			if(dto.getLastUpdateTime() != null){
-			dto.setLastUpdateTimeStr(sdf.format(dto.getLastUpdateTime()));
+				dto.setLastUpdateTimeStr(sdf.format(dto.getLastUpdateTime()));
 			}
 		}
 		return new PageResult<CompetitionMatchDto>(page, dtoList);

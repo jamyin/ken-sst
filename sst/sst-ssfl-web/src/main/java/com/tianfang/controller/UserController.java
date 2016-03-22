@@ -40,6 +40,7 @@ import com.tianfang.common.util.DateUtils;
 import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
+import com.tianfang.dto.LoginUserDto;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.service.IEmailSendService;
 import com.tianfang.user.service.ISmsSendService;
@@ -381,12 +382,15 @@ public class UserController extends BaseController{
 	@RequestMapping("/toPerson")
 	public ModelAndView toPerson(HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		ModelAndView mv = getModelAndView();
-		//LoginUserDto logDto= (LoginUserDto) session.getAttribute(SessionConstants.LOGIN_USER_INFO);
-		UserDto userDto = new UserDto();
-		userDto.setId("7e207fef-4312-4b20-935c-14e9f4d67665");
+		UserDto userDto= (UserDto) session.getAttribute(SessionConstants.LOGIN_USER_INFO);
+		if(userDto == null){
+			return new ModelAndView("redirect:/index.htm");
+//			return mv;
+		}
 		List<UserDto> list = userService.findUserByParam(userDto);
 		if(list == null || list.size() == 0){
-			return null;
+			return new ModelAndView("redirect:/index.htm");
+//			return mv;
 		}
 		UserDto dto = list.get(0);
 		if(dto.getCreateTime() != null){

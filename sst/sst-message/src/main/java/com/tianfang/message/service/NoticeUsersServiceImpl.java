@@ -2,6 +2,7 @@ package com.tianfang.message.service;
 
 import java.util.List;
 
+import com.tianfang.message.dto.NoticeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,4 +38,9 @@ public class NoticeUsersServiceImpl implements INoticeUsersService {
 		return noticeUsersDao.releaseNotice(list);
 	}
 
+
+	public NoticeDto getLast(String userId){
+
+		return noticeUsersDao.getLast(userId);
+	}
 }

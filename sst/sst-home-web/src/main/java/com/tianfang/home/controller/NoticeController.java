@@ -40,7 +40,7 @@ public class NoticeController extends BaseController {
 	private INoticeService noticeService;
 
 	@Autowired
-	private INoticeUsersService noticeUsersDao;
+	private INoticeUsersService noticeUsersService;
 	
 	/**
 	 * 公告显示页面-分页
@@ -199,7 +199,7 @@ public class NoticeController extends BaseController {
 				}
 			}
 		}
-		int releaseFlag = noticeUsersDao.releaseNotice(list);
+		int releaseFlag = noticeUsersService.releaseNotice(list);
 		if(flag > 0 && releaseFlag > 0){
 			data.setMessage("发布公告成功");
 			data.setStatus(200);
@@ -209,5 +209,23 @@ public class NoticeController extends BaseController {
 		}	   	
 		return data;
 	}
-	
+
+	/**
+	 * 提供移动端.轮询获取最新一条公告
+	 * @param userId
+	 * @return
+     */
+	@ResponseBody
+	@RequestMapping(value="getLast")
+	public Response<NoticeDto> getLast(String userId){
+		Response<NoticeDto> response = new Response<NoticeDto>();
+		if (StringUtils.isBlank(userId)){
+			response.setMessage("参数异常~");
+			response.setStatus(DataStatus.DISABLED);
+			return response;
+		}
+		NoticeDto last = noticeUsersService.getLast(userId);
+		response.setData(last);
+		return response;
+	}
 }
