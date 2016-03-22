@@ -126,4 +126,11 @@ public interface ICompetitionMatchService {
 	List<CompetitionMatchDto> findMatchByCompId(String compId);
 	
 	List<CompetitionMatchDto> findMatch(int limint,Integer matchType);
+	
+	/**
+	 * 分页根据球队ID查询
+	 * @param teamId
+	 * @return
+	 */
+	public PageResult<CompetitionMatchDto> selectCompetitionMatchByTeamId(String teamId, PageQuery query);
 }

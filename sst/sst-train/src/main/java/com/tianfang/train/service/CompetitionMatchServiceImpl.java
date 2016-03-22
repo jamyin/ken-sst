@@ -215,4 +215,16 @@ public class CompetitionMatchServiceImpl implements ICompetitionMatchService {
 		}
 		return null;
 	}
+	
+	public PageResult<CompetitionMatchDto> selectCompetitionMatchByTeamId(String teamId, PageQuery query) {
+		query.setPageSize(7);
+		int count = competitionMatchDao.countCompetitionMatchByTeamId(teamId);
+		if (count > 0) {
+			query.setTotal(count);
+			List<CompetitionMatchDto> results =  BeanUtils.createBeanListByTarget(competitionMatchDao.selectCompetitionMatchByTeamId(teamId,query), CompetitionMatchDto.class);
+			return new PageResult<CompetitionMatchDto>(query, results);
+		}
+		return null;
+//		return competitionMatchDao.selectCompetitionMatchByTeamId(teamId);
+	}
 }
