@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Form Elements - Ace Admin</title>
+    <meta name="description" content="Common form elements and layouts"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <#include "../../common/head.htm"/>
+    <link href="${base}/static/css/course.css" rel="stylesheet" type="text/css"/>
+    <link href="${base}/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="${base}/plugins/uploadify/swfobject.js"></script>
+    <script type="text/javascript" src="${base}/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>
+</head>
+<body>
+<div class="container-fluid" id="main-container">
+    <div id="main-content" class="clearfix" style="margin-left:0px;">
+        <div id="page-content" class="clearfix">
+            <div class="row-fluid">
+                <!-- PAGE CONTENT BEGINS HERE -->
+                <form id="submitForm" class="form-horizontal" method="POST">
+                    <input type="hidden" name="matchId" value="${(matchId)!}"/>
+                    <input type="hidden" name="id" value="${(homeDatas.id)!}"/>
+                    <input type="hidden" name="id" value="${(vsDatas.id)!}"/>
+                    <input type="hidden" name="teamId" value="${(home.id)!}"/>
+                    <input type="hidden" name="teamId" value="${(vs.id)!}"/>
+                    <table id="table_bug_report" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class='center'>${(home.name)!}</th>
+                            <th class='center'>数据</th>
+                            <th class='center'>${(vs.name)!}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_goal" class="input-mini score_hv" name="goal"/>
+                            </td>
+                            <td class='center'>进球</td>
+                            <td class='center'>
+                                <input type="text" id="vs_goal" class="input-mini score_hv" name="goal"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_goal_out" class="input-mini score_hv" name="goalOut"/>
+                            </td>
+                            <td class='center'>失球</td>
+                            <td class='center'>
+                                <input type="text" id="vs_goal_out" class="input-mini score_hv" name="goalOut"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_shot" class="input-mini score_hv" name="shot"/>
+                            </td>
+                            <td class='center'>射门</td>
+                            <td class='center'>
+                                <input type="text" id="vs_shot" class="input-mini score_hv" name="shot"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_shotRight" class="input-mini score_hv" name="shotRight"/>
+                            </td>
+                            <td class='center'>射正</td>
+                            <td class='center'>
+                                <input type="text" id="vs_shotRight" class="input-mini score_hv" name="shotRight"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_shotPost" class="input-mini score_hv" name="shotPost"/>
+                            </td>
+                            <td class='center'>击中门柱</td>
+                            <td class='center'>
+                                <input type="text" id="vs_shotPost" class="input-mini score_hv" name="shotPost"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_pass" class="input-mini score_hv" name="pass"/>
+                            </td>
+                            <td class='center'>传球</td>
+                            <td class='center'>
+                                <input type="text" id="vs_pass" class="input-mini score_hv" name="pass"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_passCross" class="input-mini score_hv" name="passCross"/>
+                            </td>
+                            <td class='center'>传中</td>
+                            <td class='center'>
+                                <input type="text" id="vs_passCross" class="input-mini score_hv" name="passCross"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_corner" class="input-mini score_hv" name="corner"/>
+                            </td>
+                            <td class='center'>角球</td>
+                            <td class='center'>
+                                <input type="text" id="vs_corner" class="input-mini score_hv" name="corner"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_freeKick" class="input-mini score_hv" name="freeKick"/>
+                            </td>
+                            <td class='center'>任意球</td>
+                            <td class='center'>
+                                <input type="text" id="vs_freeKick" class="input-mini score_hv" name="freeKick"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_offside" class="input-mini score_hv" name="offside"/>
+                            </td>
+                            <td class='center'>越位</td>
+                            <td class='center'>
+                                <input type="text" id="vs_offside" class="input-mini score_hv" name="offside"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_tackle" class="input-mini score_hv" name="tackle"/>
+                            </td>
+                            <td class='center'>抢断</td>
+                            <td class='center'>
+                                <input type="text" id="vs_tackle" class="input-mini score_hv" name="tackle"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_clearanceKick" class="input-mini score_hv" name="clearanceKick"/>
+                            </td>
+                            <td class='center'>解围</td>
+                            <td class='center'>
+                                <input type="text" id="vs_clearanceKick" class="input-mini score_hv" name="clearanceKick"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_yellow" class="input-mini score_hv" name="yellow"/>
+                            </td>
+                            <td class='center'>黄牌</td>
+                            <td class='center'>
+                                <input type="text" id="vs_yellow" class="input-mini score_hv" name="yellow"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input type="text" id="home_red" class="input-mini score_hv" name="red"/>
+                            </td>
+                            <td class='center'>红牌</td>
+                            <td class='center'>
+                                <input type="text" id="vs_red" class="input-mini score_hv" name="red"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='center'>
+                                <input class="input-mini input-mask-eyescript" id="home_trapRate" type="text" name="trapRate" value="${(homeDatas.trapRate)!}"/>
+                            </td>
+                            <td class='center'>控球率(%)</td>
+                            <td class='center'>
+                                <input class="input-mini input-mask-eyescript" id="vs_trapRate" type="text" name="trapRate" value="${(vsDatas.trapRate)!}"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="form-actions">
+                        <button id='cancel-button' class="btn btn-small" style="float:right;" type="reset"><i
+                                class="icon-undo"></i>关闭
+                        </button>
+                        <button id='savebutton' class="btn btn-small btn-primary"
+                                style="float:right; margin-right:20px;" type="button"><i class="icon-ok"></i>确认
+                        </button>
+                    </div>
+                </form>
+                <!-- PAGE CONTENT ENDS HERE -->
+            </div><!--/row-->
+        </div><!--/#page-content-->
+    </div><!-- #main-content -->
+</div><!--/.fluid-container#main-container-->
+<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+    <i class="icon-double-angle-up icon-only"></i>
+</a>
+<!-- basic scripts -->
+<!-- <script src="${base}/static/1.9.1/jquery.min.js"></script> -->
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+</script>
+
+<script src="${base}/static/js/bootstrap.min.js"></script>
+<!-- page specific plugin scripts -->
+
+<!--[if lt IE 9]>
+<script type="text/javascript" src="${base}/static/js/excanvas.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="${base}/static/js/jquery-ui-1.10.2.custom.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/fuelux.spinner.js"></script>
+<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/bootstrap-timepicker.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/date.js"></script>
+<script type="text/javascript" src="${base}/static/js/daterangepicker.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/bootstrap-colorpicker.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/jquery.autosize-min.js"></script>
+<script type="text/javascript" src="${base}/static/js/jquery.inputlimiter.1.3.1.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/jquery.maskedinput.min.js"></script>
+<!-- ace scripts -->
+<script src="${base}/static/js/ace-elements.min.js"></script>
+<script src="${base}/static/js/ace.min.js"></script>
+<!-- inline scripts related to this page -->
+<!-- 日期框 -->
+<script type="text/javascript" src="${base}/static/js/bootbox.min.js"></script>
+<!-- layer 弹出框处理 -->
+<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+    $(function () {
+        $('#home_goal').on('change', function(){
+            $('#vs_goal_out').val($(this).val());
+        });
+        $('#vs_goal').on('change', function(){
+            $('#home_goal_out').val($(this).val());
+        });
+        $('#home_goal_out').on('change', function(){
+            $('#vs_goal').val($(this).val());
+        });
+        $('#vs_goal_out').on('change', function(){
+            $('#home_goal').val($(this).val());
+        });
+        $('#home_trapRate').on('change', function(){
+            /*console.log('home_traprate'+$(this).val());*/
+            if ($(this).val() != null && $(this).val() != ''){
+                var num =100.00-$(this).val();
+                $('#vs_trapRate').val(num.toFixed(2));
+            }
+        });
+        $('#vs_trapRate').on('change', function(){
+           /* console.log('vs_traprate'+$(this).val());*/
+            if ($(this).val() != null && $(this).val() != ''){
+                var num =100.00-$(this).val();
+                $('#home_trapRate').val(num.toFixed(2));
+            }
+        });
+
+        $.mask.definitions['~']='[+-]';
+        $('.input-mask-eyescript').mask('99.99');
+
+        $('#home_goal').ace_spinner({value:${(homeDatas.goal)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_goal').ace_spinner({value:${(vsDatas.goal)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_goal_out').ace_spinner({value:${(homeDatas.goalOut)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_goal_out').ace_spinner({value:${(vsDatas.goalOut)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_shot').ace_spinner({value:${(homeDatas.shot)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_shot').ace_spinner({value:${(vsDatas.shot)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_shotRight').ace_spinner({value:${(homeDatas.shotRight)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_shotRight').ace_spinner({value:${(vsDatas.shotRight)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_shotPost').ace_spinner({value:${(homeDatas.shotPost)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_shotPost').ace_spinner({value:${(vsDatas.shotPost)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_pass').ace_spinner({value:${(homeDatas.pass)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_pass').ace_spinner({value:${(vsDatas.pass)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_passCross').ace_spinner({value:${(homeDatas.passCross)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_passCross').ace_spinner({value:${(vsDatas.passCross)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_corner').ace_spinner({value:${(homeDatas.corner)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_corner').ace_spinner({value:${(vsDatas.corner)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_freeKick').ace_spinner({value:${(homeDatas.freeKick)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_freeKick').ace_spinner({value:${(vsDatas.freeKick)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_offside').ace_spinner({value:${(homeDatas.offside)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_offside').ace_spinner({value:${(vsDatas.offside)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_tackle').ace_spinner({value:${(homeDatas.tackle)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_tackle').ace_spinner({value:${(vsDatas.tackle)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_clearanceKick').ace_spinner({value:${(homeDatas.clearanceKick)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_clearanceKick').ace_spinner({value:${(vsDatas.clearanceKick)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_yellow').ace_spinner({value:${(homeDatas.yellow)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_yellow').ace_spinner({value:${(vsDatas.yellow)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        $('#home_red').ace_spinner({value:${(homeDatas.red)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#vs_red').ace_spinner({value:${(vsDatas.red)!0},min:0,max:100,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+        //关闭iframe
+        $('#cancel-button').click(function () {
+            parent.layer.close(index);
+        });
+
+        $(".chzn-select").chosen();
+
+        $("#savebutton").on('click', function () {
+            submit();
+        });
+    });
+
+    function submit() {
+        if ($('#home_trapRate').val() == null || $('#home_trapRate').val() == ''){
+            layer.alert('主场控球率不能为空~', { icon: 7 });
+            return;
+        }
+        if ($('#vs_trapRate').val() == null || $('#vs_trapRate').val() == ''){
+            layer.alert('客场控球率不能为空~', { icon: 7 });
+            return;
+        }
+        var ajaxParams = $("#submitForm").serialize();
+        $.ajax({
+            type : "POST",
+            url : "${base}/competition/match/saveTeamDatas.do",
+            data : ajaxParams,
+            datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+            beforeSend : function() {
+            },
+            success : function(data) {// 成功返回之后调用的函数
+                var jsondata = null;//eval('(' + data + ')');
+                if (data instanceof Object){
+                    jsondata = data;
+                }else{
+                    jsondata = eval('(' + data + ')');
+                }
+                if(jsondata.status == 200){
+                    parent.layer.msg(jsondata.message, {
+                        shade: [0.9, '#000'],
+                        icon: 6,
+                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                        //parent.reload_page();
+                        parent.layer.close(index);
+                    });
+                }else{
+                    parent.layer.msg(jsondata.message, {
+                        shade: [0.9, '#000'],
+                        icon: 6,
+                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                    });
+                }
+                //console.log(data.success);
+            },
+            complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+
+            },
+            error : function() {// 调用出错执行的函数
+            }
+        });
+    }
+</script>
+</body>
+</html>

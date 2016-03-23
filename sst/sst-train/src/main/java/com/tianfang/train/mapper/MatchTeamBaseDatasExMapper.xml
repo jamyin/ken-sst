@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.MatchTeamBaseDatasExMapper">
+    <resultMap id="BaseResultMap" type="com.tianfang.train.pojo.MatchTeamBaseDatas">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="match_id" property="matchId" jdbcType="VARCHAR"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
+        <result column="goal" property="goal" jdbcType="INTEGER"/>
+        <result column="goal_out" property="goalOut" jdbcType="INTEGER"/>
+        <result column="shot" property="shot" jdbcType="INTEGER"/>
+        <result column="shot_right" property="shotRight" jdbcType="INTEGER"/>
+        <result column="shot_post" property="shotPost" jdbcType="INTEGER"/>
+        <result column="pass" property="pass" jdbcType="INTEGER"/>
+        <result column="pass_cross" property="passCross" jdbcType="INTEGER"/>
+        <result column="corner" property="corner" jdbcType="INTEGER"/>
+        <result column="free_kick" property="freeKick" jdbcType="INTEGER"/>
+        <result column="offside" property="offside" jdbcType="INTEGER"/>
+        <result column="tackle" property="tackle" jdbcType="INTEGER"/>
+        <result column="clearance_kick" property="clearanceKick" jdbcType="INTEGER"/>
+        <result column="yellow" property="yellow" jdbcType="INTEGER"/>
+        <result column="red" property="red" jdbcType="INTEGER"/>
+        <result column="trap_rate" property="trapRate" jdbcType="DOUBLE"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP"/>
+        <result column="stat" property="stat" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="batchInsertTeamDatas" parameterType="java.util.List">
+        insert into sst_match_team_base_datas (id, match_id, team_id,
+        goal, goal_out, shot, shot_right, shot_post, pass, pass_cross, corner, free_kick,
+        offside, tackle, clearance_kick, yellow, red, trap_rate, create_time, stat
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.matchId}, #{item.teamId},
+            #{item.goal}, #{item.goalOut}, #{item.shot}, #{item.shotRight}, #{item.shotPost}, #{item.pass}, #{item.passCross}, #{item.corner}, #{item.freeKick},
+            #{item.offside}, #{item.tackle}, #{item.clearanceKick}, #{item.yellow}, #{item.red}, #{item.trapRate}, #{item.createTime}, #{item.stat})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByMatchId" parameterType="java.lang.String">
+        delete from sst_match_team_base_datas where match_id = #{matchId}
+    </delete>
+
+</mapper>

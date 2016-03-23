@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.MatchPlayerHotDatasExMapper">
+    <resultMap id="BaseResultMap" type="com.tianfang.train.pojo.MatchPlayerHotDatas">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="match_id" property="matchId" jdbcType="VARCHAR"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
+        <result column="player_id" property="playerId" jdbcType="VARCHAR"/>
+        <result column="minute" property="minute" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP"/>
+        <result column="stat" property="stat" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="batchInsertPlayerHotDatas" parameterType="java.util.List">
+        insert into sst_match_player_hot_datas (id, match_id, team_id,
+        player_id, type, minute, create_time, stat
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.matchId}, #{item.teamId},
+            #{item.playerId}, #{item.type}, #{item.minute}, #{item.createTime}, #{item.stat})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByMatchIdAndTeamId" parameterType="java.lang.String">
+        delete from sst_match_player_hot_datas where match_id =#{matchId} and team_id= #{teamid}
+    </delete>
+</mapper>
