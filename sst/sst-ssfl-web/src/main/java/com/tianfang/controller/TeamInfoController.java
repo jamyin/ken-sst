@@ -9,9 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tianfang.common.constants.TeamPlayerPositionEnum;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
-import com.tianfang.train.constants.TeamPlayerPositionEnum;
 import com.tianfang.train.dto.CompetitionMatchDto;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.dto.TeamPlayerDto;
