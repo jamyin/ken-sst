@@ -38,7 +38,7 @@
         </foreach>
     </insert>
 
-    <delete id="deleteByMatchIdAndTeamId" parameterType="java.lang.String">
-        delete from sst_match_player_base_datas where match_id =#{matchId} and team_id= #{teamid}
+    <delete id="deleteByMatchIdAndTeamId" parameterType="java.util.Map">
+        delete from sst_match_player_base_datas where match_id =#{matchId} and team_id= #{teamId}
     </delete>
 </mapper>

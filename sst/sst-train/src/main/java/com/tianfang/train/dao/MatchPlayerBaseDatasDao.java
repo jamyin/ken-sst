@@ -57,7 +57,10 @@ public class MatchPlayerBaseDatasDao extends MyBatisBaseDao<MatchPlayerBaseDatas
 	}
 
 	public void deleteByMatchIdAndTeamId(String matchId, String teamId) {
-		exMapper.deleteByMatchIdAndTeamId(matchId, teamId);
+		Map<String, String> map = new HashMap<String, String>(2);
+		map.put("matchId",matchId);
+		map.put("teamId",teamId);
+		exMapper.deleteByMatchIdAndTeamId(map);
 	}
 
 	/**

@@ -1,9 +1,6 @@
 package com.tianfang.admin.controller;
 
-import com.tianfang.admin.dto.AdminDto;
-import com.tianfang.admin.dto.PlayerDataDto;
-import com.tianfang.admin.dto.PlayerDto;
-import com.tianfang.admin.dto.TeamDataDto;
+import com.tianfang.admin.dto.*;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.constants.TeamPlayerPositionEnum;
 import com.tianfang.common.ext.ExtPageQuery;
@@ -364,10 +361,11 @@ public class CompetitionMatchController extends BaseController {
 	/**
 	 * 选择添加那个球队
 	 * @param matchId
+	 * @param type 0-添加基本数据,1-添加时间轴数据
 	 * @return
      */
 	@RequestMapping(value="selectTeam")
-	public ModelAndView selectTeam(String matchId){
+	public ModelAndView selectTeam(String matchId, Integer type){
 		ModelAndView mv = getModelAndView();
 		CompetitionMatchDto match = matchService.getMatchById(matchId);
 		if (match != null){
@@ -376,6 +374,7 @@ public class CompetitionMatchController extends BaseController {
 			mv.addObject("home", home);
 			mv.addObject("vs", vs);
 			mv.addObject("matchId", matchId);
+			mv.addObject("type", type);
 		}
 
 		mv.setViewName("/competition/match/selectTeam");
@@ -437,6 +436,104 @@ public class CompetitionMatchController extends BaseController {
 		return response;
 	}
 
+
+	/**
+	 * 添加/编辑 比赛时间轴数据
+	 * @param matchId
+	 * @param teamId
+	 * @return
+	 */
+	@RequestMapping(value="addHotDatas")
+	public ModelAndView addHotDatas(String matchId, String teamId){
+		ModelAndView mv = getModelAndView();
+		TeamPlayerDto param = new TeamPlayerDto();
+		param.setTeamId(teamId);
+		List<TeamPlayerDto> players = playserService.findTeamPlayerByParam(param);
+		List<MatchPlayerHotDatasDto> hotDatas = getHotDatas(matchId, teamId);
+		mv.addObject("players", players);
+		mv.addObject("hotTypes", MatchPlayerHotDatasDto.Type.values());
+		mv.addObject("hotDatas", hotDatas);
+		mv.addObject("teamId", teamId);
+		mv.addObject("matchId", matchId);
+		mv.setViewName("/competition/match/addHotDatas");
+		return mv;
+	}
+
+	/**
+	 * 保存/修改 比赛时间轴数据
+	 * @param dto
+	 * @return
+     */
+	@RequestMapping(value="saveHotDatas")
+	@ResponseBody
+	public Response<String> saveHotDatas(HotDatasDto dto){
+		Response<String> response = new Response<String>();
+		if (null == dto || null == dto.getPlayerId()){
+			response.setMessage("亲,请填写数据!");
+			response.setStatus(DataStatus.HTTP_FAILE);
+			return response;
+		}
+		try {
+			List<MatchPlayerHotDatasDto> datas = assemblyDto(dto);
+			if (null != dto.getId() && dto.getId().length > 0 && StringUtils.isNotBlank(dto.getId()[0])){
+				System.out.println("update");
+				matchDatasService.updatePlayerHotDatas(datas);
+				response.setMessage("修改成功");
+			}else{
+				System.out.println("save");
+				matchDatasService.batchInsertPlayerHotDatas(datas);
+				response.setMessage("保存成功");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(DataStatus.HTTP_FAILE);
+			response.setMessage("系统异常!");
+			logger.error(e.getMessage());
+		}
+		return response;
+	}
+
+	/**
+	 * 根据比赛id,球队id查询时间轴数据
+	 * @param matchId
+	 * @param teamId
+	 * @return
+	 */
+	private List<MatchPlayerHotDatasDto> getHotDatas(String matchId, String teamId) {
+		MatchPlayerHotDatasDto param = new MatchPlayerHotDatasDto();
+		param.setMatchId(matchId);
+		param.setTeamId(teamId);
+		List<MatchPlayerHotDatasDto> matchPlayerHotDatasDtos = matchDatasService.queryPlayerHotDatasByParams(param);
+		if (null != matchPlayerHotDatasDtos && matchPlayerHotDatasDtos.size() > 0){
+			return matchPlayerHotDatasDtos;
+		}
+		return null;
+	}
+
+	/**
+	 * 将页面接收数据转为MatchPlayerHotDatasDto
+	 * @param dto
+	 * @return
+     */
+	private List<MatchPlayerHotDatasDto> assemblyDto(HotDatasDto dto) {
+		if (null != dto && null != dto.getPlayerId()){
+			List<MatchPlayerHotDatasDto> datas = new ArrayList<>(dto.getPlayerId().length);
+			MatchPlayerHotDatasDto data;
+			for (int i = 0, len = dto.getPlayerId().length; i < len; i++){
+				data = new MatchPlayerHotDatasDto();
+				data.setMatchId(dto.getMatchId());
+				data.setTeamId(dto.getTeamId());
+				data.setMinute(dto.getMinute()[i]);
+				data.setPlayerId(dto.getPlayerId()[i]);
+				data.setType(dto.getType()[i]);
+
+				datas.add(data);
+			}
+			return datas;
+		}
+		return null;
+	}
+
 	/**
 	 * 根据比赛id,球队id查询球员数据
 	 * @param matchId
@@ -477,6 +574,7 @@ public class CompetitionMatchController extends BaseController {
 				if (null != map){
 					if (map.containsKey(dto.getId())){
 						datas = map.get(dto.getId());
+						player.setId(datas.getId());
 						player.setYellow(datas.getYellow());
 						player.setAssist(datas.getAssist());
 						player.setClearanceKick(datas.getClearanceKick());

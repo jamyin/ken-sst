@@ -297,6 +297,17 @@
         });
     }
 
+    function addHotDatas(matchId, teamId){
+        layer.open({
+            type: 2,
+            title: '编辑比赛时间轴数据',
+            area: ['50%', '80%'],
+            fix: true, //不固定
+            maxmin: true,
+            content: '${base}/competition/match/addHotDatas.do?matchId=' + matchId+'&teamId='+teamId
+        });
+    }
+
     $(function () {
         $('[data-rel=tooltip]').tooltip();
 
@@ -329,7 +340,7 @@
             //console.log($(this).attr("data-obj-id"));
         });
 
-        // 选择编辑球队
+        // 选择编辑球队(球员基本数据)
         $("#operation #addPlayerDatas").on('click', function () {
             var id = $(this).attr("data-obj-id");
             //iframe层-父子操作
@@ -339,7 +350,22 @@
                 area: ['35%', '60%'],
                 fix: true, //不固定
                 maxmin: false,
-                content: '${base}/competition/match/selectTeam.do?matchId=' + id
+                content: '${base}/competition/match/selectTeam.do?matchId=' + id +'&type=0'
+            });
+            //console.log($(this).attr("data-obj-id"));
+        });
+
+        // 选择编辑球队(时间轴数据)
+        $("#operation #addHotDatas").on('click', function () {
+            var id = $(this).attr("data-obj-id");
+            //iframe层-父子操作
+            layer.open({
+                title: '选择编辑球队',
+                type: 2,
+                area: ['35%', '60%'],
+                fix: true, //不固定
+                maxmin: false,
+                content: '${base}/competition/match/selectTeam.do?matchId=' + id +'&type=1'
             });
             //console.log($(this).attr("data-obj-id"));
         });

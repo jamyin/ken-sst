@@ -14,7 +14,9 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class MatchPlayerHotDatasDao extends MyBatisBaseDao<MatchPlayerHotDatas>{
@@ -34,9 +36,9 @@ public class MatchPlayerHotDatasDao extends MyBatisBaseDao<MatchPlayerHotDatas>{
 		MatchPlayerHotDatasExample.Criteria criteria = example.createCriteria();
         assemblyParams(dto, criteria);
         if(null != query){
-        	example.setOrderByClause("create_time desc limit "+query.getStartNum() +"," + query.getPageSize());
+        	example.setOrderByClause("minute asc, create_time desc limit "+query.getStartNum() +"," + query.getPageSize());
 		}else{
-			example.setOrderByClause("create_time desc");
+			example.setOrderByClause("minute asc, create_time desc");
 		}
         List<MatchPlayerHotDatas> results = mapper.selectByExample(example);        
 		return BeanUtils.createBeanListByTarget(results, MatchPlayerHotDatasDto.class);
@@ -55,7 +57,10 @@ public class MatchPlayerHotDatasDao extends MyBatisBaseDao<MatchPlayerHotDatas>{
 	}
 
 	public void deleteByMatchIdAndTeamId(String matchId, String teamId) {
-		exMapper.deleteByMatchIdAndTeamId(matchId, teamId);
+		Map<String, String> map = new HashMap<String, String>(2);
+		map.put("matchId",matchId);
+		map.put("teamId",teamId);
+		exMapper.deleteByMatchIdAndTeamId(map);
 	}
 	
 	/**

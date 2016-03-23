@@ -19,6 +19,7 @@
 							<!-- PAGE CONTENT BEGINS HERE -->
 							<form id="submitForm" class="form-horizontal" method="POST">
 								<input type="hidden" id="matchId" name="matchId" value="${(matchId)!}"/>
+								<input type="hidden" id="type"  value="${(type)!}"/>
 								<div class="control-group">
 										<label class="course_add_label" for="teamId"></label>
 										<div class="course_add_input">
@@ -83,10 +84,16 @@
 			$(".chzn-select").chosen(); 
 			
 			$("#savebutton").on('click',function(){
-				var matchId = $("#matchId").val()
-				var teamId = $("#teamId").val()
+				var matchId = $("#matchId").val();
+				var teamId = $("#teamId").val();
+				var type = $('#type').val();
+				if (type == 0){
+					parent.addPlayerDatas(matchId, teamId);
+				}
+				if (type == 1){
+					parent.addHotDatas(matchId, teamId);
+				}
 
-				parent.addPlayerDatas(matchId, teamId);
 				parent.layer.close(index);
 			});
 		});
