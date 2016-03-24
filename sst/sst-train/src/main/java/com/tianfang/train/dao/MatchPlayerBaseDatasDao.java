@@ -1,11 +1,14 @@
 package com.tianfang.train.dao;
 
 import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.constants.TeamPlayerPositionEnum;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.mybatis.MyBatisBaseDao;
 import com.tianfang.common.util.BeanUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.train.dto.MatchPlayerBaseDatasDto;
+import com.tianfang.train.dto.MatchPlayerBaseDatasTempDto;
+import com.tianfang.train.dto.MatchPlayerHotDatasTempDto;
 import com.tianfang.train.mapper.MatchPlayerBaseDatasExMapper;
 import com.tianfang.train.mapper.MatchPlayerBaseDatasMapper;
 import com.tianfang.train.pojo.MatchPlayerBaseDatas;
@@ -83,5 +86,15 @@ public class MatchPlayerBaseDatasDao extends MyBatisBaseDao<MatchPlayerBaseDatas
 			}
         }
 		criteria.andStatEqualTo(DataStatus.ENABLED);
+	}
+
+	public List<MatchPlayerBaseDatasTempDto> queryPlayerBaseDatasTempByParams(MatchPlayerBaseDatasDto params) {
+		List<MatchPlayerBaseDatasTempDto> datas = exMapper.queryPlayerBaseDatasTempByParams(params);
+		if (null != datas && datas.size() > 0){
+			for (MatchPlayerBaseDatasTempDto data : datas){
+				data.setPositionStr(TeamPlayerPositionEnum.getName(data.getPosition()));
+			}
+		}
+		return datas;
 	}
 }
