@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<!-- 	<head>
+		<meta charset="UTF-8">
+		<meta name="Description" content="对战详情"/>
+		<link rel="icon" type="image/gif" href="static/img/favicon.ico">
+		<title>个人中心</title>
+		<script src="static/js/jquery-2.1.3.min.js"></script>
+		<script src="static/js/common.js"></script>
+		<link href="static/css/common.css" rel="stylesheet" />
+		<link href="static/css/data-battle-detail.css" rel="stylesheet" />
+	</head> -->
+
+<head>
+	<#include "/common/head.htm"/>
+	<link href="/static/css/common.css" rel="stylesheet" />
+	<link href="/static/css/data-battle-detail.css" rel="stylesheet" />
+</head>
+
+<body>
+	<div class="header">
+	<#include "/common/header.htm"/>
+		<!-- <div class="header">
+			<div class="wrapper">
+				<div class="topbar">
+					<a class="logo" href="###"></a>
+					<div class="login_status"><a class="p_center" href="###">个人中心</a> <a href="###">登陆</a> <a href="###">注册</a></div>
+				</div>
+				<div class="nav">
+					<ul>
+						<li tag="0"><a href="index.html">首 页<br><span>HOME</span></a></li>
+						<li tag="140"><a href="index.html">新闻公告<br><span>NEWS</span></a></li>
+						<li class="cur" tag="280"><a href="index.html">数据中心<br><span>DATA</span></a></li>
+						<li tag="420"><a href="index.html">视频图集<br><span>VIDEO</span></a></li>
+						<li tag="560"><a href="index.html">参赛球队<br><span>TEAM</span></a></li>
+						<li tag="700"><a href="index.html">商务合作<br><span>COOPERATION</span></a></li>
+					</ul>
+					<div class="mark"></div>
+					</li>
+				</div>
+			</div>
+		</div> -->
+
+		<div class="wrapper">
+			<div class="battle-dt-con">
+				<div class="team-A team-logo">
+				<#if matchDto.homeTeamIcon ??>
+					<img src="${(matchDto.homeTeamIcon)!}"/>
+				<#else>
+					<img src="/static/img/teamlogo1.png"/>
+				</#if>
+				</div>
+				<span class="team-A-name team-name">
+					${(matchDto.homeTeamName)!}
+				</span>
+				<div class="team-B team-logo">
+				<#if matchDto.visitingTeamIcon ??>
+					<img src="${(matchDto.visitingTeamIcon)!}"/>
+				<#else>
+					<img src="/static/img/teamlogo2.png"/>
+				</#if>
+				</div>
+				<span class="team-B-name  team-name">
+					${(matchDto.visitingTeamName)!}
+				</span>
+			</div>
+			<div class="battle-dt-time-place">
+				<div class="battle-dt-time">
+					<span class="lb">
+						比赛时间
+					</span>
+					<span class="week">
+						周${(matchDto.week)!}
+					</span>
+					<span class="time">
+						${(matchDto.matchTimeString)!}
+					</span>
+					<span class="status">
+						未开始
+					</span>
+				</div>
+				<div class="battle-dt-place">
+					<span class="lb">
+						比赛地点
+					</span>
+					<span class="address">
+						${(matchDto.address)!}
+					</span>
+				</div>
+			</div>
+		</div>
+<!-- 	<script src="static/js/footer.js"></script>
+		<script src="static/js/regiest.js"></script> -->
+	</body>
+	 <#include "/common/foot.htm"/> 
+	 <script src="/static/js/footer.js"></script>
+	 <script src="/static/js/regiest.js"></script>
+
+</html>

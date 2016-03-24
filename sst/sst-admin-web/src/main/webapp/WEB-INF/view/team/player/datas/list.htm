@@ -65,7 +65,12 @@
 							<th>赛事名称</th>
 							<th style="width:18%;">球队</th>
 							<th>球员</th>
+							<th>球员位置</th>
+							<th>出场次数</th>
+							<th>出场时间</th>
 							<th>进球数</th>
+							<th>点球数</th>
+							<th>助攻数</th>
 							<th>黄牌</th>
 							<th>红牌</th>
 							<th class="hidden-phone"><i class="icon-time hidden-phone"></i>创建时间</th>
@@ -83,7 +88,12 @@
 									<td>${(page.compName)!}</td>
 									<td><img style="width: 45px; height: 45px;" src="${imgurl}${(page.teamIcon)!}">&nbsp;&nbsp;${(page.teamName)!}</td>
 									<td>${(page.playerName)!}</td>
+									<td>${(page.position)!}</td>
+									<td>${(page.times)!}</td>
+									<td>${(page.playTimes)!}</td>
 									<td>${(page.num)!}</td>
+									<td>${(page.points)!}</td>
+									<td>${(page.assists)!}</td>
 									<td>${(page.yellow)!}</td>
 									<td>${(page.red)!}</td>
 									<td  class='hidden-phone'>${(page.createTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>

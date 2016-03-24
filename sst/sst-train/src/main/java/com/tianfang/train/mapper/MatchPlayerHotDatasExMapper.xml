@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.MatchPlayerHotDatasExMapper">
+    <resultMap id="BaseResultMap" type="com.tianfang.train.pojo.MatchPlayerHotDatas">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="match_id" property="matchId" jdbcType="VARCHAR"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
+        <result column="player_id" property="playerId" jdbcType="VARCHAR"/>
+        <result column="minute" property="minute" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP"/>
+        <result column="stat" property="stat" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="TempResultMap" type="com.tianfang.train.dto.MatchPlayerHotDatasTempDto">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="match_id" property="matchId" jdbcType="VARCHAR"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
+        <result column="player_id" property="playerId" jdbcType="VARCHAR"/>
+        <result column="minute" property="minute" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="name" property="playerName" jdbcType="VARCHAR"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="position" property="position" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Temp_Column_List" >
+        a.id, a.match_id, a.team_id, a.player_id, a.type, a.minute, b.name, b.num, b.position
+    </sql>
+
+    <sql id="Temp_Where_Clause" >
+        <where >
+            b.stat = 1 AND a.stat = 1
+            <if test="dto.id != null and dto.id != ''">
+                AND a.id = #{dto.id}
+            </if>
+            <if test="dto.matchId != null and dto.matchId != ''">
+                AND a.match_id = #{dto.matchId}
+            </if>
+            <if test="dto.teamId != null and dto.teamId != ''">
+                AND a.team_id = #{dto.teamId}
+            </if>
+            <if test="dto.playerId != null and dto.playerId != ''">
+                AND a.player_id = #{dto.playerId}
+            </if>
+            <if test="dto.type != null">
+                AND a.type = #{dto.type}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="batchInsertPlayerHotDatas" parameterType="java.util.List">
+        insert into sst_match_player_hot_datas (id, match_id, team_id,
+        player_id, type, minute, create_time, stat
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.matchId}, #{item.teamId},
+            #{item.playerId}, #{item.type}, #{item.minute}, #{item.createTime}, #{item.stat})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByMatchIdAndTeamId" parameterType="java.util.Map">
+        delete from sst_match_player_hot_datas where match_id =#{matchId} and team_id= #{teamId}
+    </delete>
+
+    <select id="queryPlayerHotDatasTempByParams" resultMap="TempResultMap" parameterType="com.tianfang.train.dto.MatchPlayerHotDatasDto">
+        select
+        <include refid="Temp_Column_List" />
+        from sst_match_player_hot_datas as a left join sst_team_player as b on a.player_id = b.id
+        <include refid="Temp_Where_Clause" />
+        order by a.minute asc,a.create_time desc
+    </select>
+</mapper>

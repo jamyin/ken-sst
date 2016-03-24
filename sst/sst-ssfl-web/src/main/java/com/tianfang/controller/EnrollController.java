@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Objects;
-import com.sun.mail.imap.protocol.Item;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.Response;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.service.ITeamService;
+import com.tianfang.user.dto.UserDto;
 
 /**
  * 
@@ -39,6 +39,12 @@ public class EnrollController extends BaseController {
 	public ModelAndView form() {
 		ModelAndView mv = getModelAndView();
 
+		//查看当前登录用户是否已经有球队 有则进行信息回填
+		UserDto userDto = getUserAccountByUserId();
+		
+//		iTeamService.
+		
+		mv.addObject("data", userDto);
 		mv.setViewName("/enroll/enroll_form");
 		return mv;
 	}

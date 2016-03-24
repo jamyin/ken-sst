@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Form Elements - Ace Admin</title>
+    <meta name="description" content="Common form elements and layouts"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <#include "../../common/head.htm"/>
+    <link href="${base}/static/css/course.css" rel="stylesheet" type="text/css"/>
+    <link href="${base}/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="${base}/plugins/uploadify/swfobject.js"></script>
+    <script type="text/javascript" src="${base}/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>
+</head>
+<body>
+<div class="container-fluid" id="main-container">
+    <div id="main-content" class="clearfix" style="margin-left:0px;">
+        <div id="page-content" class="clearfix">
+            <div class="row-fluid">
+                <!-- PAGE CONTENT BEGINS HERE -->
+                <form id="submitForm" class="form-horizontal" method="POST">
+                    <input type="hidden" name="matchId" value="${(matchId)!}"/>
+                    <input type="hidden" name="teamId" value="${(teamId)!}"/>
+                    <table id="table_bug_report" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class='center'>球员</th>
+                            <th class='center'>上场时间</th>
+                            <th class='center'>进球</th>
+                            <th class='center'>助攻</th>
+                            <th class='center'>射门</th>
+                            <th class='center'>射正</th>
+                            <th class='center'>传球</th>
+                            <th class='center'>犯规</th>
+                            <th class='center'>抢球</th>
+                            <th class='center'>解围</th>
+                            <th class='center'>扑救</th>
+                            <th class='center'>黄牌</th>
+                            <th class='center'>红牌</th>
+                            <th class='center'>是否替补</th>
+                            <th class='center'>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <#if players??>
+                            <#list players as player>
+                                <tr <#if player.disabled == 1>class="red"</#if>>
+                                    <td class='center'>
+                                        <input type="hidden" <#if player.disabled == 1>disabled="disabled"</#if> name="id" value="${(player.id)!}">
+                                        ${(player.name)!}
+                                        <input type="hidden" <#if player.disabled == 1>disabled="disabled"</#if> name="playerId" value="${(player.playerId)!}">
+                                    </td>
+                                    <td class='center'>
+                                        <input class="input-mini input-mask-eyescript" <#if player.disabled == 1>disabled="disabled"</#if> type="text" name="minute" value="${(player.minute)!}"/>
+                                    </td>
+                                    <td class='center'>
+                                        <input type="text" id="goal_${player_index}" <#if player.disabled == 1>disabled="disabled"</#if> class="input-mini score_hv" name="goal" />
+                                    </td>
+                                    <td class='center'>
+                                        <input type="text" id="assist_${player_index}" <#if player.disabled == 1>disabled="disabled"</#if> class="input-mini score_hv" name="assist"/>
+                                    </td>
+                                    <td class='center'>
+                                        <input type="text" id="shot_${player_index}" <#if player.disabled == 1>disabled="disabled"</#if> class="input-mini score_hv" name="shot"/>
+                                    </td>
+                                    <td class='center'>
+                                        <input type="text" id="shotRight_${player_index}" <#if player.disabled == 1>disabled="disabled"</#if> class="input-mini score_hv" name="shotRight"/>
+                                    </td>
+                                    <td class='center'>
+                                        <input type="text" id="pass_${player_index}" <#if player.disabled == 1>disabled="disabled"</#if> class="input-mini score_hv" name="pass"/>
+                                    </td>
+                                    <td class='center'>
+                                        <input type="text" id="foul_${player_index}" <#if player.disabled == 1>disabled="disabled"</#if> class="input-mini score_hv" name="foul"/>
+                                    </td>
+                                    <td class='center'>
+                                        <input type="text" id="tackle_${player_index}" <#if player.disabled == 1>disabled="disabled"</#if> class="input-mini score_hv" name="tackle"/>
+                                    </td>
+                                    <td class='center'>
+                                        <input type="text" id="clearanceKick_${player_index}" <#if player.disabled == 1>disabled="disabled"</#if> class="input-mini score_hv" name="clearanceKick"/>
+                                    </td>
+                                    <td class='center'>
+                                        <input type="text" id="save_${player_index}" <#if player.disabled == 1>disabled="disabled"</#if> class="input-mini score_hv" name="save"/>
+                                    </td>
+                                    <td class='center'>
+                                        <input type="text" id="yellow_${player_index}" <#if player.disabled == 1>disabled="disabled"</#if> class="input-mini score_hv" name="yellow"/>
+                                    </td>
+                                    <td class='center'>
+                                        <input type="text" id="red_${player_index}" <#if player.disabled == 1>disabled="disabled"</#if> class="input-mini score_hv" name="red"/>
+                                    </td>
+                                    <td class='center'>
+                                        <select name="reserve" class="input-mini" <#if player.disabled == 1>disabled="disabled"</#if>>
+                                            <option <#if ((player.reserve)!0) == 0>selected="true"</#if> value="0">否</option>
+                                            <option <#if ((player.reserve)!0) == 1>selected="true"</#if> value="1">是</option>
+                                        </select>
+                                    </td>
+                                    <td class='center'>
+                                        <#if player.disabled == 1>
+                                            <a class="btn btn-mini btn-info data_show_btn" data_show="off">激活</a>
+                                            <#else>
+                                                <a class="btn btn-mini btn-danger data_show_btn" data_show="on">删除</a>
+                                        </#if>
+                                    </td>
+                                </tr>
+                            </#list>
+                        </#if>
+
+                        </tbody>
+                    </table>
+
+                    <div class="form-actions">
+                        <button id='cancel-button' class="btn btn-small" style="float:right;" type="reset"><i
+                                class="icon-undo"></i>关闭
+                        </button>
+                        <button id='savebutton' class="btn btn-small btn-primary"
+                                style="float:right; margin-right:20px;" type="button"><i class="icon-ok"></i>确认
+                        </button>
+                    </div>
+                </form>
+                <!-- PAGE CONTENT ENDS HERE -->
+            </div><!--/row-->
+        </div><!--/#page-content-->
+    </div><!-- #main-content -->
+</div><!--/.fluid-container#main-container-->
+<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+    <i class="icon-double-angle-up icon-only"></i>
+</a>
+<!-- basic scripts -->
+<!-- <script src="${base}/static/1.9.1/jquery.min.js"></script> -->
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+</script>
+
+<script src="${base}/static/js/bootstrap.min.js"></script>
+<!-- page specific plugin scripts -->
+
+<!--[if lt IE 9]>
+<script type="text/javascript" src="${base}/static/js/excanvas.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="${base}/static/js/jquery-ui-1.10.2.custom.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/fuelux.spinner.js"></script>
+<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/bootstrap-timepicker.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/date.js"></script>
+<script type="text/javascript" src="${base}/static/js/daterangepicker.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/bootstrap-colorpicker.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/jquery.autosize-min.js"></script>
+<script type="text/javascript" src="${base}/static/js/jquery.inputlimiter.1.3.1.min.js"></script>
+<script type="text/javascript" src="${base}/static/js/jquery.maskedinput.min.js"></script>
+<!-- ace scripts -->
+<script src="${base}/static/js/ace-elements.min.js"></script>
+<script src="${base}/static/js/ace.min.js"></script>
+<!-- inline scripts related to this page -->
+<!-- 日期框 -->
+<script type="text/javascript" src="${base}/static/js/bootbox.min.js"></script>
+<!-- layer 弹出框处理 -->
+<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+    function eachDatas(obj){
+        obj.find('input').each(function(a,b){
+            changeDisabled(b);
+        });
+        obj.find('select').each(function(a,b){
+            changeDisabled(b);
+        });
+    }
+
+    function changeDisabled(obj){
+        if ($(obj).attr("disabled") == 'disabled'){
+            $(obj).removeAttr("disabled");
+        }else{
+            $(obj).attr("disabled","disabled");
+        }
+    }
+
+    // 生成数字插件
+    function createAceSpinner(obj, value, max){
+        $(obj).ace_spinner({value:value,min:0,max:max,step:1, icon_up:'icon-plus', icon_down:'icon-minus', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+    }
+
+    $(function () {
+        $('.data_show_btn').on('click',function(){
+            var _this=$(this);
+            var _tr = _this.parent().parent();
+            // 隐藏tr
+            if(_this.attr("data_show")==="on"){
+                _this.attr("data_show","off");
+                _this.text("激活");
+                _this.removeClass("btn-danger");
+                _this.addClass("btn-info");
+                _tr.addClass("red");
+                eachDatas(_tr);
+            } else {
+                _this.attr("data_show","on");
+                _this.text("删除");
+                _this.removeClass("btn-info");
+                _this.addClass("btn-danger");
+                _tr.removeClass("red");
+                eachDatas(_tr);
+            }
+
+            console.log(_tr);
+        });
+
+        $.mask.definitions['~']='[+-]';
+        $('.input-mask-eyescript').mask('99');
+
+        <#if players??>
+            <#list players as player>
+                createAceSpinner($('#goal_${player_index}'), ${(player.goal)!0}, 100);
+                createAceSpinner($('#assist_${player_index}'), ${(player.assist)!0}, 100);
+                createAceSpinner($('#shot_${player_index}'), ${(player.shot)!0}, 100);
+                createAceSpinner($('#shotRight_${player_index}'), ${(player.shotRight)!0}, 100);
+                createAceSpinner($('#pass_${player_index}'), ${(player.pass)!0}, 100);
+                createAceSpinner($('#foul_${player_index}'), ${(player.foul)!0}, 100);
+                createAceSpinner($('#tackle_${player_index}'), ${(player.tackle)!0}, 100);
+                createAceSpinner($('#clearanceKick_${player_index}'), ${(player.clearanceKick)!0}, 100);
+                createAceSpinner($('#save_${player_index}'), ${(player.save)!0}, 100);
+                createAceSpinner($('#yellow_${player_index}'), ${(player.yellow)!0}, 100);
+                createAceSpinner($('#red_${player_index}'), ${(player.red)!0}, 100);
+             </#list>
+        </#if>
+
+        //关闭iframe
+        $('#cancel-button').click(function () {
+            parent.layer.close(index);
+        });
+
+        $(".chzn-select").chosen();
+
+        $("#savebutton").on('click', function () {
+            submit();
+        });
+    });
+
+    function submit() {
+        var minutes = $('[name=minute]');
+        var flag = false;
+        minutes.each(function(i){
+            if ((null == $(this).val() || $(this).val() == '') && $(this).attr("disabled") != 'disabled'){
+                layer.alert('第'+(i+1)+'条球员上场时间没有填写~', { icon: 7 });
+                flag = true;
+                return;
+            }
+        });
+        if (flag) return;
+
+        var ajaxParams = $("#submitForm").serialize();
+        $.ajax({
+            type : "POST",
+            url : "${base}/competition/match/savePlayerDatas.do",
+            data : ajaxParams,
+            datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+            beforeSend : function() {
+            },
+            success : function(data) {// 成功返回之后调用的函数
+                var jsondata = null;//eval('(' + data + ')');
+                if (data instanceof Object){
+                    jsondata = data;
+                }else{
+                    jsondata = eval('(' + data + ')');
+                }
+                if(jsondata.status == 200){
+                    parent.layer.msg(jsondata.message, {
+                        shade: [0.9, '#000'],
+                        icon: 6,
+                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                        //parent.reload_page();
+                        parent.layer.close(index);
+                    });
+                }else{
+                    parent.layer.msg(jsondata.message, {
+                        shade: [0.9, '#000'],
+                        icon: 6,
+                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                    });
+                }
+                //console.log(data.success);
+            },
+            complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+
+            },
+            error : function() {// 调用出错执行的函数
+            }
+        });
+    }
+</script>
+</body>
+</html>

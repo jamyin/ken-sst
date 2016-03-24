@@ -120,8 +120,33 @@ public class TeamPlayerDatasDto implements Serializable{
 	@Getter
 	@Setter
     private Date lastUpdateTime;
-
+	
 	@Getter
 	@Setter
-    private Integer stat;
+	private Integer stat;
+
+	//球员位置
+	@Getter
+	@Setter
+    private Integer position;
+
+	//出场次数
+	@Getter
+	@Setter
+	private Integer times;
+	
+	//出场时间
+	@Getter
+	@Setter
+	private Integer playTimes;
+	
+	//点球数
+	@Getter
+	@Setter
+	private Integer points;
+	
+	//助攻数
+	@Getter
+	@Setter
+	private Integer assists;
 }
