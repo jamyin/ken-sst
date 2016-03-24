@@ -11,12 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.home.dto.AppNoticeDatas;
 import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.message.dto.NoticeUsersDto;
 import com.tianfang.message.service.INoticeService;
@@ -83,12 +85,56 @@ public class NoticeController extends BaseController {
 		int flag = noticeService.addNotice(noticeDto);
 		if(flag > 0){
 			data.setMessage("添加公告成功");
-			data.setStatus(200);
+			data.setStatus(DataStatus.HTTP_SUCCESS);
 		}else{
 			data.setMessage("添加公告失败");
-			data.setStatus(500);
+			data.setStatus(DataStatus.HTTP_FAILE);
 		}	   	
 		return data;
+	}
+	
+	/**
+	 * 发布公告 - 对某些人发布 (废弃的方法)
+	 * @author YIn
+	 * @time:2016年3月24日 下午1:35:33
+	 * @param 传入参数为 公告内容content 和接收者数组userIds[] 组成的json 格式的字符串
+	 * @return
+	 */
+	@Deprecated
+	@ResponseBody
+	@RequestMapping(value="/releaseNotice")
+	public Response<String> releaseNotice(String jsonString){
+		Response<String> result = new Response<String>();
+		AppNoticeDatas datas = JSON.parseObject(jsonString, AppNoticeDatas.class);
+		if(datas.getNoticeDto() == null){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("公告内容为空");
+			return result;
+		}
+		if(datas.getUserIds().length == 0){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("未选择公告接收人");
+			return result;
+		}
+		UserDto dto = getLoginUser();
+		NoticeDto noticeDto = new NoticeDto();
+		noticeDto.setCreateUserId(dto.getId());
+		noticeDto.setCreateUserName(dto.getMobile());
+		
+		StringBuffer sb = new StringBuffer();
+		for(String s : datas.getUserIds()){
+			sb.append(s).append(",");
+		}
+		noticeDto.setToUsers(sb.toString());
+		int flag = noticeService.addNotice(noticeDto);
+		if(flag > 0){
+			result.setMessage("添加公告成功");
+			result.setStatus(DataStatus.HTTP_SUCCESS);
+		}else{
+			result.setMessage("添加公告失败");
+			result.setStatus(DataStatus.HTTP_FAILE);
+		}	   	
+		return result;
 	}
 	
 	/**
@@ -108,10 +154,10 @@ public class NoticeController extends BaseController {
 		int flag = noticeService.updateNotice(noticeDto);
 		if(flag > 0){
 			data.setMessage("编辑公告成功");
-			data.setStatus(200);
+			data.setStatus(DataStatus.HTTP_FAILE);
 		}else{
 			data.setMessage("编辑公告失败");
-			data.setStatus(500);
+			data.setStatus(DataStatus.HTTP_SUCCESS);
 		}	   	
 		return data;
 	}
@@ -132,10 +178,10 @@ public class NoticeController extends BaseController {
 		int status = noticeService.updateNotice(noticeDto);
 		if(status > 0){
 			data.setMessage("删除公告成功");
-			data.setStatus(200);
+			data.setStatus(DataStatus.HTTP_SUCCESS);
 		}else{
 			data.setMessage("删除公告失败");
-			data.setStatus(500);
+			data.setStatus(DataStatus.HTTP_FAILE);
 		}
 		return data;
 	}
@@ -154,17 +200,17 @@ public class NoticeController extends BaseController {
 		Response<String> data = new Response<String>();
 	    if (StringUtils.isEmpty(ids)) {
 	    	data.setMessage("没有选取公告");
-			data.setStatus(500);
+			data.setStatus(DataStatus.HTTP_FAILE);
 			return data;
 	    }
 	    Integer resObject =(Integer) noticeService.delByIds(ids);
 	    if (resObject == 1) {
 	    	data.setMessage("批量删除成功");
-			data.setStatus(500);
+			data.setStatus(DataStatus.HTTP_SUCCESS);
         }
 	    if (resObject == 0) {
 	    	data.setMessage("批量删除失败");
-			data.setStatus(500);
+			data.setStatus(DataStatus.HTTP_FAILE);
         }
 	    return data;
 	}
@@ -202,10 +248,10 @@ public class NoticeController extends BaseController {
 		int releaseFlag = noticeUsersService.releaseNotice(list);
 		if(flag > 0 && releaseFlag > 0){
 			data.setMessage("发布公告成功");
-			data.setStatus(200);
+			data.setStatus(DataStatus.HTTP_SUCCESS);
 		}else{
 			data.setMessage("发布公告失败");
-			data.setStatus(500);
+			data.setStatus(DataStatus.HTTP_FAILE);
 		}	   	
 		return data;
 	}
