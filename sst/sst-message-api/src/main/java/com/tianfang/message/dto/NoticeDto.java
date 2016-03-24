@@ -73,6 +73,10 @@ public class NoticeDto {
 	
 	@Getter
 	@Setter
-    private String [] userIds;   //接收公告者集合
+    private String toUsers;   //保存接收公告者,中间用逗号隔开
+	
+	@Getter
+	@Setter
+    private String [] userIds;   //接收公告者数组
 
 }
