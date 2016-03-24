@@ -145,4 +145,27 @@ public class CompetitionTeamDto implements Serializable{
 	@Getter
 	@Setter
 	private String orderByClause;
+	
+	/**
+	 * 场数
+	 */
+	@Getter
+	@Setter
+	private Integer games;
+	
+	/**
+	 * 净胜球
+	 */
+	@Getter
+	@Setter
+	private Integer wins;
+	
+	/**
+	 * 积分
+	 */
+	@Getter
+	@Setter
+	private Integer integral ;
+	
+	
 }

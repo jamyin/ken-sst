@@ -47,15 +47,15 @@ public class TeamPlayerDatasDao extends MyBatisBaseDao<TeamPlayerDatas>{
         assemblyParams(dto, criteria);
         if(null != query){
         	if (StringUtils.isNotBlank(order)){
-        		example.setOrderByClause(order+" limit "+query.getStartNum() +"," + query.getPageSize());
+        		example.setOrderByClause(order+" DESC limit "+query.getStartNum() +"," + query.getPageSize());
 			}else{
-				example.setOrderByClause("create_time desc limit "+query.getStartNum() +"," + query.getPageSize());
+				example.setOrderByClause("create_time DESC limit "+query.getStartNum() +"," + query.getPageSize());
 			}
 		}else{
 			if (StringUtils.isNotBlank(order)){
-				example.setOrderByClause(order);
+				example.setOrderByClause(order + " DESC");
 			}else{
-				example.setOrderByClause("create_time desc");
+				example.setOrderByClause("create_time DESC");
 			}
 		}
         List<TeamPlayerDatas> results = mapper.selectByExample(example);        
