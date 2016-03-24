@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	 <head>
+		<#include "/common/head.htm"/>
+		<#assign cur = 1 >
+	</head>
+	<body>
+		<div class="header">
+			<#include "/common/header.htm"/>
+		</div>
+
+		<div class="wrapper">
+			<div class="team-hd">
+				<h1><img src="${(teamDto.icon)!}" alt="" /><span class="team-name">${(teamDto.name)!}</span></h1>
+			</div>
+
+			<div class="team-con">
+				<div class="aside">
+					<div class="team-nav">
+						<ul>
+							<li class="item"><a href="getTeam.htm?id=${(teamDto.id)!}">球队简介</a></li>
+							<li class="item"><a href="getTeamPlayer.htm?id=${(teamDto.id)!}">球队成员</a></li>
+							<li class="item cur">比赛预告</li>
+						</ul>
+					</div>
+				</div>
+				<div class="team-cen team-hearald">
+					<ul class="team-hearald-con">
+						<li class="hd"><span class="bothSd">对阵双方</span><span class="time">时间</span><span class="pos">地点</span></li>
+						<#if pageList??>
+							<#list pageList.results as herald>
+								<li>
+									<div class="bothSd">
+										<div class="teamname team-A">											
+											<span style="margin-right: 10px;">${(herald.homeTeamName)!}</span><img class="head" src="${(herald.homeTeamIcon)!}" alt="" /></div>
+										<div class="vs">VS</div>
+										<div class="teamname">
+											<img class="head" src="${(herald.visitingTeamIcon)!}" alt="" /><span class="team-B">${(herald.visitingTeamName)!}</span>
+										</div>
+									</div>
+									<span class="time">${(herald.matchTime)?string("yyyy-MM-dd")}</span>
+									<span class="pos">${(herald.address)!}</span>
+								</li>
+							</#list>
+						</#if>
+						<!-- <li>
+							<div class="bothSd">
+								<div class="teamname team-A">
+									<img class="head" src="static/img/hengdalogo.png" alt="" />
+									<span>上港青训队</span></div>
+								<div class="vs">VS</div>
+								<div class="teamname">
+									<img class="head" src="static/img/hengdalogo1.png" alt="" /><span class="team-B">上海静安中学联赛冠军队</span>
+								</div>
+							</div>
+							<span class="time">2016-3-15 9:59</span>
+							<span class="pos">上海上港青训基地3号场</span>
+						</li> -->
+					</ul>
+					<div class="pagenav">
+						<#include "/common/pagenav.htm"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+		<#include "/common/foot.htm"/>
+	<script src="/static/js/footer.js"></script>
+	<script src="/static/js/regiest.js"></script>
+	<script type="text/javascript">
+	function gotoPage(currPage){
+		window.location.href = "/teamInfo/getTeamHerald.htm?cur=${(cur)!}&currPage="+currPage+"&id=${(teamDto.id)!}";
+	};
+	</script>
+</html>

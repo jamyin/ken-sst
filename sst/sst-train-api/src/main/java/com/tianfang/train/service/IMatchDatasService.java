@@ -1,8 +1,6 @@
 package com.tianfang.train.service;
 
-import com.tianfang.train.dto.MatchPlayerBaseDatasDto;
-import com.tianfang.train.dto.MatchPlayerHotDatasDto;
-import com.tianfang.train.dto.MatchTeamBaseDatasDto;
+import com.tianfang.train.dto.*;
 
 import java.util.List;
 
@@ -59,6 +57,8 @@ public interface IMatchDatasService {
      */
     List<MatchPlayerBaseDatasDto> queryPlayerBaseDatasByParams(MatchPlayerBaseDatasDto params);
 
+    List<MatchPlayerBaseDatasTempDto> queryPlayerBaseDatasTempByParams(MatchPlayerBaseDatasDto params);
+
     /**
      * 批量新增比赛时间轴数据
      * @param dtos
@@ -77,4 +77,11 @@ public interface IMatchDatasService {
      * @return
      */
     List<MatchPlayerHotDatasDto> queryPlayerHotDatasByParams(MatchPlayerHotDatasDto params);
+
+    /**
+     * 联表查询比赛时间轴数据
+     * @param params
+     * @return
+     */
+    List<MatchPlayerHotDatasTempDto> queryPlayerHotDatasTempByParams(MatchPlayerHotDatasDto params);
 }

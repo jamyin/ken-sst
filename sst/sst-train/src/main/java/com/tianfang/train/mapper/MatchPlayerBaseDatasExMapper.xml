@@ -24,6 +24,51 @@
         <result column="stat" property="stat" jdbcType="INTEGER"/>
     </resultMap>
 
+    <resultMap id="TempResultMap" type="com.tianfang.train.dto.MatchPlayerBaseDatasTempDto">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="match_id" property="matchId" jdbcType="VARCHAR"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
+        <result column="player_id" property="playerId" jdbcType="VARCHAR"/>
+        <result column="minute" property="minute" jdbcType="INTEGER"/>
+        <result column="goal" property="goal" jdbcType="INTEGER"/>
+        <result column="assist" property="assist" jdbcType="INTEGER"/>
+        <result column="shot" property="shot" jdbcType="INTEGER"/>
+        <result column="shot_right" property="shotRight" jdbcType="INTEGER"/>
+        <result column="pass" property="pass" jdbcType="INTEGER"/>
+        <result column="foul" property="foul" jdbcType="INTEGER"/>
+        <result column="tackle" property="tackle" jdbcType="INTEGER"/>
+        <result column="clearance_kick" property="clearanceKick" jdbcType="INTEGER"/>
+        <result column="save" property="save" jdbcType="INTEGER"/>
+        <result column="yellow" property="yellow" jdbcType="INTEGER"/>
+        <result column="red" property="red" jdbcType="INTEGER"/>
+        <result column="reserve" property="reserve" jdbcType="INTEGER"/>
+        <result column="name" property="playerName" jdbcType="VARCHAR"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="position" property="position" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Temp_Column_List" >
+      a.id, a.match_id, a.team_id, a.player_id, a.minute, a.goal, a.assist, a.shot, a.shot_right, a.pass, a.foul,
+    a.tackle, a.clearance_kick, a.save, a.yellow, a.red, a.reserve, b.name, b.num, b.position
+    </sql>
+
+    <sql id="Temp_Where_Clause" >
+        <where >
+            b.stat = 1 AND a.stat = 1
+            <if test="dto.id != null and dto.id != ''">
+                AND a.id = #{dto.id}
+            </if>
+            <if test="dto.matchId != null and dto.matchId != ''">
+                AND a.match_id = #{dto.matchId}
+            </if>
+            <if test="dto.teamId != null and dto.teamId != ''">
+                AND a.team_id = #{dto.teamId}
+            </if>
+            <if test="dto.playerId != null and dto.playerId != ''">
+                AND a.player_id = #{dto.playerId}
+            </if>
+        </where>
+    </sql>
 
     <insert id="batchInsertPlayerBaseDatas" parameterType="java.util.List">
         insert into sst_match_player_base_datas (id, match_id, team_id,
@@ -41,4 +86,12 @@
     <delete id="deleteByMatchIdAndTeamId" parameterType="java.util.Map">
         delete from sst_match_player_base_datas where match_id =#{matchId} and team_id= #{teamId}
     </delete>
+
+    <select id="queryPlayerBaseDatasTempByParams" resultMap="TempResultMap" parameterType="com.tianfang.train.dto.MatchPlayerBaseDatasDto">
+        select
+        <include refid="Temp_Column_List" />
+        from sst_match_player_base_datas as a left join sst_team_player as b on a.player_id = b.id
+        <include refid="Temp_Where_Clause" />
+        order by a.minute desc,a.create_time desc
+    </select>
 </mapper>

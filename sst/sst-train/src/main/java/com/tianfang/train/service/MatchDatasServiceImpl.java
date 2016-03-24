@@ -6,9 +6,7 @@ import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.train.dao.MatchPlayerBaseDatasDao;
 import com.tianfang.train.dao.MatchPlayerHotDatasDao;
 import com.tianfang.train.dao.MatchTeamBaseDatasDao;
-import com.tianfang.train.dto.MatchPlayerBaseDatasDto;
-import com.tianfang.train.dto.MatchPlayerHotDatasDto;
-import com.tianfang.train.dto.MatchTeamBaseDatasDto;
+import com.tianfang.train.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +91,11 @@ public class MatchDatasServiceImpl implements IMatchDatasService {
     }
 
     @Override
+    public List<MatchPlayerBaseDatasTempDto> queryPlayerBaseDatasTempByParams(MatchPlayerBaseDatasDto params) {
+        return playerDatasDao.queryPlayerBaseDatasTempByParams(params);
+    }
+
+    @Override
     public void batchInsertPlayerHotDatas(List<MatchPlayerHotDatasDto> dtos) {
         checkObjIsNullException(dtos);
         for (MatchPlayerHotDatasDto dto : dtos){
@@ -117,6 +120,11 @@ public class MatchDatasServiceImpl implements IMatchDatasService {
     @Override
     public List<MatchPlayerHotDatasDto> queryPlayerHotDatasByParams(MatchPlayerHotDatasDto params) {
         return hotDatasDao.findMatchPlayerHotDatasByParam(params);
+    }
+
+    @Override
+    public List<MatchPlayerHotDatasTempDto> queryPlayerHotDatasTempByParams(MatchPlayerHotDatasDto params) {
+        return hotDatasDao.queryPlayerHotDatasTempByParams(params);
     }
 
     /**
