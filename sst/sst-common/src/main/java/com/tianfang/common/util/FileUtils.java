@@ -1,19 +1,17 @@
 package com.tianfang.common.util;
 
+import com.tianfang.common.digest.MD5Coder;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Decoder;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.web.multipart.MultipartFile;
-
-import sun.misc.BASE64Decoder;
-
-import com.tianfang.common.digest.MD5Coder;
 
 
 public class FileUtils extends org.apache.commons.io.FileUtils{
@@ -129,5 +127,48 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
         }
 		return File.separator+context + File.separator + fileName;
 	}
-	
+
+
+	/**
+	 * 上传base64图片
+	 * @param base64Img
+	 * @return
+	 * @throws Exception
+     */
+	public static String upload64Image(String base64Img) throws Exception {
+		if(StringUtils.isEmpty(base64Img)){
+			return "";
+		}
+		String prefix = "jpg";
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		String context = "upload" + File.separator + format.format(new Date());
+		String fileName = FileUtils.getUploadFileNameBybase64(base64Img)+"."+prefix;
+
+		StringBuffer rootPath = new StringBuffer(PropertiesUtils.getProperty("upload.url"));
+		rootPath.append(File.separator).append(context);
+		File file =new File(rootPath.toString());
+		//如果文件夹不存在则创建
+		if(!file.exists() && !file.isDirectory()) {
+			file.mkdir();
+		}
+		BASE64Decoder decoder = new BASE64Decoder();
+		try {
+			//Base64解码
+			byte[] bytes = decoder.decodeBuffer(base64Img);
+			for(int i=0;i<bytes.length;++i){
+				if(bytes[i]<0) {//调整异常数据
+					bytes[i]+=256;
+				}
+			}
+			//生成jpeg图片
+			String filePath = rootPath.append(File.separator).append(fileName).toString();
+			OutputStream out = new FileOutputStream(filePath);
+			out.write(bytes);
+			out.flush();
+			out.close();
+		} catch (Exception e){
+			logger.debug(e);
+		}
+		return File.separator+context + File.separator + fileName;
+	}
 }

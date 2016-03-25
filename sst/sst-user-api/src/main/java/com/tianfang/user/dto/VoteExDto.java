@@ -1,10 +1,10 @@
 package com.tianfang.user.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**		
  * <p>Title: VoteExDto </p>
@@ -119,4 +119,11 @@ public class VoteExDto implements Serializable{
 	@Getter
 	@Setter
 	private String optionUserPic;
+
+	/**
+	 * 投票创建时间
+	 */
+	@Getter
+	@Setter
+	private Date createTime;
 }

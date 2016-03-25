@@ -1,11 +1,10 @@
 package com.tianfang.home.dto;
 
-import java.io.Serializable;
-
 import lombok.Getter;
 import lombok.Setter;
 
-import org.springframework.web.multipart.MultipartFile;
+import java.io.Serializable;
+import java.util.List;
 
 /**		
  * <p>Title: AppVoteDatas </p>
@@ -22,7 +21,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class AppVoteDatas implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
+
+	/**
+	 * 用户id
+	 */
+	@Getter
+	@Setter
+	private String userId;
+
 	/**
 	 * 投票标题
 	 */
@@ -57,18 +63,11 @@ public class AppVoteDatas implements Serializable{
 	@Setter
 	@Getter
 	private String[] toUserIds;
-	
+
 	/**
-	 * 选项内容
+	 * 选项对象封装
 	 */
-	@Setter
 	@Getter
-	private String[] optionTexts;
-	
-	/**
-	 * 选项图片
-	 */
 	@Setter
-	@Getter
-	private MultipartFile[] files;
+	private List<AppOption> options;
 }

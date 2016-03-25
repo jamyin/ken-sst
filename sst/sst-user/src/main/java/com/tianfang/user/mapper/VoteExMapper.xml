@@ -19,7 +19,7 @@
   
   <select id="findVoteExById" resultType="com.tianfang.user.dto.VoteExDto" parameterType="string">
 	 	SELECT d.id AS voteId, d.title AS title, d.option_num AS optionNum, d.end_time AS endTime, d.is_anonymous AS isAnonymous, d.publish_id AS publishId, d.publish_name AS publishName, d.amount AS amount, 
-		a.id AS optionId, a.text AS optionText, a.pic AS optionPic, c.id AS optionUserId, c.nick_name AS optionUserNickName, c.pic AS optionUserPic
+		a.id AS optionId, a.text AS optionText, a.pic AS optionPic, c.id AS optionUserId, c.nick_name AS optionUserNickName, c.pic AS optionUserPic, d.create_time AS createTime
 		FROM sst_vote_option AS a
 		LEFT JOIN sst_vote_user_option AS b ON a.id = b.option_id AND b.stat = 1
 		LEFT JOIN sport_user AS c ON c.id = b.user_id AND c.stat = 1
@@ -63,7 +63,7 @@
    	from sst_vote as a left join sst_vote_user_temp as b on a.id = b.vote_id
    	<include refid="Example_Where_Clause" />
    	order by a.create_time desc
-   	<if test="page.startNum != null and page.pageSize > page.startNum">
+   	<if test="page != null and page.startNum != null and page.pageSize > page.startNum">
    	limit ${page.startNum}, ${page.pageSize}
    	</if>
   </select>
@@ -92,7 +92,7 @@
     </foreach> 
   </insert>  
 
-    <select id="getLast" resultType="com.tianfang.user.dto.VoteDto" parameterType="java.lang.String">
+    <select id="getLast" resultMap="BaseResultMap" parameterType="java.lang.String">
         select a.*, b.selected from sst_vote as a left join sst_vote_user_temp as b on a.id = b.vote_id
         where b.user_id = #{userId}
         order by a.create_time desc limit 0,1

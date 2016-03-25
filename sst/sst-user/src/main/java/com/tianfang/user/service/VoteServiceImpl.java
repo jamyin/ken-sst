@@ -131,14 +131,17 @@ public class VoteServiceImpl implements IVoteService {
 	}
 
 	public VoteDto getLast(String userId){
-		return voteDao.getLast(userId);
+		VoteDto last = voteDao.getLast(userId);
+		checkVoteOverdue(last);
+		return last;
 	}
 
 	private VoteApp voteExToVoteApp(String id, List<VoteExDto> dtos){
 		VoteApp app = null;
 		if (null != dtos && dtos.size() > 0){
+			Integer amount = dtos.get(0).getAmount();
 			app = new VoteApp(id, dtos.get(0).getTitle(), dtos.get(0).getOptionNum(), dtos.get(0).getEndTime(), dtos.get(0).getIsAnonymous(),
-					dtos.get(0).getPublishId(), dtos.get(0).getPublishName(), dtos.get(0).getAmount());
+					dtos.get(0).getPublishId(), dtos.get(0).getPublishName(), dtos.get(0).getAmount(), dtos.get(0).getCreateTime());
 			Map<String, VoteOptionApp> map = new HashMap<String, VoteOptionApp>();
 			VoteOptionApp option;
 			for (VoteExDto dto : dtos){
@@ -155,7 +158,13 @@ public class VoteServiceImpl implements IVoteService {
 				List<VoteOptionApp> options = new ArrayList<VoteOptionApp>();
 				Set<Entry<String,VoteOptionApp>> entrySet = map.entrySet();
 				for (Entry<String,VoteOptionApp> entry : entrySet){
-					options.add(entry.getValue());
+					VoteOptionApp value = entry.getValue();
+					if (null != amount && null != value.getUsers() && value.getUsers().size() > 0){
+						value.setPercent((double) (value.getUsers().size()/amount));
+					}else {
+						value.setPercent(0.00);
+					}
+					options.add(value);
 				}
 				app.setOptions(options);
 			}

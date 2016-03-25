@@ -1,10 +1,10 @@
 package com.tianfang.user.app;
 
-import java.io.Serializable;
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**		
  * <p>Title: VoteOptionApp </p>
@@ -42,7 +42,14 @@ public class VoteOptionApp implements Serializable{
 	@Getter
 	@Setter
 	private String pic;
-	
+
+	/**
+	 * 选项百分比
+	 */
+	@Getter
+	@Setter
+	private Double percent;
+
 	/**
 	 * 已投票用户
 	 */
