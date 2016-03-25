@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<!-- 	<head>
+		<meta charset="UTF-8">
+		<link rel="icon" type="image/gif" href="static/img/favicon.ico">
+		<title>个人中心</title>
+		<meta name="Description" content="赛事预告" />
+		<script src="static/js/jquery-2.1.3.min.js"></script>
+		<script src="static/js/common.js"></script>
+		<link href="static/css/common.css" rel="stylesheet" />
+		<link href="static/css/data-trailer.css" rel="stylesheet" />
+	</head> -->
+<head>
+	<#include "/common/head.htm"/>
+	<link href="/static/css/common.css" rel="stylesheet" />
+	<link href="/static/css/data-trailer.css" rel="stylesheet" />
+</head>
+
+<body>
+	<div class="header">
+	<#include "/common/header.htm"/>
+		<!-- <div class="header">
+			<div class="wrapper">
+				<div class="topbar">
+					<a class="logo" href="###"></a>
+					<div class="login_status"><a class="p_center" href="###">个人中心</a> <a href="###">登陆</a> <a href="###">注册</a></div>
+				</div>
+				<div class="nav">
+					<ul>
+						<li tag="0"><a href="index.html">首 页<br><span>HOME</span></a></li>
+						<li tag="140"><a href="index.html">新闻公告<br><span>NEWS</span></a></li>
+						<li class="cur" tag="280"><a href="index.html">数据中心<br><span>DATA</span></a></li>
+						<li tag="420"><a href="index.html">视频图集<br><span>VIDEO</span></a></li>
+						<li tag="560"><a href="index.html">参赛球队<br><span>TEAM</span></a></li>
+						<li tag="700"><a href="index.html">商务合作<br><span>COOPERATION</span></a></li>
+					</ul>
+					<div class="mark"></div>
+					</li>
+				</div>
+			</div>
+		</div> -->
+
+		<div class="wrapper">
+			<h1 class="flaga">赛事预告</h1>
+			<div class="trail-con">
+				<ul>
+				<#if pageList ??>
+					<#list pageList.getResults() as page>
+					<li>
+						<div class="team-A team">
+							<#if page.teamIcon ??>
+								<img class="team-lg" src="/static/img/hengdalogo.png" />
+							<#else>
+								<img class="team-lg" src="${(page.homeTeamIcon)!}"/>
+							</#if>
+							<span class="team-nm">${(page.homeTeamName)!}</span>
+						</div>
+						<div class="team-result team">
+							<div class="time">${(page.matchTimeString)!}</div>
+							<div class="vs">VS</div>
+						</div>
+						<div class="team-B team">
+							<#if page.teamIcon ??>
+								<img class="team-lg" src="/static/img/hengdalogo.png" />
+							<#else>
+								<img class="team-lg" src="${(page.visitingTeamIcon)!}"/>
+							</#if>
+							<span class="team-nm">${(page.visitingTeamName)!}</span>
+						</div>
+						<a class="not-start A">未开始</a>
+						<a class="detail A" href="/competition/match/trailerDetil.htm?id=${(page.id)!}" target="_blank">详细</a>
+					</li>
+					</#list>
+					</#if>
+				</ul>
+			</div>
+
+			<div class="jfb jfb-trailer">
+				<div class="tab"><a class="cur" href="###" tag="match">积分榜</a><a class="more" href="/datacenter/points.htm" target="_blank">更多</a></div>
+				<div class="integr">
+					<div class="sub_tab"><span class="date">名次</span><span>球队</span><span class="score">胜/负/平</span><span>积分</span></div>
+					<ul>
+<!-- 						<li><span class="date">1</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/12/1</span><span>93</span></li>
+						<li><span class="date">2</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>83</span></li>
+						<li><span class="date">3</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>73</span></li>
+						<li><span class="date">4</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>63</span></li>
+						<li><span class="date">5</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>53</span></li>
+						<li><span class="date">6</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>43</span></li>
+						<li><span class="date">7</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>33</span></li>
+						<li><span class="date">8</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>23</span></li>
+						<li><span class="date">9</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>13</span></li>
+						<li><span class="date">10</span><span class="name"><img src="static/img/team_n.png" border="0">重庆力帆</span><span class="score">3/1/1</span><span>10</span></li> -->
+						<#if pointList ??>
+							<#list pointList.getResults() as page>
+							<!-- 	<#if (page_index = 0)>
+									<li><span class="date hl">${page_index + 1}</span><span class="name"><img src="${(page.teamIcon)!}"  border="0">${(page.teamName)!}</span><span class="score">${(page.win)!}/${(page.draw)!}/${(page.lose)!}</span><span>${(page.integral)!}</span></li>
+								<#elseif (page_index < 3)>	
+									<li><span class="date hl">${page_index + 1}</span><span class="name">${(page.teamName)!}</span><span class="score">${(page.win)!}/${(page.draw)!}/${(page.lose)!}</span><span>${(page.integral)!}</span></li>
+								<#else>
+									<li><span class="date">${page_index + 1}</span><span class="name">${(page.teamName)!}</span><span class="score">${(page.win)!}/${(page.draw)!}/${(page.lose)!}</span><span>${(page.integral)!}</span></li>
+								</#if> -->
+								<li><span class="date">${page_index + 1}</span><span class="name"><img src="${(page.teamIcon)!}"  border="0">${(page.teamName)!}</span><span class="score">${(page.win)!}/${(page.draw)!}/${(page.lose)!}</span><span>${(page.integral)!}</span></li>
+							</#list>
+						</#if>	
+					</ul>
+				</div>
+			</div>
+
+			<div class="trailer-page">
+				<!-- <div class="pagenav">
+					<a href="###">
+						<</a>
+							<a class="cur" href="###">1</a>
+							<a href="###">2</a>
+							<a href="###">3</a>
+							<a href="###">4</a>
+							<a href="###">5</a>
+							<a href="###">6</a>
+							<a href="###">></a>
+				</div> -->
+				<div class="pagenav">
+					<#include "/common/pagenav.htm"/>
+				</div>
+			</div>
+		</div>
+		<!-- <script src="static/js/footer.js"></script>
+		<script src="static/js/data-trailer.js"></script> -->
+	</body>
+	 <#include "/common/foot.htm"/> 
+	 <script src="/static/js/footer.js"></script>
+	 <script src="/static/js/data-trailer.js"></script>
+	 <script type="text/javascript">
+		function gotoPage(currPage){
+			window.location.href = "/competition/match/trailer.htm?currPage="+currPage;
+		}
+	 </script>
+</html>

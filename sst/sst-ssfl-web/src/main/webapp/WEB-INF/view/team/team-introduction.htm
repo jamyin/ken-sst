@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+	<!-- <head>
+		<meta charset="UTF-8">
+		<link rel="icon" type="image/gif" href="static/img/favicon.ico">
+		<title>个人中心</title>
+		<script src="static/js/jquery-2.1.3.min.js"></script>
+		<script src="static/js/common.js"></script>
+		<link href="static/css/regiest.css" rel="stylesheet" />
+	</head> -->
+<head>
+<#include "/common/head.htm"/>
+<link href="/static/css/regiest.css" rel="stylesheet" />
+</head>
+	<body>
+		<div class="header">
+			<#include "/common/header.htm"/>
+		</div>
+		<!-- <div class="header">
+			<div class="wrapper">
+				<div class="topbar">
+					<a class="logo" href="###"></a>
+					<div class="login_status"><a class="p_center" href="###">个人中心</a> <a href="###">登陆</a> <a href="###">注册</a></div>
+				</div>
+				<div class="nav">
+					<ul>
+						<li class="cur" tag="0"><a href="index.html">首 页<br><span>HOME</span></a></li>
+						<li tag="140"><a href="index.html">新闻公告<br><span>NEWS</span></a></li>
+						<li tag="280"><a href="index.html">数据中心<br><span>DATA</span></a></li>
+						<li tag="420"><a href="index.html">视频图集<br><span>VIDEO</span></a></li>
+						<li tag="560"><a href="index.html">参赛球队<br><span>TEAM</span></a></li>
+						<li tag="700"><a href="index.html">商务合作<br><span>COOPERATION</span></a></li>
+					</ul>
+					<div class="mark"></div>
+					</li>
+				</div>
+
+			</div>
+		</div> -->
+
+		<div class="wrapper">
+			<div class="team-hd">
+				<h1><img src="${(teamDto.icon)!}" alt="" /><span class="team-name">${(teamDto.name)!}</span></h1>
+			</div>
+
+			<div class="team-con">
+				<div class="aside">
+					<div class="team-nav">
+						<ul>
+							<li class="item cur">球队简介</li>
+							<li class="item"><a href="getTeamPlayer.htm?id=${(teamDto.id)!}">球队成员</a></li>
+							<li class="item"><a href="getTeamHerald.htm?id=${(teamDto.id)!}&pageSize=7">比赛预告</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="team-cen team-intr">
+					<p>${(teamDto.contacts)!}</p>
+					<!--<p>上海上港集团足球俱乐部（Shanghai SIPG Football Club）是一家位于中国上海的职业足球俱乐部，现参加中国足球协会超级联赛，主场设在上海体育场。球队曾获得1次中甲联赛冠军，1次中乙联赛冠军，2次全运会冠军（代表上海队），5次沪港球会杯冠军等荣誉。</p>
+					<p>上港集团足球俱乐部前身是上海东亚足球俱乐部，始建于2005年12月25日，由上海东亚（集团）有限公司和上海根宝足球基地有限公司共同出资成立，由徐根宝担任公司董事长和俱乐部主席。球队以原上海根宝足球基地的青少年球员为主要班底，由于打造“中国的曼联”一直是徐根宝的口号和奋斗目标，所以球队有时也会被昵称为“中国曼联”。</p>
+					<p>2012年年末，球队成功升入中超联赛，上港集团以冠名赞助商的身份支持；2013赛季起以上海上港集团足球队的名义征战中超。2013年年末，徐根宝提出为了俱乐部的长远发展，希望上港集团收购俱乐部。2014年10月，上港集团全资收购东亚足球俱乐部；同年11月18日，俱乐部正式更名为上海上港集团足球俱乐部。[2] 2015赛季中超联赛，截至第28轮，上海上港以17胜8平3负积59分排名第二。</p> -->
+				</div>
+			</div>
+
+		</div>
+	</body>
+	<#include "/common/foot.htm"/> 
+	<script src="/static/js/footer.js"></script>
+	<script src="/static/js/regiest.js"></script>
+
+</html>
