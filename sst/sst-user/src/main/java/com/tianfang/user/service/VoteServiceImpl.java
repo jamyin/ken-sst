@@ -160,7 +160,7 @@ public class VoteServiceImpl implements IVoteService {
 				for (Entry<String,VoteOptionApp> entry : entrySet){
 					VoteOptionApp value = entry.getValue();
 					if (null != amount && null != value.getUsers() && value.getUsers().size() > 0){
-						value.setPercent((double) (value.getUsers().size()/amount));
+						value.setPercent((value.getUsers().size()/(double)amount));
 					}else {
 						value.setPercent(0.00);
 					}
