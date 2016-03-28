@@ -60,7 +60,7 @@ public class LoginController extends BaseController{
 		}
 		session.setAttribute(SessionConstants.LOGIN_USER_INFO, userDto);
 		// 添加用户登陆安全提醒
-		sendRemind(userDto.getId(), Point.Login);
+		//sendRemind(userDto.getId(), Point.Login);
 		return response;
 	}
 
