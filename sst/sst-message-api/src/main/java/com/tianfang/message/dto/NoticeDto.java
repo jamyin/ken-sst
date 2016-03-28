@@ -101,7 +101,10 @@ public class NoticeDto {
 	
 	@Getter
 	@Setter
-	private String  userId;   //发布者id
+	private String  userId;   
 	
-
+	@Getter
+	@Setter
+	private String  nickName;   //用戶昵称
+	
 }

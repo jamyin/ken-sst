@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.tianfang.common.constants.DataStatus;
-import com.tianfang.common.ext.ExtPageQuery;
+import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.DateUtils;
@@ -70,11 +69,12 @@ public class NoticeController extends BaseController {
 	 * @param page
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value="/findNoticeView")
-	public Response<PageResult<NoticeDto>> findNoticeViewByPage(NoticeDto noticeDto, ExtPageQuery page){
+	public Response<PageResult<NoticeDto>> findNoticeViewByPage(NoticeDto noticeDto, PageQuery query){
 		logger.info("NoticeDto  : " + noticeDto);
 		Response<PageResult<NoticeDto>> response = new Response<PageResult<NoticeDto>>();
-		PageResult<NoticeDto> result = noticeService.findNoticeViewByPage(noticeDto, page.changeToPageQuery());
+		PageResult<NoticeDto> result = noticeService.findNoticeViewByPage(noticeDto, query);
 		if(result != null){
 			response.setStatus(DataStatus.HTTP_SUCCESS);
 			response.setData(result);
@@ -93,6 +93,7 @@ public class NoticeController extends BaseController {
 	 * @param noticeDto
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value="/findNotice")
 	public Response<NoticeDto> findNotice(NoticeDto noticeDto){
 		logger.info("NoticeDto  : " + noticeDto);
@@ -276,10 +277,10 @@ public class NoticeController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value="/release")
 	@Transactional
-	public Response<String> release(String jsonParam,@RequestParam(value = "file",required = false)  MultipartFile file,
+	public Response<String> release(String jsonPara,@RequestParam(value = "file",required = false)  MultipartFile file,
 			HttpServletRequest request){
 		Gson gson = new Gson();
-	    NoticeDto noticeDto =  gson.fromJson(jsonParam, NoticeDto.class);
+	    NoticeDto noticeDto =  gson.fromJson(jsonPara, NoticeDto.class);
 		Response<String> data = new Response<String>();
 		/*UserDto dto = getLoginUser();
 		noticeDto.setCreateUserId(dto.getId());
