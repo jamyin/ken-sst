@@ -56,13 +56,11 @@
 											<option <#if (params.parentId?? && params.parentId == data.id)>selected="selected"</#if> value="${data.id}">${data.cname}</option>
 										</#list>
 								</select></td>
-								<td style="vertical-align: top;"><select
-									class="chzn-select" name="menuType" id="menuType"
-									data-placeholder="菜单级"
-									style="vertical-align: top; width: 79px;">
-										<option value=""></option>
+								<td style="vertical-align: top;">
+									<select class="chzn-select" name="menuType" id="menuType" data-placeholder="菜单级" style="vertical-align: top; width: 79px;">
+										<option value="-1"></option>
 										<#list menuTypes as type>
-											<option <#if (((params.menuType?eval)!-1) == type.getIndex())>selected="selected"</#if> value="${type.getIndex()}">${type.getName()}</option>
+											<option <#if (params.menuType?? && params.menuType?eval == type.getIndex())>selected="selected"</#if> value="${type.getIndex()}">${type.getName()}</option>
 										</#list>
 								</select></td>
 								<td style="vertical-align: top;"><button
