@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<#include "/common/head.htm"/>
+	<#assign cur = 4 >
+</head>
+
+<body>
+	<div class="header">
+		<#include "/common/header.htm"/>
+	
+		<div class="wrapper">
+			<div class="sub_ban">
+				<span>参赛球队</span>
+			</div>
+			<div class="teams_box">
+				<ul>
+					<#if pageList??>
+						<#list pageList.results as page>
+							<li><a href="/teamInfo/getTeam.htm?id=${(page.id)!}"><img src="${(page.icon)!}" border="0"><p><span>${(page.name)!}</span></p></a></li>
+						</#list>						
+					</#if>
+					
+				</ul>
+				<div class="pagenav">
+					<#include "/common/pagenav.htm"/>
+				</div>
+			</div>
+			<!-- <div class="pagenav">
+				<a href="###"><</a>
+				<a class="cur" href="###">1</a>
+				<a href="###">2</a>
+				<a href="###">3</a>
+				<a href="###">4</a>
+				<a href="###">5</a>
+				<a href="###">6</a>
+				<a href="###">></a>
+			</div> -->
+	</div>
+</body>
+<#include "/common/foot.htm"/>
+	<script src="/static/js/footer.js"></script>
+	<script type="text/javascript">
+	function gotoPage(currPage){
+		window.location.href = "/teamInfo/teamList.htm?currPage="+currPage;
+	};
+	</script>
+</html>

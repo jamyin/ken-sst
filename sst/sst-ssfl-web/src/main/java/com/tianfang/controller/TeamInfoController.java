@@ -34,6 +34,19 @@ public class TeamInfoController extends BaseController{
 	@Autowired
 	private ICompetitionMatchService iCompetitionMatchService;
 	
+	@RequestMapping("/teamList")
+	public ModelAndView teamList(PageQuery query) {
+		TeamDto teamDto = new TeamDto();
+		if (0 == query.getPageSize()) {
+			query.setPageSize(12);
+		}
+		ModelAndView mv = this.getModelAndView();
+		PageResult<TeamDto> result = iTeamService.findTeamViewByPage(teamDto, query);
+		mv.addObject("pageList", result);
+		mv.setViewName("/team/team");
+		return mv;
+	}
+	
 	/**
 	 * 获取球队信息
 	 * @param id
@@ -60,9 +73,11 @@ public class TeamInfoController extends BaseController{
 		TeamPlayerDto dto = new TeamPlayerDto();
 		dto.setTeamId(id);
 		List<TeamPlayerDto> teamPlayerDtos= iTeamPlayerService.findTeamPlayerByParam(dto);		
-		for (TeamPlayerDto teamPlayerDto : teamPlayerDtos) {
-			teamPlayerDto.setPositionStr(TeamPlayerPositionEnum.getName(teamPlayerDto.getPosition()));
-		}
+		if (null != teamPlayerDtos  && teamPlayerDtos.size()>0) {
+			for (TeamPlayerDto teamPlayerDto : teamPlayerDtos) {
+				teamPlayerDto.setPositionStr(TeamPlayerPositionEnum.getName(teamPlayerDto.getPosition()));
+			}
+		}		
 		mv.addObject("teamDto", teamDto);
 		mv.addObject("teamPlayerDtos", teamPlayerDtos);
 		mv.setViewName("/team/team-member");
