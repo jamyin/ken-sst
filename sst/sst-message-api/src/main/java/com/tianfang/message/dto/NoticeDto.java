@@ -78,5 +78,30 @@ public class NoticeDto {
 	@Getter
 	@Setter
     private String [] userIds;   //接收公告者数组
+	
+	@Getter
+	@Setter
+	private String  receiveId;   //接收公告者id
+	
+	@Getter
+	@Setter
+	private Integer  allowForward;   //是否允许转发:0表示不允许;1表示允许转发(默认是允许的)
+	
+	@Getter
+	@Setter
+	private Integer  mount;   //发送总人数
+	
+	@Getter
+	@Setter
+	private Integer  read;   //已读人数
+	
+	@Getter
+	@Setter
+	private Integer  unRead;   //未读人数
+	
+	@Getter
+	@Setter
+	private String  userId;   //发布者id
+	
 
 }

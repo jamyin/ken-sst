@@ -2,12 +2,12 @@ package com.tianfang.message.service;
 
 import java.util.List;
 
-import com.tianfang.message.dto.NoticeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tianfang.common.util.BeanUtils;
 import com.tianfang.message.dao.NoticeUsersDao;
+import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.message.dto.NoticeUsersDto;
 import com.tianfang.message.pojo.NoticeUsers;
 
@@ -42,5 +42,14 @@ public class NoticeUsersServiceImpl implements INoticeUsersService {
 	public NoticeDto getLast(String userId){
 
 		return noticeUsersDao.getLast(userId);
+	}
+
+	/**
+	 * @author YIn
+	 * @time:2016年3月28日 上午11:08:35
+	 */
+	@Override
+	public int findRead(String id) {
+		return noticeUsersDao.findRead(id);
 	}
 }

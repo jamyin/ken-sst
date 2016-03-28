@@ -19,9 +19,11 @@ public interface INoticeUsersService {
 
 	/**
 	 * 根据用户id获取最新一条公告信息
-	 *
 	 * @param userId
 	 * @return
      */
 	NoticeDto getLast(String userId);
+
+	//已读
+	int findRead(String id);
 }

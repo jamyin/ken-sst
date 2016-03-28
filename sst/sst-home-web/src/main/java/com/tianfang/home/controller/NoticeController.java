@@ -1,7 +1,16 @@
 package com.tianfang.home.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -9,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
@@ -17,13 +28,17 @@ import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
+import com.tianfang.common.util.DateUtils;
+import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.dto.AppNoticeDatas;
 import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.message.dto.NoticeUsersDto;
 import com.tianfang.message.service.INoticeService;
 import com.tianfang.message.service.INoticeUsersService;
 import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.service.IUserService;
 
 /**
  * SST给移动端接口-消息助手-公告
@@ -43,6 +58,9 @@ public class NoticeController extends BaseController {
 
 	@Autowired
 	private INoticeUsersService noticeUsersService;
+	
+	@Autowired
+	private IUserService userService;
 	
 	/**
 	 * 公告显示页面-分页
@@ -64,6 +82,39 @@ public class NoticeController extends BaseController {
 		}else{
 			response.setStatus(DataStatus.HTTP_FAILE);
 			response.setMessage("查询失败");
+		}
+		return response;
+	}
+	
+	/**
+	 *  公告详情
+	 * @author YIn
+	 * @time:2016年3月28日 上午9:50:12
+	 * @param noticeDto
+	 * @return
+	 */
+	@RequestMapping(value="/findNotice")
+	public Response<NoticeDto> findNotice(NoticeDto noticeDto){
+		logger.info("NoticeDto  : " + noticeDto);
+		Response<NoticeDto> response = new Response<NoticeDto>(); 
+		List<NoticeDto> list = noticeService.findNotice(noticeDto);
+		if(list != null && list.size() > 0){
+			//查询发送总人数
+			int mount = list.get(0).getUserIds().length;
+			//查询已读人数
+			int read =  noticeUsersService.findRead(list.get(0).getId());
+			//未读人数
+		    int unRead = mount - read;
+		    list.get(0).setMount(mount);
+		    list.get(0).setRead(read);
+		    list.get(0).setUnRead(unRead);
+		   
+			response.setStatus(DataStatus.HTTP_SUCCESS);
+			response.setData(list.get(0));
+			response.setMessage("查询成功");
+		}else{
+			response.setStatus(DataStatus.HTTP_FAILE);
+			response.setMessage("没有查询到相关记录");
 		}
 		return response;
 	}
@@ -225,20 +276,39 @@ public class NoticeController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value="/release")
 	@Transactional
-	public Response<String> release(String jsonPara){
+	public Response<String> release(String jsonParam,@RequestParam(value = "file",required = false)  MultipartFile file,
+			HttpServletRequest request){
 		Gson gson = new Gson();
-	    NoticeDto noticeDto =  gson.fromJson(jsonPara, NoticeDto.class);
+	    NoticeDto noticeDto =  gson.fromJson(jsonParam, NoticeDto.class);
 		Response<String> data = new Response<String>();
-		UserDto dto = getLoginUser();
+		/*UserDto dto = getLoginUser();
 		noticeDto.setCreateUserId(dto.getId());
-		noticeDto.setCreateUserName(dto.getMobile());
+		noticeDto.setCreateUserName(dto.getMobile());*/
+		//noticeDto.setCreateUserId("a3efc072-0142-4fff-b951-3adc659a70c9");
+		if(StringUtils.isEmpty(noticeDto.getCreateUserId())){
+			data.setMessage("发布公告者Id为空");
+			data.setStatus(DataStatus.HTTP_FAILE);
+		}
+		UserDto userDto = userService.getUserById(noticeDto.getCreateUserId());
+		if(userDto != null){
+			noticeDto.setCreateUserName(userDto.getNickName());
+		}
+		if (file != null) {
+        	Map<String, String> map = uploadImages(file , request);
+        	noticeDto.setPic(map.get("fileUrl"));
+        }
+		noticeDto.setId(UUIDGenerator.getUUID());
 		int flag = noticeService.addNotice(noticeDto);
 		List<NoticeUsersDto> list = new ArrayList<NoticeUsersDto>();
 		if(flag > 0){
 			String [] userIds = noticeDto.getUserIds();
-			NoticeUsersDto noticeUsersDto = new NoticeUsersDto();
 			if(userIds.length > 0){
 				for(String id : userIds){
+					NoticeUsersDto noticeUsersDto = new NoticeUsersDto();
+					noticeUsersDto.setId(UUIDGenerator.getUUID());
+					noticeUsersDto.setReadstat(DataStatus.DISABLED);      //默认未读
+					noticeUsersDto.setCreateTime(new Date());
+					noticeUsersDto.setStat(DataStatus.ENABLED);
 					noticeUsersDto.setNoticeId(noticeDto.getId());
 					noticeUsersDto.setUserId(id);
 					list.add(noticeUsersDto);
@@ -255,6 +325,59 @@ public class NoticeController extends BaseController {
 		}	   	
 		return data;
 	}
+	
+    @ResponseBody
+    @RequestMapping("/uploadImages.do"   )  
+    public Map<String, String> uploadImages(@RequestParam("file") MultipartFile file,HttpServletRequest request){      	
+    	//String context = "/upload";
+		String realPath = PropertiesUtils.getProperty("upload.url");
+		String fileDe = DateUtils.format(new Date(), DateUtils.YMD);
+		String path = "";
+		String filePath = "";
+		String fileName = ""; //重新新命名
+		String realName = "";
+		Map<String, String> m = new HashMap<String, String>();
+    	if(file.isEmpty()){
+    		System.out.println("请选择需要上传的文件!");  
+    		m.put("message", "请选择需要上传的文件!");
+	       	return m;
+    	}else{
+    			realName = file.getOriginalFilename();
+ 	            System.out.println("fileName4---------->" + realName); 
+ 	            if(file.getSize()> DataStatus._FILESIZE_){
+ 	       		System.out.println("上传图片大小不允许超过1M");
+ 	       		m.put("message", "上传图片大小不允许超过1M");
+ 	       		return m;
+ 	            }
+ 	                int pre = (int) System.currentTimeMillis();  
+ 	                path = realPath + "/" + fileDe;
+ 	                fileName = this.getUploadFileName(file.getOriginalFilename());
+ 	                filePath = path  + "/" + fileName;
+ 	                File f = new File(path);
+ 	                //如果文件夹不存在则创建    
+ 	                if(!f.exists() && !f.isDirectory()) {
+ 	                  f.mkdir();    
+ 	                }
+ 	                try {  
+ 	                	file.transferTo(new File(path + "/" + fileName));
+ 	                    int finaltime = (int) System.currentTimeMillis();  
+ 	                    System.out.println("上传3共耗时：" + (finaltime - pre) + "毫秒");  
+ 	                }catch (FileNotFoundException e) {
+ 	                    e.printStackTrace();
+ 	                }catch (IOException e) {  
+ 	                    e.printStackTrace();  
+ 	                }  
+    	}
+        System.out.println("上传成功"); 
+        m.put("fileUrl", filePath);
+        m.put("realName", realName);
+        return m;  
+    }
+    
+    public  String getUploadFileName(String fileName) {
+  		String tempFile = fileName.substring(fileName.lastIndexOf(".")+1);
+  		return UUIDGenerator.getUUID32Bit() + "." + tempFile;
+  	}
 
 	/**
 	 * 提供移动端.轮询获取最新一条公告
