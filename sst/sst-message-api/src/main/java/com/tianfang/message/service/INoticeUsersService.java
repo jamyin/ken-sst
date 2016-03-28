@@ -24,6 +24,9 @@ public interface INoticeUsersService {
      */
 	NoticeDto getLast(String userId);
 
+	//发送人数
+	int findMount(String id);
+	
 	//已读
 	int findRead(String id);
 }

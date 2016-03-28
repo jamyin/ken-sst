@@ -53,7 +53,7 @@ public class NoticeServiceImpl implements INoticeService {
 		Notice notice = BeanUtils.createBeanByTarget(noticeDto, Notice.class);
 		return noticeDao.deleteByPrimaryKey(notice.getId());
 	}
-	
+
 	/**
 	 * 批量逻辑删除
 	 * @author YIn
@@ -61,18 +61,18 @@ public class NoticeServiceImpl implements INoticeService {
 	 */
 	@Override
 	public Integer delByIds(String ids) {
-		  String[] idArr = ids.split(",");
-	        for (String id : idArr) {
-	        	Notice notice = noticeDao.selectByPrimaryKey(id);
-	            if (null == notice) {
-	                return 0;//无此条记录
-	            }
-	            notice.setStat(DataStatus.DISABLED);
-	            noticeDao.updateByPrimaryKeySelective(notice);
-	        }
-	        return 1;
+		String[] idArr = ids.split(",");
+		for (String id : idArr) {
+			Notice notice = noticeDao.selectByPrimaryKey(id);
+			if (null == notice) {
+				return 0;//无此条记录
+			}
+			notice.setStat(DataStatus.DISABLED);
+			noticeDao.updateByPrimaryKeySelective(notice);
+		}
+		return 1;
 	}
-	
+
 	/**
 	 * @author YIn
 	 * @time:2016年1月13日 下午1:17:12
@@ -91,7 +91,7 @@ public class NoticeServiceImpl implements INoticeService {
 	 */
 	@Override
 	public PageResult<NoticeDto> findNoticeViewByPage(NoticeDto noticeDto , PageQuery page) {
-		Notice notice = BeanUtils.createBeanByTarget(noticeDto, Notice.class);
+		/*	Notice notice = BeanUtils.createBeanByTarget(noticeDto, Notice.class);
 		List<Notice> list = noticeDao.findNoticeViewByPage(notice,page);
 		int total = noticeDao.selectAccount(notice);
 		page.setTotal(total);
@@ -104,10 +104,24 @@ public class NoticeServiceImpl implements INoticeService {
 			dto.setLastUpdateTimeStr(sdf.format(dto.getLastUpdateTime()));
 			}
 		}
-		return new PageResult<NoticeDto>(page, dtoList);
+		return new PageResult<NoticeDto>(page, dtoList);*/
+		List<NoticeDto> list = noticeDao.findNoticeViewByPage(noticeDto ,  page);
+		if(list != null  && list.size() >0){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+			for(NoticeDto dto : list){
+				if(dto.getCreateTime() != null){
+					dto.setCreateTimeStr(sdf.format(dto.getCreateTime()));}
+				if(dto.getLastUpdateTime() != null){
+					dto.setLastUpdateTimeStr(sdf.format(dto.getLastUpdateTime()));
+				}
+			}
+		}
+		int total = noticeDao.selectAccount(noticeDto);
+		page.setTotal(total);
+		return new PageResult<NoticeDto>(page, list);
 	}
-	
-	
+
+
 	@Override
 	public NoticeDto findNoticeById(String infoId) {
 		if (StringUtils.isBlank(infoId)){

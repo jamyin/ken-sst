@@ -22,5 +22,37 @@
         ORDER BY b.create_time desc 
         LIMIT 0,1;
     </select>
-
+    
+     <select id="findNoticeViewByPage" resultType="com.tianfang.message.dto.NoticeDto">
+        SELECT b.id,b.title,b.create_user_id AS createUserId ,b.create_user_name AS createUserName,
+        b.content,b.group_id AS groupId,b.group_name AS groupName,b.pic,b.create_time AS createTime,b.stat,b.allow_forward AS allowForward, 
+        a.readstat AS ReadStat, 
+        c.nick_name AS  nickName  
+        FROM sst_notice_users AS a    
+        LEFT JOIN sst_notice AS b   
+        ON a.notice_id = b.id  
+        LEFT JOIN sport_user c    
+        ON a.user_id = c.id  
+        WHERE a.user_id = #{dto.userId}    
+        ORDER BY b.create_time desc  
+        LIMIT  #{page.startNum}, #{page.pageSize}
+     </select>
+    
+     <select id="selectAccount" resultType="java.lang.Integer" parameterType="com.tianfang.message.dto.NoticeDto">
+	 	SELECT count(*)   
+        FROM sst_notice_users as a   
+        LEFT JOIN sst_notice as b    
+        ON a.notice_id = b.id   
+        LEFT JOIN sport_user c    
+        ON a.user_id = c.id   
+        WHERE a.user_id = #{dto.userId}  
+	  </select>
+	
+	  <select id="findMount" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT count(*) FROM sst_notice a LEFT JOIN sst_notice_users b ON a.id = b.notice_id  WHERE a.id = #{id} 
+      </select>
+      
+	   <select id="findRead" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT count(*) FROM sst_notice a LEFT JOIN sst_notice_users b ON a.id = b.notice_id  WHERE a.id = #{id} and b.readstat =0
+     </select>
 </mapper> 

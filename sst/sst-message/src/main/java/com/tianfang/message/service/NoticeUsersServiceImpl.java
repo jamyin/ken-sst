@@ -46,10 +46,20 @@ public class NoticeUsersServiceImpl implements INoticeUsersService {
 
 	/**
 	 * @author YIn
+	 * @time:2016年3月28日 下午6:42:32
+	 */
+	@Override
+	public int findMount(String id) {
+
+		return noticeUsersDao.findMount(id);
+	}
+	/**
+	 * @author YIn
 	 * @time:2016年3月28日 上午11:08:35
 	 */
 	@Override
 	public int findRead(String id) {
 		return noticeUsersDao.findRead(id);
 	}
+
 }
