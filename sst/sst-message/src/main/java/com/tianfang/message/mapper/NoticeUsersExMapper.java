@@ -14,8 +14,7 @@ public interface NoticeUsersExMapper {
 
 	NoticeDto getLast(String userId);
 
-	List<NoticeDto> findNoticeViewByPage(@Param("dto")NoticeDto noticeDto,
-			@Param("page")PageQuery page);
+	List<NoticeDto> findNoticeViewByPage(@Param("dto")NoticeDto noticeDto, @Param("page")PageQuery page);
 
 	int selectAccount(@Param("dto")NoticeDto noticeDto);
 

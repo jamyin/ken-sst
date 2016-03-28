@@ -23,6 +23,7 @@
         LIMIT 0,1;
     </select>
     
+    
      <select id="findNoticeViewByPage" resultType="com.tianfang.message.dto.NoticeDto">
         SELECT b.id,b.title,b.create_user_id AS createUserId ,b.create_user_name AS createUserName,
         b.content,b.group_id AS groupId,b.group_name AS groupName,b.pic,b.create_time AS createTime,b.stat,b.allow_forward AS allowForward, 
