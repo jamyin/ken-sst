@@ -54,6 +54,6 @@
       </select>
       
 	   <select id="findRead" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT count(*) FROM sst_notice a LEFT JOIN sst_notice_users b ON a.id = b.notice_id  WHERE a.id = #{id} and b.readstat =0
+        SELECT count(*) FROM sst_notice a LEFT JOIN sst_notice_users b ON a.id = b.notice_id  WHERE a.id = #{id} and b.readstat =1
      </select>
 </mapper> 

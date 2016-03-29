@@ -7,12 +7,16 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.mybatis.MyBatisBaseDao;
+import com.tianfang.common.util.StringUtils;
 import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.message.dto.NoticeUsersDto;
 import com.tianfang.message.mapper.NoticeUsersExMapper;
 import com.tianfang.message.mapper.NoticeUsersMapper;
 import com.tianfang.message.pojo.NoticeUsers;
+import com.tianfang.message.pojo.NoticeUsersExample;
+import com.tianfang.message.pojo.NoticeUsersExample.Criteria;
 
 @Repository
 public class NoticeUsersDao extends MyBatisBaseDao<NoticeUsers> {
@@ -62,6 +66,33 @@ public class NoticeUsersDao extends MyBatisBaseDao<NoticeUsers> {
         int reads = mapper.countByExample(example);
         return reads;*/
 		return mappers.findRead(id);
+	}
+
+	/**
+	 * @author YIn
+	 * @time:2016年3月29日 上午9:52:18
+	 */
+	public List<NoticeUsers> selectByParameter(NoticeUsers noticeUsers) {
+		NoticeUsersExample example = new NoticeUsersExample();
+		NoticeUsersExample.Criteria criteria = example.createCriteria();
+        assemblyParams(noticeUsers, criteria);   //组装参数
+        List<NoticeUsers> result = mapper.selectByExample(example);  
+        return result;
+	}
+
+	/**
+	 * @author YIn
+	 * @time:2016年3月29日 上午9:53:42
+	 */
+	private void assemblyParams(NoticeUsers noticeUsers, Criteria criteria) {
+		if (StringUtils.isNotBlank(noticeUsers.getUserId())){
+    		criteria.andUserIdEqualTo(noticeUsers.getUserId());
+    	}
+    	if (StringUtils.isNotBlank(noticeUsers.getNoticeId())){
+    		criteria.andNoticeIdEqualTo(noticeUsers.getNoticeId());    //根据状态查询
+    	}
+    	criteria.andStatEqualTo(DataStatus.ENABLED);
+		
 	}
 
 }

@@ -1,9 +1,9 @@
 package com.tianfang.message.service;
 
+import java.util.List;
+
 import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.message.dto.NoticeUsersDto;
-
-import java.util.List;
 public interface INoticeUsersService {
 
 	/**
@@ -14,6 +14,8 @@ public interface INoticeUsersService {
 	 * @return
 	 */
 	int addNotice(NoticeUsersDto noticeUsersDto);
+	
+	int updateNotice(NoticeUsersDto noticeUsersDto);
 
 	int releaseNotice(List<NoticeUsersDto> list);
 
@@ -29,4 +31,6 @@ public interface INoticeUsersService {
 	
 	//已读
 	int findRead(String id);
+
+	List<NoticeUsersDto> findNoticeUsers(NoticeUsersDto noticeUsersDto);
 }

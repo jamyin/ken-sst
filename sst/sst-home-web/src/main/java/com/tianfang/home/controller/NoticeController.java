@@ -99,6 +99,16 @@ public class NoticeController extends BaseController {
 		logger.info("NoticeDto  : " + noticeDto);
 		Response<NoticeDto> response = new Response<NoticeDto>(); 
 		List<NoticeDto> list = noticeService.findNotice(noticeDto);
+		
+		//打开后状态改变
+		NoticeUsersDto noticeUsersDto = new NoticeUsersDto();
+		noticeUsersDto.setUserId(noticeDto.getUserId());;
+		noticeUsersDto.setNoticeId(noticeDto.getId());
+		List<NoticeUsersDto> noticeUsersDtoList = noticeUsersService.findNoticeUsers(noticeUsersDto);
+		if(noticeUsersDtoList != null && noticeUsersDtoList.size() > 0){
+			noticeUsersDtoList.get(0).setReadstat(1);
+			noticeUsersService.updateNotice(noticeUsersDtoList.get(0));
+		}
 		if(list != null && list.size() > 0){
 			//查询发送总人数
 			int mount = noticeUsersService.findMount(list.get(0).getId());

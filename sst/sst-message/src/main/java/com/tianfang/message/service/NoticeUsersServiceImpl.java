@@ -62,4 +62,26 @@ public class NoticeUsersServiceImpl implements INoticeUsersService {
 		return noticeUsersDao.findRead(id);
 	}
 
+	/**
+	 * @author YIn
+	 * @time:2016年3月29日 上午9:41:13
+	 */
+	@Override
+	public int updateNotice(NoticeUsersDto noticeUsersDto) {
+		NoticeUsers noticeUsers = BeanUtils.createBeanByTarget(noticeUsersDto, NoticeUsers.class);
+		return noticeUsersDao.updateByPrimaryKeySelective(noticeUsers);
+	}
+
+	/**
+	 * @author YIn
+	 * @time:2016年3月29日 上午9:48:02
+	 */
+	@Override
+	public List<NoticeUsersDto> findNoticeUsers(NoticeUsersDto noticeUsersDto) {
+		NoticeUsers noticeUsers = BeanUtils.createBeanByTarget(noticeUsersDto, NoticeUsers.class);
+		List<NoticeUsers> list = noticeUsersDao.selectByParameter(noticeUsers);
+		List<NoticeUsersDto> dtoList = BeanUtils.createBeanListByTarget(list, NoticeUsersDto.class);
+		return dtoList;
+	}
+
 }
