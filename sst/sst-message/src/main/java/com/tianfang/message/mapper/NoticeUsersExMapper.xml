@@ -18,7 +18,7 @@
         FROM sst_notice_users as a  
         LEFT JOIN sst_notice as b  
         ON a.notice_id = b.id 
-        WHERE a.user_id = #{userId}  
+        WHERE a.user_id = #{userId}  a.stat =1 AND b.stat =1 
         ORDER BY b.create_time desc 
         LIMIT 0,1;
     </select>
@@ -34,7 +34,7 @@
         ON a.notice_id = b.id  
         LEFT JOIN sport_user c    
         ON a.user_id = c.id  
-        WHERE a.user_id = #{dto.userId}    
+        WHERE a.user_id = #{dto.userId} AND b.stat=1 and a.stat =1     
         ORDER BY b.create_time desc  
         LIMIT  #{page.startNum}, #{page.pageSize}
      </select>
@@ -46,14 +46,14 @@
         ON a.notice_id = b.id   
         LEFT JOIN sport_user c    
         ON a.user_id = c.id   
-        WHERE a.user_id = #{dto.userId}  
+        WHERE a.user_id = #{dto.userId}   AND b.stat=1 and a.stat =1   
 	  </select>
 	
 	  <select id="findMount" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT count(*) FROM sst_notice a LEFT JOIN sst_notice_users b ON a.id = b.notice_id  WHERE a.id = #{id} 
+        SELECT count(*) FROM sst_notice a LEFT JOIN sst_notice_users b ON a.id = b.notice_id  WHERE a.id = #{id}   AND b.stat=1 and a.stat =1   
       </select>
       
 	   <select id="findRead" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT count(*) FROM sst_notice a LEFT JOIN sst_notice_users b ON a.id = b.notice_id  WHERE a.id = #{id} and b.readstat =1
+        SELECT count(*) FROM sst_notice a LEFT JOIN sst_notice_users b ON a.id = b.notice_id  WHERE a.id = #{id} and b.readstat =1  AND b.stat=1 and a.stat =1   
      </select>
 </mapper> 
