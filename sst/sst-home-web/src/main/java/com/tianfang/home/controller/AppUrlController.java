@@ -40,14 +40,18 @@ public class AppUrlController {
 			return data;
 		}
 		if(!Objects.equal(dto.getVersionNum(),dtoObj.getVersionNum())){	//判断移动的版本不一样则需要跟新
-			data.setStatus(DataStatus.HTTP_SUCCESS);
 			dtoObj.setHttpUrl(dtoObj.getVersionUrl());
+			dtoObj.setType(DataStatus.ENABLED);//跟新
+			
 			data.setData(dtoObj);
 			data.setMessage("您的程序需要跟新啦");
+			data.setStatus(DataStatus.HTTP_SUCCESS);
 			return data;
 		}else{	//分享
 			dtoObj.setTitle(dto.getTitle());
 			dtoObj.setHttpUrl(dtoObj.getShareUrl());
+			dtoObj.setType(DataStatus.DISABLED);//分享
+			
 			data.setStatus(DataStatus.HTTP_SUCCESS);
 			data.setData(dtoObj);
 		}

@@ -48,7 +48,7 @@ public class AppVersionDto implements Serializable{
 	
 	@Getter
 	@Setter
-    private String type;
+    private Integer type;
 	
 	
 	@Getter
