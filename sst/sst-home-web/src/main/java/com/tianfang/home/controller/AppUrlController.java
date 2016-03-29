@@ -3,6 +3,7 @@ package com.tianfang.home.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,13 +34,12 @@ public class AppUrlController {
 //		id = 1 ios 2 android
 		
 		AppVersionDto dtoObj = iAppVersionService.getAppVersionBy(dto);
-		if(Objects.equal(dto, null)){
+		if(Objects.equal(dtoObj, null)){
 			data.setStatus(DataStatus.HTTP_FAILE);
 			data.setMessage("数据服务异常");
 			return data;
 		}
-		
-		if(Objects.equal(dto.getVersionNum(),dtoObj.getVersionNum())){	//判断移动的版本不一样则需要跟新
+		if(!Objects.equal(dto.getVersionNum(),dtoObj.getVersionNum())){	//判断移动的版本不一样则需要跟新
 			data.setStatus(DataStatus.HTTP_SUCCESS);
 			dtoObj.setHttpUrl(dtoObj.getVersionUrl());
 			data.setData(dtoObj);
