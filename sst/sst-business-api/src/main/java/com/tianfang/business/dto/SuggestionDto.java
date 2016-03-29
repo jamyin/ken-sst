@@ -35,5 +35,9 @@ public class SuggestionDto implements Serializable {
 	@Getter
 	@Setter
 	private Integer stat;
+	
+	@Getter
+	@Setter
+	private String sfContacts;
 
 }
