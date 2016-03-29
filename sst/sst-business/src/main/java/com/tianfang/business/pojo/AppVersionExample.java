@@ -664,6 +664,7 @@ public class AppVersionExample {
      * This class corresponds to the database table sst_app_version
      *
      * @mbggenerated Tue Mar 29 13:59:19 CST 2016
+>>>>>>> branch 'ssfl' of http://192.168.1.231/group-two/sst.git
      */
     public static class Criterion {
         private String condition;

@@ -309,6 +309,7 @@
     update sst_app_version
     set version_num = #{versionNum,jdbcType=INTEGER},
       version_type = #{versionType,jdbcType=VARCHAR},
+>>>>>>> branch 'ssfl' of http://192.168.1.231/group-two/sst.git
       version_url = #{versionUrl,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},

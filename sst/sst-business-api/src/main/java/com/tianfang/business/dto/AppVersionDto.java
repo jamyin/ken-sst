@@ -41,4 +41,24 @@ public class AppVersionDto implements Serializable{
 	@Setter
     private Integer stat;
 
+	
+	@Getter
+	@Setter
+    private String title;
+	
+	@Getter
+	@Setter
+    private String type;
+	
+	
+	@Getter
+	@Setter
+    private String httpUrl;
+	
+	
+	@Getter
+	@Setter
+    private String shareUrl;
+
+
 }
