@@ -471,9 +471,8 @@ public class UserController extends BaseController{
  	       		return m;
  	            }
  	                int pre = (int) System.currentTimeMillis();  
- 	                path = realPath + "/" + fileDe;
  	                fileName = this.getUploadFileName(file.getOriginalFilename());
- 	                filePath = path  + "/" + fileName;
+ 	                filePath = fileDe  + "/" + fileName;
  	                File f = new File(path);
  	                //如果文件夹不存在则创建    
  	                if(!f.exists() && !f.isDirectory()) {
