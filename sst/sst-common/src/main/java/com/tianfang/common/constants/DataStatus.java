@@ -8,9 +8,10 @@ import com.tianfang.common.util.RandomCode;
  * @author rkzhang
  *
  */
-public interface DataStatus
-{
+public interface DataStatus {
 
+	final static String _UPLOAD_ = "/upload/";
+	
 	final static int EVA_TWO = 2;
 
     final static int ENABLED = 1;
