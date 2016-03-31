@@ -100,4 +100,9 @@ public class RemindDto implements Serializable{
 	@Getter
 	@Setter
     private Integer stat;
+	
+	
+	@Getter
+	@Setter
+    private String [] userIds;   //接收公告者数组
 }

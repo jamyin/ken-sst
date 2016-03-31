@@ -33,7 +33,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
 		//如果只是上传一个文件，则只需要MultipartFile类型接收文件即可，而且无需显式指定@RequestParam注解  
         //如果想上传多个文件，那么这里就要用MultipartFile[]类型来接收文件，并且还要指定@RequestParam注解  
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-		String context = "upload" + "/" + format.format(new Date());
+		String context = "/upload" + "/" + format.format(new Date());
         String realPath = PropertiesUtils.getProperty("upload.url");
         String fileName = FileUtils.getUploadFileName(myfile.getOriginalFilename());
         FileUtils.copyInputStreamToFile(myfile.getInputStream(), new File(realPath + "/" + context, fileName));  

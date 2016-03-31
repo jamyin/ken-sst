@@ -25,4 +25,6 @@ public interface IRemindUsersService {
 
 	List<RemindUsersDto> findRemindUsersByParam(RemindUsersDto dto) throws Exception;
 
+	void insertList(List<RemindUsersDto> list);
+
 }

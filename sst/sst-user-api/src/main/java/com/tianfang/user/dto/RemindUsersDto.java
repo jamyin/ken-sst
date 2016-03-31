@@ -13,7 +13,7 @@ public class RemindUsersDto {
 
 	@Getter
 	@Setter
-    private String noticeId;
+    private String remindId;
 
 	@Getter
 	@Setter

@@ -31,5 +31,11 @@ public class RemindUsersServiceImpl implements IRemindUsersService {
 		return remindUsersDao.findRemindUsersByParam(dto);
 	}
 
+	@Override
+	public void insertList(List<RemindUsersDto> list) {
+		// TODO Auto-generated method stub
+		remindUsersDao.insertList(list);
+	}
+
 	
 }
