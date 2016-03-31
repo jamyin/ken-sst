@@ -69,17 +69,6 @@ public class RemindController {
 			data.setStatus(DataStatus.HTTP_FAILE);	    	
 	    	return data;
 	    }
-	    
-		
-		/*UserDto dto = getLoginUser();
-		noticeDto.setCreateUserId(dto.getId());
-		noticeDto.setCreateUserName(dto.getMobile());*/
-		//noticeDto.setCreateUserId("a3efc072-0142-4fff-b951-3adc659a70c9");
-		if(StringUtils.isEmpty(remindDto.getUserId())){//发送者用户Id
-			data.setMessage("发布公告者Id为空");
-			data.setStatus(DataStatus.HTTP_FAILE);
-			return data;
-		}
 				
 		UserDto userDto = iuserService.getUserById(remindDto.getUserId());
 		if(Objects.equal(userDto, null)){
@@ -99,40 +88,16 @@ public class RemindController {
 			e.printStackTrace();
 		}
 		
-//		UserDto userDto = userService.getUserById(noticeDto.getCreateUserId());
-//		if(userDto != null){
-//			noticeDto.setCreateUserName(userDto.getNickName());
-//		}
-//		if (file != null) {
-//        	Map<String, String> map = uploadImages(file , request);
-//        	noticeDto.setPic(map.get("fileUrl"));
-//        }
-//		noticeDto.setId(UUIDGenerator.getUUID());
-//		int flag = noticeService.addNotice(noticeDto);
-//		List<remindUserDto> list = new ArrayList<remindUserDto>();
-//		if(flag > 0){
-//			String [] userIds = noticeDto.getUserIds();
-//			if(userIds.length > 0){
-//				for(String id : userIds){
-//					remindUserDto remindUserDto = new remindUserDto();
-//					remindUserDto.setId(UUIDGenerator.getUUID());
-//					remindUserDto.setReadstat(DataStatus.DISABLED);      //默认未读
-//					remindUserDto.setCreateTime(new Date());
-//					remindUserDto.setStat(DataStatus.ENABLED);
-//					remindUserDto.setNoticeId(noticeDto.getId());
-//					remindUserDto.setUserId(id);
-//					list.add(remindUserDto);
-//				}
-//			}
-//		}
-//		int releaseFlag = noticeUsersService.releaseNotice(list);
-//		if(flag > 0 && releaseFlag > 0){
-//			data.setMessage("发布公告成功");
-//			data.setStatus(DataStatus.HTTP_SUCCESS);
-//		}else{
-//			data.setMessage("发布公告失败");
-//			data.setStatus(DataStatus.HTTP_FAILE);
-//		}	   	
+		//对象处理
+		remindDto = copyBeanUtils(remindDto,userDto,fileO,fileT);
+		
+		//保存
+		try {
+			insertRemindAndList(remindDto);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return data;
 	}
 
@@ -177,7 +142,7 @@ public class RemindController {
 		}
 		
 		
-		if (fileO != null) {
+		if (fileT != null) {
 			try {
 				remindDto.setVoice(FileUtils.uploadImage(fileT));
 			} catch (IOException e) {
