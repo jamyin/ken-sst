@@ -471,7 +471,7 @@ public class UserController extends BaseController{
  	       		return m;
  	            }
  	                int pre = (int) System.currentTimeMillis();  
- 	                path = realPath + "/" + fileDe;
+ 	                path = realPath + DataStatus._UPLOAD_ + fileDe;
  	                fileName = this.getUploadFileName(file.getOriginalFilename());
 // 	                filePath = path  + "/" + fileName;
  	                filePath = DataStatus._UPLOAD_  +fileDe + File.separator +fileName;
