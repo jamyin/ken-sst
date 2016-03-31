@@ -121,6 +121,24 @@ public class NoticeServiceImpl implements INoticeService {
 		return new PageResult<NoticeDto>(page, list);
 	}
 
+	
+	@Override
+	public PageResult<NoticeDto> queryNoticeViewByPage(NoticeDto noticeDto , PageQuery page) {
+		Notice notice = BeanUtils.createBeanByTarget(noticeDto, Notice.class);
+		List<Notice> list = noticeDao.queryNoticeViewByPage(notice,page);
+		int total = noticeDao.queryAccount(notice);
+		page.setTotal(total);
+		List<NoticeDto> dtoList = BeanUtils.createBeanListByTarget(list, NoticeDto.class);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+		for(NoticeDto dto : dtoList){
+			if(dto.getCreateTime() != null){
+			dto.setCreateTimeStr(sdf.format(dto.getCreateTime()));}
+			if(dto.getLastUpdateTime() != null){
+			dto.setLastUpdateTimeStr(sdf.format(dto.getLastUpdateTime()));
+			}
+		}
+		return new PageResult<NoticeDto>(page, dtoList);
+	}
 
 	@Override
 	public NoticeDto findNoticeById(String infoId) {

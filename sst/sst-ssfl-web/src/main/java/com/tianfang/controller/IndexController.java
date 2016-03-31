@@ -122,7 +122,7 @@ public class IndexController extends BaseController{
 	public List<NoticeDto> getAuthInfo(){
 		PageQuery query = new PageQuery(6); // 公告条数限制为6条
 		NoticeDto dto = new NoticeDto();
-		PageResult<NoticeDto> datas = iNoticeService.findNoticeViewByPage(dto, query);
+		PageResult<NoticeDto> datas = iNoticeService.queryNoticeViewByPage(dto, query);
 		return datas.getResults();
 	}
 	

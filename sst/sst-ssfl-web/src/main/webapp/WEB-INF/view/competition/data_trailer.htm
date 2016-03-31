@@ -15,6 +15,7 @@
 	<link href="/static/css/common.css" rel="stylesheet" />
 	<link href="/static/css/data-trailer.css" rel="stylesheet" />
 	<#include "/common/head.htm"/>
+	<#assign cur = 2 >
 </head>
 
 <body>
@@ -69,7 +70,7 @@
 							<span class="team-nm">${(page.visitingTeamName)!}</span>
 						</div>
 						<a class="not-start A">未开始</a>
-						<a class="detail A" href="/competition/match/trailerDetil.htm?id=${(page.id)!}" target="_blank">详细</a>
+						<a class="detail A" href="/competition/match/trailerDetil.htm?id=${(page.id)!}&cur=${(cur)!}" target="_blank">详细</a>
 					</li>
 					</#list>
 					</#if>
@@ -77,7 +78,7 @@
 			</div>
 
 			<div class="jfb jfb-trailer">
-				<div class="tab"><a class="cur" href="###" tag="match">积分榜</a><a class="more" href="/datacenter/points.htm" target="_blank">更多</a></div>
+				<div class="tab"><a class="cur" href="###" tag="match">积分榜</a><a class="more" href="/datacenter/points.htm?cur=${(cur)!}" target="_blank">更多</a></div>
 				<div class="integr">
 					<div class="sub_tab"><span class="date">名次</span><span>球队</span><span class="score">胜/负/平</span><span>积分</span></div>
 					<ul>

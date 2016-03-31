@@ -64,6 +64,14 @@ public interface INoticeService {
 	
 	/**
 	 * 
+		 * 此方法描述的是：前台页面的接口
+		 * @author: cwftalus@163.com
+		 * @version: 2016年3月31日 上午10:31:11
+	 */
+	PageResult<NoticeDto> queryNoticeViewByPage(NoticeDto noticeDto, PageQuery page);
+	
+	/**
+	 * 
 		 * 此方法描述的是 根据infoId获取数据
 		 * @author: cwftalus@163.com
 		 * @version: 2016年3月22日 下午3:48:42

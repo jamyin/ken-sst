@@ -99,7 +99,7 @@ public class InfoController extends BaseController{
 		NoticeDto dto = new NoticeDto();
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		query.setPageSize(10);
-		PageResult<NoticeDto> datas = iNoticeService.findNoticeViewByPage(dto, query);
+		PageResult<NoticeDto> datas = iNoticeService.queryNoticeViewByPage(dto, query);
 		map.put("infoTitle", InfoTitle.ZERO.value);
 		map.put("infoType", InfoTitle.ZERO);
 		map.put("pageList",datas);

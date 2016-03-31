@@ -106,5 +106,32 @@ public class NoticeDao extends MyBatisBaseDao<Notice> {
 	}*/
 
 	
+
+	/**
+	 * 分页查询公告
+	 * @author YIn
+	 * @time:2016年1月13日 下午2:43:29
+	 */
+	public List<Notice> queryNoticeViewByPage(Notice notice, PageQuery page) {
+		NoticeExample example = new NoticeExample();
+		NoticeExample.Criteria criteria = example.createCriteria();
+		example.setOrderByClause(" create_time DESC limit " + page.getStartNum() +"," + page.getPageSize());
+        assemblyParams(notice, criteria);   //组装参数
+        List<Notice> result = mapper.selectByExample(example);  
+        return result;
+	}
+
+	/**
+	 * 查询总条数
+	 * @author YIn
+	 * @time:2016年1月13日 下午2:43:59
+	 */
+	public int queryAccount(Notice notice) {
+		NoticeExample example = new NoticeExample();
+		NoticeExample.Criteria criteria = example.createCriteria();
+        assemblyParams(notice, criteria);   //组装参数
+        return mapper.countByExample(example);
+	}
+	
 	
 }
