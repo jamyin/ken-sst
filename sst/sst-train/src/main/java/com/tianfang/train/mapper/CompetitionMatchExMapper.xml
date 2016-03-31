@@ -43,4 +43,29 @@
     </foreach> 
   </insert>  
   
-</mapper>
+  
+  <select id="selectCompetitionMatchByTeamId" resultType="com.tianfang.train.pojo.CompetitionMatch" parameterType="java.lang.String">
+  		SELECT id, comp_id as compId, comp_name as compName, cround_id as croundId, cround_name as croundName,home_team_id as homeTeamId, home_team_icon as homeTeamIcon,
+  		home_team_name as homeTeamName, visiting_team_id as visitingTeamId,visiting_team_icon as visitingTeamIcon, visiting_team_name as visitingTeamName,match_type as matchType,
+  		match_time as matchTime,home_score as homeScore,visiting_score as visitingScore, address, people_type as peopleType,create_admin_id as createAdminId,
+  		create_admin_name as createAdminName,create_time as createTime,last_update_time as lastUpdateTime,stat
+  		FROM sst_competition_match s
+  		WHERE s.stat = 1
+  		<if test="teamId != null and teamId != ''">
+  				and s.home_team_id = #{teamId}
+  				or s.visiting_team_id = #{teamId}
+  		</if> 
+  		ORDER BY s.create_time desc
+        limit  #{page.startNum}, #{page.pageSize}
+  </select>
+  
+  <select id="countCompetitionMatchByTeamId" resultType="java.lang.Integer" parameterType="java.lang.String">
+  		SELECT count(*) 
+  		FROM sst_competition_match s
+  		WHERE s.stat = 1
+  		<if test="teamId != null and teamId != ''">
+  				and s.home_team_id = #{teamId}
+  				or s.visiting_team_id = #{teamId}
+  		</if> 
+  </select>
+  </mapper>

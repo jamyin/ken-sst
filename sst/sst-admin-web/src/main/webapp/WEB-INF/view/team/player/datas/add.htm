@@ -47,9 +47,39 @@
 								</div>
 								<div id="div_datas" style="display:none">
 									<div class="control-group">
+										<label class="course_add_label">球员位置</label>
+										<div class="course_add_input">
+											<input type="text" class="input-mini score_hv" name="position" id="position"/>
+										</div>									
+									</div>
+									<div class="control-group">
+										<label class="course_add_label">出场次数</label>
+										<div class="course_add_input">
+											<input type="text" class="input-mini score_hv" name="times" id="times"/>
+										</div>									
+									</div>
+									<div class="control-group">
+										<label class="course_add_label">出场时间</label>
+										<div class="course_add_input">
+											<input type="text" class="input-mini score_hv" name="playTimes" id="playTimes"/>
+										</div>									
+									</div>
+									<div class="control-group">
 										<label class="course_add_label">进球</label>
 										<div class="course_add_input">
 											<input type="text" class="input-mini score_hv" name="num" id="num"/>
+										</div>									
+									</div>
+									<div class="control-group">
+										<label class="course_add_label">点球</label>
+										<div class="course_add_input">
+											<input type="text" class="input-mini score_hv" name="points" id="points"/>
+										</div>									
+									</div>
+									<div class="control-group">
+										<label class="course_add_label">助攻数</label>
+										<div class="course_add_input">
+											<input type="text" class="input-mini score_hv" name="assists" id="assists"/>
 										</div>									
 									</div>
 									<div class="control-group">
@@ -166,8 +196,28 @@
 					layer.alert('对不起,请选择球员~', { icon: 7 });
 					return;
 				}
+				if (null == $("#position").val() || '' == $("#position").val()){
+					layer.alert('对不起,请填写球员位置~', { icon: 7 });
+					return;
+				}
+				if (null == $("#times").val() || '' == $("#times").val()){
+					layer.alert('对不起,请填写出场次数~', { icon: 7 });
+					return;
+				}
+				if (null == $("#playTimes").val() || '' == $("#playTimes").val()){
+					layer.alert('对不起,请填写出场时间~', { icon: 7 });
+					return;
+				}
 				if (null == $("#num").val() || '' == $("#num").val()){
 					layer.alert('对不起,请填写进球数~', { icon: 7 });
+					return;
+				}
+				if (null == $("#points").val() || '' == $("#points").val()){
+					layer.alert('对不起,请填写点球数~', { icon: 7 });
+					return;
+				}
+				if (null == $("#assists").val() || '' == $("#assists").val()){
+					layer.alert('对不起,请填写助攻数~', { icon: 7 });
 					return;
 				}
 				if (null == $("#yellow").val() || '' == $("#yellow").val()){

@@ -1,42 +1,31 @@
 package com.tianfang.home.controller;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.tianfang.user.pojo.Vote;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
+import com.alibaba.fastjson.JSON;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.DateUtils;
-import com.tianfang.common.util.PropertiesUtils;
+import com.tianfang.common.util.FileUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
+import com.tianfang.home.dto.AppOption;
 import com.tianfang.home.dto.AppVoteDatas;
 import com.tianfang.user.app.VoteApp;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.dto.VoteDto;
-import com.tianfang.user.dto.VoteOptionDto;
-import com.tianfang.user.dto.VoteParams;
-import com.tianfang.user.dto.VoteUserOptionDto;
-import com.tianfang.user.dto.VoteUserTempDto;
+import com.tianfang.user.dto.*;
 import com.tianfang.user.service.IVoteService;
 import com.tianfang.user.service.IVoteUserOptionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**		
  * <p>Title: VoteController </p>
@@ -192,20 +181,69 @@ public class VoteController extends BaseController{
 		
 		return result;
 	}
-	
+
 	/**
-	 * 发起投票接口
+	 * 发起投票接口(ios端)
+	 * @param datas
+	 * @param request
+	 * @return
+	 * @throws Exception
+     */
+	@RequestMapping(value ="publishIOS" ,method = RequestMethod.POST)
+	@ResponseBody
+	public Response<String> publishIOS(String datas, HttpServletRequest request) throws Exception{
+		Response<String> result = new Response<String>();
+		AppVoteDatas vote = JSON.parseObject(datas, AppVoteDatas.class);
+		if (StringUtils.isBlank(vote.getUserId())){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("用户未登陆");
+			return result;
+		}
+		if (null == vote.getToUserIds() || vote.getToUserIds().length == 0){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("未选择发送用户");
+			return result;
+		}
+		UserDto user = getUserByCache(vote.getUserId());
+		if (null != user){
+			try {
+				// 组装Vote数据
+				String voteId = UUIDGenerator.getUUID();
+				VoteDto dto = assemblyVote(vote, user, voteId);
+				// 组装VoteUserTemp数据
+				List<VoteUserTempDto> temps = assemblyTemps(vote, voteId);
+				// 组装VoteOption(ios端组装方式)
+				List<VoteOptionDto> options = assemblyVoteOptions(vote, voteId);
+				// 批量保存数据
+				voteService.save(dto, temps, options);
+
+				result.setMessage("发布成功!");
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("系统异常");
+			}
+		}else{
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("用户不存在");
+		}
+
+		return result;
+	}
+
+	/**
+	 * 发起投票接口(android端)
 	 * @param vote
-	 * @param userId
 	 * @return
 	 * @author xiang_wang
 	 * 2016年3月9日下午1:11:40
 	 */
-	@RequestMapping(value ="publish")
+	@RequestMapping(value ="publish" ,method = RequestMethod.POST)
 	@ResponseBody
-	public Response<String> publish(AppVoteDatas vote, String userId, HttpServletRequest request){
+	public Response<String> publish(@RequestBody AppVoteDatas vote) throws Exception{
 		Response<String> result = new Response<String>();
-		if (StringUtils.isBlank(userId)){
+		if (StringUtils.isBlank(vote.getUserId())){
 			result.setStatus(DataStatus.HTTP_FAILE);
     		result.setMessage("用户未登陆");
     		return result;
@@ -215,19 +253,19 @@ public class VoteController extends BaseController{
     		result.setMessage("未选择发送用户");
     		return result;
 		}
-		UserDto user = getUserByCache(userId);
+		UserDto user = getUserByCache(vote.getUserId());
     	if (null != user){
 			try {
 				// 组装Vote数据
 				String voteId = UUIDGenerator.getUUID();
 				VoteDto dto = assemblyVote(vote, user, voteId);
 				// 组装VoteUserTemp数据
-				List<VoteUserTempDto> temps = assemblyTemps(vote, voteId, userId);
+				List<VoteUserTempDto> temps = assemblyTemps(vote, voteId);
 				// 组装VoteOption
-				List<VoteOptionDto> options = assemblyVoteOptions(vote, request, voteId);
+				List<VoteOptionDto> options = assemblyVoteOptions(vote, voteId);
 				// 批量保存数据
 				voteService.save(dto, temps, options);
-				
+
 				result.setMessage("发布成功!");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -263,35 +301,43 @@ public class VoteController extends BaseController{
 	}
 
 	/**
-	 * 组装投票选择数据
+	 * base64图片 选项数据组装
 	 * @param vote
-	 * @param request
 	 * @param voteId
-	 * @return
-	 * @author xiang_wang
-	 * 2016年3月9日下午3:11:57
-	 */
-	private List<VoteOptionDto> assemblyVoteOptions(AppVoteDatas vote, HttpServletRequest request, String voteId) {
-		List<VoteOptionDto> options = new ArrayList<VoteOptionDto>(vote.getOptionTexts().length);
-		VoteOptionDto option;
-		MultipartFile file;
-		for (int i = 0, len = vote.getOptionTexts().length; i < len; i++){
-			option = new VoteOptionDto();
-			option.setId(UUIDGenerator.getUUID());
-			option.setVoteId(voteId);
-			option.setText(vote.getOptionTexts()[i]);
-			option.setCreateTime(new Date());
-			option.setNum(0);
-			option.setStat(DataStatus.ENABLED);
-			
-			file = vote.getFiles()[i];
-			if(!file.isEmpty()){
-				Map<String, String> map = uploadImages(file, request);
-				option.setPic(map.get("fileUrl"));
+     * @return
+     */
+	private List<VoteOptionDto> assemblyVoteOptions(AppVoteDatas vote, String voteId) {
+		logger.info("---------base64图片 端数据组装逻辑-------------------");
+		List<AppOption> options1 = vote.getOptions();
+		if (null != options1 && options1.size() > 0){
+			List<VoteOptionDto> options = new ArrayList<VoteOptionDto>(options1.size());
+			VoteOptionDto option;
+			for (AppOption a : options1){
+				option = new VoteOptionDto();
+				option.setId(UUIDGenerator.getUUID());
+				option.setVoteId(voteId);
+				option.setText(a.getOptionText());
+				option.setCreateTime(new Date());
+				option.setNum(0);
+				option.setStat(DataStatus.ENABLED);
+				if (StringUtils.isNotBlank(a.getBase64Img())){
+					String fileUrl = null;
+					try {
+						fileUrl = FileUtils.upload64Image(a.getBase64Img());
+					} catch (Exception e) {
+						logger.error("图片上传失败.....");
+						e.printStackTrace();
+					}
+					option.setPic(fileUrl);
+				}
+
+				options.add(option);
 			}
-			options.add(option);
+
+			return options;
 		}
-		return options;
+
+		return null;
 	}
 
 	/**
@@ -302,7 +348,7 @@ public class VoteController extends BaseController{
 	 * @author xiang_wang
 	 * 2016年3月9日下午3:10:00
 	 */
-	private List<VoteUserTempDto> assemblyTemps(AppVoteDatas vote, String voteId, String userId) {
+	private List<VoteUserTempDto> assemblyTemps(AppVoteDatas vote, String voteId) {
 		List<VoteUserTempDto> temps = new ArrayList<VoteUserTempDto>(vote.getToUserIds().length);
 		VoteUserTempDto voteUser;
 		for (String uid : vote.getToUserIds()){
@@ -320,7 +366,7 @@ public class VoteController extends BaseController{
 		voteUser = new VoteUserTempDto();
 		voteUser.setId(UUIDGenerator.getUUID());
 		voteUser.setSelected(DataStatus.DISABLED);
-		voteUser.setUserId(userId);
+		voteUser.setUserId(vote.getUserId());
 		voteUser.setVoteId(voteId);
 		voteUser.setCreateTime(new Date());
 		voteUser.setStat(DataStatus.ENABLED);
@@ -359,7 +405,7 @@ public class VoteController extends BaseController{
 	 * 2:校验该投票是否过期
 	 * 3:校验用户投票选项是否超过投票所限制的条数
 	 * @param userId
-	 * @param optinId
+	 * @param optionId
 	 * @author xiang_wang
 	 * 2016年3月9日上午10:19:38
 	 */
@@ -402,57 +448,5 @@ public class VoteController extends BaseController{
 			return null;
 		}
 		return vote;
-	}
-	
-	
-	private Map<String, String> uploadImages(@RequestParam("file") MultipartFile file,HttpServletRequest request){      	
-    	//String context = "/upload";
-		String realPath = PropertiesUtils.getProperty("upload.url");
-		String fileDe = DateUtils.format(new Date(), DateUtils.YMD);
-		String path = "";
-		String filePath = "";
-		String fileName = ""; //重新新命名
-		String realName = "";
-		Map<String, String> m = new HashMap<String, String>();
-    	if(file.isEmpty()){
-    		System.out.println("请选择需要上传的文件!");  
-    		m.put("message", "请选择需要上传的文件!");
-	       	return m;
-    	}else{
-    			realName = file.getOriginalFilename();
- 	            System.out.println("fileName4---------->" + realName); 
- 	            if(file.getSize()> DataStatus._FILESIZE_){
- 	       		System.out.println("上传图片大小不允许超过1M");
- 	       		m.put("message", "上传图片大小不允许超过1M");
- 	       		return m;
- 	            }
- 	                int pre = (int) System.currentTimeMillis();  
- 	                path = realPath + "/" + fileDe;
- 	                fileName = this.getUploadFileName(file.getOriginalFilename());
- 	                filePath = path  + "/" + fileName;
- 	                File f = new File(path);
- 	                //如果文件夹不存在则创建    
- 	                if(!f.exists() && !f.isDirectory()) {
- 	                  f.mkdir();    
- 	                }
- 	                try {  
- 	                	file.transferTo(new File(path + "/" + fileName));
- 	                    int finaltime = (int) System.currentTimeMillis();  
- 	                    System.out.println("上传3共耗时：" + (finaltime - pre) + "毫秒");  
- 	                }catch (FileNotFoundException e) {
- 	                    e.printStackTrace();
- 	                }catch (IOException e) {  
- 	                    e.printStackTrace();  
- 	                }  
-    	}
-        System.out.println("上传成功4"); 
-        m.put("fileUrl", filePath);
-        m.put("realName", realName);
-        return m;  
-    }
-	
-	public String getUploadFileName(String fileName){
-		String tempFile = fileName.substring(fileName.lastIndexOf(".")+1);
-		return UUIDGenerator.getUUID32Bit() + "." + tempFile;
 	}
 }

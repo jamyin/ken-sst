@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Form Elements - Ace Admin</title>
+		<meta name="description" content="Common form elements and layouts" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />		
+		<#include "../../common/head.htm"/>
+		<link href="${base}/static/css/course.css" rel="stylesheet" type="text/css" />
+		<link href="${base}/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+ 		<script type="text/javascript" src="${base}/plugins/uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="${base}/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+	</head>
+	<body>
+		<div class="container-fluid" id="main-container">
+			<div id="main-content" class="clearfix" style="margin-left:0px;">
+					<div id="page-content" class="clearfix">
+						<div class="row-fluid">
+							<!-- PAGE CONTENT BEGINS HERE -->
+							<form id="submitForm" class="form-horizontal" method="POST">
+								<input type="hidden" id="matchId" name="matchId" value="${(matchId)!}"/>
+								<input type="hidden" id="type"  value="${(type)!}"/>
+								<div class="control-group">
+										<label class="course_add_label" for="teamId"></label>
+										<div class="course_add_input">
+											<select class="chzn-select" name="teamId" data-placeholder="球队" style="vertical-align: top; width: 250px;" id="teamId">
+												<option value="${(home.id)!}">${(home.name)!}</option>
+												<option value="${(vs.id)!}">${(vs.name)!}</option>
+											</select>
+										</div>									
+								</div>
+								<div class="form-actions">
+									<button id='cancel-button' class="btn btn-small"  style="float:right;" type="reset"><i class="icon-undo"></i>关闭</button>
+									<button id='savebutton' class="btn btn-small btn-primary" style="float:right; margin-right:20px;"  type="button"><i class="icon-ok"></i>确认</button>
+								</div>
+							 </form>
+							<!-- PAGE CONTENT ENDS HERE -->
+						 </div><!--/row-->
+					</div><!--/#page-content-->
+			</div><!-- #main-content -->
+		</div><!--/.fluid-container#main-container-->
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only"></i>
+		</a>
+		<!-- basic scripts -->
+		<!-- <script src="${base}/static/1.9.1/jquery.min.js"></script> -->
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+		</script>
+		
+		<script src="${base}/static/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		
+		<!--[if lt IE 9]>
+		<script type="text/javascript" src="${base}/static/js/excanvas.min.js"></script>
+		<![endif]-->
+		<script type="text/javascript" src="${base}/static/js/jquery-ui-1.10.2.custom.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/fuelux.spinner.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-timepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/date.js"></script>
+		<script type="text/javascript" src="${base}/static/js/daterangepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-colorpicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.autosize-min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.inputlimiter.1.3.1.min.js"></script>
+		<!-- ace scripts -->
+		<script src="${base}/static/js/ace-elements.min.js"></script>
+		<script src="${base}/static/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+		<!-- 日期框 -->
+		<script type="text/javascript" src="${base}/static/js/bootbox.min.js"></script>
+		<!-- layer 弹出框处理 -->
+		<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+		<script type="text/javascript">
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		$(function() {
+			//关闭iframe
+			$('#cancel-button').click(function(){
+				parent.layer.close(index);
+			});
+			
+			$(".chzn-select").chosen(); 
+			
+			$("#savebutton").on('click',function(){
+				var matchId = $("#matchId").val();
+				var teamId = $("#teamId").val();
+				var type = $('#type').val();
+				if (type == 0){
+					parent.addPlayerDatas(matchId, teamId);
+				}
+				if (type == 1){
+					parent.addHotDatas(matchId, teamId);
+				}
+
+				parent.layer.close(index);
+			});
+		});
+		</script>
+	</body>
+</html>

@@ -135,4 +135,18 @@ public class CompetitionMatchDto implements Serializable{
 	@Getter
 	@Setter
 	private String matchTimeStr;
+	
+	/**
+	 * 比赛时间页面显示(yyyy-MM-dd HH:mm:ss)
+	 */
+	@Getter
+	@Setter
+	private String matchTimeString;
+	
+	/**
+	 * 周几
+	 */
+	@Getter
+	@Setter
+	private String week;
 }

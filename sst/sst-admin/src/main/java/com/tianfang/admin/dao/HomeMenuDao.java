@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.google.common.base.Objects;
 import com.tianfang.admin.dto.HomeMenuDto;
 import com.tianfang.admin.mapper.HomeMenuMapper;
 import com.tianfang.admin.pojo.HomeMenu;
@@ -64,8 +65,7 @@ public class HomeMenuDao extends MyBatisBaseDao<HomeMenu>{
 		return mapper.countByExample(example);
 	}
 	
-	private void assemblyParams(HomeMenuDto dto,
-			HomeMenuExample.Criteria criteria) {
+	private void assemblyParams(HomeMenuDto dto,HomeMenuExample.Criteria criteria) {
 		if (null != dto){
 			if (StringUtils.isNotBlank(dto.getId())) {
 				criteria.andIdEqualTo(dto.getId());
@@ -73,7 +73,7 @@ public class HomeMenuDao extends MyBatisBaseDao<HomeMenu>{
 			if (StringUtils.isNotBlank(dto.getParentId())) {
 				criteria.andParentIdEqualTo(dto.getParentId());
 			}
-			if (null != dto.getMenuType()){
+			if (!StringUtils.isEmpty(dto.getMenuType()) && !Objects.equal(dto.getMenuType(), "-1")){
 				criteria.andMenuTypeEqualTo(dto.getMenuType());
 			}
 			if (StringUtils.isNotBlank(dto.getCname())){

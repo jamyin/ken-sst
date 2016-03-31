@@ -26,6 +26,8 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils
     public static final String YMD_SLASH = "yyyy/MM/dd";
     public static final String YMD_DASH = "yyyy-MM-dd";
     public static final String YMD_DASH_WITH_TIME = "yyyy-MM-dd H:m";
+    public static final String YMD_DASH_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
+    public static final String YMD_DASH_DATE_MINUTES = "yyyy-MM-dd HH:mm";
     public static final String YDM_SLASH = "yyyy/dd/MM";
     public static final String YDM_DASH = "yyyy-dd-MM";
     public static final String HM = "HHmm";

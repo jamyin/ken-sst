@@ -1,4 +1,4 @@
-package com.tianfang.train.constants;
+package com.tianfang.common.constants;
 
 import lombok.Getter;
 import lombok.Setter;

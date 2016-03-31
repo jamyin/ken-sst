@@ -96,8 +96,8 @@ public class CompetitionMatchDao extends MyBatisBaseDao<CompetitionMatch> {
 	public List<CompetitionMatch> findCompetitionMatchViewByPage(CompetitionMatchDto competitionMatch, PageQuery page) {
 		CompetitionMatchExample example = new CompetitionMatchExample();
 		CompetitionMatchExample.Criteria criteria = example.createCriteria();
-		example.setOrderByClause(" match_time asc limit " + page.getStartNum() +"," + page.getPageSize());
-        assemblyParams(competitionMatch, criteria);   //组装参数
+		assemblyParams(competitionMatch, criteria);   //组装参数
+		example.setOrderByClause(" match_time asc limit " + page.getStartNum() +"," + page.getPageSize());      
         List<CompetitionMatch> result = mapper.selectByExample(example);  
         return result;
 	}
@@ -188,5 +188,13 @@ public class CompetitionMatchDao extends MyBatisBaseDao<CompetitionMatch> {
 
         List<CompetitionMatch> result = mapper.selectByExample(example);  
 		return result;
+	}
+	
+	public List<CompetitionMatch> selectCompetitionMatchByTeamId(String teamId,PageQuery page) {
+		return exMapper.selectCompetitionMatchByTeamId(teamId, page);
+	}
+	
+	public Integer countCompetitionMatchByTeamId(String teamId) {
+		return exMapper.countCompetitionMatchByTeamId(teamId);
 	}
 }

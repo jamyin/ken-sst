@@ -1,11 +1,11 @@
 package com.tianfang.user.app;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**		
  * <p>Title: VoteApp </p>
@@ -85,20 +85,27 @@ public class VoteApp implements Serializable{
 	@Getter
 	@Setter
 	private Integer amount;
+
+	/**
+	 * 创建时间
+	 */
+	@Getter
+	@Setter
+	private Date createTime;
 	
 	/**
 	 * 投票选项
 	 */
 	@Getter
 	@Setter
-	private List<VoteOptionApp> options; 
+	private List<VoteOptionApp> options;
 
 	public VoteApp() {
 		super();
 	}	
 	
 	public VoteApp(String id, String title, Integer optionNum, Date endTime,
-			Integer isAnonymous, String publishId, String publishName, Integer amount) {
+			Integer isAnonymous, String publishId, String publishName, Integer amount, Date createTime) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -111,5 +118,6 @@ public class VoteApp implements Serializable{
 		if (null != endTime){
 			this.overdue = new Date().getTime() < endTime.getTime() ? 0 : 1;
 		}
+		this.createTime = createTime;
 	}
 }
