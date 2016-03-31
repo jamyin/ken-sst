@@ -232,7 +232,7 @@
 				<div class="integr">
 					<div class="sub_tab"><span class="date">名次</span><span>球队</span><span class="score">胜/负/平</span><span>积分</span></div>
 					<ul>
-						<#if dataMap ??>
+						<#if dataMap ?? && dataMap.raceRecord ??>
 							<#list dataMap.raceRecord as data>
 								<li>
 									<span class="date">${(data_index+1)!}</span>

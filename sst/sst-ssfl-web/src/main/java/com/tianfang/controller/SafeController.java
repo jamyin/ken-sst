@@ -59,7 +59,7 @@ public class SafeController extends BaseController{
 		mv.addObject("reminding", getReminding(noti));
 		mv.addObject("settingEmail", getEmail(noti));
 		mv.addObject("paper", getPaper(user));
-		mv.setViewName("safe");
+		mv.setViewName("/safe");
 
 		return mv;
 	}

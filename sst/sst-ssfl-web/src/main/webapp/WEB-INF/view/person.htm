@@ -55,8 +55,10 @@
 					<ul>
 						<li class="item person cur"><a href="/user/toPerson.htm">个人信息</a></li>
 						<li class="item safe"><a href="/safe/index.htm">账号安全</a></li>
-						<li class="item enroll">我的报名</li>
-						<li class="item team">我的球队</li>
+						<!-- <li class="item enroll">我的报名</li> -->
+						<#if teamId ??>
+							<li class="item team"><a hidden="/teamInfo/getTeam.htm?id=${(teamId)!}">我的球队</a></li>
+						</#if>
 					</ul>
 				</div>
 			</div>
