@@ -76,6 +76,9 @@ public class TeamDao extends MyBatisBaseDao<Team>{
 		if (StringUtils.isNotBlank(team.getMobile())){
 			criteria.andMobileLike("%"+team.getMobile().trim()+"%");
 		}
+		if (StringUtils.isNotBlank(team.getCreateUserId())){
+			criteria.andCreateUserIdEqualTo(team.getCreateUserId());
+		}
     	criteria.andStatEqualTo(DataStatus.ENABLED);
 	}
 
