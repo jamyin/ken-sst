@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.common.base.Objects;
 import com.tianfang.business.dto.AlbumDto;
 import com.tianfang.business.dto.VideoDto;
 import com.tianfang.business.service.IAlbumService;
@@ -171,6 +172,9 @@ public class IndexController extends BaseController{
 		PageQuery query = new PageQuery(10);
 		CompetitionTeamDto dto = new CompetitionTeamDto();
 		PageResult<CompetitionTeamDto> datas = iCompetitionTeamService.findCompetitionTeamByParam(dto, query);
+		if(Objects.equal(datas, null)){
+			return null;
+		}
 		return datas.getResults();
 	}
 	
