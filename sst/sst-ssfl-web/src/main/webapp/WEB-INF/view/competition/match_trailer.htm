@@ -13,7 +13,7 @@
 	</head> -->
 
 <head>
-
+	<link href="/static/css/data-battle-detail.css" rel="stylesheet" />
 	<#include "/common/head.htm"/>
 </head>
 
@@ -45,7 +45,7 @@
 			<div class="battle-dt-con">
 				<div class="team-A team-logo">
 				<#if matchDto.homeTeamIcon ??>
-					<img src="${(matchDto.homeTeamIcon)!}"/>
+					<img src="${(matchDto.homeTeamIcon)!}" style="width:160px;height:160px;"/>
 				<#else>
 					<img src="/static/img/teamlogo1.png"/>
 				</#if>
@@ -55,7 +55,7 @@
 				</span>
 				<div class="team-B team-logo">
 				<#if matchDto.visitingTeamIcon ??>
-					<img src="${(matchDto.visitingTeamIcon)!}"/>
+					<img src="${(matchDto.visitingTeamIcon)!}" style="width:160px;height:160px;"/>/>
 				<#else>
 					<img src="/static/img/teamlogo2.png"/>
 				</#if>
