@@ -682,9 +682,9 @@ public class CompController extends BaseController {
 		UserDto user = userService.getUserById(compApply.getCreateUserId());
     	if (null != user){
     		// 只有队长才有权利创建和报名球队
-			if (null == user.getUtype() || user.getUtype() != UserType.CAPTAIN.getIndex()){
+			if (null == user.getUtype() && user.getUtype() == UserType.GENERAL.getIndex()){
 				result.setStatus(DataStatus.HTTP_FAILE);
-				result.setMessage("赶快通知您们的队长来报名吧~");
+				result.setMessage("对不起.普通用户没有权限报名~");
 				return false;
 			}
 			try {
@@ -695,7 +695,7 @@ public class CompController extends BaseController {
 					if (null == team.getStat() || team.getStat() == DataStatus.ENABLED){
 						// 如果球队信息有更改,则更新球队信息
 						boolean flag = false;
-						if (!team.getIcon().equals(compApply.getTeamIcon())){
+						if (StringUtils.isNotBlank(compApply.getTeamIcon()) && (null == team.getIcon() || !team.getIcon().equals(compApply.getTeamIcon()))){
 							team.setIcon(compApply.getTeamIcon());
 							flag = true;
 						}
