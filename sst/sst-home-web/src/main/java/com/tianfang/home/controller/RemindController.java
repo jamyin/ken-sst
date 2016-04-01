@@ -18,10 +18,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.common.base.Objects;
 import com.google.gson.Gson;
 import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.model.PageQuery;
+import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.FileUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
+import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.user.dto.RemindDto;
 import com.tianfang.user.dto.RemindUsersDto;
 import com.tianfang.user.dto.UserDto;
@@ -47,6 +50,29 @@ public class RemindController {
 	
 	@Autowired
 	private IUserService iuserService;
+	
+	/**
+	 * 获取当前用户收到的提醒数据
+	 * 排除当前用户自己发送的提醒数据
+	 * @param remindDto
+	 * @param query
+	 * @param userId
+	 * 
+	 */
+	@RequestMapping(value="list")
+	@ResponseBody
+	public Response<PageResult<RemindDto>> list(String userId, PageQuery query){
+		Response<PageResult<RemindDto>> data = new Response<PageResult<RemindDto>>();
+		try {
+			PageResult<RemindDto> pageList = iRemindService.findRemindByParam(userId,query);
+			data.setData(pageList);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return data;
+	}
+	
 	
 	/**
 	 * 

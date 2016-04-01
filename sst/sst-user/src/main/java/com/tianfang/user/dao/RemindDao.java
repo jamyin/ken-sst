@@ -46,6 +46,28 @@ public class RemindDao extends MyBatisBaseDao<Remind> {
 		return mapper.countByExample(example);
 	}
 	
+	public List<RemindDto> findRemindByParam(String userId, PageQuery query) {
+		RemindExample example = new RemindExample();
+		RemindExample.Criteria criteria = example.createCriteria();
+		
+		criteria.andUserIdNotEqualTo(userId);
+		
+        if(null != query){
+        	example.setOrderByClause("create_time desc limit "+query.getStartNum() +"," + query.getPageSize());
+		}
+        List<Remind> results = mapper.selectByExample(example);        
+		return BeanUtils.createBeanListByTarget(results, RemindDto.class);
+	}	
+	
+	public int countRemindByParam(String userId){
+		RemindExample example = new RemindExample();
+		RemindExample.Criteria criteria = example.createCriteria();
+        
+    	criteria.andUserIdNotEqualTo(userId);
+        
+		return mapper.countByExample(example);
+	}
+	
 	/**
 	 * 组装查询参数
 	 * @param params

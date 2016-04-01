@@ -92,4 +92,16 @@ public class RemindServiceImpl implements IRemindService {
 			throw new RuntimeException("对不起,用户提醒对象不存在!");
 		}
 	}
+
+	@Override
+	public PageResult<RemindDto> findRemindByParam(String userId,PageQuery query) {
+		int total = remindDao.countRemindByParam(userId);
+		if (total > 0){
+			query.setTotal(total);
+			List<RemindDto> results = remindDao.findRemindByParam(userId, query);
+			return new PageResult<RemindDto>(query, results);
+		}
+		
+		return null;
+	}
 }

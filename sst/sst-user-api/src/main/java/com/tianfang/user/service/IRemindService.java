@@ -31,4 +31,6 @@ public interface IRemindService {
 	List<RemindDto> findRemindByParam(RemindDto dto) throws Exception;
 	
 	PageResult<RemindDto> findRemindByParam(RemindDto dto, PageQuery query) throws Exception;
+
+	PageResult<RemindDto> findRemindByParam(String userId, PageQuery query);
 }
