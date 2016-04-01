@@ -222,6 +222,4 @@ public class TeamController extends BaseController {
 		mv.setViewName("/team/team_list");
 		return mv;
 	}
-	
-	
 }
