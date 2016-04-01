@@ -65,6 +65,11 @@ public class RemindController {
 		Response<PageResult<RemindDto>> data = new Response<PageResult<RemindDto>>();
 		try {
 			PageResult<RemindDto> pageList = iRemindService.findRemindByParam(userId,query);
+			if(Objects.equal(pageList, null)){
+				data.setStatus(DataStatus.HTTP_FAILE);
+				data.setMessage("不存在提醒消息");
+				return data;
+			}
 			data.setData(pageList);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -81,11 +86,16 @@ public class RemindController {
 	 */
 	@RequestMapping(value="details")
 	@ResponseBody
-	public Response<PageResult<RemindDto>> details(String remindId,PageQuery query){
-		Response<PageResult<RemindDto>> data = new Response<PageResult<RemindDto>>();
+	public Response<RemindDto> details(String remindId){
+		Response<RemindDto> data = new Response<RemindDto>();
 		try {
-//			PageResult<RemindDto> pageList = iRemindService.findRemindByParam(userId,query);
-//			data.setData(pageList);
+			RemindDto result = iRemindService.getRemindById(remindId);
+			if(Objects.equal(result, null)){
+				data.setStatus(DataStatus.HTTP_FAILE);
+				data.setMessage("该提醒的消息不存在 请重新处理");
+				return data;
+			}
+			data.setData(result);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
