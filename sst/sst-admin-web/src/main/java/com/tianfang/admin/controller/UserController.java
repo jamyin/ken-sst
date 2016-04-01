@@ -1,8 +1,13 @@
 package com.tianfang.admin.controller;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -162,8 +167,8 @@ public class UserController extends BaseController{
     public ModelAndView auth(String id, String teamId) throws Exception {
         ModelAndView mv = this.getModelAndView(this.getSessionUserId());   
         List<TeamDto> teamList = teamService.findAll();
-        assemblyTreeNodes(teamId, teamList);
-        String jsonStr = JsonUtil.getJsonStr(teamList);
+        List<JsonTeam> jsonTeams = assemblyTreeNodes(teamId, teamList);
+        String jsonStr = JSON.toJSONString(jsonTeams);
         logger.info("jsonStr="+jsonStr);
         mv.setViewName("/user/teams");
         mv.addObject("userId", id);
@@ -185,14 +190,42 @@ public class UserController extends BaseController{
         return result;
     }
     
-	private void assemblyTreeNodes(String teamId, List<TeamDto> teamList) {
-		if (null != teamList && teamList.size() > 0 && null != teamId && !"".equals(teamId.trim())){
+	private List<JsonTeam> assemblyTreeNodes(String teamId, List<TeamDto> teamList) {
+		if (null != teamList && teamList.size() > 0){
+            List<JsonTeam> datas = new ArrayList<>(teamList.size());
+            JsonTeam data;
         	for (TeamDto dto : teamList){
-        		if (dto.getId().equals(teamId)){
-        			dto.setChecked(true);
-        			break;
-        		}
+                data = new JsonTeam(dto.getId(), dto.getName());
+                if (null != teamId && !"".equals(teamId.trim()) && dto.getId().equals(teamId)){
+                    data.setChecked(true);
+                }
+                datas.add(data);
         	}
+            return datas;
         }
+
+        return null;
 	}
+}
+class JsonTeam implements Serializable{
+
+    @Getter
+    @Setter
+    private String id;
+
+    @Getter
+    @Setter
+    private String name;			// 球队名称
+
+    @Getter
+    @Setter
+    private boolean checked = false; 		// 是否选中(用于用户球队关联操作树展示)
+
+    public JsonTeam() {
+    }
+
+    public JsonTeam(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
