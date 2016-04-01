@@ -14,6 +14,8 @@ import com.tianfang.common.util.BeanUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.user.dto.RemindDto;
 import com.tianfang.user.mapper.RemindMapper;
+import com.tianfang.user.mapper.RemindUsersExMapper;
+import com.tianfang.user.mapper.RemindUsersMapper;
 import com.tianfang.user.pojo.Remind;
 import com.tianfang.user.pojo.RemindExample;
 
@@ -24,6 +26,10 @@ public class RemindDao extends MyBatisBaseDao<Remind> {
 	@Autowired
 	private RemindMapper mapper;
 
+	@Getter
+	@Autowired
+	private RemindUsersExMapper mappers;
+	
 	public List<RemindDto> findRemindByParam(RemindDto dto){
 		return findRemindByParam(dto, null);
 	}
@@ -47,25 +53,12 @@ public class RemindDao extends MyBatisBaseDao<Remind> {
 	}
 	
 	public List<RemindDto> findRemindByParam(String userId, PageQuery query) {
-		RemindExample example = new RemindExample();
-		RemindExample.Criteria criteria = example.createCriteria();
-		
-		criteria.andUserIdNotEqualTo(userId);
-		
-        if(null != query){
-        	example.setOrderByClause("create_time desc limit "+query.getStartNum() +"," + query.getPageSize());
-		}
-        List<Remind> results = mapper.selectByExample(example);        
-		return BeanUtils.createBeanListByTarget(results, RemindDto.class);
+		List<Remind> remindList = mappers.queryRemindList(userId,query);
+		return BeanUtils.createBeanListByTarget(remindList, RemindDto.class);
 	}	
 	
 	public int countRemindByParam(String userId){
-		RemindExample example = new RemindExample();
-		RemindExample.Criteria criteria = example.createCriteria();
-        
-    	criteria.andUserIdNotEqualTo(userId);
-        
-		return mapper.countByExample(example);
+		return mappers.countRemindList(userId);
 	}
 	
 	/**

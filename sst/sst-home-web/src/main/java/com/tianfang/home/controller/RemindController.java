@@ -73,6 +73,25 @@ public class RemindController {
 		return data;
 	}
 	
+	/**
+	 * 
+		 * 此方法描述的是：提醒的详细信息
+		 * @author: cwftalus@163.com
+		 * @version: 2016年4月1日 上午9:42:03
+	 */
+	@RequestMapping(value="details")
+	@ResponseBody
+	public Response<PageResult<RemindDto>> details(String remindId,PageQuery query){
+		Response<PageResult<RemindDto>> data = new Response<PageResult<RemindDto>>();
+		try {
+//			PageResult<RemindDto> pageList = iRemindService.findRemindByParam(userId,query);
+//			data.setData(pageList);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return data;
+	}
 	
 	/**
 	 * 
