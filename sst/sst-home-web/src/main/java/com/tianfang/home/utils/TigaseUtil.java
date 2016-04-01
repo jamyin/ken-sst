@@ -132,7 +132,7 @@ public class TigaseUtil {
 		params.put("userList", sb.toString());
 		params.put("type", "0");
 		
-		String result = HttpClientUtil.sendPostRequestByJava("http://192.168.1.234/message/sendMessages.do", params);
+		String result = HttpClientUtil.sendPostRequestByJava(PropertiesUtils.getProperty("tigase_http"), params);
 		
 //		StringBuffer sb = new StringBuffer();
 //		sb.append("from=").append(mobile).append("#").append(PropertiesUtils.getProperty("project")).append("&");
