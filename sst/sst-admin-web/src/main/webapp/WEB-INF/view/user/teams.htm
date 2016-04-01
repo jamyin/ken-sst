@@ -85,9 +85,11 @@
 				    checkStyle:"radio",
 				    checkRadioType:"all"
 				};
-				var zn = '${zTreeNodes}';
-				var zTreeNodes = eval(zn);
-				zTree = $("#tree").zTree(setting, zTreeNodes);
+				var zn = '${(zTreeNodes)!}';
+				if (null != zn && '' != zn){
+					var zTreeNodes = eval(zn);
+					zTree = $("#tree").zTree(setting, zTreeNodes);
+				}
 			});
 		</script>
 		<script type="text/javascript">
