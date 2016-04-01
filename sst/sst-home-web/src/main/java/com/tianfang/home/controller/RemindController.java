@@ -147,17 +147,6 @@ public class RemindController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//对象处理
-		remindDto = copyBeanUtils(remindDto,userDto,fileO,fileT);
-		
-		//保存
-		try {
-			insertRemindAndList(remindDto);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		String nickName = "";
 		if(!StringUtils.isEmpty(userDto.getNickName())){

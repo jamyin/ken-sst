@@ -112,14 +112,43 @@ public class TigaseUtil {
 	
 	@Async
 	public static void sendMessage(String mobile,String pic,String nickName,String[] jIds){
+		
+		Map<String, String> params = new HashMap<String, String>(7);
+		params.put("from", mobile+suffix);
+		params.put("fromIcon", pic);
+		params.put("fromNickName", nickName);
+		params.put("message", "来自"+nickName+"的提醒");
+		params.put("messageType", "text");
+		
 		StringBuffer sb = new StringBuffer();
-		sb.append("from=").append(mobile).append("#").append(PropertiesUtils.getProperty("project")).append("&");
-		sb.append("fromIcon=").append(pic).append("&");
-		sb.append("fromNickName=").append(nickName).append("&");
-		sb.append("message=").append("来自"+nickName+"的提醒").append("&"); 
-		sb.append("messageType=").append("text").append("&");
-		sb.append("userList=").append(jIds).append("&");
-		sb.append("type=").append(0).append("&");
-		GetPostUtil.post(PropertiesUtils.getProperty("tigase_http"), sb.toString());
+		if(jIds!=null && jIds.length>0){
+			sb.append("[");
+			for(String str : jIds){
+				sb.append("\"").append(str).append("\",");
+			}
+			sb.subSequence(0, sb.length()-1);
+			sb.append("]");
+		}
+		params.put("userList", sb.toString());
+		params.put("type", "0");
+		
+		String result = HttpClientUtil.sendPostRequestByJava(PropertiesUtils.getProperty("tigase_http"), params);
+		
+//		StringBuffer sb = new StringBuffer();
+//		sb.append("from=").append(mobile).append("#").append(PropertiesUtils.getProperty("project")).append("&");
+//		sb.append("fromIcon=").append(pic).append("&");
+//		sb.append("fromNickName=").append(nickName).append("&");
+//		sb.append("message=").append("来自"+nickName+"的提醒").append("&"); 
+//		sb.append("messageType=").append("text").append("&");
+//		sb.append("userList=").append(jIds).append("&");
+//		sb.append("type=").append(0).append("&");
+//		System.out.println("sb+sb"+sb.toString());
+//		GetPostUtil.post("http://192.168.1.234/message/sendMessages.do?", sb.toString());
 	}
+	
+	public static void main(String[] args) {
+		StringBuffer sb = new StringBuffer("18721472363#sst,13040691917#sst,");
+		System.out.println(sb.subSequence(0, sb.length()-1));
+	}
+	
 }
