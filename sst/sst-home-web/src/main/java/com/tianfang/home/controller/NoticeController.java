@@ -32,6 +32,7 @@ import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.dto.AppNoticeDatas;
+import com.tianfang.home.utils.TigaseUtil;
 import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.message.dto.NoticeUsersDto;
 import com.tianfang.message.service.INoticeService;
@@ -192,6 +193,14 @@ public class NoticeController extends BaseController {
 		if(flag > 0){
 			result.setMessage("添加公告成功");
 			result.setStatus(DataStatus.HTTP_SUCCESS);
+			
+			/**
+			 * 消息提醒 公共方法
+			 * 提醒完成之后 发送消息提醒相关的用户 需要立即发送 
+			 */
+//			TigaseUtil.sendMessage(userDto.getMobile(), userDto.getPic(), nickName, remindDto.getJIds());
+			
+			
 		}else{
 			result.setMessage("添加公告失败");
 			result.setStatus(DataStatus.HTTP_FAILE);

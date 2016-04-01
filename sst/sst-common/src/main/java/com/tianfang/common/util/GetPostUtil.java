@@ -11,7 +11,7 @@ import java.net.URL;
 
 public class GetPostUtil {
 
-	private static final String URL = "http://127.0.0.1:8080/BJDR-CURD-Api";
+//	private static final String URL = "http://127.0.0.1:8080/BJDR-CURD-Api";
 
 	// 微信登录请求
 	public static String weiLink(String url) {
@@ -67,7 +67,7 @@ public class GetPostUtil {
 	public static String get(String url) {
 
 		// 拼凑get请求的URL字串，使用URLEncoder.encode对特殊和不可见字符进行编码
-		String getURL = URL + url;// URLEncoder.encode(address, "utf-8")
+		String getURL = url;// URLEncoder.encode(address, "utf-8")
 		URL getUrl = null;
 		BufferedReader reader = null;
 		HttpURLConnection connection = null;
@@ -122,7 +122,7 @@ public class GetPostUtil {
 		DataOutputStream out = null;
 		StringBuffer stringBuffer = new StringBuffer();
 		try {
-			postUrl = new URL(URL + url);
+			postUrl = new URL(url);
 			// 打开连接
 			connection = (HttpURLConnection) postUrl.openConnection();
 
