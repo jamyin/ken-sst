@@ -53,7 +53,7 @@ public class RemindDto implements Serializable{
 	 */
 	@Getter
 	@Setter
-    private Date sendTime; 
+    private String sendTime; 
 
 	/**
 	 * 附件
@@ -105,4 +105,9 @@ public class RemindDto implements Serializable{
 	@Getter
 	@Setter
     private String [] userIds;   //接收公告者数组
+	
+	
+	@Getter
+	@Setter
+    private String [] jIds;   //接收公告者数组
 }

@@ -24,8 +24,11 @@ import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.FileUtils;
+import com.tianfang.common.util.GetPostUtil;
+import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
+import com.tianfang.home.utils.TigaseUtil;
 import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.user.dto.RemindDto;
 import com.tianfang.user.dto.RemindUsersDto;
@@ -155,6 +158,23 @@ public class RemindController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		String nickName = "";
+		if(!StringUtils.isEmpty(userDto.getNickName())){
+			nickName = userDto.getNickName();
+		}else{
+			nickName = userDto.getMobile();
+		}
+
+		/**
+		 * 消息提醒 公共方法
+		 * 提醒完成之后 发送消息提醒相关的用户 需要立即发送 
+		 */
+		if(StringUtils.isEmpty(remindDto.getSendTime())){
+			TigaseUtil.sendMessage(userDto.getMobile(), userDto.getPic(), nickName, remindDto.getJIds());	
+		}
+		
+		
 		return data;
 	}
 

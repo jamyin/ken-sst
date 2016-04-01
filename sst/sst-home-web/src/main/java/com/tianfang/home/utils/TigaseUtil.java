@@ -3,6 +3,9 @@ package com.tianfang.home.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.scheduling.annotation.Async;
+
+import com.tianfang.common.util.GetPostUtil;
 import com.tianfang.common.util.HttpClientUtil;
 import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
@@ -105,5 +108,18 @@ public class TigaseUtil {
 		if (StringUtils.isBlank(password)){
 			throw new RuntimeException("聊天服务器注册:密码不能为空!");
 		}
+	}
+	
+	@Async
+	public static void sendMessage(String mobile,String pic,String nickName,String[] jIds){
+		StringBuffer sb = new StringBuffer();
+		sb.append("from=").append(mobile).append("#").append(PropertiesUtils.getProperty("project")).append("&");
+		sb.append("fromIcon=").append(pic).append("&");
+		sb.append("fromNickName=").append(nickName).append("&");
+		sb.append("message=").append("来自"+nickName+"的提醒").append("&"); 
+		sb.append("messageType=").append("text").append("&");
+		sb.append("userList=").append(jIds).append("&");
+		sb.append("type=").append(0).append("&");
+		GetPostUtil.post(PropertiesUtils.getProperty("tigase_http"), sb.toString());
 	}
 }
