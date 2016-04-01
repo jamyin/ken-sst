@@ -56,6 +56,24 @@
 	<bean id="jsonHttpMessageConverter"
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
 
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+	    <!-- 国际化信息所在的文件名 -->                     
+	    <property name="basename" value="messages" />   
+	    <!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称  -->               
+	    <property name="useCodeAsDefaultMessage" value="true" />           
+	</bean>
+
+<!-- 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+	        <property name="basenames">
+	           <list>
+	             <value>Messages</value>
+	           </list>
+	        </property>
+	        ① 刷新资源文件的周期，以秒为单位
+	        <property name="cacheSeconds" value="5"/> 
+	  </bean> -->
+
+
 	<!-- <mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />

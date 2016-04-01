@@ -1,0 +1,5 @@
+配置文件已经完成 在类里面增加 下面的方法即可（messages_en_US.properties、messages_zh_CN.properties）
+@Autowired
+private MessageSource msg;
+System.out.println(msg.getMessage("systeminfo", new Object[]{"测试"}, Locale.US));
+System.out.println(msg.getMessage("systeminfo", new Object[]{"test"}, Locale.CHINA));
