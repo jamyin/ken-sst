@@ -50,18 +50,20 @@ public class TeamController extends BaseController{
 	 * 用户申请加入球队接口
 	 * @param userId
 	 * @param teamId
+	 * @param reason 申请理由
 	 * @return
 	 * @author xiang_wang
 	 * 2016年3月4日下午5:30:26
 	 */
 	@RequestMapping(value="apply")
     @ResponseBody
-    public Response<String> apply(String userId, String teamId) {
+    public Response<String> apply(String userId, String teamId, String reason) {
 		Response<String> result = new Response<String>();
 		if (checkUserApplyTeam(result, userId, teamId)){
 			UserApplyTeamDto dto = new UserApplyTeamDto();
 			dto.setTeamId(teamId);
 			dto.setUserId(userId);
+			dto.setReason(reason);
 			dto.setStatus(AuditType.UNAUDIT.getIndex());
 			userApplyTeamService.save(dto);
 
