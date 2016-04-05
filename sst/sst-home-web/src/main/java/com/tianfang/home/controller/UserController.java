@@ -32,6 +32,7 @@ import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.DateUtils;
 import com.tianfang.common.util.PropertiesUtils;
+import com.tianfang.common.util.RandomCode;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.dto.AppGroupDatas;
@@ -122,7 +123,8 @@ public class UserController extends BaseController{
 				result.setMessage("手机号码已经注册过！");
 				return result;
 			}
-			dto.setNickName(DataStatus._JUJU_); 		//设置昵称
+			dto.setNickName( "juju_" + RandomCode.getEnRandomCode(1)
+			        + RandomCode.getRandomCodeByNumber(4)); 		//设置昵称
 			String id = userService.save(dto);
 			if (StringUtils.isBlank(id)) {
 				result.setStatus(DataStatus.HTTP_FAILE);

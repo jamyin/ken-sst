@@ -52,4 +52,9 @@ public class RandomCode {
 		}
 		return sb.toString();
 	}
+	
+	public static void main(String[] args) {
+		System.out.println(RandomCode.getEnRandomCode(1)
+		        + RandomCode.getRandomCodeByNumber(4));
+	}
 }
