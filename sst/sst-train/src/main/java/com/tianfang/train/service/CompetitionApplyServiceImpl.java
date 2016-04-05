@@ -1,25 +1,23 @@
 package com.tianfang.train.service;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-
-import com.tianfang.train.dao.CompetitionDao;
-import com.tianfang.train.pojo.Competition;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.util.BeanUtils;
 import com.tianfang.train.dao.CompetitionApplyDao;
+import com.tianfang.train.dao.CompetitionDao;
 import com.tianfang.train.dao.CompetitionTeamDao;
 import com.tianfang.train.dto.CompetitionApplyDto;
 import com.tianfang.train.enums.AuditType;
+import com.tianfang.train.pojo.Competition;
 import com.tianfang.train.pojo.CompetitionApply;
 import com.tianfang.train.pojo.CompetitionTeam;
-import com.tianfang.train.service.ICompetitionApplyService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 
 @Service
@@ -40,7 +38,7 @@ public class CompetitionApplyServiceImpl implements ICompetitionApplyService {
 	public int addCompetitionApply(CompetitionApplyDto competitionApplyDto) {
 		CompetitionApply competitionApply = BeanUtils.createBeanByTarget(competitionApplyDto, CompetitionApply.class);
 		if (StringUtils.isBlank(competitionApply.getCompName()) && StringUtils.isNotBlank(competitionApply.getCompId())){
-			Competition competition = compDao.selectByPrimaryKey(competitionApply.getId());
+			Competition competition = compDao.selectByPrimaryKey(competitionApply.getCompId());
 			competitionApply.setCompName(competition.getTitle());
 		}
 		return competitionApplyDao.insertSelective(competitionApply);
