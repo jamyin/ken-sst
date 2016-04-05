@@ -39,7 +39,11 @@ public class UserDao extends MyBatisBaseDao<User> {
 		criteria.andMobileEqualTo(mobile);
         List<User> results = mapper.selectByExample(example); 
         if (null != results && results.size() > 0){
-        	return BeanUtils.createBeanByTarget(results.get(0), UserDto.class);
+			for (User user : results){
+				if (user.getStat() != null && user.getStat().intValue() == DataStatus.ENABLED){
+					return BeanUtils.createBeanByTarget(user, UserDto.class);
+				}
+			}
         }
 		return null;
 	}
