@@ -51,7 +51,7 @@ public class TeamController extends BaseController{
 	 * @param userId
 	 * @param teamId
 	 * @param reason 申请理由
-	 * @return
+	 * @return Response<String>
 	 * @author xiang_wang
 	 * 2016年3月4日下午5:30:26
 	 */
@@ -141,7 +141,7 @@ public class TeamController extends BaseController{
 	 * @param userId
 	 * @param id
 	 * @param status
-	 * @return
+	 * @return Response<String>
 	 * @author xiang_wang
 	 * 2016年3月7日上午11:06:45
 	 */
@@ -226,12 +226,14 @@ public class TeamController extends BaseController{
 	}
 
 	/**
-	 * 球队球员踢出操作
+	 * <p>Description: 球队球员踢出操作 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
 	 * @param userId
-	 * @param kickingId
-	 * @return
-	 * @author xiang_wang
-	 * 2016年3月7日上午11:06:45
+	 * @param kickingId 被踢出人userId
+	 * @return Response<String>
+	 * @author wangxiang
+	 * @date 16/4/5 下午1:54
+	 * @version 1.0
 	 */
 	@RequestMapping(value="kicking")
 	@ResponseBody
