@@ -226,7 +226,7 @@ public class TeamController extends BaseController{
 	}
 
 	/**
-	 * 审核球队用户申请
+	 * 球队球员踢出操作
 	 * @param userId
 	 * @param kickingId
 	 * @return
