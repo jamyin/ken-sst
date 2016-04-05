@@ -530,7 +530,7 @@ public class UserController extends BaseController{
 			return result;
 		}
 		result.setStatus(DataStatus.HTTP_FAILE);
-		result.setMessage("查询失败");
+		result.setMessage("没有查到此用户");
 		return result;
 
 	}

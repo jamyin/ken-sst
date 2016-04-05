@@ -1,16 +1,13 @@
 package com.tianfang.admin.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.tianfang.common.digest.MD5Coder;
-import com.tianfang.common.ext.ExtPageQuery;
-import com.tianfang.common.model.MessageResp;
-import com.tianfang.common.model.PageResult;
-import com.tianfang.train.dto.TeamDto;
-import com.tianfang.train.service.ITeamService;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.service.IUserService;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import lombok.Getter;
 import lombok.Setter;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,10 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.alibaba.fastjson.JSON;
+import com.tianfang.common.digest.MD5Coder;
+import com.tianfang.common.ext.ExtPageQuery;
+import com.tianfang.common.model.MessageResp;
+import com.tianfang.common.model.PageResult;
+import com.tianfang.train.dto.TeamDto;
+import com.tianfang.train.service.ITeamService;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.service.IUserService;
 
 @Controller
 @RequestMapping(value="/user")
@@ -207,7 +209,9 @@ public class UserController extends BaseController{
 }
 class JsonTeam implements Serializable{
 
-    @Getter
+	private static final long serialVersionUID = -837711745585130582L;
+
+	@Getter
     @Setter
     private String id;
 
