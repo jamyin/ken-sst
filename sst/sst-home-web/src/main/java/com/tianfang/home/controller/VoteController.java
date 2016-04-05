@@ -5,7 +5,10 @@ import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
-import com.tianfang.common.util.*;
+import com.tianfang.common.util.DateUtils;
+import com.tianfang.common.util.FileUtils;
+import com.tianfang.common.util.StringUtils;
+import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.dto.AppOption;
 import com.tianfang.home.dto.AppVoteDatas;
 import com.tianfang.user.app.VoteApp;
@@ -14,21 +17,22 @@ import com.tianfang.user.service.IVoteService;
 import com.tianfang.user.service.IVoteUserOptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-/**		
+/**
  * <p>Title: VoteController </p>
  * <p>Description: 类描述:投票接口</p>
  * <p>Copyright (c) 2015 </p>
  * <p>Company: 上海天坊信息科技有限公司</p>
- * @author xiang_wang	
+ * @author xiang_wang
  * @date 2016年3月8日下午3:14:01
  * @version 1.0
  * <p>修改人：</p>
@@ -38,7 +42,7 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "vote")
 public class VoteController extends BaseController{
-	
+
 	@Autowired
 	private IVoteService voteService;
 	@Autowired
@@ -55,6 +59,7 @@ public class VoteController extends BaseController{
 	@RequestMapping(value = "list")
 	@ResponseBody
 	public Response<PageResult<VoteDto>> list(PageQuery query, VoteParams params){
+		System.out.println("--------->juju:"+DataStatus._JUJU_);
 		Response<PageResult<VoteDto>> result = new Response<PageResult<VoteDto>>();
 		if (StringUtils.isBlank(params.getUserId())){
 			result.setStatus(DataStatus.HTTP_FAILE);
@@ -77,10 +82,10 @@ public class VoteController extends BaseController{
     		result.setStatus(DataStatus.HTTP_FAILE);
     		result.setMessage("用户不存在");
     	}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * 根据投票id查询投票详情
 	 * @param voteId
@@ -114,10 +119,10 @@ public class VoteController extends BaseController{
     		result.setStatus(DataStatus.HTTP_FAILE);
     		result.setMessage("用户不存在");
     	}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * 用户投票接口
 	 * @param userId
@@ -152,13 +157,13 @@ public class VoteController extends BaseController{
 					vuo.setVoteId(voteId);
 					voteUserOptionService.save(vuo);
 				}
-				
+
 				// 更新投票用户关联表selected字段
 				VoteUserTempDto temp = new VoteUserTempDto();
 				temp.setId(vote.getTempId());
 				temp.setSelected(DataStatus.ENABLED);
 				voteService.update(temp);
-				
+
 				// 累加投票表amount字段
 				int amount = vote.getAmount() == null? 0 : vote.getAmount();
 				vote.setAmount(amount + optionIds.length);
@@ -174,7 +179,7 @@ public class VoteController extends BaseController{
     		result.setStatus(DataStatus.HTTP_FAILE);
     		result.setMessage("用户不存在");
     	}
-		
+
 		return result;
 	}
 
@@ -273,7 +278,7 @@ public class VoteController extends BaseController{
     		result.setStatus(DataStatus.HTTP_FAILE);
     		result.setMessage("用户不存在");
     	}
-		
+
 		return result;
 	}
 
@@ -355,7 +360,7 @@ public class VoteController extends BaseController{
 			voteUser.setVoteId(voteId);
 			voteUser.setCreateTime(new Date());
 			voteUser.setStat(DataStatus.ENABLED);
-			
+
 			temps.add(voteUser);
 		}
 		// 给创建者,添加一条关联数据
@@ -366,9 +371,9 @@ public class VoteController extends BaseController{
 		voteUser.setVoteId(voteId);
 		voteUser.setCreateTime(new Date());
 		voteUser.setStat(DataStatus.ENABLED);
-		
+
 		temps.add(voteUser);
-		
+
 		return temps;
 	}
 
@@ -391,11 +396,11 @@ public class VoteController extends BaseController{
 		dto.setOptionNum(vote.getOptionNum());
 		dto.setTitle(vote.getTitle());
 		dto.setAmount(0);
-		
+
 		return dto;
 	}
-	
-	
+
+
 	/**
 	 * 1:校验用户是否已经投了.
 	 * 2:校验该投票是否过期
@@ -436,7 +441,7 @@ public class VoteController extends BaseController{
 			result.setStatus(DataStatus.HTTP_FAILE);
 			return null;
 		}
-		
+
 		String[] optionIds = optionId.split(",");
 		if (optionIds.length > vote.getOptionNum()){
 			result.setMessage("对不起,投票最多选择"+vote.getOptionNum()+"项!");
