@@ -24,11 +24,11 @@
 								<div class="control-group">
 										<label class="course_add_label" for="form-field-1">用户昵称</label>
 										<div class="course_add_input">
-											<input type="text" name="nickName" id="form-field-1" placeholder="用户昵称" value="${(datas.nickName)}">
+											<input type="text" name="nickName" id="form-field-1" placeholder="用户昵称" value="${(datas.nickName)!}">
 										</div>									
 								</div>
 								<div class="control-group">
-									<label class="course_add_label" for="form-field-2">用户头像</label>
+									<label class="course_add_label" for="id-input-file-3">用户头像</label>
 									<div class="course_add_input">
 										<input multiple type="file" id="id-input-file-3"/>
 									</div>
@@ -37,7 +37,7 @@
 									</div>									
 								</div>
 								<div class="control-group">
-									<label class="course_add_label" for="form-input-readonly">性别</label>
+									<label class="course_add_label" for="form-radio-show">性别</label>
 										<div class="course_add_input" id="form-radio-show">
 											<label class="span2">
 												<input name="gender" <#if datas.sex??><#if datas.sex == 1 >checked="checked"</#if></#if>  type="radio" value="0"/><span class="lbl">男</span>
@@ -47,6 +47,16 @@
 											</label>
 										</div>
 								</div>
+								 <div class="control-group">
+									 <label class="course_add_label" for="form-radio-show">用户类型</label>
+									 <div class="course_add_input" id="form-radio-show">
+										 <select name="utype">
+											 <option <#if datas.utype??><#if datas.utype == 1 >selected="true"</#if></#if> value="1">普通用户</option>
+											 <option <#if datas.utype??><#if datas.utype == 2 >selected="true"</#if></#if> value="2">教练</option>
+											 <option <#if datas.utype??><#if datas.utype == 3 >selected="true"</#if></#if> value="3">队长</option>
+										 </select>
+									 </div>
+								 </div>
 								<div class="control-group">
 										<label class="course_add_label" for="form-field-1">地区</label>
 										<div class="course_add_input">
