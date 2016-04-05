@@ -59,7 +59,6 @@ public class VoteController extends BaseController{
 	@RequestMapping(value = "list")
 	@ResponseBody
 	public Response<PageResult<VoteDto>> list(PageQuery query, VoteParams params){
-		System.out.println("--------->juju:"+DataStatus._JUJU_);
 		Response<PageResult<VoteDto>> result = new Response<PageResult<VoteDto>>();
 		if (StringUtils.isBlank(params.getUserId())){
 			result.setStatus(DataStatus.HTTP_FAILE);
