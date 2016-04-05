@@ -1,11 +1,14 @@
 package com.tianfang.admin.controller;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.fastjson.JSON;
+import com.tianfang.common.digest.MD5Coder;
+import com.tianfang.common.ext.ExtPageQuery;
+import com.tianfang.common.model.MessageResp;
+import com.tianfang.common.model.PageResult;
+import com.tianfang.train.dto.TeamDto;
+import com.tianfang.train.service.ITeamService;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.service.IUserService;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
@@ -17,15 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tianfang.common.digest.MD5Coder;
-import com.tianfang.common.ext.ExtPageQuery;
-import com.tianfang.common.model.MessageResp;
-import com.tianfang.common.model.PageResult;
-import com.tianfang.common.util.JsonUtil;
-import com.tianfang.train.dto.TeamDto;
-import com.tianfang.train.service.ITeamService;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.service.IUserService;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value="/user")
@@ -105,15 +103,15 @@ public class UserController extends BaseController{
         return result;
     }
     
-    @RequestMapping(value = "editPassword")
+    @RequestMapping(value = "editPwd")
     public ModelAndView editPassword(String id) throws Exception {
         ModelAndView mv = this.getModelAndView(this.getSessionUserId());
-        mv.setViewName("/user/editPassword");
+        mv.setViewName("/user/editPwd");
         mv.addObject("id", id);
         return mv;
     }
     
-    @RequestMapping(value = "resetPassword")
+    @RequestMapping(value = "resetPwd")
     @ResponseBody
     public Map<String, Object> resetPassword(UserDto dto) throws Exception{
         if (StringUtils.isBlank(dto.getId())) {
@@ -133,7 +131,7 @@ public class UserController extends BaseController{
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = MessageResp.getMessage(false, e.getMessage());
-			logger.error("resetPassword方法抛出异常:"+e.getMessage());
+			logger.error("resetPwd方法抛出异常:"+e.getMessage());
 		}
         return result;
     }
