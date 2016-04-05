@@ -192,7 +192,7 @@ public class TeamController extends BaseController{
 		userApplyTeam.setStatus(status);
 		userApplyTeamService.update(userApplyTeam);
 		result.setStatus(DataStatus.HTTP_SUCCESS);
-		result.setMessage("恭喜你,审核成功!");
+		result.setMessage("恭喜你,操作成功!");
 		return result;
 	}
 
