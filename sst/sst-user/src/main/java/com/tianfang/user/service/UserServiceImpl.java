@@ -178,4 +178,16 @@ public class UserServiceImpl implements IUserService {
 	public List<UserDto> findUserByGroupId(String groupId) {
 		return userDao.findUserByGroupId(groupId);
 	}
+
+	@Override
+	public UserDto kickingTeam(String userId) {
+		checkIdIsNullException(userId);
+		User user = userDao.selectByPrimaryKey(userId);
+		if (null != user && user.getStat() == DataStatus.ENABLED){
+			user.setTeamId(null);
+			userDao.updateByPrimaryKey(user);
+			return BeanUtils.createBeanByTarget(user, UserDto.class);
+		}
+		return null;
+	}
 }

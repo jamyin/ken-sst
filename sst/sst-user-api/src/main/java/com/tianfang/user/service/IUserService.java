@@ -90,4 +90,15 @@ public interface IUserService {
      * @return
      */
 	List<UserDto> findUserByGroupId(String groupId);
+
+	/**		
+	 * <p>Description: 将用户踢出球队 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param userId
+	 * @return UserDto
+	 * @author wangxiang	
+	 * @date 16/4/5 下午1:36
+	 * @version 1.0
+	 */
+	UserDto kickingTeam(String userId);
 }

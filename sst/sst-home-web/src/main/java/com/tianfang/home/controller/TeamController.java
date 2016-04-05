@@ -102,7 +102,7 @@ public class TeamController extends BaseController{
 		TeamDto team = isOwnerTeam(userId);
 		if (null == team){
 			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("对不起,您不是球队的队长");
+			result.setMessage("对不起,您没有权限查看!");
 			return result;
 		}
 		UserApplyTeamDto dto = new UserApplyTeamDto();
@@ -157,7 +157,7 @@ public class TeamController extends BaseController{
 		TeamDto team = isOwnerTeam(userId);
 		if (null == team){
 			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("对不起,您不是球队的队长");
+			result.setMessage("对不起,您没有权限审核");
 			return result;
 		}
 		UserApplyTeamDto userApplyTeam = userApplyTeamService.getUserApplyTeamById(id);
@@ -195,7 +195,64 @@ public class TeamController extends BaseController{
 		result.setMessage("恭喜你,审核成功!");
 		return result;
 	}
-	
+
+	/**		
+	 * <p>Description: 分页查询球队下所有用户 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param userId
+	 * @param query
+	 * @return Response<PageResult<UserDto>>
+	 * @author wangxiang	
+	 * @date 16/4/5 下午1:31
+	 * @version 1.0
+	 */
+	@RequestMapping(value="playersList")
+	@ResponseBody
+	public Response<PageResult<UserDto>> playersList(String userId, PageQuery query){
+		Response<PageResult<UserDto>> result = new Response<PageResult<UserDto>>();
+		TeamDto team = isOwnerTeam(userId);
+		if (null == team){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("对不起,您没有权限查看!");
+			return result;
+		}
+		UserDto dto = new UserDto();
+		dto.setTeamId(team.getId());
+		PageResult<UserDto> datas = userService.findUserByParam(dto, query);
+		result.setStatus(DataStatus.HTTP_SUCCESS);
+		result.setData(datas);
+
+		return result;
+	}
+
+	/**
+	 * 审核球队用户申请
+	 * @param userId
+	 * @param kickingId
+	 * @return
+	 * @author xiang_wang
+	 * 2016年3月7日上午11:06:45
+	 */
+	@RequestMapping(value="kicking")
+	@ResponseBody
+	public Response<String> kicking(String userId, String kickingId){
+		Response<String> result = new Response<String>();
+		TeamDto team = isOwnerTeam(userId);
+		if (null == team){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("对不起,您没有权限审核");
+			return result;
+		}
+		UserDto user = userService.kickingTeam(kickingId);
+		if (null == user){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("对不起,球员踢出失败!");
+			return result;
+		}
+		result.setMessage("恭喜你,球员已踢出!");
+		return result;
+	}
+
 	/**
 	 * 查询该用户是否是该球队的队长
 	 * @param userId
@@ -208,17 +265,20 @@ public class TeamController extends BaseController{
 		if (StringUtils.isBlank(user.getTeamId())){
 			return null;
 		}
-		if (user.getUtype() != UserType.CAPTAIN.getIndex()){
+		if (user.getUtype() == UserType.GENERAL.getIndex()){
+			return null;
+		}
+		if (StringUtils.isBlank(user.getTeamId())){
 			return null;
 		}
 		TeamDto team = teamService.getTeamById(user.getTeamId());
 		
-		if (null == team || team.getStat() != DataStatus.ENABLED){
-			return null;
-		}
-		if (StringUtils.equals(team.getCreateUserId(), userId)){
+		if (null != team && team.getStat() == DataStatus.ENABLED){
 			return team;
 		}
+		/*if (StringUtils.equals(team.getCreateUserId(), userId)){
+			return team;
+		}*/
 		return null;
 	}
 

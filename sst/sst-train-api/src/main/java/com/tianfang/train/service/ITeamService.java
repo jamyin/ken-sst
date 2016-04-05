@@ -76,7 +76,7 @@ public interface ITeamService {
 	 * @author YIn
 	 * @time:2016年1月15日 下午2:17:54
 	 * @param teamDto
-	 * @param changeToPageQuery
+	 * @param page
 	 * @return
 	 */
 	PageResult<TeamDto> findTeamViewByPage(TeamDto teamDto, PageQuery page);
