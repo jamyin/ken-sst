@@ -5,6 +5,7 @@ import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.home.dto.AppTeamPlayer;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.dto.UserApplyTeamDto;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**		
@@ -221,6 +223,56 @@ public class TeamController extends BaseController{
 		PageResult<UserDto> datas = userService.findUserByParam(dto, query);
 		result.setStatus(DataStatus.HTTP_SUCCESS);
 		result.setData(datas);
+
+		return result;
+	}
+
+	/**		
+	 * <p>Description: 查询球队下成员,按管理员和成员分组展示 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param
+	 * @return
+	 * @author wangxiang	
+	 * @date 16/4/6 下午6:14
+	 * @version 1.0
+	 */
+	@RequestMapping(value="queryPlayers")
+	@ResponseBody
+	public Response<?> queryPlayers(String userId){
+		Response<List<AppTeamPlayer>> result = new Response<List<AppTeamPlayer>>();
+		TeamDto team = isOwnerTeam(userId);
+		if (null == team){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("对不起,您没有权限查看!");
+			return result;
+		}
+		UserDto dto = new UserDto();
+		dto.setTeamId(team.getId());
+		List<UserDto> datas = userService.findUserByParam(dto);
+		List<AppTeamPlayer> results = new ArrayList<>(2);
+		if (null != datas && datas.size() > 0){
+			AppTeamPlayer gl = new AppTeamPlayer("管理员", new ArrayList<UserDto>());
+			AppTeamPlayer cy = new AppTeamPlayer("球队成员", new ArrayList<UserDto>());
+			for (UserDto user : datas){
+				if (null != user && user.getStat().intValue() == DataStatus.ENABLED){
+					if (null == user.getUtype()){
+						continue;
+					}
+					if (user.getUtype().intValue() == UserType.GENERAL.getIndex()){
+						cy.getList().add(user);
+					}
+					if (user.getUtype().intValue() == UserType.CAPTAIN.getIndex()){
+						gl.getList().add(user);
+					}
+					if (user.getUtype().intValue() == UserType.COACH.getIndex()){
+						gl.getList().add(user);
+					}
+				}
+			}
+			results.add(gl);
+			results.add(cy);
+		}
+		result.setData(results);
 
 		return result;
 	}
