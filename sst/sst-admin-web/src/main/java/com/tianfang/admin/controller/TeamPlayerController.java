@@ -87,7 +87,7 @@ public class TeamPlayerController extends BaseController {
 		List<TeamDto> teamList = teamService.findTeam(new TeamDto());
 		mv.addObject("allTeam", teamList);
 		try {
-			mv.setViewName("/Team/player/player_edit");
+			mv.setViewName("/team/player/player_edit");
 			mv.addObject("msg", "edit");
 			mv.addObject("teamPlayerDto", list.get(0));
 		} catch (Exception e) {
