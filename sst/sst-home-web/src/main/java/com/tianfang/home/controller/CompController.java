@@ -15,6 +15,8 @@ import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.enums.UserType;
 import com.tianfang.user.service.IUserService;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +57,7 @@ public class CompController extends BaseController {
 	@Autowired
 	private ICompetitionApplyService applyService;
 	@Autowired
-	private ICompetitionRoundService roundSerivce;
+	private ICompetitionRoundService roundService;
 	@Autowired
 	private ICompetitionMatchService matchService;
 	@Autowired
@@ -363,7 +366,77 @@ public class CompController extends BaseController {
 		}
 		return response;
 	}
-	
+
+	/**
+	 * 根据赛事分每轮查询比赛记录
+	 *
+	 * @param compId 赛事id
+	 * @param currRound 当前轮数页码
+	 * @return
+	 */
+	@RequestMapping(value = "queryMatchs")
+	@ResponseBody
+	public Response<RoundDetail> queryMatchs(String compId, int currRound){
+		Response<RoundDetail> response = new Response<RoundDetail>();
+		if (StringUtils.isBlank(compId)){
+			logger.error("queryMatchs 赛事id为空!");
+			response.setStatus(DataStatus.HTTP_FAILE);
+			response.setMessage("参数异常!");
+			return response;
+		}
+		currRound = currRound <= 0? 1 : currRound;
+		CompetitionRoundDto param = new CompetitionRoundDto();
+		param.setCompId(compId);
+		PageQuery query = new PageQuery();
+		query.setCurrPage(currRound);
+		query.setPageSize(1);
+		PageResult<CompetitionRoundDto> round = roundService.findRoundByParam(param, query);
+		if (null != round){
+			if (null !=round.getResults() && round.getResults().size() > 0){
+				try {
+					PageResult<CompetitionMatchDto> matchs = findMathByPage(compId, round.getResults().get(0).getId());
+					RoundDetail detail = new RoundDetail();
+					detail.setName(round.getResults().get(0).getName());
+					detail.setCurrRound(currRound);
+					if (round.getCurrPage() > 1){
+						detail.setBefore(round.getCurrPage() - 1);
+					}
+					if (round.getCurrPage() < round.getTotalPage()){
+						detail.setNext(round.getCurrPage() + 1);
+					}
+					detail.setMatchs(matchs);
+					response.setData(detail);
+				} catch (Exception e) {
+					e.printStackTrace();
+					logger.error(e.getMessage());
+					response.setStatus(DataStatus.HTTP_FAILE);
+				}
+			}
+		}
+
+		return response;
+	}
+
+	/**
+	 * 分页查询该轮下的比赛信息
+	 *
+	 * @param compId 赛事id
+	 * @param roundId 轮次id
+	 * @return
+	 */
+	private PageResult<CompetitionMatchDto> findMathByPage(String compId, String roundId) {
+		CompetitionMatchDto param = new CompetitionMatchDto();
+		param.setCompId(compId);
+		param.setCroundId(roundId);
+		PageQuery query = new PageQuery();
+		query.setCurrPage(1);
+		query.setPageSize(1000);
+		PageResult<CompetitionMatchDto> matchs = matchService.findCompetitionMatchViewByPage(param, query);
+
+		return matchs;
+	}
+
+
 	/**
 	 * 通过比赛日期查询当天的比赛
 	 * @param compId
@@ -557,7 +630,7 @@ public class CompController extends BaseController {
 	 */
 	private List<CompRound> findCompRounds(String compId) {
 		List<CompRound> crs = null;
-		List<CompetitionRoundDto> rounds = roundSerivce.findRoundByCompId(compId);
+		List<CompetitionRoundDto> rounds = roundService.findRoundByCompId(compId);
 		if (null != rounds && rounds.size() > 0){
 			List<CompetitionMatchDto> matchs = matchService.findMatchByCompId(compId);
 			if (null != matchs && matchs.size() > 0){
@@ -598,7 +671,7 @@ public class CompController extends BaseController {
 	 */
 	private CompRound findCompRounds(String compId, String matchDate) {
 		CompRound result = new CompRound();
-		List<CompetitionRoundDto> rounds = roundSerivce.findRoundByCompId(compId);
+		List<CompetitionRoundDto> rounds = roundService.findRoundByCompId(compId);
 		if (null != rounds && rounds.size() > 0){
 			CompetitionMatchDto params = new CompetitionMatchDto();
 			params.setCompId(compId);
@@ -624,7 +697,7 @@ public class CompController extends BaseController {
 	 */
 	private CompRound getCompRoundsByCroundId(String compId, String croundId) {
 		CompRound result = new CompRound();
-		List<CompetitionRoundDto> rounds = roundSerivce.findRoundByCompId(compId);
+		List<CompetitionRoundDto> rounds = roundService.findRoundByCompId(compId);
 		if (null != rounds && rounds.size() > 0){
 			CompetitionMatchDto params = new CompetitionMatchDto();
 			params.setCompId(compId);
@@ -787,4 +860,30 @@ public class CompController extends BaseController {
 		
 		return true;
 	}
+}
+
+/**
+ * 每轮下比赛记录数据封装
+ */
+class RoundDetail implements Serializable {
+
+	@Getter
+	@Setter
+	private Integer currRound;  // 当前轮数据
+
+	@Getter
+	@Setter
+	private String name;		// 赛事场次名(第几轮)
+
+	@Getter
+	@Setter
+	private Integer before; // 上一轮
+
+	@Getter
+	@Setter
+	private Integer next;   // 下一轮
+
+	@Getter
+	@Setter
+	private PageResult<CompetitionMatchDto> matchs; // 当前轮下比赛记录
 }
