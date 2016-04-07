@@ -320,9 +320,16 @@ public class CompController extends BaseController {
 	public Response<String> apply(CompetitionApplyDto dto, String userId){
 		Response<String> result = new Response<String>();
 		dto.setCreateUserId(userId);
+		try {
 		if (checkCompApply(result, dto)){
 			applyService.addCompetitionApply(dto);
 			result.setMessage("恭喜您,报名成功!");
+		}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("系统异常!");
 		}
 			
 		return result;
