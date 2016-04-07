@@ -1,6 +1,5 @@
 package com.tianfang.home.dto;
 
-import com.tianfang.user.dto.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,12 +22,12 @@ public class AppTeamPlayer implements Serializable{
 
     @Getter
     @Setter
-    private List<UserDto> list;
+    private List<AppUser> list;
 
     public AppTeamPlayer() {
     }
 
-    public AppTeamPlayer(String title, List<UserDto> list) {
+    public AppTeamPlayer(String title, List<AppUser> list) {
         this.title = title;
         this.list = list;
     }

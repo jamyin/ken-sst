@@ -6,6 +6,7 @@ import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.home.dto.AppTeamPlayer;
+import com.tianfang.home.dto.AppUser;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.dto.UserApplyTeamDto;
@@ -263,24 +264,24 @@ public class TeamController extends BaseController{
 		dto.setTeamId(team.getId());
 		List<UserDto> datas = userService.findUserByParam(dto);
 		Map<String, Object> map = new HashMap<String, Object>(2);
-		map.put("currUser", curruser);
+		map.put("currUser", UserDtoToAppUser(curruser));
 		List<AppTeamPlayer> results = new ArrayList<>(2);
 		if (null != datas && datas.size() > 0){
-			AppTeamPlayer gl = new AppTeamPlayer("管理员", new ArrayList<UserDto>());
-			AppTeamPlayer cy = new AppTeamPlayer("球队成员", new ArrayList<UserDto>());
+			AppTeamPlayer gl = new AppTeamPlayer("管理员", new ArrayList<AppUser>());
+			AppTeamPlayer cy = new AppTeamPlayer("球队成员", new ArrayList<AppUser>());
 			for (UserDto user : datas){
 				if (null != user && user.getStat().intValue() == DataStatus.ENABLED){
 					if (null == user.getUtype()){
 						continue;
 					}
 					if (user.getUtype().intValue() == UserType.GENERAL.getIndex()){
-						cy.getList().add(user);
+						cy.getList().add(UserDtoToAppUser(user));
 					}
 					if (user.getUtype().intValue() == UserType.CAPTAIN.getIndex()){
-						gl.getList().add(user);
+						gl.getList().add(UserDtoToAppUser(user));
 					}
 					if (user.getUtype().intValue() == UserType.COACH.getIndex()){
-						gl.getList().add(user);
+						gl.getList().add(UserDtoToAppUser(user));
 					}
 				}
 			}
@@ -313,8 +314,7 @@ public class TeamController extends BaseController{
 			result.setMessage("对不起,您没有权限审核");
 			return result;
 		}
-		UserDto user = userService.kickingTeam(kickingId);
-		if (null == user){
+		if (!userService.kickingTeam(kickingId)){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("对不起,球员踢出失败!");
 			return result;
@@ -391,6 +391,27 @@ public class TeamController extends BaseController{
     	}
 		
 		return true;
+	}
+
+	private AppUser UserDtoToAppUser(UserDto dto){
+		if (null != dto){
+			AppUser user = new AppUser();
+			user.setCname(dto.getCname());
+			user.setCreateTime(dto.getCreateTime());
+			user.setEname(dto.getEname());
+			user.setGender(dto.getGender());
+			user.setId(dto.getId());
+			user.setLastLoginTime(dto.getLastLoginTime());
+			user.setMobile(dto.getMobile());
+			user.setNickName(dto.getNickName());
+			user.setPic(dto.getPic());
+			user.setPosition(dto.getPosition());
+			user.setTeamId(dto.getTeamId());
+			user.setUtype(dto.getUtype());
+
+			return user;
+		}
+		return null;
 	}
 	
 }

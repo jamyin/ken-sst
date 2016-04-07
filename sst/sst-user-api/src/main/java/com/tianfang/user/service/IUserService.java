@@ -1,11 +1,11 @@
 package com.tianfang.user.service;
 
-import java.util.List;
-
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.user.app.FriendApp;
 import com.tianfang.user.dto.UserDto;
+
+import java.util.List;
 
 /**		
  * <p>Title: IUserService </p>
@@ -95,10 +95,10 @@ public interface IUserService {
 	 * <p>Description: 将用户踢出球队 </p>
 	 * <p>Company: 上海天坊信息科技有限公司</p>
 	 * @param userId
-	 * @return UserDto
+	 * @return boolean
 	 * @author wangxiang	
 	 * @date 16/4/5 下午1:36
 	 * @version 1.0
 	 */
-	UserDto kickingTeam(String userId);
+	boolean kickingTeam(String userId);
 }
