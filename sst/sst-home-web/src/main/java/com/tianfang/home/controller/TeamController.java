@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**		
  * <p>Title: TeamController </p>
@@ -238,17 +240,30 @@ public class TeamController extends BaseController{
 	 */
 	@RequestMapping(value="queryPlayers")
 	@ResponseBody
-	public Response<?> queryPlayers(String userId){
-		Response<List<AppTeamPlayer>> result = new Response<List<AppTeamPlayer>>();
-		TeamDto team = isOwnerTeam(userId);
-		if (null == team){
+	public Response<Map<String, Object>> queryPlayers(String userId){
+		Response<Map<String, Object>> result = new Response<Map<String, Object>>();
+		UserDto curruser = getUserByCache(userId);
+		if (null == curruser){
 			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("对不起,您没有权限查看!");
+			result.setMessage("用户不存在!");
+			return result;
+		}
+		if (StringUtils.isBlank(curruser.getTeamId())){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("暂未加入球队!");
+			return result;
+		}
+		TeamDto team = teamService.getTeamById(curruser.getTeamId());
+		if (null == team || team.getStat() == DataStatus.DISABLED){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("暂未加入球队!");
 			return result;
 		}
 		UserDto dto = new UserDto();
 		dto.setTeamId(team.getId());
 		List<UserDto> datas = userService.findUserByParam(dto);
+		Map<String, Object> map = new HashMap<String, Object>(2);
+		map.put("currUser", curruser);
 		List<AppTeamPlayer> results = new ArrayList<>(2);
 		if (null != datas && datas.size() > 0){
 			AppTeamPlayer gl = new AppTeamPlayer("管理员", new ArrayList<UserDto>());
@@ -272,7 +287,8 @@ public class TeamController extends BaseController{
 			results.add(gl);
 			results.add(cy);
 		}
-		result.setData(results);
+		map.put("list", results);
+		result.setData(map);
 
 		return result;
 	}
