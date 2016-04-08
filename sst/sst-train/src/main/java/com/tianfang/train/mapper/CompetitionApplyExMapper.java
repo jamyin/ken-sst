@@ -1,12 +1,11 @@
 package com.tianfang.train.mapper;
 
-import java.util.List;
-
+import com.tianfang.common.model.PageQuery;
+import com.tianfang.train.dto.CompetitionApplyDto;
 import com.tianfang.train.dto.CompetitionDto;
 import org.apache.ibatis.annotations.Param;
 
-import com.tianfang.common.model.PageQuery;
-import com.tianfang.train.dto.CompetitionApplyDto;
+import java.util.List;
 
 
 public interface CompetitionApplyExMapper {
@@ -14,5 +13,5 @@ public interface CompetitionApplyExMapper {
 	
 	int countByExample(@Param("competitionNoticeDto") CompetitionApplyDto competitionApplyDto);
 
-	List<CompetitionDto> findCompApplyByParams(@Param("dto") CompetitionApplyDto params);
+	List<CompetitionDto> findCompApplyByParams(@Param("params") CompetitionApplyDto params);
 }
