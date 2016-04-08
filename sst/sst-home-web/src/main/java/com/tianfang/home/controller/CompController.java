@@ -1,5 +1,21 @@
 package com.tianfang.home.controller;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
@@ -8,28 +24,30 @@ import com.tianfang.common.util.HtmlRegexpUtil;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.dto.CompRound;
-import com.tianfang.train.dto.*;
+import com.tianfang.train.dto.CompetitionApplyDto;
+import com.tianfang.train.dto.CompetitionDto;
+import com.tianfang.train.dto.CompetitionMatchDto;
+import com.tianfang.train.dto.CompetitionNewsDto;
+import com.tianfang.train.dto.CompetitionNoticeDto;
+import com.tianfang.train.dto.CompetitionRoundDto;
+import com.tianfang.train.dto.CompetitionTeamDto;
+import com.tianfang.train.dto.TeamDto;
+import com.tianfang.train.dto.TeamPlayerDatasDto;
+import com.tianfang.train.dto.TeamResultDto;
 import com.tianfang.train.enums.AuditType;
-import com.tianfang.train.pojo.CompetitionApply;
-import com.tianfang.train.service.*;
+import com.tianfang.train.service.ICompetitionApplyService;
+import com.tianfang.train.service.ICompetitionMatchService;
+import com.tianfang.train.service.ICompetitionNewsService;
+import com.tianfang.train.service.ICompetitionNoticeService;
+import com.tianfang.train.service.ICompetitionRoundService;
+import com.tianfang.train.service.ICompetitionService;
+import com.tianfang.train.service.ICompetitionTeamService;
+import com.tianfang.train.service.ITeamPlayerDatasService;
+import com.tianfang.train.service.ITeamResultService;
+import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.enums.UserType;
 import com.tianfang.user.service.IUserService;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**		
  * <p>Title: CompController </p>

@@ -70,6 +70,8 @@
 			<form id="userInfo">
 			<input type="hidden" id="id" name="id" value="${(userInfo.id)!}">
 			<input type="hidden" id="provinceHidd" name="provinceHidd" value="${(userInfo.province)!}">
+			<input type="hidden" id="areaHidd" name="areaHidd" value="${(userInfo.area)!}">
+			<input type="hidden" id="locationHidd" name="locationHidd" value="${(userInfo.location)!}">
 			<div class="basic">
 				<div class="uhd">
 					<h1 class="basichd">基本资料<span class="basic-edit" data-status="edit"  style="cursor:pointer;" id="edit">编辑</span></h1>
@@ -107,7 +109,7 @@
 						</li>
 						<li>
 							<label class="lf" for="">性别</label>
-							<#if userInfo.pic??>
+							<#if userInfo.gender ??>
 								<#if userInfo.gender == 1>
 									<input class="hide" type="radio" name="gender" id="male" value="1" checked="chekced"/>
 									<label class="sex male check hide" for="male">男</label>
@@ -121,12 +123,6 @@
 									<label class="sex female check hide" for="female">女</label>
 									<span class="js-sex show-inf">女</span>
 								</#if>
-							<#else>
-									<input class="hide" type="radio" name="gender" id="male" value="1" checked="chekced"/>
-									<label class="sex male check hide" for="male">男</label>
-									<input class="hide" type="radio" name="gender" id="female" value="2" />
-									<label class="sex female hide" for="female">女</label>
-									<span class="js-sex show-inf">男</span>
 							</#if>
 						</li>
 						<li>
@@ -140,25 +136,19 @@
 							</#if>
 							</select> -->
 							<select class="pro hide" name="province" id="province">
-							<#if userInfo.provinceStr?? >
+							<!-- <#if userInfo.provinceStr?? >
 								<option value="${(userInfo.province)!}" selected="selected">${(userInfo.provinceStr)!}</option>
-							<#else>	
-								<option value="">请选择</option>
-							</#if>
+							</#if> -->
 							</select>
 							<select class="city hide" name="area" id="area">
-							<#if userInfo.areaStr?? >
+							<!-- <#if userInfo.areaStr?? >
 								<option value="${(userInfo.area)!}">${(userInfo.areaStr)!}</option>
-							<#else>	
-								<option value="">请选择</option>
-							</#if>
+							</#if> -->
 							</select>
 							<select class="city hide" name="location" id="location">
-							<#if userInfo.areaStr?? >
+							<!-- <#if userInfo.areaStr?? >
 								<option value="${(userInfo.location)!}">${(userInfo.locationStr)!}</option>
-							<#else>	
-								<option value="">请选择</option>
-							</#if>
+							</#if> -->
 							</select>
 							<span class="js-addr show-inf">
 								${(userInfo.provinceStr)!} &nbsp;${(userInfo.areaStr)!} &nbsp; ${(userInfo.locationStr)!}
