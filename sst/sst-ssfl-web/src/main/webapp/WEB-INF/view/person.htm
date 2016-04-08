@@ -110,19 +110,25 @@
 						<li>
 							<label class="lf" for="">性别</label>
 							<#if userInfo.gender ??>
-								<#if userInfo.gender == 1>
-									<input class="hide" type="radio" name="gender" id="male" value="1" checked="chekced"/>
+								<#if userInfo.gender == 2>
+									<input class="hide" type="radio" name="gender" id="male" value="1"/>
+									<label class="sex male hide" for="male">男</label>
+									<input class="hide" type="radio" name="gender" id="female" value="2"/>
+									<label class="sex female check hide" for="female">女</label>
+									<span class="js-sex show-inf">女</span>
+								<#else>
+									<input class="hide" type="radio" name="gender" id="male" value="1"/>
 									<label class="sex male check hide" for="male">男</label>
 									<input class="hide" type="radio" name="gender" id="female" value="2" />
 									<label class="sex female hide" for="female">女</label>
 									<span class="js-sex show-inf">男</span>
-								<#else>
-									<input class="hide" type="radio" name="gender" id="male" value="1"/>
-									<label class="sex male hide" for="male">男</label>
-									<input class="hide" type="radio" name="gender" id="female" value="2"  checked="chekced"/>
-									<label class="sex female check hide" for="female">女</label>
-									<span class="js-sex show-inf">女</span>
 								</#if>
+							<#else>
+									<input class="hide" type="radio" name="gender" id="male" value="1"/>
+									<label class="sex male check hide" for="male">男</label>
+									<input class="hide" type="radio" name="gender" id="female" value="2"/>
+									<label class="sex female hide" for="female">女</label>
+									<span class="js-sex show-inf">女</span>
 							</#if>
 						</li>
 						<li>
