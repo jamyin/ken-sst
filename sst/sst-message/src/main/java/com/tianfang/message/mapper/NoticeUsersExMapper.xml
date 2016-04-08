@@ -24,7 +24,7 @@
     </select>
     
     
-     <select id="findNoticeViewByPage" resultType="com.tianfang.message.dto.NoticeDto">
+     <select id="findNoticeViewByPage" parameterType="com.tianfang.message.dto.NoticeDto" resultType="com.tianfang.message.dto.NoticeDto">
         SELECT b.id,b.title,b.create_user_id AS createUserId ,b.create_user_name AS createUserName,
         b.content,b.group_id AS groupId,b.group_name AS groupName,b.pic,b.create_time AS createTime,b.stat,b.allow_forward AS allowForward, 
         a.readstat AS ReadStat, 
@@ -34,7 +34,10 @@
         ON a.notice_id = b.id  
         LEFT JOIN sport_user c    
         ON a.user_id = c.id  
-        WHERE a.user_id = #{dto.userId} AND b.stat=1 and a.stat =1     
+        WHERE b.stat=1 and a.stat =1  
+        <if test="dto.userId != null and dto.userId !=''">
+       		and a.user_id = #{dto.userId}    
+        </if>
         ORDER BY b.create_time desc  
         LIMIT  #{page.startNum}, #{page.pageSize}
      </select>
@@ -46,7 +49,10 @@
         ON a.notice_id = b.id   
         LEFT JOIN sport_user c    
         ON a.user_id = c.id   
-        WHERE a.user_id = #{dto.userId}   AND b.stat=1 and a.stat =1   
+        WHERE b.stat=1 and a.stat =1  
+        <if test="dto.userId != null and dto.userId !='' ">
+        and a.user_id = #{dto.userId}  
+        </if>
 	  </select>
 	
 	  <select id="findMount" resultType="java.lang.Integer" parameterType="java.lang.String">
