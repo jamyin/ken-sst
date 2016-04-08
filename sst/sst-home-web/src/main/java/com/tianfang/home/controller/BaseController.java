@@ -1,5 +1,6 @@
 package com.tianfang.home.controller;
 
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.constants.SessionConstants;
 import com.tianfang.home.utils.SessionUtil;
 import com.tianfang.user.dto.UserDto;
@@ -16,14 +17,10 @@ import java.util.concurrent.TimeUnit;
 
 public class BaseController {
 	protected Logger logger = Logger.getLogger(BaseController.class);
-	public static final String SST_USER = "SSTUSER";
-	
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
-
 	@Autowired
 	private IUserService iUserService;
-
 
 	/**
 	 * 获取缓存中用户信息
@@ -33,8 +30,8 @@ public class BaseController {
 	 * 2016年1月18日下午4:45:10
 	 * @throws Exception 
 	 */
-	public UserDto getUserByCache(String userId){	
-		String keyCode = SST_USER+userId;
+	public UserDto getUserByCache(String userId){
+		String keyCode = DataStatus.SST_USER+userId;
 		UserDto dto = null;
 		if(null != redisTemplate.opsForValue().get(keyCode)){
 			dto = (UserDto)redisTemplate.opsForValue().get(keyCode);
@@ -55,7 +52,7 @@ public class BaseController {
 		if (flag){
 			return getUserByCache(userId);
 		}else{
-			String keyCode = SST_USER+userId;
+			String keyCode = DataStatus.SST_USER+userId;
 			UserDto dto = iUserService.getUserById(userId);
 			redisTemplate.opsForValue().set(keyCode, dto, 1, TimeUnit.HOURS);
 			return dto;

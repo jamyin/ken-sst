@@ -11,8 +11,8 @@ import com.tianfang.user.dao.UserDao;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -21,6 +21,8 @@ import java.util.regex.Pattern;
 public class UserServiceImpl implements IUserService {
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
 
 	@Override
 	public String save(UserDto dto){
@@ -55,16 +57,19 @@ public class UserServiceImpl implements IUserService {
 			checkObjIsNotExistException(user);
 			user.setStat(DataStatus.DISABLED);
 			userDao.updateByPrimaryKeySelective(user);
+			// 清缓存
+			redisTemplate.delete(DataStatus.SST_USER+id);
 		}
 	}
 
 	@Override
 	public int update(UserDto dto){
-		
 		checkObjIsNullException(dto);
 		checkIdIsNullException(dto.getId());
 		checkObjIsNotExistException(userDao.selectByPrimaryKey(dto.getId()));
 		User user = BeanUtils.createBeanByTarget(dto, User.class);
+		// 清缓存
+		redisTemplate.delete(DataStatus.SST_USER+user.getId());
 		return userDao.updateByPrimaryKeySelective(user);
 	}
 
@@ -101,6 +106,8 @@ public class UserServiceImpl implements IUserService {
 		checkObjIsNotExistException(user);
 		user.setTeamId(teamId);
 		userDao.updateByPrimaryKeySelective(user);
+		// 清缓存
+		redisTemplate.delete(DataStatus.SST_USER+userId);
 	}
 	
 	@Override

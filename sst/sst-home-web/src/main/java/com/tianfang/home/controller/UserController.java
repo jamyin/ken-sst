@@ -117,7 +117,7 @@ public class UserController extends BaseController{
 					userService.update(user);
 					session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
 					if(user != null){
-						redisTemplate.opsForValue().set(SST_USER+id, user);
+						redisTemplate.opsForValue().set(DataStatus.SST_USER+id, user);
 					}
 					result.setData(user.getId());
 					result.setStatus(DataStatus.HTTP_SUCCESS);
@@ -224,7 +224,7 @@ public class UserController extends BaseController{
 
 		session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
 		if(user != null){
-			redisTemplate.opsForValue().set(SST_USER+user.getId(), user);
+			redisTemplate.opsForValue().set(DataStatus.SST_USER+user.getId(), user);
 		}
 		result.setData(user.getId());
 		result.setStatus(DataStatus.HTTP_SUCCESS);
@@ -278,7 +278,7 @@ public class UserController extends BaseController{
 				if (TigaseUtil.resetPassword(user.getMobile(), user.getPassword())){
 					session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
 					if(user != null){
-						redisTemplate.opsForValue().set(SST_USER+user.getId(), user);
+						redisTemplate.opsForValue().set(DataStatus.SST_USER+user.getId(), user);
 					}
 					result.setData(user.getId());
 					result.setStatus(DataStatus.HTTP_SUCCESS);
@@ -363,7 +363,7 @@ public class UserController extends BaseController{
 				if (TigaseUtil.registered(mobile, password)){
 					session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
 					if(user != null){
-						redisTemplate.opsForValue().set(SST_USER+user.getId(), user);
+						redisTemplate.opsForValue().set(DataStatus.SST_USER+user.getId(), user);
 					}
 					result.setData(user.getId());
 					result.setStatus(DataStatus.HTTP_SUCCESS);

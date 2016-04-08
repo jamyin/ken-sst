@@ -73,4 +73,5 @@ public interface DataStatus {
     public String _SST_ = "sst_" + RandomCode.getEnRandomCode(1)
             + RandomCode.getRandomCodeByNumber(4);  //赛事通用户昵称
 
+    public static final String SST_USER = "SSTUSER";
 }
