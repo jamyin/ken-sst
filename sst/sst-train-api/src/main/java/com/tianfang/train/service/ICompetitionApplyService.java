@@ -5,6 +5,8 @@ import java.util.List;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.train.dto.CompetitionApplyDto;
+import com.tianfang.train.dto.CompetitionDto;
+
 public interface ICompetitionApplyService {
 
 	/**
@@ -90,4 +92,14 @@ public interface ICompetitionApplyService {
 	 */
 	PageResult<CompetitionApplyDto> findCompApplyViewByPage(CompetitionApplyDto competitionApplyDto, PageQuery page);
 
+	/**
+	 * <p>Description: 根据查询查询赛事报名申请列表 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param params
+	 * @return List<CompetitionDto>
+	 * @author wangxiang
+	 * @date 16/4/8 上午9:16
+	 * @version 1.0
+	 */
+	List<CompetitionDto> findCompApplyByParams(CompetitionApplyDto params);
 }

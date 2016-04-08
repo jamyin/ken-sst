@@ -15,7 +15,7 @@ import lombok.Setter;
  * @Description: TODO
  * @
  */
-@JsonIgnoreProperties({"createTime","lastUpdateTime","stat","createTimeStr","lastUpdateTimeStr"})
+@JsonIgnoreProperties({"createTime","lastUpdateTime","stat","createTimeStr","lastUpdateTimeStr","compType"})
 public class CompetitionApplyDto implements Serializable{
 	
 	private static final long serialVersionUID = 4933671747979370463L;
@@ -92,4 +92,7 @@ public class CompetitionApplyDto implements Serializable{
 	@Setter
 	private String lastUpdateTimeStr; //页面显示更新时间
 
+	@Getter
+	@Setter
+	private Integer compType; // 用于联表查询,赛事状态(0-未开始,1-进行中,2-已结束)
 }

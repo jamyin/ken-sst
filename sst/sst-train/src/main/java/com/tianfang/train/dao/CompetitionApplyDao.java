@@ -2,6 +2,7 @@ package com.tianfang.train.dao;
 
 import java.util.List;
 
+import com.tianfang.train.dto.CompetitionDto;
 import lombok.Getter;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,100 +22,115 @@ import com.tianfang.train.pojo.CompetitionApplyExample.Criteria;
 @Repository
 public class CompetitionApplyDao extends MyBatisBaseDao<CompetitionApply> {
 
-	@Getter
-	@Autowired
-	private CompetitionApplyMapper mapper;
-	
-	@Getter
-	@Autowired
-	private CompetitionApplyExMapper mappers;
+    @Getter
+    @Autowired
+    private CompetitionApplyMapper mapper;
 
-	/**
-	 * 不带分页查询
-	 * @author YIn
-	 * @time:2016年1月20日 下午1:24:21
-	 */
-	public List<CompetitionApply> selectByParameter(CompetitionApply competitionApply) {
-		CompetitionApplyExample example = new CompetitionApplyExample();
-		CompetitionApplyExample.Criteria criteria = example.createCriteria();
+    @Getter
+    @Autowired
+    private CompetitionApplyExMapper mappers;
+
+    /**
+     * 不带分页查询
+     *
+     * @author YIn
+     * @time:2016年1月20日 下午1:24:21
+     */
+    public List<CompetitionApply> selectByParameter(CompetitionApply competitionApply) {
+        CompetitionApplyExample example = new CompetitionApplyExample();
+        CompetitionApplyExample.Criteria criteria = example.createCriteria();
         assemblyParams(competitionApply, criteria);   //组装参数
-        List<CompetitionApply> result = mapper.selectByExample(example);  
+        List<CompetitionApply> result = mapper.selectByExample(example);
         return result;
-	}
+    }
 
-	/**
-	 * 组装参数
-	 * @author YIn
-	 * @time:2016年1月20日 下午1:27:43
-	 */
-	private void assemblyParams(CompetitionApply competitionApply, Criteria criteria) {
-		if (null != competitionApply){
-			if (StringUtils.isNotBlank(competitionApply.getId())){
-	    		criteria.andIdEqualTo(competitionApply.getId());
-	    	}
-			if (StringUtils.isNotBlank(competitionApply.getTeamId())){
-				criteria.andTeamIdEqualTo(competitionApply.getTeamId());
-			}
-			if (StringUtils.isNotBlank(competitionApply.getCompId())){
-				criteria.andCompIdEqualTo(competitionApply.getCompId());
-			}
-			if (StringUtils.isNotBlank(competitionApply.getCompName())){
-	    		criteria.andCompNameLike("%"+competitionApply.getCompName()+"%");
-	    	}
-			if (StringUtils.isNotBlank(competitionApply.getTeamName())){
-	    		criteria.andTeamNameLike("%"+competitionApply.getTeamName()+"%");
-	    	}
-			if (null != competitionApply.getAuditType()){
-				criteria.andAuditTypeEqualTo(competitionApply.getAuditType());
-			}
-		}
-		
-    	criteria.andStatEqualTo(DataStatus.ENABLED);
-	}
+    /**
+     * 组装参数
+     *
+     * @author YIn
+     * @time:2016年1月20日 下午1:27:43
+     */
+    private void assemblyParams(CompetitionApply competitionApply, Criteria criteria) {
+        if (null != competitionApply) {
+            if (StringUtils.isNotBlank(competitionApply.getId())) {
+                criteria.andIdEqualTo(competitionApply.getId());
+            }
+            if (StringUtils.isNotBlank(competitionApply.getTeamId())) {
+                criteria.andTeamIdEqualTo(competitionApply.getTeamId());
+            }
+            if (StringUtils.isNotBlank(competitionApply.getCompId())) {
+                criteria.andCompIdEqualTo(competitionApply.getCompId());
+            }
+            if (StringUtils.isNotBlank(competitionApply.getCompName())) {
+                criteria.andCompNameLike("%" + competitionApply.getCompName() + "%");
+            }
+            if (StringUtils.isNotBlank(competitionApply.getTeamName())) {
+                criteria.andTeamNameLike("%" + competitionApply.getTeamName() + "%");
+            }
+            if (null != competitionApply.getAuditType()) {
+                criteria.andAuditTypeEqualTo(competitionApply.getAuditType());
+            }
+        }
 
-	/**
-	 * 分页查询比赛报名
-	 * @author YIn
-	 * @time:2016年1月20日 下午2:43:29
-	 */
-	public List<CompetitionApply> findCompetitionApplyViewByPage(CompetitionApply competitionApply, PageQuery page) {
-		CompetitionApplyExample example = new CompetitionApplyExample();
-		CompetitionApplyExample.Criteria criteria = example.createCriteria();
-		example.setOrderByClause(" create_time DESC limit " + page.getStartNum() +"," + page.getPageSize());
+        criteria.andStatEqualTo(DataStatus.ENABLED);
+    }
+
+    /**
+     * 分页查询比赛报名
+     *
+     * @author YIn
+     * @time:2016年1月20日 下午2:43:29
+     */
+    public List<CompetitionApply> findCompetitionApplyViewByPage(CompetitionApply competitionApply, PageQuery page) {
+        CompetitionApplyExample example = new CompetitionApplyExample();
+        CompetitionApplyExample.Criteria criteria = example.createCriteria();
+        example.setOrderByClause(" create_time DESC limit " + page.getStartNum() + "," + page.getPageSize());
         assemblyParams(competitionApply, criteria);   //组装参数
-        List<CompetitionApply> result = mapper.selectByExample(example);  
+        List<CompetitionApply> result = mapper.selectByExample(example);
         return result;
-	}
+    }
 
-	/**
-	 * 查询总条数
-	 * @author YIn
-	 * @time:2016年1月20日 下午2:43:59
-	 */
-	public int selectAccount(CompetitionApply competitionApply) {
-		CompetitionApplyExample example = new CompetitionApplyExample();
-		CompetitionApplyExample.Criteria criteria = example.createCriteria();
+    /**
+     * 查询总条数
+     *
+     * @author YIn
+     * @time:2016年1月20日 下午2:43:59
+     */
+    public int selectAccount(CompetitionApply competitionApply) {
+        CompetitionApplyExample example = new CompetitionApplyExample();
+        CompetitionApplyExample.Criteria criteria = example.createCriteria();
         assemblyParams(competitionApply, criteria);   //组装参数
         return mapper.countByExample(example);
-	}
-	
-	/**
-	 * @author YIn
-	 * @time:2016年1月22日 下午5:42:40
-	 */
-	public List<CompetitionApplyDto> findCompApplyViewByPage(CompetitionApplyDto competitionApplyDto, PageQuery page) {
-			List<CompetitionApplyDto> result = mappers.selectByExample(competitionApplyDto, page);  
-	        return result;
-	}
+    }
 
-	/**
-	 * @author YIn
-	 * @time:2016年1月22日 下午5:42:56
-	 */
-	public int selectCompAccount(CompetitionApplyDto competitionApplyDto) {
-		    return mappers.countByExample(competitionApplyDto);
-	}
+    /**
+     * @author YIn
+     * @time:2016年1月22日 下午5:42:40
+     */
+    public List<CompetitionApplyDto> findCompApplyViewByPage(CompetitionApplyDto competitionApplyDto, PageQuery page) {
+        List<CompetitionApplyDto> result = mappers.selectByExample(competitionApplyDto, page);
+        return result;
+    }
 
-	
-	
+    /**
+     * @author YIn
+     * @time:2016年1月22日 下午5:42:56
+     */
+    public int selectCompAccount(CompetitionApplyDto competitionApplyDto) {
+        return mappers.countByExample(competitionApplyDto);
+    }
+
+    /**
+     * <p>Description: 根据参数查询球队报名列表 </p>
+     * <p>Company: 上海天坊信息科技有限公司</p>
+     *
+     * @param params
+     * @return List<CompetitionDto>
+     * @author wangxiang
+     * @date 16/4/8 上午9:20
+     * @version 1.0
+     */
+    public List<CompetitionDto> findCompApplyByParams(CompetitionApplyDto params) {
+        return mappers.findCompApplyByParams(params);
+    }
 }

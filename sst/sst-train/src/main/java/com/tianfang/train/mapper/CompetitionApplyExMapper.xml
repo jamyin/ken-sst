@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tianfang.train.mapper.CompetitionApplyExMapper">
-	
+
+	<resultMap id="CompetionResultMap" type="com.tianfang.train.dto.CompetitionDto" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="icon" property="icon" jdbcType="VARCHAR" />
+		<result column="start_date" property="startDate" jdbcType="DATE" />
+		<result column="end_date" property="endDate" jdbcType="DATE" />
+		<result column="is_closed" property="isClosed" jdbcType="INTEGER" />
+		<result column="comp_type" property="compType" jdbcType="INTEGER" />
+		<result column="create_admin_id" property="createAdminId" jdbcType="VARCHAR" />
+		<result column="create_admin_name" property="createAdminName" jdbcType="VARCHAR" />
+		<result column="update_admin_id" property="updateAdminId" jdbcType="VARCHAR" />
+		<result column="update_admin_name" property="updateAdminName" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+		<result column="stat" property="stat" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Competition_Column_List" >
+		a.id, a.title, a.content, a.icon, a.start_date, a.end_date, a.is_closed, a.comp_type, a.create_admin_id,
+		a.create_admin_name, a.update_admin_id, a.update_admin_name, a.create_time, a.last_update_time,
+		a.stat
+	</sql>
+
 	<select id="selectByExample" resultType="com.tianfang.train.dto.CompetitionApplyDto">
 	   SELECT a.id, a.comp_id as compId,a.comp_name as compName,a.team_id as teamId,a.team_logo as teamLogo,a.team_name as teamName,a.contacts,a.mobile,a.audit_type as auditType,a.create_user_id as createUserId,a.create_user_name as createUserName, a.audit_user_id as auditUserId, a.create_time as  createTime ,a.last_update_time as lastUpdateTime ,a.stat,b.title as competitionName 
 	   FROM sst_competition_apply a 
@@ -38,5 +62,27 @@
 	   </if>
 	    -->
 	</sql>
-	
+
+	<sql id="Apply_Where_Clause" >
+		<where >
+			<if test="dto.teamId != null and params.teamId != ''">
+				AND b.team_id = #{dto.teamId}
+			</if>
+			<if test="dto.auditType != null and dto.auditType != ''">
+				AND b.audit_type = #{dto.auditType}
+			</if>
+			<if test="dto.compType != null and dto.compType != ''">
+				AND a.comp_type = #{dto.compType}
+			</if>
+		</where>
+	</sql>
+
+	<select id="findCompApplyByParams" resultMap="CompetionResultMap" parameterType="com.tianfang.train.dto.CompetitionApplyDto" >
+		select
+		<include refid="Competition_Column_List" />
+		from sst_competition as a left join sst_competition_apply as b on a.id = b.comp_id
+		<include refid="Apply_Where_Clause" />
+	  	order by a.start_date desc
+	</select>
+
 </mapper> 

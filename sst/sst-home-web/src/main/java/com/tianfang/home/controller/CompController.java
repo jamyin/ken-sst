@@ -10,6 +10,7 @@ import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.dto.CompRound;
 import com.tianfang.train.dto.*;
 import com.tianfang.train.enums.AuditType;
+import com.tianfang.train.pojo.CompetitionApply;
 import com.tianfang.train.service.*;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.enums.UserType;
@@ -93,6 +94,37 @@ public class CompController extends BaseController {
 			logger.error(e.getMessage());
 		}
 		
+		return response;
+	}
+
+	/**		
+	 * <p>Description: 赛事报名管理,根据参数查询赛事报名列表 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param params
+	 * @return Response<List<CompetitionDto>>
+	 * @author wangxiang	
+	 * @date 16/4/8 上午10:05
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "listApply")
+	@ResponseBody
+	public Response<List<CompetitionDto>> listApply(String userId, CompetitionApplyDto params){
+		Response<List<CompetitionDto>> response = new Response<>();
+		UserDto user = getUserByCache(userId);
+		if (StringUtils.isBlank(userId) || null == user){
+			response.setStatus(DataStatus.HTTP_FAILE);
+			response.setMessage("用户不存在!");
+			return response;
+		}
+		if (StringUtils.isBlank(user.getTeamId())){
+			response.setStatus(DataStatus.HTTP_FAILE);
+			response.setMessage("对不起,用户未加入球队!");
+			return response;
+		}
+		params.setTeamId(user.getTeamId());
+		List<CompetitionDto> datas = applyService.findCompApplyByParams(params);
+
+		response.setData(datas);
 		return response;
 	}
 	
@@ -269,7 +301,11 @@ public class CompController extends BaseController {
 		Response<TeamDto> response = new Response<TeamDto>();
 		try {
 			TeamDto team = teamService.getTeamById(id);
-			
+			if (null == team){
+				response.setStatus(DataStatus.HTTP_FAILE);
+				response.setMessage("球队不存在");
+				return response;
+			}
 			team.setSummary(HtmlRegexpUtil.filterHtml(team.getSummary()));
 			
 			TeamResultDto trDto = new TeamResultDto();

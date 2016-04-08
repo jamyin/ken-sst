@@ -8,6 +8,7 @@ import com.tianfang.train.dao.CompetitionApplyDao;
 import com.tianfang.train.dao.CompetitionDao;
 import com.tianfang.train.dao.CompetitionTeamDao;
 import com.tianfang.train.dto.CompetitionApplyDto;
+import com.tianfang.train.dto.CompetitionDto;
 import com.tianfang.train.enums.AuditType;
 import com.tianfang.train.pojo.Competition;
 import com.tianfang.train.pojo.CompetitionApply;
@@ -176,4 +177,9 @@ public class CompetitionApplyServiceImpl implements ICompetitionApplyService {
 		return new PageResult<CompetitionApplyDto>(page, dtoList);
 	}
 
+	@Override
+	public List<CompetitionDto> findCompApplyByParams(CompetitionApplyDto params) {
+		List<CompetitionDto> list = competitionApplyDao.findCompApplyByParams(params);
+		return list;
+	}
 }
