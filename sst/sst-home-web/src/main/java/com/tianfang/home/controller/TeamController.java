@@ -250,9 +250,12 @@ public class TeamController extends BaseController{
 			return result;
 		}
 		if (StringUtils.isBlank(curruser.getTeamId())){
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("暂未加入球队!");
-			return result;
+			curruser = getUserByCache(userId, false);
+			if (StringUtils.isBlank(curruser.getTeamId())){
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("暂未加入球队!");
+				return result;
+			}
 		}
 		TeamDto team = teamService.getTeamById(curruser.getTeamId());
 		if (null == team || team.getStat() == DataStatus.DISABLED){

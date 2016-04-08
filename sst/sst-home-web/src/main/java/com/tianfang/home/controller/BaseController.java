@@ -1,9 +1,9 @@
 package com.tianfang.home.controller;
 
-import java.util.concurrent.TimeUnit;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.tianfang.common.constants.SessionConstants;
+import com.tianfang.home.utils.SessionUtil;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.service.IUserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,10 +11,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tianfang.common.constants.SessionConstants;
-import com.tianfang.home.utils.SessionUtil;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.service.IUserService;
+import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 
 public class BaseController {
 	protected Logger logger = Logger.getLogger(BaseController.class);
@@ -45,6 +43,23 @@ public class BaseController {
 			redisTemplate.opsForValue().set(keyCode, dto, 1, TimeUnit.HOURS);
 		}
 		return dto;
+	}
+
+	/**
+	 * 是否取redis缓存中的数据
+	 * @param userId
+	 * @param flag true-取,false-不取
+     * @return
+     */
+	public UserDto getUserByCache(String userId, boolean flag){
+		if (flag){
+			return getUserByCache(userId);
+		}else{
+			String keyCode = SST_USER+userId;
+			UserDto dto = iUserService.getUserById(userId);
+			redisTemplate.opsForValue().set(keyCode, dto, 1, TimeUnit.HOURS);
+			return dto;
+		}
 	}
 
 	public ModelAndView getModelAndView(){
