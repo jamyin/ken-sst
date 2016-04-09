@@ -1,5 +1,6 @@
 package com.tianfang.home.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
@@ -9,6 +10,8 @@ import com.tianfang.home.dto.AppTeamPlayer;
 import com.tianfang.home.dto.AppUser;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.service.ITeamService;
+import com.tianfang.user.app.AppUserInfo;
+import com.tianfang.user.dto.ReasonJson;
 import com.tianfang.user.dto.UserApplyTeamDto;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.enums.AuditType;
@@ -102,23 +105,57 @@ public class TeamController extends BaseController{
 	 */
 	@RequestMapping(value="listApply")
     @ResponseBody
-	public Response<PageResult<UserApplyTeamDto>> listApply(String userId, PageQuery query){
-		Response<PageResult<UserApplyTeamDto>> result = new Response<PageResult<UserApplyTeamDto>>();
+	public Response<PageResult<AppUserInfo>> listApply(String userId, PageQuery query){
+		Response<PageResult<AppUserInfo>> result = new Response<PageResult<AppUserInfo>>();
 		TeamDto team = isOwnerTeam(userId);
 		if (null == team){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("对不起,您没有权限查看!");
 			return result;
 		}
-		UserApplyTeamDto dto = new UserApplyTeamDto();
+		AppUserInfo dto = new AppUserInfo();
 		dto.setTeamId(team.getId());
-		PageResult<UserApplyTeamDto> datas = userApplyTeamService.findUserApplyTeamExByParam(dto, query);
+		PageResult<AppUserInfo> datas = userApplyTeamService.queryUserApplyInfoByParam(dto, query);
 		result.setStatus(DataStatus.HTTP_SUCCESS);
 		result.setData(datas);
 		
 		return result;
 	}
-	
+
+	/**		
+	 * <p>Description: 根据申请记录id,查询用户申请球队详情 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param id
+	 * @return Response<AppUserInfo>
+	 * @author wangxiang	
+	 * @date 16/4/9 下午3:56
+	 * @version 1.0
+	 */
+	@RequestMapping(value="detailApply")
+	@ResponseBody
+	public Response<AppUserInfo> detailApply(String id){
+		Response<AppUserInfo> response = new Response<>();
+		try {
+			AppUserInfo  info = userApplyTeamService.getUserApplyInfoById(id);
+			if (null != info){
+				if (info.getStatus() == AuditType.FAIL.getIndex()){
+					if (StringUtils.isNotBlank(info.getReason())){
+						ReasonJson reasonJson = JSON.parseObject(info.getReason(), ReasonJson.class);
+						info.setReason(reasonJson.getRefuse());
+					}
+				}
+
+			}
+			response.setData(info);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(DataStatus.HTTP_FAILE);
+			response.setMessage("系统异常!");
+		}
+
+		return response;
+	}
+
 	/**
 	 * 判断是否是球队的队长
 	 * @param userId
@@ -146,13 +183,14 @@ public class TeamController extends BaseController{
 	 * @param userId
 	 * @param id
 	 * @param status
+	 * @param reason 拒绝理由
 	 * @return Response<String>
 	 * @author xiang_wang
 	 * 2016年3月7日上午11:06:45
 	 */
 	@RequestMapping(value="auditApply")
     @ResponseBody
-	public Response<String> auditApply(String userId, String id, Integer status){
+	public Response<String> auditApply(String userId, String id, Integer status, String reason){
 		Response<String> result = new Response<String>();
 		if (null == status || (status != AuditType.PASS.getIndex() && status != AuditType.FAIL.getIndex())){
 			result.setStatus(DataStatus.HTTP_FAILE);
@@ -193,11 +231,18 @@ public class TeamController extends BaseController{
 		if (status == AuditType.PASS.getIndex()){
 			user.setTeamId(team.getId());
 			userService.update(user);
+			result.setMessage("恭喜你,操作成功!");
+		}
+		// 如果拒绝本次申请
+		if (status == AuditType.FAIL.getIndex()){
+			ReasonJson reasonJson = new ReasonJson();
+			reasonJson.setApply(userApplyTeam.getReason());
+			reasonJson.setRefuse(reason);
+			userApplyTeam.setReason(JSON.toJSONString(reasonJson));
+			result.setMessage("恭喜你,拒绝成功!");
 		}
 		userApplyTeam.setStatus(status);
 		userApplyTeamService.update(userApplyTeam);
-		result.setStatus(DataStatus.HTTP_SUCCESS);
-		result.setMessage("恭喜你,操作成功!");
 		return result;
 	}
 
@@ -349,9 +394,6 @@ public class TeamController extends BaseController{
 		if (null != team && team.getStat() == DataStatus.ENABLED){
 			return team;
 		}
-		/*if (StringUtils.equals(team.getCreateUserId(), userId)){
-			return team;
-		}*/
 		return null;
 	}
 

@@ -206,6 +206,24 @@ public class UserController extends BaseController{
 
         return null;
 	}
+	
+    @RequestMapping(value="auditObj")
+    @ResponseBody
+    public Map<String, Object> auditObj(String userId, Integer isAudit) {
+    	Map<String, Object> result;
+        try {
+        	UserDto userDto = userService.getUserById(userId);
+        	userDto.setAudit(isAudit);
+        	userService.update(userDto);
+			
+			result = MessageResp.getMessage(true, "加入成功~");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = MessageResp.getMessage(false, e.getMessage());
+		}
+        return result;
+    }
+	
 }
 class JsonTeam implements Serializable{
 

@@ -2,8 +2,10 @@ package com.tianfang.user.dao;
 
 import java.util.List;
 
+import com.tianfang.user.app.AppUserInfo;
 import lombok.Getter;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -107,5 +109,23 @@ public class UserApplyTeamDao extends MyBatisBaseDao<UserApplyTeam>{
         	}
         }
 		criteria.andStatEqualTo(DataStatus.ENABLED);
+	}
+
+	public AppUserInfo getUserApplyInfoById(String id) {
+		AppUserInfo param = new AppUserInfo();
+		param.setId(id);
+		List<AppUserInfo> appUserInfos = exMapper.queryUserApplyInfoByParam(param, null);
+		if (null != appUserInfos && appUserInfos.size() > 0){
+			return appUserInfos.get(0);
+		}
+		return null;
+	}
+
+	public List<AppUserInfo> queryUserApplyInfoByParam(AppUserInfo param, PageQuery query){
+		return exMapper.queryUserApplyInfoByParam(param, query);
+	}
+
+	public int countUserApplyInfoByParam(AppUserInfo param){
+		return exMapper.countUserApplyInfoByParam(param);
 	}
 }
