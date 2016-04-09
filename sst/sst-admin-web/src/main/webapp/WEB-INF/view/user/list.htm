@@ -68,6 +68,7 @@
 							<th>性别</th>
 							<th>地区</th>
 							<th>用户类型</th>
+							<th>用户状态</th>
 							<th class="hidden-phone"><i class="icon-time hidden-phone"></i>创建时间</th>
 							<th style="width:20%;">操作</th>
 						</tr>
@@ -90,6 +91,15 @@
 											<#if page.utype==2>教练</#if>
 											<#if page.utype==3>队长</#if>
 										</#if></td>
+									<td>
+										<#if page.audit??>
+												<#if page.audit == 0>
+													<span class="label label-warning">待审核或审核失败</span>
+												<#else>
+													<span class="label label-success">审核通过</span>
+												</#if>	
+										</#if>
+									</td>										
 									<td  class='hidden-phone'>${(page.createTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>
 									<td>
 										<div id="operation" class='hidden-phone visible-desktop btn-group'>			
@@ -97,6 +107,13 @@
 											<a id='editObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-warning' style="margin-left:5px;" title="编辑"><i class='icon-edit'></i></a>
 											<a id='deleteObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-danger' style="margin-left:5px;" title="删除"><i class='icon-trash'></i></a>
 											<a id='editPwd' data-obj-id="${(page.id)!}" class="btn btn-mini btn-purple" style="margin-left:5px;"><i class="icon-pencil"></i>修改密码</a>
+											<#if page.audit ??>
+												<#if page.audit == 0>
+													<a id='auditObj' data-obj-audit="1" data-obj-id="${(page.id)!}" class="btn btn-mini btn-success" style="margin-left:5px;"><i class="icon-pencil"></i>审核通过</a>
+												<#else>
+													<a id='auditObj' data-obj-audit="0" data-obj-id="${(page.id)!}" class="btn btn-mini btn-warning" style="margin-left:5px;"><i class="icon-pencil"></i>审核不通过</a>
+												</#if>	
+											</#if>
 										</div>
 									</td>
 								</tr>
@@ -193,6 +210,41 @@
 			window.location.reload();//刷新当前页面
 		}
 		$(function() {
+			
+			$("#operation #auditObj").on('click',function(){
+				var userId = $(this).attr("data-obj-id");
+				var audit = $(this).attr("data-obj-audit");
+
+				layer.confirm('确定要审核处理吗？', {icon: 3}, function(index){
+					$.ajax({
+			             type: "POST",
+			             url: "${base}/user/auditObj.do",
+			             data: {userId:userId,isAudit:audit},
+			             dataType: "json",
+			             success: function(data){
+			            	 if(data.success){
+		            			layer.msg('数据处理成功', {
+		            				shade: [0.9, '#000'],
+		            			    icon: 6,
+		            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+		            			}, function(){
+		            			    //do something
+		            				reload_page();
+		            			});		            		 
+			            	 }else{
+		            			layer.msg('数据处理失败', {
+		            				shade: [0.9, '#000'],
+		            			    icon: 6,
+		            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+		            			},function(){
+		            				return;
+		            			});
+			            	 }
+			             }
+			         });
+				});			
+			});			
+			
 			$("#operation #editTeam").on('click',function(){
 				var id = $(this).attr("data-obj-id");
 				var teamId = $(this).attr("data-team-id");
@@ -232,32 +284,32 @@
 				console.log($(this).attr("data-obj-id"));
 				var ids = $(this).attr("data-obj-id");
 				layer.confirm('确定要删除吗？', {icon: 3}, function(index){
-				$.ajax({
-		             type: "POST",
-		             url: "${base}/user/delAdIds.do",
-		             data: {ids:ids},
-		             dataType: "json",
-		             success: function(data){
-		            	 if(data.success){
-	            			layer.msg('数据删除成功', {
-	            				shade: [0.9, '#000'],
-	            			    icon: 6,
-	            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
-	            			}, function(){
-	            			    //do something
-	            				reload_page();
-	            			});		            		 
-		            	 }else{
-	            			layer.msg('数据删除失败', {
-	            				shade: [0.9, '#000'],
-	            			    icon: 6,
-	            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
-	            			},function(){
-	            				return;
-	            			});
-		            	 }
-		             }
-		         });
+					$.ajax({
+			             type: "POST",
+			             url: "${base}/user/delAdIds.do",
+			             data: {ids:ids},
+			             dataType: "json",
+			             success: function(data){
+			            	 if(data.success){
+		            			layer.msg('数据删除成功', {
+		            				shade: [0.9, '#000'],
+		            			    icon: 6,
+		            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+		            			}, function(){
+		            			    //do something
+		            				reload_page();
+		            			});		            		 
+			            	 }else{
+		            			layer.msg('数据删除失败', {
+		            				shade: [0.9, '#000'],
+		            			    icon: 6,
+		            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+		            			},function(){
+		            				return;
+		            			});
+			            	 }
+			             }
+			         });
 				});				
 			});		
 			$("#batch-del").on('click',function(){
