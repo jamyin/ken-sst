@@ -125,4 +125,9 @@ public class UserDao extends MyBatisBaseDao<User> {
 		public List<UserDto> findUserByGroupId(String groupId) {
 			return uExMapper.findUserByGroupId(groupId);
 		}
+
+		public List<FriendApp> findTeamFriends(String teamId) {
+			// TODO Auto-generated method stub
+			return uExMapper.findTeamFriends(teamId);
+		}
 }

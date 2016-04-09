@@ -31,4 +31,11 @@
 		ON a.team_id = b.id
 		WHERE a.id = #{id} AND a.stat = 1
 	</select>
+	
+	<select id="findTeamFriends" resultType="com.tianfang.user.app.FriendApp" parameterType="java.lang.String">
+		SELECT A.`id` AS friendId,A.`mobile` AS friendMobile ,A.`pic` AS pic ,A.`nick_name` AS nickName FROM sport_user A WHERE EXISTS(
+  			SELECT user_id FROM sst_user_apply_team s WHERE s.user_id=A.id AND  s.team_id = #{teamId}
+		);
+	</select>
+	
 </mapper>

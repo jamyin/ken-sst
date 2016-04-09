@@ -101,4 +101,12 @@ public interface IUserService {
 	 * @version 1.0
 	 */
 	boolean kickingTeam(String userId);
+	
+	/**
+	 * 
+		 * 此方法描述的是：获取本人同一队伍的用户信息
+		 * @author: cwftalus@163.com
+		 * @version: 2016年4月9日 上午10:11:11
+	 */
+	List<FriendApp> findTeamFriends(String teamId);
 }

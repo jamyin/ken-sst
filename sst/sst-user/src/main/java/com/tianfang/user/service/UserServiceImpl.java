@@ -1,5 +1,12 @@
 package com.tianfang.user.service;
 
+import java.util.List;
+import java.util.regex.Pattern;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
@@ -10,12 +17,6 @@ import com.tianfang.user.app.FriendApp;
 import com.tianfang.user.dao.UserDao;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.pojo.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -199,5 +200,11 @@ public class UserServiceImpl implements IUserService {
 		}
 
 		return true;
+	}
+
+	@Override
+	public List<FriendApp> findTeamFriends(String teamId) {
+		// TODO Auto-generated method stub
+		return userDao.findTeamFriends(teamId);
 	}
 }

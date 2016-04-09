@@ -43,4 +43,11 @@ public interface UserExMapper {
 	 * @return
 	 */
 	List<UserDto> findUserInfo(UserDto userDto);
+	/**
+	 * 
+		 * 此方法描述的是：获取本人同一队伍的用户信息
+		 * @author: cwftalus@163.com
+		 * @version: 2016年4月9日 上午10:13:30
+	 */
+	List<FriendApp> findTeamFriends(@Param("teamId")String teamId);
 }
