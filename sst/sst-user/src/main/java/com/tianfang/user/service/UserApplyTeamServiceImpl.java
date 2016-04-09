@@ -2,6 +2,7 @@ package com.tianfang.user.service;
 
 import java.util.List;
 
+import com.tianfang.user.app.AppUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -85,7 +86,32 @@ public class UserApplyTeamServiceImpl implements IUserApplyTeamService {
 		
 		return null;
 	}
-	
+
+	@Override
+	public AppUserInfo getUserApplyInfoById(String id) {
+		checkIdIsNull(id);
+		return userApplyTeamDao.getUserApplyInfoById(id);
+	}
+
+	@Override
+	public PageResult<AppUserInfo> queryUserApplyInfoByParam(AppUserInfo param, PageQuery query) {
+		int total = userApplyTeamDao.countUserApplyInfoByParam(param);
+		if (total > 0){
+			query.setTotal(total);
+			List<AppUserInfo> datas = userApplyTeamDao.queryUserApplyInfoByParam(param, query);
+			PageResult<AppUserInfo> result = new PageResult<>(query,datas);
+
+			return result;
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<AppUserInfo> queryUserApplyInfoByParam(AppUserInfo param) {
+		return userApplyTeamDao.queryUserApplyInfoByParam(param, null);
+	}
+
 	private void checkObjIsNull(Object obj) {
 		if (null == obj){
 			throw new RuntimeException("对不起,用户申请球队记录对象为空!");
