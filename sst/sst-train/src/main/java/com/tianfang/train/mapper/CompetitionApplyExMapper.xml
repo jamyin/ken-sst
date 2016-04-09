@@ -65,14 +65,14 @@
 
 	<sql id="Apply_Where_Clause" >
 		<where >
-			<if test="dto.teamId != null and params.teamId != ''">
-				AND b.team_id = #{dto.teamId}
+			<if test="params.teamId != null and params.teamId != ''">
+				AND b.team_id = #{params.teamId}
 			</if>
-			<if test="dto.auditType != null and dto.auditType != ''">
-				AND b.audit_type = #{dto.auditType}
+			<if test="params.auditType != null and params.auditType != ''">
+				AND b.audit_type = #{params.auditType}
 			</if>
-			<if test="dto.compType != null and dto.compType != ''">
-				AND a.comp_type = #{dto.compType}
+			<if test="params.compType != null and params.compType != ''">
+				AND a.comp_type = #{params.compType}
 			</if>
 		</where>
 	</sql>
