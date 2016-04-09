@@ -78,7 +78,7 @@
 										<select class="chzn-select" id="peopleType" name="peopleType" data-placeholder="比赛几人制" style="vertical-align: top; width: 120px;">
 												<#if peopleTypes??> 
 													<#list peopleTypes as type>
-													<option <#if match.peopleType == type.getIndex()>selected="true"</#if> value="${(type.getIndex())!}">${(type.getValue())!}</option>
+														 <option <#if match.peopleType == type.getIndex()>selected="true"</#if> value="${(type.getIndex())!}">${(type.getValue())!}</option> 
 													</#list> 
 												</#if>
 										</select>

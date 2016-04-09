@@ -32,14 +32,14 @@
       cround_id, cround_name, home_team_id, 
       home_team_icon, home_team_name, visiting_team_id, 
       visiting_team_icon, visiting_team_name, match_type, match_time,
-      home_score, visiting_score, address, 
+      home_score, visiting_score, address,people_type,
       create_admin_id, create_admin_name, create_time, 
       last_update_time, stat)
     values 
      <foreach collection="list" item="item" index="index" separator="," >  
         (#{item.id},#{item.compId},#{item.compName},#{item.croundId},#{item.croundName},#{item.homeTeamId},#{item.homeTeamIcon},#{item.homeTeamName},
-        #{item.visitingTeamId},#{item.visitingTeamIcon},#{item.visitingTeamName},#{item.matchType},#{item.matchTime},#{item.homeScore},#{item.visitingScore},#{item.address},#{item.createAdminId}
-        ,#{item.createAdminName},#{item.createTime},#{item.lastUpdateTime},#{item.stat})  
+        #{item.visitingTeamId},#{item.visitingTeamIcon},#{item.visitingTeamName},#{item.matchType,jdbcType=INTEGER},#{item.matchTime},#{item.homeScore,jdbcType=INTEGER},#{item.visitingScore},#{item.address},
+        #{item.peopleType},#{item.createAdminId},#{item.createAdminName},#{item.createTime},#{item.lastUpdateTime},#{item.stat})  
     </foreach> 
   </insert>  
   

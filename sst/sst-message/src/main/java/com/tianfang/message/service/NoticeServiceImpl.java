@@ -106,16 +106,16 @@ public class NoticeServiceImpl implements INoticeService {
 		}
 		return new PageResult<NoticeDto>(page, dtoList);*/
 		List<NoticeDto> list = noticeDao.findNoticeViewByPage(noticeDto ,  page);
-		if(list != null  && list.size() >0){
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-			for(NoticeDto dto : list){
-				if(dto.getCreateTime() != null){
-					dto.setCreateTimeStr(sdf.format(dto.getCreateTime()));}
-				if(dto.getLastUpdateTime() != null){
-					dto.setLastUpdateTimeStr(sdf.format(dto.getLastUpdateTime()));
-				}
-			}
-		}
+//		if(list != null  && list.size() >0){
+//			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+//			for(NoticeDto dto : list){
+//				if(dto.getCreateTime() != null){
+//					dto.setCreateTimeStr(sdf.format(dto.getCreateTime()));}
+//				if(dto.getLastUpdateTime() != null){
+//					dto.setLastUpdateTimeStr(sdf.format(dto.getLastUpdateTime()));
+//				}
+//			}
+//		}
 		int total = noticeDao.selectAccount(noticeDto);
 		page.setTotal(total);
 		return new PageResult<NoticeDto>(page, list);
