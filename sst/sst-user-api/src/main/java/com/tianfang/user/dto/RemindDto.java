@@ -109,5 +109,5 @@ public class RemindDto implements Serializable{
 	
 	@Getter
 	@Setter
-    private String [] jIds;   //接收公告者数组
+    private String [] jIds;   //接收用户的聊天账号  即电话号码
 }

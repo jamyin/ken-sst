@@ -107,4 +107,8 @@ public class NoticeDto {
 	@Setter
 	private String  nickName;   //用戶昵称
 	
+	@Getter
+	@Setter
+    private String [] jIds;   //接收用户的聊天账号  即电话号码
+	
 }

@@ -70,4 +70,8 @@ public class AppVoteDatas implements Serializable{
 	@Getter
 	@Setter
 	private List<AppOption> options;
+	
+	@Getter
+	@Setter
+    private String [] jIds;   //接收用户的聊天账号  即电话号码
 }

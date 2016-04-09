@@ -339,6 +339,21 @@ public class NoticeController extends BaseController {
 		if(flag > 0 && releaseFlag > 0){
 			data.setMessage("发布公告成功");
 			data.setStatus(DataStatus.HTTP_SUCCESS);
+			
+			/**
+			 * 消息提醒 公共方法
+			 * 提醒完成之后 发送消息提醒相关的用户 需要立即发送 
+			 */
+			String nickName = "";
+			if(!StringUtils.isEmpty(userDto.getNickName())){
+				nickName = userDto.getNickName();
+			}else{
+				nickName = userDto.getMobile();
+			}			
+//			if(StringUtils.isEmpty(remindDto.getSendTime())){
+			TigaseUtil.sendMessage(userDto.getMobile(), userDto.getPic(), nickName, noticeDto.getJIds(),TigaseUtil.NOTICE_INFO);	
+//			}			
+			
 		}else{
 			data.setMessage("发布公告失败");
 			data.setStatus(DataStatus.HTTP_FAILE);

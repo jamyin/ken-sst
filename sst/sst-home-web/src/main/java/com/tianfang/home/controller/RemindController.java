@@ -160,10 +160,10 @@ public class RemindController {
 		 * 提醒完成之后 发送消息提醒相关的用户 需要立即发送 
 		 */
 		if(StringUtils.isEmpty(remindDto.getSendTime())){
-			TigaseUtil.sendMessage(userDto.getMobile(), userDto.getPic(), nickName, remindDto.getJIds());	
+			TigaseUtil.sendMessage(userDto.getMobile(), userDto.getPic(), nickName, remindDto.getJIds(),TigaseUtil.REMIND_INFO);	
 		}
 		
-		
+		data.setMessage("提醒发布成功");
 		return data;
 	}
 

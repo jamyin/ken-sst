@@ -11,10 +11,12 @@ import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.dto.AppOption;
 import com.tianfang.home.dto.AppVoteDatas;
+import com.tianfang.home.utils.TigaseUtil;
 import com.tianfang.user.app.VoteApp;
 import com.tianfang.user.dto.*;
 import com.tianfang.user.service.IVoteService;
 import com.tianfang.user.service.IVoteUserOptionService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -218,6 +221,15 @@ public class VoteController extends BaseController{
 				voteService.save(dto, temps, options);
 
 				result.setMessage("发布成功!");
+				
+				String nickName = "";
+				if(!StringUtils.isEmpty(user.getNickName())){
+					nickName = user.getNickName();
+				}else{
+					nickName = user.getMobile();
+				}
+				TigaseUtil.sendMessage(user.getMobile(), user.getPic(), nickName, vote.getJIds(),TigaseUtil.VOTE_INFO);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());

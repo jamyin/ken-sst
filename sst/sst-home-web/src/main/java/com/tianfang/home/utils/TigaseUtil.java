@@ -23,6 +23,10 @@ import com.tianfang.common.util.StringUtils;
  * <p>修改备注：</p>
  */
 public class TigaseUtil {
+	public static String REMIND_INFO = "我给你发了一条提醒,请点击提醒列表查看";
+	public static String NOTICE_INFO = "我给你发了一条公告,请点击公告列表查看";
+	public static String VOTE_INFO = "我给你发了一条投票,请点击投票列表查看";
+	
 	private static String REGISTERED_URL = "http://${ip}/user/regUser.do";
 	private static String RESETPASSWORD_URL = "http://${ip}/user/changePassword.do";
 	private static final String ip;
@@ -111,13 +115,13 @@ public class TigaseUtil {
 	}
 	
 	@Async
-	public static void sendMessage(String mobile,String pic,String nickName,String[] jIds){
+	public static void sendMessage(String mobile,String pic,String nickName,String[] jIds,String message){
 		
 		Map<String, String> params = new HashMap<String, String>(7);
 		params.put("from", mobile+suffix);
 		params.put("fromIcon", pic);
 		params.put("fromNickName", nickName);
-		params.put("message", "来自"+nickName+"的提醒");
+		params.put("message", message);
 		params.put("messageType", "text");
 		
 		StringBuffer sb = new StringBuffer();
