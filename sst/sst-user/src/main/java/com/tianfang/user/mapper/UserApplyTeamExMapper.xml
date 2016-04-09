@@ -22,9 +22,35 @@
 	<result column="utype" property="utype" jdbcType="INTEGER" />
 	<result column="trainer_level" property="trainerLevel" jdbcType="INTEGER" />
   </resultMap>
+
+	<!--联表查询字段-->
+	<resultMap id="UserInfoMap" type="com.tianfang.user.app.AppUserInfo" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="team_id" property="teamId" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="reason" property="reason" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<!-- 联表查询字段 -->
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="pic" property="pic" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="utype" property="utype" jdbcType="INTEGER" />
+		<result column="age" property="age" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+		<result column="student_no" property="studentNo" jdbcType="VARCHAR" />
+		<result column="school" property="school" jdbcType="VARCHAR" />
+		<result column="team_name" property="teamName" jdbcType="VARCHAR" />
+		<result column="photo" property="photo" jdbcType="VARCHAR" />
+	</resultMap>
   <sql id="Base_Column_List" >
     a.id, a.team_id, a.user_id, a.status, a.reason, a.create_time, a.last_update_time, a.stat,b.nick_name,b.pic,b.gender,b.province,b.location,b.detailed_address,b.birthday,b.mobile,b.utype,b.trainer_level
   </sql>
+
+	<sql id="User_Info_List">
+		a.id, a.team_id, a.user_id, a.status, a.reason,a.create_time, u.nick_name, u.utype, u.pic, team.name AS team_name, info.name, info.age, info.card_no, info.mobile, info.school, info.student_no, info.photo
+	</sql>
   
   <sql id="Example_Where_Clause" >
 	  <where >
@@ -58,6 +84,30 @@
    		</if>
     </where>
   </sql>
+
+	<sql id="User_Info_Where_Clause" >
+		<where >
+			a.stat = 1 AND u.stat = 1 AND team.stat = 1
+			<if test="example.id != null">
+				and a.id = #{example.id,jdbcType=VARCHAR}
+			</if>
+			<if test="example.teamId != null">
+				and a.team_id = #{example.teamId,jdbcType=VARCHAR}
+			</if>
+			<if test="example.userId != null">
+				and a.user_id = #{example.userId,jdbcType=VARCHAR}
+			</if>
+			<if test="example.status != null">
+				and a.status = #{example.status,jdbcType=INTEGER}
+			</if>
+			<if test="example.mobile != null">
+				and info.mobile = #{example.mobile,jdbcType=VARCHAR}
+			</if>
+			<if test="example.utype != null">
+				and u.utype = #{example.utype,jdbcType=INTEGER}
+			</if>
+		</where>
+	</sql>
   
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tianfang.user.dto.UserApplyTeamDto" >
     select
@@ -65,7 +115,7 @@
    	from sst_user_apply_team as a left join sport_user as b on a.user_id = b.id
    	<include refid="Example_Where_Clause" />
    	order by a.create_time desc
-   	<if test="page.startNum != null and page.pageSize > page.startNum">
+   	<if test="page != null and page.startNum != null and page.pageSize > page.startNum">
    	limit ${page.startNum}, ${page.pageSize}
    	</if>
   </select>
@@ -74,4 +124,27 @@
     select count(*) from sst_user_apply_team as a left join sport_user as b on a.user_id = b.id
     <include refid="Example_Where_Clause" />
   </select>
+
+	<select id="queryUserApplyInfoByParam" resultMap="UserInfoMap" parameterType="com.tianfang.user.app.AppUserInfo" >
+		SELECT
+		<include refid="User_Info_List"/>
+		FROM sst_user_apply_team AS a
+		LEFT JOIN sport_user AS u ON a.user_id = u.id
+		LEFT JOIN sst_team AS team ON a.team_id = team.id
+		LEFT JOIN sst_user_info AS info ON a.user_id = info.user_id
+		<include refid="User_Info_Where_Clause" />
+		ORDER BY a.create_time DESC
+		<if test="page != null and page.startNum != null and page.pageSize > page.startNum">
+			limit ${page.startNum}, ${page.pageSize}
+		</if>
+	</select>
+
+	<select id="countUserApplyInfoByParam" parameterType="com.tianfang.user.app.AppUserInfo" resultType="java.lang.Integer" >
+		select count(*)
+		FROM sst_user_apply_team AS a
+		LEFT JOIN sport_user AS u ON a.user_id = u.id
+		LEFT JOIN sst_team AS team ON a.team_id = team.id
+		LEFT JOIN sst_user_info AS info ON a.user_id = info.user_id
+		<include refid="User_Info_Where_Clause" />
+	</select>
 </mapper>
