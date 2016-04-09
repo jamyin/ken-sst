@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.base.Objects;
 import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.ext.ExtPageQuery;
+import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.user.app.FriendApp;
+import com.tianfang.user.dto.UserApplyTeamDto;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.enums.UserType;
 import com.tianfang.user.service.IUserApplyTeamService;
@@ -33,6 +36,35 @@ public class UserFriendController extends BaseController{
 	
 	@Autowired
 	private IUserApplyTeamService iUserApplyTeamService;
+	
+	/**
+	 * 
+	  @Name: UserFriendController.java 
+	  @Author: pengpeng
+	  @Date: 2016年4月9日 下午4:31:32 
+	  @Description:用户申请球队列表
+	 */
+	@RequestMapping(value="/user/team")
+	@ResponseBody
+	public Response<PageResult<UserApplyTeamDto>> findUserTeamPage(UserApplyTeamDto dto,ExtPageQuery page) {
+		Response<PageResult<UserApplyTeamDto>> result = new Response<PageResult<UserApplyTeamDto>>();
+		UserDto user = getUserByCache(dto.getUserId());
+		if (null != user){
+			PageResult<UserApplyTeamDto> userApplyTeamDtos = iUserApplyTeamService.findUserApplyTeamByParam(dto, page.changeToPageQuery());
+			if (userApplyTeamDtos.getResults().size()>0) {
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+				result.setMessage("查询成功");
+				result.setParentData(userApplyTeamDtos);
+			} else {
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+				result.setMessage("无数据");
+			}
+		}else {
+			result.setStatus(DataStatus.HTTP_FAILE);
+    		result.setMessage("用户不存在");
+		}
+		return result;
+	}
 	
 	 /**
      * 移动端查询用户赛事好友
