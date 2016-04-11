@@ -72,4 +72,12 @@
 	JOIN sst_team AS c ON a.team_id = c.id
     <include refid="Example_Where_Clause" />
   </select>
+  
+  <select id="selectCompeTeamList" resultType="com.tianfang.train.dto.CompetitionTeamDto" parameterType="java.lang.String">
+  	SELECT st.id as teamId,st.`name` as teamName,st.`icon` as teamIcon,sct.`comp_id` as compId,sc.`title` as compName,sc.`stat` AS scstat,st.`stat` AS ststat ,sct.`stat` AS sctstat FROM `sst_team` st LEFT JOIN `sst_competition_team` sct 
+		ON st.`id` = sct.`team_id`
+		LEFT JOIN `sst_competition` sc ON sct.`comp_id` = sc.`id`
+		WHERE sc.`stat` = 1 AND st.`stat` =1 AND sct.`stat`=1;  	
+  </select>
+   
 </mapper>

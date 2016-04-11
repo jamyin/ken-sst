@@ -11,4 +11,6 @@ public interface CompetitionTeamExMapper {
 	List<CompetitionTeamDto> findCompetitionTeamByParam(@Param("dto")CompetitionTeamDto dto);
 	
 	int countCompetitionTeamByParam(@Param("dto")CompetitionTeamDto dto);
+	
+	List<CompetitionTeamDto> selectCompeTeamList(@Param("userId") String userId);
 }
