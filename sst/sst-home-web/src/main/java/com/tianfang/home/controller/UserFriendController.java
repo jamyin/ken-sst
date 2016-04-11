@@ -44,13 +44,13 @@ public class UserFriendController extends BaseController{
 	  @Date: 2016年4月9日 下午4:31:32 
 	  @Description:用户申请球队列表
 	 */
-	@RequestMapping(value="/user/team")
+	@RequestMapping(value="/user/teamList")
 	@ResponseBody
 	public Response<PageResult<UserApplyTeamDto>> findUserTeamPage(UserApplyTeamDto dto,ExtPageQuery page) {
 		Response<PageResult<UserApplyTeamDto>> result = new Response<PageResult<UserApplyTeamDto>>();
 		UserDto user = getUserByCache(dto.getUserId());
 		if (null != user){
-			PageResult<UserApplyTeamDto> userApplyTeamDtos = iUserApplyTeamService.findUserApplyTeamByParam(dto, page.changeToPageQuery());
+			PageResult<UserApplyTeamDto> userApplyTeamDtos = iUserApplyTeamService.findUserApplyTeamExByParam(dto, page.changeToPageQuery());
 			if (userApplyTeamDtos.getResults().size()>0) {
 				result.setStatus(DataStatus.HTTP_SUCCESS);
 				result.setMessage("查询成功");
