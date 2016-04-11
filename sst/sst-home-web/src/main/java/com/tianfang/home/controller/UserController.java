@@ -1539,7 +1539,59 @@ public class UserController extends BaseController{
 	}
     
 	
-    /**
-     * 修改用户赛事信息接口
-     */
+	/**
+	 * 增加用户参赛信息
+	 * @author YIn
+	 * @time:2016年4月9日 上午10:11:14
+	 * @param userInfoDto
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="addUserInfo")
+	public Response<String> addUserInfo(UserInfoDto userInfoDto ,@RequestParam(value = "file",required = false)  MultipartFile file
+			,HttpServletRequest request){
+		Response<String> data = new Response<String>();
+		int flag = 0;
+		try {
+	        if (file != null) {
+	        	Map<String, String> map = uploadImages(file , request);
+	        	userInfoDto.setPhoto(map.get("fileUrl"));
+	        }
+	        flag = userInfoService.addUserInfo(userInfoDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(flag > 0){
+			data.setMessage("添加参赛信息成功");
+			data.setStatus(DataStatus.HTTP_SUCCESS);
+		}else{
+			data.setMessage("添加参赛信息失败");
+			data.setStatus(DataStatus.HTTP_FAILE);
+		}	   	
+		return data;
+	}
+	
+	/**
+	 * 根据主键Id编辑用户参赛信息
+	 * @author YIn
+	  * @time:2016年4月9日 上午10:11:14
+	 * @param userInfoDto
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/updateUserInfo")
+	public Response<String> updateUserInfo(UserInfoDto userInfoDto){
+		Response<String> data = new Response<String>();
+		int flag = userInfoService.updateUserInfo(userInfoDto);
+		if(flag > 0){
+			data.setMessage("编辑赛事信息成功");
+			data.setStatus(DataStatus.HTTP_SUCCESS);
+		}else{
+			data.setMessage("编辑赛事信息失败");
+			data.setStatus(DataStatus.HTTP_FAILE);
+		}	   	
+		return data;
+	}
+	
 }
