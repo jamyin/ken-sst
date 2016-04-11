@@ -1548,13 +1548,13 @@ public class UserController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="addUserInfo")
-	public Response<String> addUserInfo(UserInfoDto userInfoDto ,@RequestParam(value = "file",required = false)  MultipartFile file
+	public Response<String> addUserInfo(UserInfoDto userInfoDto ,@RequestParam(value = "photo",required = false)  MultipartFile photo
 			,HttpServletRequest request){
 		Response<String> data = new Response<String>();
 		int flag = 0;
 		try {
-	        if (file != null) {
-	        	Map<String, String> map = uploadImages(file , request);
+	        if (photo != null) {
+	        	Map<String, String> map = uploadImages(photo , request);
 	        	userInfoDto.setPhoto(map.get("fileUrl"));
 	        }
 	        flag = userInfoService.addUserInfo(userInfoDto);
@@ -1581,27 +1581,46 @@ public class UserController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="/updateUserInfo")
-	public Response<String> updateUserInfo(UserInfoDto userInfoDto,@RequestParam(value = "file",required = false)  MultipartFile file
+	public Response<String> updateUserInfo(UserInfoDto userInfoDto,@RequestParam(value = "photo",required = false)  MultipartFile photo
 			,HttpServletRequest request){
 		Response<String> data = new Response<String>();
-		int flag = 0;
+		if(userInfoDto == null || StringUtils.isEmpty(userInfoDto.getUserId())){
+			data.setMessage("请求参数为空");
+			data.setStatus(DataStatus.HTTP_FAILE);
+		}
+		
+		
 		try {
-	        if (file != null) {
-	        	Map<String, String> map = uploadImages(file , request);
+	        if (photo != null) {
+	        	Map<String, String> map = uploadImages(photo , request);
 	        	userInfoDto.setPhoto(map.get("fileUrl"));
 	        }
-	        flag = userInfoService.updateUserInfo(userInfoDto);
+	        List<UserInfoDto> result = userInfoService.findUserInfo(userInfoDto);
+	        if(result.size() <= 0){
+	        	int addFlag = 0;
+	 	        addFlag = userInfoService.addUserInfo(userInfoDto);
+	 	        if(addFlag > 0){
+	 				data.setMessage("新增赛事信息成功");
+	 				data.setStatus(DataStatus.HTTP_SUCCESS);
+	 			}else{
+	 				data.setMessage("新增赛事信息失败");
+	 				data.setStatus(DataStatus.HTTP_FAILE);
+	 			}	
+	        }else{
+		        int editFlag = 0;
+		        userInfoDto.setId(result.get(0).getId());
+		        editFlag = userInfoService.updateUserInfo(userInfoDto);
+		        if(editFlag > 0){
+					data.setMessage("编辑赛事信息成功");
+					data.setStatus(DataStatus.HTTP_SUCCESS);
+				}else{
+					data.setMessage("编辑赛事信息失败");
+					data.setStatus(DataStatus.HTTP_FAILE);
+				}
+	        }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		if(flag > 0){
-			data.setMessage("编辑赛事信息成功");
-			data.setStatus(DataStatus.HTTP_SUCCESS);
-		}else{
-			data.setMessage("编辑赛事信息失败");
-			data.setStatus(DataStatus.HTTP_FAILE);
-		}	   	
 		return data;
 	}
 	
