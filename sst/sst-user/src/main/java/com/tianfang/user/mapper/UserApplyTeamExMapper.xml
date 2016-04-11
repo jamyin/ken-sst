@@ -43,13 +43,14 @@
 		<result column="school" property="school" jdbcType="VARCHAR" />
 		<result column="team_name" property="teamName" jdbcType="VARCHAR" />
 		<result column="photo" property="photo" jdbcType="VARCHAR" />
+		<result column="gender" property="gender" jdbcType="INTEGER" />
 	</resultMap>
   <sql id="Base_Column_List" >
     a.id, a.team_id, a.user_id, a.status, a.reason, a.create_time, a.last_update_time, a.stat,b.nick_name,b.pic,b.gender,b.province,b.location,b.detailed_address,b.birthday,b.mobile,b.utype,b.trainer_level
   </sql>
 
 	<sql id="User_Info_List">
-		a.id, a.team_id, a.user_id, a.status, a.reason,a.create_time, u.nick_name, u.utype, u.pic, team.name AS team_name, info.name, info.age, info.card_no, info.mobile, info.school, info.student_no, info.photo
+		a.id, a.team_id, a.user_id, a.status, a.reason,a.create_time, u.nick_name, u.utype, u.pic, team.name AS team_name, info.name, info.age, info.card_no, info.mobile, info.school, info.student_no, info.photo, info.gender
 	</sql>
   
   <sql id="Example_Where_Clause" >
@@ -105,6 +106,9 @@
 			</if>
 			<if test="example.utype != null">
 				and u.utype = #{example.utype,jdbcType=INTEGER}
+			</if>
+			<if test="example.gender != null">
+				and info.gender = #{example.gender,jdbcType=INTEGER}
 			</if>
 		</where>
 	</sql>
