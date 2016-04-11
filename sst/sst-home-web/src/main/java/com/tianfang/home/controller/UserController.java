@@ -1581,9 +1581,20 @@ public class UserController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="/updateUserInfo")
-	public Response<String> updateUserInfo(UserInfoDto userInfoDto){
+	public Response<String> updateUserInfo(UserInfoDto userInfoDto,@RequestParam(value = "file",required = false)  MultipartFile file
+			,HttpServletRequest request){
 		Response<String> data = new Response<String>();
-		int flag = userInfoService.updateUserInfo(userInfoDto);
+		int flag = 0;
+		try {
+	        if (file != null) {
+	        	Map<String, String> map = uploadImages(file , request);
+	        	userInfoDto.setPhoto(map.get("fileUrl"));
+	        }
+	        flag = userInfoService.updateUserInfo(userInfoDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		if(flag > 0){
 			data.setMessage("编辑赛事信息成功");
 			data.setStatus(DataStatus.HTTP_SUCCESS);
