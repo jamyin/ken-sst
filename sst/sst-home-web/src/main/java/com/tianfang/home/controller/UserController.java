@@ -35,9 +35,12 @@ import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.dto.AppGroupDatas;
+import com.tianfang.home.dto.MatchesDto;
 import com.tianfang.home.utils.QRCodeUtil;
 import com.tianfang.home.utils.TigaseUtil;
+import com.tianfang.train.dto.CompetitionTeamDto;
 import com.tianfang.train.dto.TeamDto;
+import com.tianfang.train.service.ICompetitionTeamService;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.app.FriendApp;
 import com.tianfang.user.dto.GroupDto;
@@ -90,6 +93,9 @@ public class UserController extends BaseController{
 	private ITeamService teamService;
 	@Autowired
 	private IUserFriendService userFriendService;
+	
+	@Autowired
+	private ICompetitionTeamService iCompetitionTeamService;
 	
 	/**
 	 * 用户注册
@@ -1292,6 +1298,70 @@ public class UserController extends BaseController{
     	}
     	
     	return result;
+    }
+    
+    /**
+     * 联盟通讯录 按照赛事分组
+     * @return {"status":状态码(200-成功,500-失败),"message":"提示信息","data":List<TeamDto>}
+     * @author xiang_wang
+     * 2016年1月20日下午2:10:25
+     */
+    @RequestMapping(value="raceTeam")
+    @ResponseBody
+    public Response<List<MatchesDto>> raceTeam(String userId){
+    	UserDto user = getUserByCache(userId);
+    	Response<List<MatchesDto>> result = new Response<List<MatchesDto>>();
+    	if (null != user){
+    		List<CompetitionTeamDto> dataList = iCompetitionTeamService.selectCompeTeamList(userId);
+    		    		
+    		HashMap<String,List<TeamDto>> mapObj = changeListToMap(dataList);
+    		
+    		List<MatchesDto> resultList = changeMapToList(mapObj);
+    		
+    		try {
+    			result.setStatus(DataStatus.HTTP_SUCCESS);
+				result.setData(resultList);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				result.setStatus(DataStatus.HTTP_FAILE);
+	    		result.setMessage("系统异常");
+			}	
+    	}else{
+    		result.setStatus(DataStatus.HTTP_FAILE);
+    		result.setMessage("用户不存在");
+    	}
+    	return result;
+    }
+    
+    private List<MatchesDto> changeMapToList(HashMap<String,List<TeamDto>> mapSList){
+    	List<MatchesDto> objList = new ArrayList<MatchesDto>();
+    	for (Map.Entry<String,List<TeamDto>> entry : mapSList.entrySet()) {
+    		MatchesDto matchDto = new MatchesDto();
+    		matchDto.setTitle(entry.getKey());
+    		matchDto.setList(entry.getValue());
+    		objList.add(matchDto);
+    	}
+    	return objList;
+    }
+    
+    private HashMap<String,List<TeamDto>> changeListToMap(List<CompetitionTeamDto> dataList){
+    	HashMap<String,List<TeamDto>> mapObj = new HashMap<String, List<TeamDto>>();
+    	List<TeamDto> teamDtoList = null;
+		for(CompetitionTeamDto ctDto : dataList){
+			TeamDto teamDto = new TeamDto();
+			teamDto.setId(ctDto.getTeamId());teamDto.setName(ctDto.getTeamName());teamDto.setIcon(ctDto.getTeamIcon());
+			
+			if(mapObj.containsKey(ctDto.getCompName())){
+				teamDtoList = mapObj.get(ctDto.getCompName());
+			}else{
+				teamDtoList = new ArrayList<TeamDto>();
+			}
+			teamDtoList.add(teamDto);
+			mapObj.put(ctDto.getCompName(), teamDtoList);
+		}
+		return mapObj;
+    	
     }
     
     /**

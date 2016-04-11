@@ -30,4 +30,9 @@ public class CompetitionTeamDao extends MyBatisBaseDao<CompetitionTeam> {
 	public int countCompetitionTeamByParam(CompetitionTeamDto dto){
 		return exMapper.countCompetitionTeamByParam(dto);
 	}
+
+	public List<CompetitionTeamDto> selectCompeTeamList(String userId) {
+		// TODO Auto-generated method stub
+		return exMapper.selectCompeTeamList(userId);
+	}
 }
