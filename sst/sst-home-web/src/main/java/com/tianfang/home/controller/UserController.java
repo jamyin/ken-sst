@@ -50,12 +50,14 @@ import com.tianfang.user.dto.MemoDto;
 import com.tianfang.user.dto.PlanDto;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.dto.UserFriendDto;
+import com.tianfang.user.dto.UserInfoDto;
 import com.tianfang.user.service.IEmailSendService;
 import com.tianfang.user.service.IGroupService;
 import com.tianfang.user.service.IMemoService;
 import com.tianfang.user.service.IPlanService;
 import com.tianfang.user.service.ISmsSendService;
 import com.tianfang.user.service.IUserFriendService;
+import com.tianfang.user.service.IUserInfoService;
 import com.tianfang.user.service.IUserService;
 
 /**
@@ -97,6 +99,9 @@ public class UserController extends BaseController{
 	
 	@Autowired
 	private ICompetitionTeamService iCompetitionTeamService;
+    
+    @Autowired
+    private IUserInfoService userInfoService;
 	
 	/**
 	 * 用户注册
@@ -1509,4 +1514,32 @@ public class UserController extends BaseController{
     	
     	return result;
     }
+    
+    /**
+     * 查询用户赛事信息接口
+     */
+	@RequestMapping(value="findUserInfo")
+	@ResponseBody
+	public Response<List<UserInfoDto>> findUserInfo(UserInfoDto userInfoDto){
+		Response<List<UserInfoDto>> data = new Response<List<UserInfoDto>>();
+		if(userInfoDto == null || StringUtils.isEmpty(userInfoDto.getUserId())){
+			data.setMessage("查询参数为空");
+			data.setStatus(DataStatus.HTTP_FAILE);
+		}
+		List<UserInfoDto> result = userInfoService.findUserInfo(userInfoDto);
+		if(result.size() > 0){
+			data.setMessage("查询参赛信息成功");
+			data.setStatus(DataStatus.HTTP_SUCCESS);
+			data.setData(result);
+		}else{
+			data.setMessage("未查到此用户参赛信息");
+			data.setStatus(DataStatus.HTTP_SUCCESS);
+		}	   	
+		return data;
+	}
+    
+	
+    /**
+     * 修改用户赛事信息接口
+     */
 }
