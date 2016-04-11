@@ -82,5 +82,9 @@ public class AppUserInfo implements Serializable {
 
     @Getter
     @Setter
+    private Integer gender;      // 性别(1-男,2-女)
+
+    @Getter
+    @Setter
     private Date createTime;    // 申请时间
 }
