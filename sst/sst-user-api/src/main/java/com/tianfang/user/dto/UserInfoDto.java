@@ -83,5 +83,9 @@ public class UserInfoDto implements Serializable{
 	@Getter
 	@Setter
     private String lastUpdateTimeStr;    //页面显示最后更新时间
+	
+	@Getter
+	@Setter
+    private Integer gender;    //姓别(1:男;2:女)
 
 }
