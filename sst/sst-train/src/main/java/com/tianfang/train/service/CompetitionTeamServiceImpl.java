@@ -187,4 +187,10 @@ public class CompetitionTeamServiceImpl implements ICompetitionTeamService {
 			throw new RuntimeException("对不起,球队ID为空!");
 		}
 	}
+
+	@Override
+	public List<CompetitionTeamDto> selectCompeTeamList(String userId) {
+		// TODO Auto-generated method stub
+		return cteamDao.selectCompeTeamList(userId);
+	}
 }

@@ -33,4 +33,6 @@ public interface ICompetitionTeamService {
 	 * 2016年2月1日下午1:42:15
 	 */
 	void updateTeamDatas(CompetitionTeamDto cTeam, List<CompetitionMatchDto> matchs);
+
+	List<CompetitionTeamDto> selectCompeTeamList(String userId);
 }
