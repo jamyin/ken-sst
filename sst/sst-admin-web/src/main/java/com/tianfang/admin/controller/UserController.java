@@ -1,6 +1,7 @@
 package com.tianfang.admin.controller;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,13 +19,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.digest.MD5Coder;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.MessageResp;
 import com.tianfang.common.model.PageResult;
+import com.tianfang.common.model.Response;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.dto.UserInfoDto;
+import com.tianfang.user.service.IUserInfoService;
 import com.tianfang.user.service.IUserService;
 
 @Controller
@@ -34,8 +39,13 @@ public class UserController extends BaseController{
 	    
     @Autowired
     private IUserService userService;
+    
+    @Autowired
+    private IUserInfoService userInfoService;
+    
     @Autowired
     private ITeamService teamService;
+    
     
     @RequestMapping(value = "list")
     public ModelAndView findpage(UserDto dto, ExtPageQuery page) throws Exception {
@@ -206,6 +216,174 @@ public class UserController extends BaseController{
 
         return null;
 	}
+	
+	   /**
+		 * 跳转至新增页面
+		 * @author Yin
+		 */
+		@RequestMapping(value = "goUserInfoAdd")
+		public ModelAndView goUserInfoAdd() {
+			logger.info("去用户参赛信息新增页面");
+			ModelAndView mv = this.getModelAndView(this.getSessionUserId());
+			mv.setViewName("/userInfo/add");
+			return mv;
+		}
+
+		/**
+		 * 增加用户参赛信息
+		 * @author YIn
+		 * @time:2016年4月9日 上午10:11:14
+		 * @param userInfoDto
+		 * @return
+		 */
+		@ResponseBody
+		@RequestMapping(value="addUserInfo")
+		public Response<String> addUserInfo(UserInfoDto userInfoDto){
+			Response<String> data = new Response<String>();
+			int flag = userInfoService.addUserInfo(userInfoDto);
+			if(flag > 0){
+				data.setMessage("添加参赛信息成功");
+				data.setStatus(DataStatus.HTTP_SUCCESS);
+			}else{
+				data.setMessage("添加参赛信息失败");
+				data.setStatus(DataStatus.HTTP_FAILE);
+			}	   	
+			return data;
+		}
+		
+		/**
+		 * 跳转至编辑页面
+		 * @return
+		 */
+		@RequestMapping(value = "goUserInfoEdit")
+		public ModelAndView goUserInfoEdit(String userInfoId) {
+			logger.info("去用户赛事信息修改页面");
+			ModelAndView mv = this.getModelAndView(this.getSessionUserId());
+			UserInfoDto userInfoDto = new UserInfoDto();
+			userInfoDto.setId(userInfoId);
+			List<UserInfoDto> list =userInfoService.findUserInfo(userInfoDto);
+			try {
+				mv.setViewName("/userInfo/edit");
+				mv.addObject("msg", "edit");
+				mv.addObject("noticeDto", list.get(0));
+			} catch (Exception e) {
+				logger.error(e.toString(), e);
+			}						
+			return mv;
+		}
+		
+		/**
+		 * 根据主键Id编辑用户参赛信息
+		 * @author YIn
+		  * @time:2016年4月9日 上午10:11:14
+		 * @param userInfoDto
+		 * @return
+		 */
+		@ResponseBody
+		@RequestMapping(value="/updateUserInfo")
+		public Response<String> updateUserInfo(UserInfoDto userInfoDto){
+			Response<String> data = new Response<String>();
+			int flag = userInfoService.updateUserInfo(userInfoDto);
+			if(flag > 0){
+				data.setMessage("编辑赛事信息成功");
+				data.setStatus(DataStatus.HTTP_SUCCESS);
+			}else{
+				data.setMessage("编辑赛事信息失败");
+				data.setStatus(DataStatus.HTTP_FAILE);
+			}	   	
+			return data;
+		}
+		
+		/**
+		 * 根据主键Id删除 -逻辑删除用户参赛信息
+		 * @author YIn
+		 * @time:2016年4月9日 上午10:11:14
+		 * @param userInfoDto
+		 * @return
+		 */
+		@ResponseBody
+		@RequestMapping(value="delUserInfo")
+		public Map<String, Object> delUserInfo(UserInfoDto userInfoDto){
+			logger.info("UserInfoDto"+userInfoDto);
+			userInfoDto.setStat(0); //逻辑删除
+			int status = userInfoService.updateUserInfo(userInfoDto);
+			if(status > 0){
+				return MessageResp.getMessage(true,"删除赛事信息成功");
+			}
+				return MessageResp.getMessage(false,"删除赛事信息失败");
+			
+		}
+		
+		/**
+		 * 批量删除用户参赛信息
+		 * @author YIn
+		 * @time:2016年4月9日 上午10:11:14
+		 * @param ids
+		 * @return
+		 * @throws Exception
+		 */
+		@ResponseBody
+		@RequestMapping(value="delUserInfoByIds")
+	    public Map<String, Object> delUserInfoByIds(String  ids) throws Exception{
+		    if (StringUtils.isEmpty(ids)) {
+		        return MessageResp.getMessage(false, "请选择需要删除的项！");
+		    }
+		    Integer resObject =(Integer) userInfoService.delByIds(ids);
+		    if (resObject == 0) {
+	            return MessageResp.getMessage(false, "批量删除失败");
+	        }
+		    if (resObject == 1) {
+	            return MessageResp.getMessage(true, "批量删除成功");
+	        }
+		    return MessageResp.getMessage(false, "删除异常");
+		}
+		
+		@RequestMapping(value="findUserInfo")
+		@ResponseBody
+		public Response<List<UserInfoDto>> findUserInfo(UserInfoDto userInfoDto){
+			Response<List<UserInfoDto>> data = new Response<List<UserInfoDto>>();
+			
+			List<UserInfoDto> result = userInfoService.findUserInfo(userInfoDto);
+			if(result.size() > 0){
+				data.setMessage("查询参赛信息成功");
+				data.setStatus(DataStatus.HTTP_SUCCESS);
+				data.setData(result);
+			}else{
+				data.setMessage("未查到此用户参赛信息");
+				data.setStatus(DataStatus.HTTP_SUCCESS);
+			}	   	
+			return data;
+		}
+		
+		/**
+		 * 后台用户参赛信息显示页面-分页
+		 * @author YIn
+		 * @time:2016年4月9日 上午10:11:14
+		 * @param userInfoDto
+		 * @param page
+		 * @return
+		 */
+		@RequestMapping(value = "findUserInfoView")
+		public ModelAndView findUserInfoView(UserInfoDto userInfoDto, ExtPageQuery page){
+			logger.info("userInfoDto  : " + userInfoDto);
+			ModelAndView mv = this.getModelAndView(this.getSessionUserId());
+			PageResult<UserInfoDto> result = userInfoService.findUserInfoViewByPage(userInfoDto, page.changeToPageQuery());
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
+			if(result.getResults() != null && result.getResults().size() > 0){
+				for(UserInfoDto dto:result.getResults()){
+					if(dto.getCreateTime() != null){
+					dto.setCreateTimeStr(sdf.format(dto.getCreateTime()));
+					}
+					if(dto.getLastUpdateTime() != null){
+						dto.setLastUpdateTimeStr(sdf.format(dto.getLastUpdateTime()));
+					}
+				}
+			}
+			mv.addObject("pageList", result);
+			mv.addObject("userInfoDto", userInfoDto);
+			mv.setViewName("/userInfo/list");
+			return mv;
+		}
 	
     @RequestMapping(value="auditObj")
     @ResponseBody
