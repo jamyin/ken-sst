@@ -1520,8 +1520,8 @@ public class UserController extends BaseController{
      */
 	@RequestMapping(value="findUserInfo")
 	@ResponseBody
-	public Response<List<UserInfoDto>> findUserInfo(UserInfoDto userInfoDto){
-		Response<List<UserInfoDto>> data = new Response<List<UserInfoDto>>();
+	public Response<UserInfoDto> findUserInfo(UserInfoDto userInfoDto){
+		Response<UserInfoDto> data = new Response<UserInfoDto>();
 		if(userInfoDto == null || StringUtils.isEmpty(userInfoDto.getUserId())){
 			data.setMessage("查询参数为空");
 			data.setStatus(DataStatus.HTTP_FAILE);
@@ -1530,7 +1530,7 @@ public class UserController extends BaseController{
 		if(result.size() > 0){
 			data.setMessage("查询参赛信息成功");
 			data.setStatus(DataStatus.HTTP_SUCCESS);
-			data.setData(result);
+			data.setData(result.get(0));
 		}else{
 			data.setMessage("未查到此用户参赛信息");
 			data.setStatus(DataStatus.HTTP_SUCCESS);
@@ -1548,13 +1548,13 @@ public class UserController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="addUserInfo")
-	public Response<String> addUserInfo(UserInfoDto userInfoDto ,@RequestParam(value = "photo",required = false)  MultipartFile photo
+	public Response<String> addUserInfo(UserInfoDto userInfoDto ,@RequestParam(value = "file",required = false)  MultipartFile file
 			,HttpServletRequest request){
 		Response<String> data = new Response<String>();
 		int flag = 0;
 		try {
-	        if (photo != null) {
-	        	Map<String, String> map = uploadImages(photo , request);
+	        if (file != null) {
+	        	Map<String, String> map = uploadImages(file , request);
 	        	userInfoDto.setPhoto(map.get("fileUrl"));
 	        }
 	        flag = userInfoService.addUserInfo(userInfoDto);
@@ -1581,7 +1581,7 @@ public class UserController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="/updateUserInfo")
-	public Response<String> updateUserInfo(UserInfoDto userInfoDto,@RequestParam(value = "photo",required = false)  MultipartFile photo
+	public Response<String> updateUserInfo(UserInfoDto userInfoDto,@RequestParam(value = "file",required = false)  MultipartFile file
 			,HttpServletRequest request){
 		Response<String> data = new Response<String>();
 		if(userInfoDto == null || StringUtils.isEmpty(userInfoDto.getUserId())){
@@ -1591,8 +1591,8 @@ public class UserController extends BaseController{
 		
 		
 		try {
-	        if (photo != null) {
-	        	Map<String, String> map = uploadImages(photo , request);
+	        if (file != null) {
+	        	Map<String, String> map = uploadImages(file , request);
 	        	userInfoDto.setPhoto(map.get("fileUrl"));
 	        }
 	        List<UserInfoDto> result = userInfoService.findUserInfo(userInfoDto);

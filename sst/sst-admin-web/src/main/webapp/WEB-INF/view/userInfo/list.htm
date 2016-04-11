@@ -235,11 +235,11 @@
 			
 			//删除
 			$("#operation #deleteObj").on('click',function(){
-				console.log($(this).attr("data-obj-id"));
+				//console.log($(this).attr("data-obj-id"));
 				var id = $(this).attr("data-obj-id");
 				$.ajax({
 		             type: "POST",
-		             url: "${base}/user/delete.do",
+		             url: "${base}/user/delUserInfo.do",
 		             data: {id:id},
 		             dataType: "json",
 		             success: function(data){
@@ -288,7 +288,7 @@
 					    //alert("ids = " + ids);
 						$.ajax({
 				             type: "POST",
-				             url: "${base}/user/delByIds.do",
+				             url: "${base}/user/delUserInfoByIds.do",
 				             data: {ids:ids},
 				             dataType: "json",
 				             success: function(data){
@@ -330,7 +330,7 @@
 				layer.open({
 					title:'新增赛事信息',
 				    type: 2,
-				    area: ['1000px', '750px'],
+				    area: ['500px', '600px'],
 				    fix: true, //不固定
 				    maxmin: false,
 				    content: '${base}/user/goUserInfoAdd.do'
