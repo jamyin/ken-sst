@@ -115,13 +115,20 @@ public class TeamController extends BaseController{
 		AppUserInfo dto = new AppUserInfo();
 		dto.setTeamId(team.getId());
 		PageResult<AppUserInfo> datas = userApplyTeamService.queryUserApplyInfoByParam(dto, query);
+		if (null != datas && null != datas.getResults() && datas.getResults().size() > 0){
+			for (AppUserInfo info : datas.getResults()){
+				if (null != info){
+					assemblyReason(info);
+				}
+			}
+		}
 		result.setStatus(DataStatus.HTTP_SUCCESS);
 		result.setData(datas);
 		
 		return result;
 	}
 
-	/**		
+	/**
 	 * <p>Description: 根据申请记录id,查询用户申请球队详情 </p>
 	 * <p>Company: 上海天坊信息科技有限公司</p>
 	 * @param id
@@ -136,15 +143,7 @@ public class TeamController extends BaseController{
 		Response<AppUserInfo> response = new Response<>();
 		try {
 			AppUserInfo  info = userApplyTeamService.getUserApplyInfoById(id);
-			if (null != info){
-				if (info.getStatus() == AuditType.FAIL.getIndex()){
-					if (StringUtils.isNotBlank(info.getReason())){
-						ReasonJson reasonJson = JSON.parseObject(info.getReason(), ReasonJson.class);
-						info.setReason(reasonJson.getRefuse());
-					}
-				}
-
-			}
+			assemblyReason(info);
 			response.setData(info);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -236,7 +235,7 @@ public class TeamController extends BaseController{
 		if (status == AuditType.FAIL.getIndex()){
 			ReasonJson reasonJson = new ReasonJson();
 			reasonJson.setApply(userApplyTeam.getReason());
-			reasonJson.setRefuse(reason);
+			reasonJson.setRefuse(StringUtils.isBlank(reason)?"":reason.trim());
 			userApplyTeam.setReason(JSON.toJSONString(reasonJson));
 			result.setMessage("恭喜你,拒绝成功!");
 		}
@@ -470,5 +469,17 @@ public class TeamController extends BaseController{
 		}
 		return null;
 	}
-	
+
+	private void assemblyReason(AppUserInfo info) {
+		if (info.getStatus() == AuditType.FAIL.getIndex()){
+			if (StringUtils.isNotBlank(info.getReason())){
+				ReasonJson reasonJson = JSON.parseObject(info.getReason(), ReasonJson.class);
+				if (null != reasonJson.getRefuse()){
+					info.setReason(reasonJson.getRefuse());
+				}else{
+					info.setReason("");
+				}
+			}
+		}
+	}
 }
