@@ -18,6 +18,7 @@ import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
+import com.tianfang.user.app.AppUserInfo;
 import com.tianfang.user.app.FriendApp;
 import com.tianfang.user.dto.UserApplyTeamDto;
 import com.tianfang.user.dto.UserDto;
@@ -46,11 +47,11 @@ public class UserFriendController extends BaseController{
 	 */
 	@RequestMapping(value="/user/teamList")
 	@ResponseBody
-	public Response<PageResult<UserApplyTeamDto>> findUserTeamPage(UserApplyTeamDto dto,ExtPageQuery page) {
-		Response<PageResult<UserApplyTeamDto>> result = new Response<PageResult<UserApplyTeamDto>>();
-		UserDto user = getUserByCache(dto.getUserId());
+	public Response<PageResult<AppUserInfo>> findUserTeamPage(UserApplyTeamDto dtos,ExtPageQuery page) {
+		Response<PageResult<AppUserInfo>> result = new Response<PageResult<AppUserInfo>>();
+		UserDto user = getUserByCache(dtos.getUserId());		
 		if (null != user){
-			PageResult<UserApplyTeamDto> userApplyTeamDtos = iUserApplyTeamService.findUserApplyTeamExByParam(dto, page.changeToPageQuery());
+			PageResult<AppUserInfo> userApplyTeamDtos = iUserApplyTeamService.queryUserTeamApplyInfoByParam(dtos, page.changeToPageQuery());
 			if (userApplyTeamDtos.getResults().size()>0) {
 				result.setStatus(DataStatus.HTTP_SUCCESS);
 				result.setMessage("查询成功");

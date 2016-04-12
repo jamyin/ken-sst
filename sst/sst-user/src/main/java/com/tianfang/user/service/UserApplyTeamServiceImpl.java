@@ -107,6 +107,17 @@ public class UserApplyTeamServiceImpl implements IUserApplyTeamService {
 		return null;
 	}
 
+	public PageResult<AppUserInfo> queryUserTeamApplyInfoByParam(UserApplyTeamDto dto,PageQuery query){
+		int total = userApplyTeamDao.countUserTeamApplyInfoByParam(dto);
+		if (total > 0) {
+			query.setTotal(total);
+			List<AppUserInfo> datas = userApplyTeamDao.queryUserTeamApplyInfoByParam(dto, query);
+			PageResult<AppUserInfo> result = new PageResult<>(query,datas);
+			return result;
+		}
+		return null;
+	}
+	
 	@Override
 	public List<AppUserInfo> queryUserApplyInfoByParam(AppUserInfo param) {
 		return userApplyTeamDao.queryUserApplyInfoByParam(param, null);

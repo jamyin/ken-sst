@@ -53,6 +53,9 @@ public interface IUserApplyTeamService {
 	 * @version 1.0
 	 */
 	PageResult<AppUserInfo> queryUserApplyInfoByParam(AppUserInfo param, PageQuery query);
+	
+	
+	PageResult<AppUserInfo> queryUserTeamApplyInfoByParam(UserApplyTeamDto param, PageQuery query);
 
 	/**		
 	 * <p>Description: 查询用户申请 </p>

@@ -85,10 +85,43 @@
    		</if>
     </where>
   </sql>
-
+  
+	<sql id="Example_User_Where_Clause" >
+		  <where >
+		 	a.stat = 1 AND u.stat = 1 AND team.stat = 1 AND info.stat = 1
+	   		<if test="example.id != null">
+	   		and a.id = #{example.id,jdbcType=VARCHAR}
+	   		</if>
+	   		<if test="example.teamId != null">
+	   		and a.team_id = #{example.teamId,jdbcType=VARCHAR}
+	   		</if>
+	   		<if test="example.userId != null">
+	   		and a.user_id = #{example.userId,jdbcType=VARCHAR}
+	   		</if>
+	   		<if test="example.status != null">
+	   		and a.status = #{example.status,jdbcType=INTEGER}
+	   		</if>
+	   		<if test="example.nickName != null">
+	   		and b.nick_name = #{example.nickName,jdbcType=VARCHAR}
+	   		</if>
+	   		<if test="example.gender != null">
+	   		and b.gender = #{example.gender,jdbcType=INTEGER}
+	   		</if>
+	   		<if test="example.mobile != null">
+	   		and b.mobile = #{example.mobile,jdbcType=VARCHAR}
+	   		</if>
+	   		<if test="example.utype != null">
+	   		and b.utype = #{example.utype,jdbcType=INTEGER}
+	   		</if>
+	   		<if test="example.trainerLevel != null">
+	   		and b.trainer_level = #{example.trainerLevel,jdbcType=INTEGER}
+	   		</if>
+	    </where>
+	  </sql>
+	  
 	<sql id="User_Info_Where_Clause" >
 		<where >
-			a.stat = 1 AND u.stat = 1 AND team.stat = 1
+			a.stat = 1 AND u.stat = 1 AND team.stat = 1 AND info.stat = 1
 			<if test="example.id != null">
 				and a.id = #{example.id,jdbcType=VARCHAR}
 			</if>
@@ -127,8 +160,31 @@
    <select id="countByExample" parameterType="com.tianfang.user.dto.UserApplyTeamDto" resultType="java.lang.Integer" >
     select count(*) from sst_user_apply_team as a left join sport_user as b on a.user_id = b.id
     <include refid="Example_Where_Clause" />
-  </select>
+   </select>
 
+   <select id="queryUserTeamApplyInfoByParam" resultMap="UserInfoMap" parameterType="com.tianfang.user.dto.UserApplyTeamDto" >
+   		SELECT
+		<include refid="User_Info_List"/>
+		FROM sst_user_apply_team AS a
+		LEFT JOIN sport_user AS u ON a.user_id = u.id
+		LEFT JOIN sst_team AS team ON a.team_id = team.id
+		LEFT JOIN sst_user_info AS info ON a.user_id = info.user_id
+		<include refid="Example_User_Where_Clause" />
+		ORDER BY a.create_time DESC		
+		<if test="page != null and page.startNum != null and page.pageSize > page.startNum">
+			limit ${page.startNum}, ${page.pageSize}
+		</if>
+   </select>
+   	
+   <select id="countUserTeamApplyInfoByParam" resultType="java.lang.Integer" parameterType="com.tianfang.user.dto.UserApplyTeamDto" >
+   		select count(*)
+		FROM sst_user_apply_team AS a
+		LEFT JOIN sport_user AS u ON a.user_id = u.id
+		LEFT JOIN sst_team AS team ON a.team_id = team.id
+		LEFT JOIN sst_user_info AS info ON a.user_id = info.user_id		
+		<include refid="Example_User_Where_Clause" />
+   </select>	
+   	
 	<select id="queryUserApplyInfoByParam" resultMap="UserInfoMap" parameterType="com.tianfang.user.app.AppUserInfo" >
 		SELECT
 		<include refid="User_Info_List"/>

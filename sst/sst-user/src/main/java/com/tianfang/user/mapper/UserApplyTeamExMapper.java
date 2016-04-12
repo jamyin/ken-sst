@@ -14,6 +14,10 @@ public interface UserApplyTeamExMapper {
 
     List<UserApplyTeamDto> selectByExample(@Param("example")UserApplyTeamDto example, @Param("page") PageQuery page);
 
+    List<AppUserInfo> queryUserTeamApplyInfoByParam(@Param("example")UserApplyTeamDto example, @Param("page") PageQuery page);
+    
+    int countUserTeamApplyInfoByParam(@Param("example")UserApplyTeamDto example);
+    
     List<AppUserInfo> queryUserApplyInfoByParam(@Param("example")AppUserInfo example, @Param("page") PageQuery page);
 
     int countUserApplyInfoByParam(@Param("example")AppUserInfo example);

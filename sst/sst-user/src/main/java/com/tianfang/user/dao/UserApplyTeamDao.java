@@ -128,4 +128,12 @@ public class UserApplyTeamDao extends MyBatisBaseDao<UserApplyTeam>{
 	public int countUserApplyInfoByParam(AppUserInfo param){
 		return exMapper.countUserApplyInfoByParam(param);
 	}
+	
+	public List<AppUserInfo> queryUserTeamApplyInfoByParam(UserApplyTeamDto param, PageQuery query){
+		return exMapper.queryUserTeamApplyInfoByParam(param, query);
+	}
+	
+	public int countUserTeamApplyInfoByParam(UserApplyTeamDto param){
+		return exMapper.countUserTeamApplyInfoByParam(param);
+	}
 }
