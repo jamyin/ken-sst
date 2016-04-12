@@ -43,6 +43,7 @@ public class UserInfoDao extends MyBatisBaseDao<UserInfo> {
 		UserInfoExample example = new UserInfoExample();
 		UserInfoExample.Criteria criteria = example.createCriteria();
         assemblyParams(userInfoDto, criteria);
+        example.setOrderByClause("create_time desc");
         List<UserInfo> results = mapper.selectByExample(example);        
 		return BeanUtils.createBeanListByTarget(results, UserInfoDto.class);
 	}

@@ -10,7 +10,8 @@
 		<if test="userInfoDto.name != null and userInfoDto.name != ''">
 				and a.name like "%"#{userInfoDto.name}"%"
 		</if>
-		LIMIT #{page.startNum}, #{page.pageSize} 
+		ORDER BY a.create_time DESC
+		LIMIT #{page.startNum}, #{page.pageSize}  
 	</select>
 	
 	<select id="selectAccount" resultType="java.lang.Integer" parameterType="com.tianfang.user.dto.UserDto">

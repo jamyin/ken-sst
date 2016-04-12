@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -222,9 +224,11 @@ public class UserController extends BaseController{
 		 * @author Yin
 		 */
 		@RequestMapping(value = "goUserInfoAdd")
-		public ModelAndView goUserInfoAdd() {
+		public ModelAndView goUserInfoAdd(HttpSession session) {
 			logger.info("去用户参赛信息新增页面");
 			ModelAndView mv = this.getModelAndView(this.getSessionUserId());
+			List<UserDto> userList = userService.findUserByParam(new UserDto());
+			mv.addObject("userList", userList);
 			mv.setViewName("/userInfo/add");
 			return mv;
 		}
@@ -238,8 +242,20 @@ public class UserController extends BaseController{
 		 */
 		@ResponseBody
 		@RequestMapping(value="addUserInfo")
-		public Response<String> addUserInfo(UserInfoDto userInfoDto){
+		public Response<String> addUserInfo(UserInfoDto userInfoDto, HttpSession session){
 			Response<String> data = new Response<String>();
+			/*AdminDto admin = (AdminDto) session.getAttribute(Const.SESSION_USER);
+			if(admin != null && StringUtils.isNotEmpty(admin.getId())){
+				userInfoDto.setUserId(admin.getId());
+			}*/
+			if(StringUtils.isNotEmpty(userInfoDto.getUserId())){
+				List<UserInfoDto> list = userInfoService.findUserInfo(userInfoDto);
+				if(list != null && list.size() > 0){
+					data.setMessage("此用户已经填写参赛信息");
+					data.setStatus(DataStatus.HTTP_FAILE);
+					return data;
+				}
+			}
 			int flag = userInfoService.addUserInfo(userInfoDto);
 			if(flag > 0){
 				data.setMessage("添加参赛信息成功");
@@ -262,10 +278,12 @@ public class UserController extends BaseController{
 			UserInfoDto userInfoDto = new UserInfoDto();
 			userInfoDto.setId(userInfoId);
 			List<UserInfoDto> list =userInfoService.findUserInfo(userInfoDto);
+			List<UserDto> userList = userService.findUserByParam(new UserDto());
+			mv.addObject("userList", userList);
 			try {
 				mv.setViewName("/userInfo/edit");
 				mv.addObject("msg", "edit");
-				mv.addObject("noticeDto", list.get(0));
+				mv.addObject("userInfoDto", list.get(0));
 			} catch (Exception e) {
 				logger.error(e.toString(), e);
 			}						
