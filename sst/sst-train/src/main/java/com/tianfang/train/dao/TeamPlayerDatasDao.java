@@ -1,12 +1,5 @@
 package com.tianfang.train.dao;
 
-import java.util.List;
-
-import lombok.Getter;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.mybatis.MyBatisBaseDao;
@@ -16,6 +9,11 @@ import com.tianfang.train.dto.TeamPlayerDatasDto;
 import com.tianfang.train.mapper.TeamPlayerDatasMapper;
 import com.tianfang.train.pojo.TeamPlayerDatas;
 import com.tianfang.train.pojo.TeamPlayerDatasExample;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class TeamPlayerDatasDao extends MyBatisBaseDao<TeamPlayerDatas>{
@@ -47,13 +45,13 @@ public class TeamPlayerDatasDao extends MyBatisBaseDao<TeamPlayerDatas>{
         assemblyParams(dto, criteria);
         if(null != query){
         	if (StringUtils.isNotBlank(order)){
-        		example.setOrderByClause(order+" DESC limit "+query.getStartNum() +"," + query.getPageSize());
+        		example.setOrderByClause(order+" limit "+query.getStartNum() +"," + query.getPageSize());
 			}else{
 				example.setOrderByClause("create_time DESC limit "+query.getStartNum() +"," + query.getPageSize());
 			}
 		}else{
 			if (StringUtils.isNotBlank(order)){
-				example.setOrderByClause(order + " DESC");
+				example.setOrderByClause(order);
 			}else{
 				example.setOrderByClause("create_time DESC");
 			}
