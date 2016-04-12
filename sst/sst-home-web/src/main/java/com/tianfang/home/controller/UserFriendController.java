@@ -52,7 +52,7 @@ public class UserFriendController extends BaseController{
 		UserDto user = getUserByCache(dtos.getUserId());		
 		if (null != user){
 			PageResult<AppUserInfo> userApplyTeamDtos = iUserApplyTeamService.queryUserTeamApplyInfoByParam(dtos, page.changeToPageQuery());
-			if (userApplyTeamDtos.getResults().size()>0) {
+			if (null != userApplyTeamDtos && userApplyTeamDtos.getResults().size()>0) {
 				result.setStatus(DataStatus.HTTP_SUCCESS);
 				result.setMessage("查询成功");
 				result.setParentData(userApplyTeamDtos);
