@@ -39,6 +39,8 @@ public class UserApplyTeamDao extends MyBatisBaseDao<UserApplyTeam>{
         assemblyParams(dto, criteria);
         if(null != query){
         	example.setOrderByClause("create_time desc limit "+query.getStartNum() +"," + query.getPageSize());
+		}else{
+			example.setOrderByClause("create_time desc");
 		}
         List<UserApplyTeam> results = mapper.selectByExample(example);        
 		return BeanUtils.createBeanListByTarget(results, UserApplyTeamDto.class);

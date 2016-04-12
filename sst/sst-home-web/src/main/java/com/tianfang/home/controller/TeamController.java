@@ -46,7 +46,6 @@ import java.util.Map;
 @RequestMapping(value = "team")
 public class TeamController extends BaseController{
 	protected static final Log logger = LogFactory.getLog(TeamController.class);
-	
 	@Autowired
 	private ITeamService teamService;
 	@Autowired
@@ -397,6 +396,17 @@ public class TeamController extends BaseController{
 		return null;
 	}
 
+	/**		
+	 * <p>Description: 用户申请加入球队逻辑 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param result
+	 * @param userId
+	 * @param teamId
+	 * @return boolean
+	 * @author wangxiang	
+	 * @date 16/4/12 上午9:39
+	 * @version 1.0
+	 */
 	private boolean checkUserApplyTeam(Response<?> result, String userId, String teamId){
 		if (StringUtils.isBlank(userId)){
 			result.setStatus(DataStatus.HTTP_FAILE);
@@ -416,18 +426,20 @@ public class TeamController extends BaseController{
     		dto.setTeamId(teamId);
     		List<UserApplyTeamDto> applies = userApplyTeamService.findUserApplyTeamByParam(dto);
     		if (null != applies && applies.size() > 0){
-    			for (UserApplyTeamDto apply : applies){
-    				if (apply.getStatus() == AuditType.UNAUDIT.getIndex()){
-    					result.setStatus(DataStatus.HTTP_FAILE);
-    					result.setMessage("正在申请中,请耐心等待队长审核...");
-    					return false;
-    				}
-    				if (apply.getStatus() == AuditType.PASS.getIndex()){
-    					result.setStatus(DataStatus.HTTP_FAILE);
-    					result.setMessage("您已经是该球队中一员");
-    					return false;
-    				}
-    			}
+				// 取最新一条申请记录
+				UserApplyTeamDto apply = applies.get(0);
+				if (apply.getStatus() == AuditType.PASS.getIndex() && null != user.getTeamId() && StringUtils.isNotBlank(user.getTeamId())){
+					result.setStatus(DataStatus.HTTP_FAILE);
+					result.setMessage("您已经是该球队中一员");
+					return false;
+				}else{
+					// 24小时才可以申请一次
+					if (System.currentTimeMillis() - apply.getCreateTime().getTime() < DataStatus.HOUR_24){
+						result.setStatus(DataStatus.HTTP_FAILE);
+						result.setMessage("24小时之内只准申请一次");
+						return false;
+					}
+				}
     		}
     	}else{
     		result.setStatus(DataStatus.HTTP_FAILE);

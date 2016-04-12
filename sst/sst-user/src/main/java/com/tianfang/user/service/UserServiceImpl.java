@@ -3,6 +3,7 @@ package com.tianfang.user.service;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.tianfang.common.constants.CacheKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -196,6 +197,8 @@ public class UserServiceImpl implements IUserService {
 			if (null != user && user.getStat() == DataStatus.ENABLED){
 				user.setTeamId(null);
 				userDao.updateByPrimaryKey(user);
+				// 清缓存
+				redisTemplate.delete(DataStatus.SST_USER+id);
 			}
 		}
 
