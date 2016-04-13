@@ -533,6 +533,14 @@ public class UserController extends BaseController{
 		List<UserDto> list = new ArrayList<UserDto>();
 		try {
 			list = userService.findUserByParam(userDto);
+			if(list != null && list.size() > 0 && StringUtils.isNotEmpty(list.get(0).getTeamId())){
+				TeamDto teamDto = teamService.getTeamById(list.get(0).getTeamId());
+				if(teamDto ==null){
+					list.get(0).setTeamId(null);
+				}
+				
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
