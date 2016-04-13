@@ -19,7 +19,7 @@
 				<#if dataMap.pageList ??>
 					<#list dataMap.pageList.getResults() as data>
 						<li>
-							<h2><a href="/info/details.htm?infoId=${(data.id)!}&cur=${(cur)!}">${(data.title)!}</a></h2>
+							<h2><a href="/info/details.htm?infoType=${(dataMap.infoType)!}&infoId=${(data.id)!}&cur=${(cur)!}">${(data.title)!}</a></h2>
 							<span class="dec">
 								<#if dataMap.infoType == "ONE">
 									${(data.summary)!}	

@@ -1,11 +1,21 @@
 package com.tianfang.home.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
+import com.alibaba.fastjson.JSON;
+import com.google.common.base.Objects;
+import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.ext.ExtPageQuery;
+import com.tianfang.common.model.PageResult;
+import com.tianfang.common.model.Response;
+import com.tianfang.common.util.StringUtils;
+import com.tianfang.user.app.AppUserInfo;
+import com.tianfang.user.app.FriendApp;
+import com.tianfang.user.dto.ReasonJson;
+import com.tianfang.user.dto.UserApplyTeamDto;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.enums.AuditType;
+import com.tianfang.user.enums.UserType;
+import com.tianfang.user.service.IUserApplyTeamService;
+import com.tianfang.user.service.IUserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.base.Objects;
-import com.tianfang.common.constants.DataStatus;
-import com.tianfang.common.ext.ExtPageQuery;
-import com.tianfang.common.model.PageResult;
-import com.tianfang.common.model.Response;
-import com.tianfang.user.app.AppUserInfo;
-import com.tianfang.user.app.FriendApp;
-import com.tianfang.user.dto.UserApplyTeamDto;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.enums.UserType;
-import com.tianfang.user.service.IUserApplyTeamService;
-import com.tianfang.user.service.IUserService;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "userFriend")
@@ -52,10 +51,17 @@ public class UserFriendController extends BaseController{
 		UserDto user = getUserByCache(dtos.getUserId());		
 		if (null != user){
 			PageResult<AppUserInfo> userApplyTeamDtos = iUserApplyTeamService.queryUserTeamApplyInfoByParam(dtos, page.changeToPageQuery());
+			if (null != userApplyTeamDtos && null != userApplyTeamDtos.getResults() && userApplyTeamDtos.getResults().size() > 0){
+				for (AppUserInfo info : userApplyTeamDtos.getResults()){
+					if (null != info){
+						assemblyReason(info);
+					}
+				}
+			}
 			if (null != userApplyTeamDtos && userApplyTeamDtos.getResults().size()>0) {
 				result.setStatus(DataStatus.HTTP_SUCCESS);
 				result.setMessage("查询成功");
-				result.setParentData(userApplyTeamDtos);
+				result.setData(userApplyTeamDtos);
 			} else {
 				result.setStatus(DataStatus.HTTP_SUCCESS);
 				result.setMessage("无数据");
@@ -126,4 +132,16 @@ public class UserFriendController extends BaseController{
         return newList;
     }
 
+	private void assemblyReason(AppUserInfo info) {
+		if (info.getStatus() == AuditType.FAIL.getIndex()){
+			if (StringUtils.isNotBlank(info.getReason())){
+				ReasonJson reasonJson = JSON.parseObject(info.getReason(), ReasonJson.class);
+				if (null != reasonJson.getRefuse()){
+					info.setReason(reasonJson.getRefuse());
+				}else{
+					info.setReason("");
+				}
+			}
+		}
+	}
 }

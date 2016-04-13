@@ -66,6 +66,7 @@
 										<th style="width:60px;" class="center">用户姓名</th>
 										<th style="width:100px;" class="center">昵称</th>
 										<th style="width:60px;" class="center">年龄</th>
+										<th style="width:60px;" class="center">姓别</th>
 										<th style="width:100px;" class="center">身份证号</th>
 										<th style="width:80px;" class="center">手机号码</th>
 										<th style="width:80px;" class="center">学校</th>
@@ -89,6 +90,13 @@
 										<td class='hidden-phone'>${(page.name)!}</td>
 										<td class='hidden-phone'>${(page.nickName)!}</td>
 										<td class='hidden-phone'>${(page.age)!}</td>
+										<td class='hidden-phone'>
+											<#if page.gender??>
+												<#if page.gender == 1>男
+												<#elseif  page.gender == 2>女
+												</#if>
+											</#if>
+										</td>
 										<td class='hidden-phone'>${(page.cardNo)!}</td>
 										<td class='hidden-phone'>${(page.mobile)!}</td>
 										<td class='hidden-phone'>${(page.school)!}</td>
@@ -220,15 +228,15 @@
 		$(function() {
 			$("#operation #editObj").on('click',function(){
 				var id = $(this).attr("data-obj-id");
-				console.log("id=" + id);
+				//console.log("id=" + id);
 				//iframe层-父子操作
 				layer.open({
 					title:'编辑赛事信息',
 				    type: 2,
-				    area: ['1000px', '750px'],
+				    area: ['500px', '600px'],
 				    fix: true, //不固定
 				    maxmin: false,
-				    content: '${base}/user/goEdit.do?id='+id
+				    content: '${base}/user/goUserInfoEdit.do?userInfoId='+id
 				});				
 				//console.log($(this).attr("data-obj-id"));
 			});

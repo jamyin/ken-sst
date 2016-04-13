@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tianfang.user.mapper.UserInfoExMapper" >
 	<select id="findUserInfoViewByPage" resultType="com.tianfang.user.dto.UserInfoDto">
-		SELECT a.id, b.id AS userId,a.name, a.age, a.card_no AS cardNo, a.mobile, a.school, a.student_no AS studentNo,
+		SELECT a.id, b.id AS userId,a.name, a.age, a.gender,a.card_no AS cardNo, a.mobile, a.school, a.student_no AS studentNo,
 		a.photo,a.create_time as createTime,a.last_update_time as lastUpdateTime, a.stat,b.nick_name as nickName 
 		FROM sst_user_info AS a  
 		LEFT JOIN sport_user AS b ON a.user_id = b.id 
@@ -10,7 +10,8 @@
 		<if test="userInfoDto.name != null and userInfoDto.name != ''">
 				and a.name like "%"#{userInfoDto.name}"%"
 		</if>
-		LIMIT #{page.startNum}, #{page.pageSize} 
+		ORDER BY a.create_time DESC
+		LIMIT #{page.startNum}, #{page.pageSize}  
 	</select>
 	
 	<select id="selectAccount" resultType="java.lang.Integer" parameterType="com.tianfang.user.dto.UserDto">
