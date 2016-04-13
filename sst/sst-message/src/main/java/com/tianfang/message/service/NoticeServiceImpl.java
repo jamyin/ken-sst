@@ -105,7 +105,8 @@ public class NoticeServiceImpl implements INoticeService {
 			}
 		}
 		return new PageResult<NoticeDto>(page, dtoList);*/
-		List<NoticeDto> list = noticeDao.findNoticeViewByPage(noticeDto ,  page);
+		Notice notice = BeanUtils.createBeanByTarget(noticeDto, Notice.class);
+		List<NoticeDto> list = BeanUtils.createBeanListByTarget(noticeDao.queryNoticeViewByPage(notice,  page), NoticeDto.class);
 //		if(list != null  && list.size() >0){
 //			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
 //			for(NoticeDto dto : list){
@@ -116,7 +117,7 @@ public class NoticeServiceImpl implements INoticeService {
 //				}
 //			}
 //		}
-		int total = noticeDao.selectAccount(noticeDto);
+		int total = noticeDao.queryAccount(notice);
 		page.setTotal(total);
 		return new PageResult<NoticeDto>(page, list);
 	}

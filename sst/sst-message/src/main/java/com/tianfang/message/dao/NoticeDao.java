@@ -115,8 +115,8 @@ public class NoticeDao extends MyBatisBaseDao<Notice> {
 	public List<Notice> queryNoticeViewByPage(Notice notice, PageQuery page) {
 		NoticeExample example = new NoticeExample();
 		NoticeExample.Criteria criteria = example.createCriteria();
-		example.setOrderByClause(" create_time DESC limit " + page.getStartNum() +"," + page.getPageSize());
-        assemblyParams(notice, criteria);   //组装参数
+		assemblyParams(notice, criteria);   //组装参数
+		example.setOrderByClause(" create_time DESC limit " + page.getStartNum() +"," + page.getPageSize());      
         List<Notice> result = mapper.selectByExample(example);  
         return result;
 	}
