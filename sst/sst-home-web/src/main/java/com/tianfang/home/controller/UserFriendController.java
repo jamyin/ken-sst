@@ -94,6 +94,9 @@ public class UserFriendController extends BaseController{
     			//队内成员 
     			List<FriendApp> teamFriends = userService.findTeamFriends(dto.getTeamId());
     			for(FriendApp fApp: teamFriends){
+    				if(Objects.equal(userId, fApp.getFriendId())){//排除自身用户
+    					teamFriends.remove(fApp);
+    				}
     				fApp.setUserId(dto.getId());
     				fApp.setUserMobile(dto.getMobile());
     			}
