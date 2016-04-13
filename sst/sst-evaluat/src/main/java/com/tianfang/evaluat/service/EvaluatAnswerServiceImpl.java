@@ -43,8 +43,14 @@ public class EvaluatAnswerServiceImpl implements IEvaluatAnswerService {
 	public int save(EvaluatAnswerDto dto) {
 		// TODO Auto-generated method stub
 		dto.setOrderBy(evaluatAnswerDao.countAllEvaluatAnswer(dto.getEvaId(),dto.getEvaQuestionId())+1);			
-		EvaluatAnswer EvaluatAnswer = BeanUtils.createBeanByTarget(dto, EvaluatAnswer.class);
-		return evaluatAnswerDao.insertSelective(EvaluatAnswer);
+		EvaluatAnswer evaluatAnswer = BeanUtils.createBeanByTarget(dto, EvaluatAnswer.class);
+		
+		int result = evaluatAnswerDao.insertSelective(evaluatAnswer);
+		
+		//统计分数
+		setTotalScore(evaluatAnswer);
+				
+		return result;
 	}
 
 	@Override
