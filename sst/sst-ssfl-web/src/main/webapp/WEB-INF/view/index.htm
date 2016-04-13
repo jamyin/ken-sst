@@ -36,7 +36,7 @@
 							<p class="tit">${(data.title)!}</p>
 							<p>
 						</#if>
-								<a href="###">${(data.title)!}</a> |
+								<a href="/info/details.htm?infoType=ONE&infoId=${(data.id)!}&cur=1">${(data.title)!}</a> |
 							<!-- 	<a href="###">老不如小老不如小 曼城后防天团门将开挂也难救</a> | 
 								<a class="red" href="###">真值1亿！蓝军最强真神王者归来</a> | 
 								<a href="###">曼城10点超红魔</a> -->
@@ -72,7 +72,7 @@
 					<ul>
 						<#if dataMap ??>
 							<#list dataMap.authInfo as data>
-								<li><a href="###">${(data.title)!}</a></li>
+								<li><a href="/info/details.htm?infoType=ZERO&infoId=${(data.id)!}&cur=1">${(data.title)!}</a></li>
 							</#list>
 						</#if>
 <!-- 						<li><a href="###">关于举办2015-2016“上超杯”上海业余足球联赛联赛联赛</a></li>
@@ -88,7 +88,7 @@
 					<ul>
 						<#if dataMap ??>
 							<#list dataMap.raceNoteice as data>
-								<li><a href="###">${(data.title)!}</a></li>
+								<li><a href="/info/details.htm?infoType=TWO&infoId=${(data.id)!}&cur=1">${(data.title)!}</a></li>
 							</#list>
 						</#if>					
 <!-- 						<li><a href="###">关于举办2015-2016“上超杯”上海业余足球联赛联赛联赛</a></li>
