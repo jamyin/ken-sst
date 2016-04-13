@@ -540,7 +540,6 @@ public class UserController extends BaseController{
 				}
 				
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
