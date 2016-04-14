@@ -204,10 +204,11 @@ public class TeamPlayerServiceImpl implements ITeamPlayerService {
 	@Override
 	public PageResult<TeamPlayerDto> findTeamPlayerViewByPage(TeamPlayerDto teamPlayerDto , PageQuery page) {
 		TeamPlayer teamPlayer = BeanUtils.createBeanByTarget(teamPlayerDto, TeamPlayer.class);
-		List<TeamPlayer> list = playerDao.findTeamPlayerViewByPage(teamPlayer, page);
-		int total = playerDao.selectAccount(teamPlayer);
+		List<TeamPlayerDto> list = playerDao.findTeamPlayerByTeamPlayer(teamPlayerDto, page);
+		int total = playerDao.countTeamPlayerByTeamPlayer(teamPlayerDto);
 		page.setTotal(total);
 		List<TeamPlayerDto> dtoList = BeanUtils.createBeanListByTarget(list, TeamPlayerDto.class);
-		return new PageResult<TeamPlayerDto>(page, dtoList);
+		return new PageResult<TeamPlayerDto>(page, list);
 	}
+	
 }

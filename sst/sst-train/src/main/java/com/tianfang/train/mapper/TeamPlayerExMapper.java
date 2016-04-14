@@ -11,4 +11,8 @@ public interface TeamPlayerExMapper {
     List<TeamPlayerDto> findTeamPlayerByParam(@Param("dto")TeamPlayerDto dto, @Param("page")PageQuery query);
 
     int countTeamPlayerByParam(@Param("dto")TeamPlayerDto dto);
+    
+    List<TeamPlayerDto> findTeamPlayerByTeamPlayer(@Param("dto")TeamPlayerDto dto, @Param("page")PageQuery query);
+    
+    int countTeamPlayerByTeamPlayer(@Param("dto")TeamPlayerDto dto);
 }

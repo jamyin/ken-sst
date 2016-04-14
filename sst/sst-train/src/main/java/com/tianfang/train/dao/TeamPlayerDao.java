@@ -37,6 +37,14 @@ public class TeamPlayerDao extends MyBatisBaseDao<TeamPlayer>{
 		return exMapper.countTeamPlayerByParam(dto);
 	}
 	
+	public List<TeamPlayerDto> findTeamPlayerByTeamPlayer(TeamPlayerDto dto, PageQuery query) {
+		return exMapper.findTeamPlayerByTeamPlayer(dto, query);
+	}
+	
+	public int countTeamPlayerByTeamPlayer(TeamPlayerDto dto) {
+		return exMapper.countTeamPlayerByTeamPlayer(dto);
+	}
+	
 	/**
 	 * 不带分页查询
 	 * @author YIn

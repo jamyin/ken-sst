@@ -20,12 +20,10 @@
 		<result column="stat" property="stat" jdbcType="INTEGER" />
 		<!--联表数据-->
 		<result column="utype" property="utype" jdbcType="INTEGER" />
-		<result column="team_name" property="teamName" jdbcType="VARCHAR" />
-		<result column="team_icon" property="teamIcon" jdbcType="VARCHAR" />
 	</resultMap>
   <sql id="Example_Where_Clause" >
     <where >
-     	p.stat = 1 AND u.stat = 1 AND t.stat = 1
+     	p.stat = 1 AND u.stat = 1
      	<if test="dto.id != null and dto.id != ''">
 			AND p.id = #{dto.id}
 	   	</if>
@@ -42,14 +40,13 @@
   </sql>
 	<sql id="Base_Column_List" >
 		p.id, p.team_id, p.user_id, p.name, p.age, p.card_no, p.mobile, p.school, p.student_no, p.pic, p.gender,
-		p.num, p.position, p.create_time, p.last_update_time, p.stat, u.utype, t.name AS team_name, t.icon AS team_icon
+		p.num, p.position, p.create_time, p.last_update_time, p.stat, u.utype
 	</sql>
   <select id="findTeamPlayerByParam" resultMap="BaseResultMap" parameterType="com.tianfang.train.dto.CompetitionTeamDto" >
 	  SELECT
 	  <include refid="Base_Column_List" />
 	  FROM sst_team_player AS p
 	  LEFT JOIN sport_user AS u ON p.user_id = u.id
-	  LEFT JOIN sst_team AS t ON t.id = p.team_id
 	  <include refid="Example_Where_Clause" />
 	  ORDER BY p.create_time DESC
 	  <if test="page != null and page.startNum != null and page.pageSize > page.startNum">
@@ -61,7 +58,6 @@
     SELECT count(*)
 	FROM sst_team_player AS p
 	LEFT JOIN sport_user AS u ON p.user_id = u.id
-	  LEFT JOIN sst_team AS t ON t.id = p.team_id
     <include refid="Example_Where_Clause" />
   </select>
   
