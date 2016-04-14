@@ -1,12 +1,5 @@
 package com.tianfang.train.dao;
 
-import java.util.List;
-
-import lombok.Getter;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.mybatis.MyBatisBaseDao;
@@ -17,6 +10,11 @@ import com.tianfang.train.mapper.TeamPlayerMapper;
 import com.tianfang.train.pojo.TeamPlayer;
 import com.tianfang.train.pojo.TeamPlayerExample;
 import com.tianfang.train.pojo.TeamPlayerExample.Criteria;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class TeamPlayerDao extends MyBatisBaseDao<TeamPlayer>{
