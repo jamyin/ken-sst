@@ -292,7 +292,6 @@ public class TeamController extends BaseController{
 		dto.setTeamId(team.getId());
 		List<TeamPlayerDto> players = playerService.findTeamPlayerByParam(dto);
 		Map<String, Object> map = new HashMap<String, Object>(2);
-		map.put("currUser", UserDtoToAppUser(curruser));
 		List<AppTeamPlayer> results = new ArrayList<>(2);
 		if (null != players && players.size() > 0){
 			AppTeamPlayer gl = new AppTeamPlayer("管理员", new ArrayList<AppUser>());
@@ -310,6 +309,9 @@ public class TeamController extends BaseController{
 					}
 					if (user.getUtype().intValue() == UserType.COACH.getIndex()){
 						gl.getList().add(UserDtoToAppUser(user));
+					}
+					if (user.getUserId().equals(curruser.getId())){
+						map.put("currUser", UserDtoToAppUser(user));
 					}
 				}
 			}
@@ -454,23 +456,6 @@ public class TeamController extends BaseController{
 			user.setMobile(dto.getMobile());
 			user.setPic(dto.getPic());
 			user.setPosition(dto.getPositionStr());
-			user.setTeamId(dto.getTeamId());
-			user.setUtype(dto.getUtype());
-
-			return user;
-		}
-		return null;
-	}
-
-	private AppUser UserDtoToAppUser(UserDto dto){
-		if (null != dto){
-			AppUser user = new AppUser();
-			user.setCreateTime(dto.getCreateTime());
-			user.setGender(dto.getGender());
-			user.setUserId(dto.getId());
-			user.setMobile(dto.getMobile());
-			user.setPic(dto.getPic());
-			user.setPosition(dto.getPosition());
 			user.setTeamId(dto.getTeamId());
 			user.setUtype(dto.getUtype());
 

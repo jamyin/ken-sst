@@ -1,11 +1,11 @@
 package com.tianfang.train.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.tianfang.common.constants.TeamPlayerPositionEnum;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>Description: 球队成员信息 </p>
@@ -123,6 +123,20 @@ public class TeamPlayerDto implements Serializable{
 	@Getter
 	@Setter
 	private Integer utype;
+
+	/**
+	 * 球队名称
+	 */
+	@Getter
+	@Setter
+	private String teamName;
+
+	/**
+	 * 球队图标
+	 */
+	@Getter
+	@Setter
+	private String teamIcon;
 
 	@Getter
 	@Setter
