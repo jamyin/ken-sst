@@ -16,6 +16,7 @@ import com.tianfang.user.enums.AuditType;
 import com.tianfang.user.enums.UserType;
 import com.tianfang.user.service.IUserApplyTeamService;
 import com.tianfang.user.service.IUserService;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
