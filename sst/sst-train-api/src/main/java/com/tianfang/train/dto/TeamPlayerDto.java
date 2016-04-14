@@ -28,10 +28,6 @@ public class TeamPlayerDto implements Serializable{
 	
 	@Getter
 	@Setter
-	private String teamName;
-
-	@Getter
-	@Setter
 	private String userId;
 
 	/**
