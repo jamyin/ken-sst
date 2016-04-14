@@ -61,9 +61,6 @@ public class TeamPlayerDao extends MyBatisBaseDao<TeamPlayer>{
         	if (StringUtils.isNotBlank(params.getTeamId())){
         		criteria.andTeamIdEqualTo(params.getTeamId().trim());
         	}
-        	if (StringUtils.isNotBlank(params.getTeamName())){
-        		criteria.andTeamNameLike("%"+params.getTeamName().trim()+"%");
-        	}
         	if (null != params.getNum()){
         		criteria.andNumEqualTo(params.getNum().intValue());
         	}

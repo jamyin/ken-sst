@@ -98,9 +98,6 @@ public class UserDao extends MyBatisBaseDao<User> {
         	if (StringUtils.isNotBlank(params.getBirthday())){
         		criteria.andBirthdayEqualTo(params.getBirthday().trim());
         	}
-        	if (StringUtils.isNotBlank(params.getMobile())){
-        		criteria.andMobileEqualTo(params.getMobile().trim());
-        	}
         	if (null != params.getUtype()){
         		criteria.andUtypeEqualTo(params.getUtype().intValue());
         	}
