@@ -107,7 +107,7 @@
 									<td  class='hidden-phone'>${(page.createTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>
 									<td>
 										<div id="operation" class='hidden-phone visible-desktop btn-group'>			
-											<a id='editTeam' data-obj-id="${(page.id)!}" data-team-id="${(page.teamId)!}" class="btn btn-mini btn-purple"><i class="icon-pencil"></i>关联球队</a>						
+											<a id='editTeam' data-obj-id="${(page.id)!}" class="btn btn-mini btn-purple"><i class="icon-pencil"></i>关联球队</a>
 											<a id='editObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-warning' style="margin-left:5px;" title="编辑"><i class='icon-edit'></i></a>
 											<a id='deleteObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-danger' style="margin-left:5px;" title="删除"><i class='icon-trash'></i></a>
 											<a id='editPwd' data-obj-id="${(page.id)!}" class="btn btn-mini btn-purple" style="margin-left:5px;"><i class="icon-pencil"></i>修改密码</a>
@@ -254,14 +254,13 @@
 			
 			$("#operation #editTeam").on('click',function(){
 				var id = $(this).attr("data-obj-id");
-				var teamId = $(this).attr("data-team-id");
 				//iframe层-父子操作
 				layer.open({
 				    type: 2,
 				    area: ['260px', '380px'],
 				    fix: true, //不固定
 				    maxmin: false,
-				    content: '${base}/user/team.do?id='+id+'&teamId='+teamId
+				    content: '${base}/user/team.do?id='+id
 				});				
 			});
 			$("#operation #editPwd").on('click',function(){

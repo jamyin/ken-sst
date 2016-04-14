@@ -6,6 +6,7 @@ import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.user.app.AppUserInfo;
 import com.tianfang.user.dto.UserApplyTeamDto;
+import com.tianfang.user.dto.UserInfoDto;
 
 public interface IUserApplyTeamService {
 
@@ -42,7 +43,7 @@ public interface IUserApplyTeamService {
 	 */
 	AppUserInfo getUserApplyInfoById(String id);
 
-	/**		
+	/**
 	 * <p>Description: 分页查询用户申请 </p>
 	 * <p>Company: 上海天坊信息科技有限公司</p>
 	 * @param param

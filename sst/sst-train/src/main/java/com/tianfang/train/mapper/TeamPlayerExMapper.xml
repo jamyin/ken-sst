@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.TeamPlayerExMapper">
+    <resultMap id="BaseResultMap" type="com.tianfang.train.dto.TeamPlayerDto">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="card_no" property="cardNo" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="school" property="school" jdbcType="VARCHAR"/>
+        <result column="student_no" property="studentNo" jdbcType="VARCHAR"/>
+        <result column="pic" property="pic" jdbcType="VARCHAR"/>
+        <result column="gender" property="gender" jdbcType="INTEGER"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="position" property="position" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP"/>
+        <result column="stat" property="stat" jdbcType="INTEGER"/>
+        <!--联表数据-->
+        <result column="utype" property="utype" jdbcType="INTEGER"/>
+        <result column="team_name" property="teamName" jdbcType="VARCHAR"/>
+        <result column="team_icon" property="teamIcon" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            p.stat = 1 AND u.stat = 1 AND t.stat = 1
+            <if test="dto.id != null and dto.id != ''">
+                AND p.id = #{dto.id}
+            </if>
+            <if test="dto.teamId != null and dto.teamId != ''">
+                AND p.team_id = #{dto.teamId}
+            </if>
+            <if test="dto.userId != null and dto.userId != ''">
+                AND p.user_id = #{dto.userId}
+            </if>
+            <if test="dto.utype != null and dto.utype != ''">
+                AND u.utype = #{dto.utype}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List">
+        p.id, p.team_id, p.user_id, p.name, p.age, p.card_no, p.mobile, p.school, p.student_no, p.pic, p.gender,
+        p.num, p.position, p.create_time, p.last_update_time, p.stat, u.utype, t.name AS team_name, t.icon AS team_icon
+    </sql>
+
+    <select id="findTeamPlayerByParam" resultMap="BaseResultMap" parameterType="com.tianfang.train.dto.TeamPlayerDto">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sst_team_player AS p
+        LEFT JOIN sport_user AS u ON p.user_id = u.id
+        LEFT JOIN sst_team AS t ON t.id = p.team_id
+        <include refid="Example_Where_Clause"/>
+        ORDER BY p.create_time DESC
+        <if test="page != null and page.startNum != null and page.pageSize > page.startNum">
+            limit ${page.startNum}, ${page.pageSize}
+        </if>
+    </select>
+
+    <select id="countTeamPlayerByParam" parameterType="com.tianfang.train.dto.TeamPlayerDto"
+            resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM sst_team_player AS p
+        LEFT JOIN sport_user AS u ON p.user_id = u.id
+        LEFT JOIN sst_team AS t ON t.id = p.team_id
+        <include refid="Example_Where_Clause"/>
+    </select>
+
+    <sql id="Base_Column_Team_List">
+        p.id, p.team_id, p.user_id, p.name, p.age, p.card_no, p.mobile, p.school, p.student_no, p.pic, p.gender,
+        p.num, p.position, p.create_time, p.last_update_time, p.stat, t.name as teamName
+    </sql>
+
+    <sql id="Example_Where_Team_Clause">
+        <where>
+            p.stat = 1 AND t.stat = 1
+            <if test="dto.id != null and dto.id != ''">
+                AND p.id = #{dto.id}
+            </if>
+            <if test="dto.teamId != null and dto.teamId != ''">
+                AND p.team_id = #{dto.teamId}
+            </if>
+            <if test="dto.name != null and dto.name != ''">
+                and p.name like "%"#{dto.name}"%"
+            </if>
+            <if test="dto.userId != null and dto.userId != ''">
+                AND p.user_id = #{dto.userId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="findTeamPlayerByTeamPlayer" resultType="com.tianfang.train.dto.TeamPlayerDto"
+            parameterType="com.tianfang.train.dto.TeamPlayerDto">
+        SELECT
+        <include refid="Base_Column_Team_List"/>
+        FROM sst_team_player AS p
+        LEFT JOIN sst_team AS t ON p.team_id = t.id
+        <include refid="Example_Where_Team_Clause"/>
+        ORDER BY p.create_time desc
+        limit #{page.startNum}, #{page.pageSize}
+    </select>
+
+    <select id="countTeamPlayerByTeamPlayer" resultType="java.lang.Integer"
+            parameterType="com.tianfang.train.dto.TeamPlayerDto">
+        SELECT count(*)
+        FROM sst_team_player AS p
+        LEFT JOIN sst_team AS t ON p.team_id = t.id
+        <include refid="Example_Where_Team_Clause"/>
+    </select>
+</mapper>

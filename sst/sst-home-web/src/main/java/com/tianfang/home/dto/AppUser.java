@@ -14,16 +14,19 @@ import java.util.Date;
  */
 public class AppUser implements Serializable {
 
+    /**
+     * 球员表主键id
+     */
     @Getter
     @Setter
     private String id;
 
     /**
-     * 用户昵称
+     * 用户id
      */
     @Getter
     @Setter
-    private String nickName;
+    private String userId;
 
     /**
      * 用户头像
@@ -68,25 +71,11 @@ public class AppUser implements Serializable {
     private Date createTime;
 
     /**
-     * 最后登录时间
-     */
-    @Getter
-    @Setter
-    private Date lastLoginTime;
-
-    /**
      * 中文名
      */
     @Setter
     @Getter
-    private String cname;
-
-    /**
-     * 英文名
-     */
-    @Setter
-    @Getter
-    private String ename;
+    private String name;
 
     /**
      * 在团队中的位置，比如左边锋

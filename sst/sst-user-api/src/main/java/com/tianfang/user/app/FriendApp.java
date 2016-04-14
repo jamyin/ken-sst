@@ -2,6 +2,8 @@ package com.tianfang.user.app;
 
 import java.io.Serializable;
 
+import com.google.common.base.Objects;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -92,4 +94,30 @@ public class FriendApp implements Serializable{
 		this.userMobile = userMobile;
 		this.care = care;
 	}
+	
+	@Override
+	public int hashCode(){
+		return getFriendId().hashCode();
+	}
+	
+	//重写equals比较按照 Id 进行比较 friend
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (obj instanceof FriendApp){
+			FriendApp i = (FriendApp)obj;
+			if (null != i.getFriendId() && null != this.getFriendId() && Objects.equal(this.getFriendId(), i.getFriendId())){
+				return true;
+			}else{
+				return false;
+			}
+		} else{
+			return false;
+		}
+	}
+	
+	
 }

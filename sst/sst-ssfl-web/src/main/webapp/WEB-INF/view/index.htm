@@ -13,13 +13,23 @@
 			<div class="slidebox">
 				<div id="slider" class="swipe" style="visibility:visible;">
 					<div class="swipe-wrap">
-						<figure text="1聚焦足总杯-切尔西5-1曼城 阿扎尔1射2聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传传"><img src="/static/img/silde.jpg" border="0"></figure>
+						<#if dataMap ?? && dataMap.infomation ??>
+							<#list dataMap.infomation as data>
+								<#if data_index == 0>
+									<#assign oTitle = data.title>
+								</#if>
+								<#if data_index < 4>
+									<figure text="${(data.title)!}"><img src="${(data.pic)!}" border="0"></figure>
+								</#if>
+							</#list>
+						</#if>
+<!-- 						<figure text="1聚焦足总杯-切尔西5-1曼城 阿扎尔1射2聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传传"><img src="/static/img/silde.jpg" border="0"></figure>
 						<figure text="2聚焦足总杯-切尔西5-1曼城 阿扎尔1射2聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传传"><img src="/static/img/silde.jpg" border="0"></figure>
 						<figure text="3聚焦足总杯-切尔西5-1曼城 阿扎尔1射2聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传传"><img src="/static/img/silde.jpg" border="0"></figure>
 						<figure text="4聚焦足总杯-切尔西5-1曼城 阿扎尔1射2聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传传"><img src="/static/img/silde.jpg" border="0"></figure>
-					</div>
+ -->					</div>
   				</div>
-				<div class="text_tip"><p>z聚焦足总杯-切尔西5-1曼城 阿扎尔1射2聚焦足总杯-切尔西5-1曼城 阿扎尔1射2传传22222222222222</p></div>
+				<div class="text_tip"><p>${(oTitle)!}</p></div>
 				<ul id="position">
 					<li class="on"></li>
 					<li class=""></li>
@@ -28,7 +38,7 @@
 				</ul>
 			</div>
 			<div class="hotnews">
-				<#if dataMap ?? && dataMap.raceRecord ??>
+				<#if dataMap ?? && dataMap.infomation ??>
 					<#list dataMap.infomation as data>
 						<!-- ${(data_index)!} && ${((data_index)%4)!} -->
 						<#if ((data_index) % 4) == 0>

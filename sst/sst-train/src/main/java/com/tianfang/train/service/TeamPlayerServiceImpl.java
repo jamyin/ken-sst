@@ -1,12 +1,5 @@
 package com.tianfang.train.service;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
@@ -15,6 +8,11 @@ import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.train.dao.TeamPlayerDao;
 import com.tianfang.train.dto.TeamPlayerDto;
 import com.tianfang.train.pojo.TeamPlayer;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TeamPlayerServiceImpl implements ITeamPlayerService {
@@ -64,8 +62,7 @@ public class TeamPlayerServiceImpl implements ITeamPlayerService {
 	}
 
 	@Override
-	public List<TeamPlayerDto> findTeamPlayerByParam(
-			TeamPlayerDto dto) {
+	public List<TeamPlayerDto> findTeamPlayerByParam(TeamPlayerDto dto) {
 		List<TeamPlayerDto> list = playerDao.findTeamPlayerByParam(dto);
 		if (null != list && list.size() > 0){
 			return BeanUtils.createBeanListByTarget(list, TeamPlayerDto.class);
@@ -74,8 +71,7 @@ public class TeamPlayerServiceImpl implements ITeamPlayerService {
 	}
 
 	@Override
-	public PageResult<TeamPlayerDto> findTeamPlayerByParam(
-			TeamPlayerDto dto, PageQuery query) {
+	public PageResult<TeamPlayerDto> findTeamPlayerByParam(TeamPlayerDto dto, PageQuery query) {
 		int total = playerDao.countTeamPlayerByParam(dto);
 		if (total > 0){
 			query.setTotal(total);
@@ -93,9 +89,30 @@ public class TeamPlayerServiceImpl implements ITeamPlayerService {
 		return findTeamPlayerByParam(dto);
 	}
 
+	@Override
+	public TeamPlayerDto getTeamPlayeByUserId(String userId) {
+		checkUserIdIsNull(userId);
+		TeamPlayerDto dto = new TeamPlayerDto();
+		dto.setUserId(userId);
+		List<TeamPlayerDto> playeies = findTeamPlayerByParam(dto);
+		if (null != playeies && playeies.size() > 0){
+			if (playeies.size() > 1){
+				throw new RuntimeException("数据异常,请联系技术人员,处理sst_team_player表数据!");
+			}
+			return playeies.get(0);
+		}
+		return null;
+	}
+
 	private void checkTeamIdIsNull(String teamId) {
 		if (StringUtils.isBlank(teamId)){
 			throw new RuntimeException("对不起,赛事球员对象球队ID为空!");
+		}
+	}
+
+	private void checkUserIdIsNull(String userId) {
+		if (StringUtils.isBlank(userId)){
+			throw new RuntimeException("对不起,赛事球员对象用户ID为空!");
 		}
 	}
 
@@ -187,19 +204,11 @@ public class TeamPlayerServiceImpl implements ITeamPlayerService {
 	@Override
 	public PageResult<TeamPlayerDto> findTeamPlayerViewByPage(TeamPlayerDto teamPlayerDto , PageQuery page) {
 		TeamPlayer teamPlayer = BeanUtils.createBeanByTarget(teamPlayerDto, TeamPlayer.class);
-		List<TeamPlayer> list = playerDao.findTeamPlayerViewByPage(teamPlayer,page);
-		int total = playerDao.selectAccount(teamPlayer);
+		List<TeamPlayerDto> list = playerDao.findTeamPlayerByTeamPlayer(teamPlayerDto, page);
+		int total = playerDao.countTeamPlayerByTeamPlayer(teamPlayerDto);
 		page.setTotal(total);
 		List<TeamPlayerDto> dtoList = BeanUtils.createBeanListByTarget(list, TeamPlayerDto.class);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-		for(TeamPlayerDto dto : dtoList){
-			if(dto.getCreateTime() != null){
-			dto.setCreateTimeStr(sdf.format(dto.getCreateTime()));}
-			if(dto.getLastUpdateTime() != null){
-			dto.setLastUpdateTimeStr(sdf.format(dto.getLastUpdateTime()));
-			}
-		}
-		return new PageResult<TeamPlayerDto>(page, dtoList);
+		return new PageResult<TeamPlayerDto>(page, list);
 	}
-
+	
 }
