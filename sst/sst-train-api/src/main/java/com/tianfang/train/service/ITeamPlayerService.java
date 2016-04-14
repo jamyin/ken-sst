@@ -1,10 +1,10 @@
 package com.tianfang.train.service;
 
-import java.util.List;
-
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.train.dto.TeamPlayerDto;
+
+import java.util.List;
 
 public interface ITeamPlayerService {
 	
@@ -13,12 +13,50 @@ public interface ITeamPlayerService {
 	void del(String id);
 	
 	void update(TeamPlayerDto dto);
-	
+
+	/**		
+	 * <p>Description: 联表查询球员信息 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param dto
+	 * @return List<TeamPlayerDto>
+	 * @author wangxiang	
+	 * @date 16/4/14 下午1:43
+	 * @version 1.0
+	 */
 	List<TeamPlayerDto> findTeamPlayerByParam(TeamPlayerDto dto);
-	
+
+	/**
+	 * <p>Description: 联表分页查询球员信息 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param dto
+	 * @return List<TeamPlayerDto>
+	 * @author wangxiang
+	 * @date 16/4/14 下午1:43
+	 * @version 1.0
+	 */
 	PageResult<TeamPlayerDto> findTeamPlayerByParam(TeamPlayerDto dto, PageQuery query);
-	
+
+	/**
+	 * <p>Description: 根据球队id联表查询球员信息 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param teamId
+	 * @return List<TeamPlayerDto>
+	 * @author wangxiang
+	 * @date 16/4/14 下午1:43
+	 * @version 1.0
+	 */
 	List<TeamPlayerDto> findTeamPlayerByTeamId(String teamId);
+	
+	/**		
+	 * <p>Description: 根据球队id和用户id查询球员信息 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param userId
+	 * @return TeamPlayerDto
+	 * @author wangxiang	
+	 * @date 16/4/14 下午1:51
+	 * @version 1.0
+	 */
+	TeamPlayerDto getTeamPlayeByUserId(String userId);
 	
 	/**
 	 * 增加赛事球队队员
@@ -27,7 +65,7 @@ public interface ITeamPlayerService {
 	 * @param teamPlayerDto
 	 * @return
 	 */
-	int addTeamPlayer(TeamPlayerDto TeamPlayerDto);
+	int addTeamPlayer(TeamPlayerDto teamPlayerDto);
 
 	/**
 	 * 编辑赛事球队队员(根据主键Id进行更新)
@@ -36,7 +74,7 @@ public interface ITeamPlayerService {
 	 * @param teamPlayerDto
 	 * @return
 	 */
-	int updateTeamPlayer(TeamPlayerDto TeamPlayerDto);
+	int updateTeamPlayer(TeamPlayerDto teamPlayerDto);
 	
 	/**
 	 * 根据主键Id删除 -物理删除
@@ -45,7 +83,7 @@ public interface ITeamPlayerService {
 	 * @param teamPlayerDto
 	 * @return
 	 */
-	int delTeamPlayer(TeamPlayerDto TeamPlayerDto);
+	int delTeamPlayer(TeamPlayerDto teamPlayerDto);
 	
 	/**
 	 * 批量逻辑删除
@@ -72,7 +110,7 @@ public interface ITeamPlayerService {
 	 * @param teamPlayerDto
 	 * @return
 	 */
-	List<TeamPlayerDto> findTeamPlayer(TeamPlayerDto TeamPlayerDto);
+	List<TeamPlayerDto> findTeamPlayer(TeamPlayerDto teamPlayerDto);
 
 	/**
 	 * 后台赛事球队队员显示页面-分页
@@ -82,5 +120,5 @@ public interface ITeamPlayerService {
 	 * @param page
 	 * @return
 	 */
-	PageResult<TeamPlayerDto> findTeamPlayerViewByPage(TeamPlayerDto TeamPlayerDto, PageQuery page);
+	PageResult<TeamPlayerDto> findTeamPlayerViewByPage(TeamPlayerDto teamPlayerDto, PageQuery page);
 }

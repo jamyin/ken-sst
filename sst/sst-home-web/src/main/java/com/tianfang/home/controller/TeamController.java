@@ -9,14 +9,19 @@ import com.tianfang.common.util.StringUtils;
 import com.tianfang.home.dto.AppTeamPlayer;
 import com.tianfang.home.dto.AppUser;
 import com.tianfang.train.dto.TeamDto;
+import com.tianfang.train.dto.TeamPlayerDto;
+import com.tianfang.train.pojo.TeamPlayer;
+import com.tianfang.train.service.ITeamPlayerService;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.app.AppUserInfo;
 import com.tianfang.user.dto.ReasonJson;
 import com.tianfang.user.dto.UserApplyTeamDto;
 import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.dto.UserInfoDto;
 import com.tianfang.user.enums.AuditType;
 import com.tianfang.user.enums.UserType;
 import com.tianfang.user.service.IUserApplyTeamService;
+import com.tianfang.user.service.IUserInfoService;
 import com.tianfang.user.service.IUserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,6 +57,10 @@ public class TeamController extends BaseController{
 	private IUserApplyTeamService userApplyTeamService;
 	@Autowired
 	private IUserService userService;
+	@Autowired
+	private ITeamPlayerService playerService;
+	@Autowired
+	private IUserInfoService userInfoService;
 
 	/**
 	 * 用户申请加入球队接口
@@ -115,16 +124,9 @@ public class TeamController extends BaseController{
 		AppUserInfo dto = new AppUserInfo();
 		dto.setTeamId(team.getId());
 		PageResult<AppUserInfo> datas = userApplyTeamService.queryUserApplyInfoByParam(dto, query);
-		if (null != datas && null != datas.getResults() && datas.getResults().size() > 0){
-			for (AppUserInfo info : datas.getResults()){
-				if (null != info){
-					assemblyReason(info);
-				}
-			}
-		}
 		result.setStatus(DataStatus.HTTP_SUCCESS);
 		result.setData(datas);
-		
+
 		return result;
 	}
 
@@ -133,7 +135,7 @@ public class TeamController extends BaseController{
 	 * <p>Company: 上海天坊信息科技有限公司</p>
 	 * @param id
 	 * @return Response<AppUserInfo>
-	 * @author wangxiang	
+	 * @author wangxiang
 	 * @date 16/4/9 下午3:56
 	 * @version 1.0
 	 */
@@ -143,7 +145,15 @@ public class TeamController extends BaseController{
 		Response<AppUserInfo> response = new Response<>();
 		try {
 			AppUserInfo  info = userApplyTeamService.getUserApplyInfoById(id);
-			assemblyReason(info);
+			if (null != info){
+				if (info.getStatus() == AuditType.FAIL.getIndex()){
+					if (StringUtils.isNotBlank(info.getReason())){
+						ReasonJson reasonJson = JSON.parseObject(info.getReason(), ReasonJson.class);
+						info.setReason(reasonJson.getRefuse());
+					}
+				}
+
+			}
 			response.setData(info);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -175,7 +185,7 @@ public class TeamController extends BaseController{
 		result.setMessage("欢迎队长回家");
 		return result;
 	}
-	
+
 	/**
 	 * 审核球队用户申请
 	 * @param userId
@@ -212,30 +222,35 @@ public class TeamController extends BaseController{
 			result.setMessage("对不起,已经审核过了!");
 			return result;
 		}
-		
-		UserDto user = userService.getUserById(userApplyTeam.getUserId());
-		if (null != user){
-			if (StringUtils.isNotBlank(user.getTeamId())){
-				TeamDto userTeam = teamService.getTeamById(user.getTeamId());
-				if (null != userTeam ){
-					result.setStatus(DataStatus.HTTP_FAILE);
-					result.setMessage("对不起,该用户已经加入其它球队!");
-					userApplyTeam.setStat(DataStatus.DISABLED);
-					userApplyTeamService.update(userApplyTeam);
-					return result;
-				}
+
+		// 逻辑改动:由sport_user下查询teamId字段  改为  查询sst_team_player表中是否有用户
+		TeamPlayerDto teamPlayer = getTeamPlayerByUserId(userId);
+		if (null != teamPlayer){
+			TeamDto userTeam = teamService.getTeamById(teamPlayer.getTeamId());
+			if (null != userTeam){
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("对不起,该用户已经加入其它球队!");
+				userApplyTeam.setStat(DataStatus.DISABLED);
+				userApplyTeamService.update(userApplyTeam);
+				return result;
 			}
 		}
 		if (status == AuditType.PASS.getIndex()){
-			user.setTeamId(team.getId());
-			userService.update(user);
-			result.setMessage("恭喜你,操作成功!");
+			UserInfoDto userInfo = userInfoService.getUserInfo(userId);
+			if (null != userInfo){
+				TeamPlayerDto player = assemblyPlayer(userApplyTeam, userInfo);
+				playerService.save(player);
+				result.setMessage("恭喜你,操作成功!");
+			}else{
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("用户参赛信息未填写!");
+			}
 		}
 		// 如果拒绝本次申请
 		if (status == AuditType.FAIL.getIndex()){
 			ReasonJson reasonJson = new ReasonJson();
 			reasonJson.setApply(userApplyTeam.getReason());
-			reasonJson.setRefuse(StringUtils.isBlank(reason)?"":reason.trim());
+			reasonJson.setRefuse(reason);
 			userApplyTeam.setReason(JSON.toJSONString(reasonJson));
 			result.setMessage("恭喜你,拒绝成功!");
 		}
@@ -244,41 +259,12 @@ public class TeamController extends BaseController{
 		return result;
 	}
 
-	/**		
-	 * <p>Description: 分页查询球队下所有用户 </p>
-	 * <p>Company: 上海天坊信息科技有限公司</p>
-	 * @param userId
-	 * @param query
-	 * @return Response<PageResult<UserDto>>
-	 * @author wangxiang	
-	 * @date 16/4/5 下午1:31
-	 * @version 1.0
-	 */
-	@RequestMapping(value="playersList")
-	@ResponseBody
-	public Response<PageResult<UserDto>> playersList(String userId, PageQuery query){
-		Response<PageResult<UserDto>> result = new Response<PageResult<UserDto>>();
-		TeamDto team = isOwnerTeam(userId);
-		if (null == team){
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("对不起,您没有权限查看!");
-			return result;
-		}
-		UserDto dto = new UserDto();
-		dto.setTeamId(team.getId());
-		PageResult<UserDto> datas = userService.findUserByParam(dto, query);
-		result.setStatus(DataStatus.HTTP_SUCCESS);
-		result.setData(datas);
-
-		return result;
-	}
-
-	/**		
+	/**
 	 * <p>Description: 查询球队下成员,按管理员和成员分组展示 </p>
 	 * <p>Company: 上海天坊信息科技有限公司</p>
 	 * @param
 	 * @return
-	 * @author wangxiang	
+	 * @author wangxiang
 	 * @date 16/4/6 下午6:14
 	 * @version 1.0
 	 */
@@ -292,31 +278,29 @@ public class TeamController extends BaseController{
 			result.setMessage("用户不存在!");
 			return result;
 		}
-		if (StringUtils.isBlank(curruser.getTeamId())){
-			curruser = getUserByCache(userId, false);
-			if (StringUtils.isBlank(curruser.getTeamId())){
-				result.setStatus(DataStatus.HTTP_FAILE);
-				result.setMessage("暂未加入球队!");
-				return result;
-			}
-		}
-		TeamDto team = teamService.getTeamById(curruser.getTeamId());
-		if (null == team || team.getStat() == DataStatus.DISABLED){
+		TeamPlayerDto player = getTeamPlayerByUserId(userId);
+		if (null == player){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("暂未加入球队!");
 			return result;
 		}
-		UserDto dto = new UserDto();
+		TeamDto team = teamService.getTeamById(player.getTeamId());
+		if (null == team || team.getStat() == DataStatus.DISABLED){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("您加入的球队已经解散了!");
+			return result;
+		}
+		TeamPlayerDto dto = new TeamPlayerDto();
 		dto.setTeamId(team.getId());
-		List<UserDto> datas = userService.findUserByParam(dto);
+		List<TeamPlayerDto> players = playerService.findTeamPlayerByParam(dto);
 		Map<String, Object> map = new HashMap<String, Object>(2);
 		map.put("currUser", UserDtoToAppUser(curruser));
 		List<AppTeamPlayer> results = new ArrayList<>(2);
-		if (null != datas && datas.size() > 0){
+		if (null != players && players.size() > 0){
 			AppTeamPlayer gl = new AppTeamPlayer("管理员", new ArrayList<AppUser>());
 			AppTeamPlayer cy = new AppTeamPlayer("球队成员", new ArrayList<AppUser>());
-			for (UserDto user : datas){
-				if (null != user && user.getStat().intValue() == DataStatus.ENABLED){
+			for (TeamPlayerDto user : players){
+				if (null != user){
 					if (null == user.getUtype()){
 						continue;
 					}
@@ -360,7 +344,19 @@ public class TeamController extends BaseController{
 			result.setMessage("对不起,您没有权限审核");
 			return result;
 		}
-		if (!userService.kickingTeam(kickingId)){
+		try {
+			if (StringUtils.isNotBlank(kickingId)){
+                String[] ids = kickingId.split(",");
+                for (String id : ids){
+                    TeamPlayerDto player = playerService.getTeamPlayerById(id);
+                    if (null != player){
+                        player.setStat(DataStatus.DISABLED);
+                    }
+                    playerService.update(player);
+                }
+            }
+		} catch (Exception e) {
+			e.printStackTrace();
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("对不起,球员踢出失败!");
 			return result;
@@ -388,21 +384,21 @@ public class TeamController extends BaseController{
 			return null;
 		}
 		TeamDto team = teamService.getTeamById(user.getTeamId());
-		
+
 		if (null != team && team.getStat() == DataStatus.ENABLED){
 			return team;
 		}
 		return null;
 	}
 
-	/**		
+	/**
 	 * <p>Description: 用户申请加入球队逻辑 </p>
 	 * <p>Company: 上海天坊信息科技有限公司</p>
 	 * @param result
 	 * @param userId
 	 * @param teamId
 	 * @return boolean
-	 * @author wangxiang	
+	 * @author wangxiang
 	 * @date 16/4/12 上午9:39
 	 * @version 1.0
 	 */
@@ -445,21 +441,35 @@ public class TeamController extends BaseController{
     		result.setMessage("用户不存在");
     		return false;
     	}
-		
+
 		return true;
+	}
+
+	private AppUser UserDtoToAppUser(TeamPlayerDto dto){
+		if (null != dto){
+			AppUser user = new AppUser();
+			user.setName(dto.getName());
+			user.setCreateTime(dto.getCreateTime());
+			user.setGender(dto.getGender());
+			user.setUserId(dto.getUserId());
+			user.setMobile(dto.getMobile());
+			user.setPic(dto.getPic());
+			user.setPosition(dto.getPositionStr());
+			user.setTeamId(dto.getTeamId());
+			user.setUtype(dto.getUtype());
+
+			return user;
+		}
+		return null;
 	}
 
 	private AppUser UserDtoToAppUser(UserDto dto){
 		if (null != dto){
 			AppUser user = new AppUser();
-			user.setCname(dto.getCname());
 			user.setCreateTime(dto.getCreateTime());
-			user.setEname(dto.getEname());
 			user.setGender(dto.getGender());
-			user.setId(dto.getId());
-			user.setLastLoginTime(dto.getLastLoginTime());
+			user.setUserId(dto.getId());
 			user.setMobile(dto.getMobile());
-			user.setNickName(dto.getNickName());
 			user.setPic(dto.getPic());
 			user.setPosition(dto.getPosition());
 			user.setTeamId(dto.getTeamId());
@@ -470,16 +480,51 @@ public class TeamController extends BaseController{
 		return null;
 	}
 
-	private void assemblyReason(AppUserInfo info) {
-		if (info.getStatus() == AuditType.FAIL.getIndex()){
-			if (StringUtils.isNotBlank(info.getReason())){
-				ReasonJson reasonJson = JSON.parseObject(info.getReason(), ReasonJson.class);
-				if (null != reasonJson.getRefuse()){
-					info.setReason(reasonJson.getRefuse());
-				}else{
-					info.setReason("");
-				}
+	/**
+	 * <p>Description: 根据用户id查询球队用户 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param userId
+	 * @return TeamPlayerDto
+	 * @author wangxiang
+	 * @date 16/4/14 上午11:37
+	 * @version 1.0
+	 */
+	private TeamPlayerDto getTeamPlayerByUserId(String userId) {
+		TeamPlayerDto param = new TeamPlayerDto();
+		param.setUserId(userId);
+		List<TeamPlayerDto> teamPlayer = playerService.findTeamPlayerByParam(param);
+		if (null != teamPlayer && teamPlayer.size() > 0){
+			if (teamPlayer.size() != 1){
+				logger.error("sst_team_plaryer 数据出现异常:"+JSON.toJSONString(teamPlayer));
 			}
+			return teamPlayer.get(0);
 		}
+		return null;
+	}
+
+	/**		
+	 * <p>Description: 组装球队球员数据 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param
+	 * @return
+	 * @author wangxiang	
+	 * @date 16/4/14 上午11:58
+	 * @version 1.0
+	 */
+	private TeamPlayerDto assemblyPlayer(UserApplyTeamDto userApplyTeam, UserInfoDto userInfo) {
+		TeamPlayerDto player = new TeamPlayerDto();
+		player.setMobile(userInfo.getMobile());
+		player.setAge(userInfo.getAge());
+		player.setCardNo(userInfo.getCardNo());
+		player.setGender(userInfo.getGender());
+		player.setName(userInfo.getName());
+		player.setStudentNo(userInfo.getStudentNo());
+		player.setSchool(userInfo.getSchool());
+		// 保存用户头像
+		player.setPic(userApplyTeam.getPic());
+		player.setTeamId(userApplyTeam.getTeamId());
+		player.setUserId(userApplyTeam.getUserId());
+
+		return player;
 	}
 }

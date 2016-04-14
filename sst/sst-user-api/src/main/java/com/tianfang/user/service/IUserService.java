@@ -33,8 +33,6 @@ public interface IUserService {
 	
 	PageResult<UserDto> findUserByParam(UserDto dto, PageQuery query);
 
-	void joinTeam(String userId, String teamId);
-	
 	/**
 	 * 用户注册
 	 * @param dto
@@ -91,17 +89,6 @@ public interface IUserService {
      */
 	List<UserDto> findUserByGroupId(String groupId);
 
-	/**		
-	 * <p>Description: 将用户踢出球队 </p>
-	 * <p>Company: 上海天坊信息科技有限公司</p>
-	 * @param userId
-	 * @return boolean
-	 * @author wangxiang	
-	 * @date 16/4/5 下午1:36
-	 * @version 1.0
-	 */
-	boolean kickingTeam(String userId);
-	
 	/**
 	 * 
 		 * 此方法描述的是：获取本人同一队伍的用户信息

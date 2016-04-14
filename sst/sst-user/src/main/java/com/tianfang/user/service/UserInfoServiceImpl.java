@@ -1,20 +1,24 @@
 package com.tianfang.user.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.alibaba.fastjson.JSON;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.util.BeanUtils;
+import com.tianfang.common.util.StringUtils;
 import com.tianfang.user.dao.UserInfoDao;
 import com.tianfang.user.dto.UserInfoDto;
 import com.tianfang.user.pojo.UserInfo;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserInfoServiceImpl implements IUserInfoService {
+	protected static final Log logger = LogFactory.getLog(UserInfoServiceImpl.class);
 	
 	@Autowired
 	private UserInfoDao userInfoDao;
@@ -59,4 +63,20 @@ public class UserInfoServiceImpl implements IUserInfoService {
 		return new PageResult<UserInfoDto>(page, list);
 	}
 
+	@Override
+	public UserInfoDto getUserInfo(String userId) {
+		if (StringUtils.isBlank(userId)){
+			throw new RuntimeException("对不起,用户id为空!");
+		}
+		UserInfoDto param = new UserInfoDto();
+		param.setUserId(userId);
+		List<UserInfoDto> userInfo = userInfoDao.findUserInfo(param);
+		if (null != userInfo && userInfo.size() > 0){
+			if (userInfo.size() != 1){
+				logger.error("userInfo数据存在异常!数据内容:"+ JSON.toJSONString(userInfo));
+			}
+			return userInfo.get(0);
+		}
+		return null;
+	}
 }

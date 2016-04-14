@@ -1,13 +1,5 @@
 package com.tianfang.user.service;
 
-import java.util.List;
-import java.util.regex.Pattern;
-
-import com.tianfang.common.constants.CacheKey;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
@@ -18,6 +10,12 @@ import com.tianfang.user.app.FriendApp;
 import com.tianfang.user.dao.UserDao;
 import com.tianfang.user.dto.UserDto;
 import com.tianfang.user.pojo.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -48,8 +46,7 @@ public class UserServiceImpl implements IUserService {
 			return null;
 		}
 	}
-	
-	
+
 	@Override
 	public void del(String ids){
 		String[] idArr = ids.split(",");
@@ -99,17 +96,6 @@ public class UserServiceImpl implements IUserService {
 			return new PageResult<UserDto>(query, list);
 		}
 		return null;
-	}
-	
-	@Override
-	public void joinTeam(String userId, String teamId){
-		checkIdIsNullException(userId);
-		User user = userDao.selectByPrimaryKey(userId);
-		checkObjIsNotExistException(user);
-		user.setTeamId(teamId);
-		userDao.updateByPrimaryKeySelective(user);
-		// 清缓存
-		redisTemplate.delete(DataStatus.SST_USER+userId);
 	}
 	
 	@Override
@@ -186,23 +172,6 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public List<UserDto> findUserByGroupId(String groupId) {
 		return userDao.findUserByGroupId(groupId);
-	}
-
-	@Override
-	public boolean kickingTeam(String userId) {
-		checkIdIsNullException(userId);
-		String[] ids = userId.split(",");
-		for (String id : ids){
-			User user = userDao.selectByPrimaryKey(id);
-			if (null != user && user.getStat() == DataStatus.ENABLED){
-				user.setTeamId(null);
-				userDao.updateByPrimaryKey(user);
-				// 清缓存
-				redisTemplate.delete(DataStatus.SST_USER+id);
-			}
-		}
-
-		return true;
 	}
 
 	@Override

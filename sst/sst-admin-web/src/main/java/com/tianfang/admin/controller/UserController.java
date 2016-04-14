@@ -1,16 +1,23 @@
 package com.tianfang.admin.controller;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
+import com.alibaba.fastjson.JSON;
+import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.digest.MD5Coder;
+import com.tianfang.common.ext.ExtPageQuery;
+import com.tianfang.common.model.MessageResp;
+import com.tianfang.common.model.PageResult;
+import com.tianfang.common.model.Response;
+import com.tianfang.train.dto.TeamDto;
+import com.tianfang.train.dto.TeamPlayerDto;
+import com.tianfang.train.service.ITeamPlayerService;
+import com.tianfang.train.service.ITeamService;
+import com.tianfang.user.dto.UserApplyTeamDto;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.dto.UserInfoDto;
+import com.tianfang.user.service.IUserInfoService;
+import com.tianfang.user.service.IUserService;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,19 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSON;
-import com.tianfang.common.constants.DataStatus;
-import com.tianfang.common.digest.MD5Coder;
-import com.tianfang.common.ext.ExtPageQuery;
-import com.tianfang.common.model.MessageResp;
-import com.tianfang.common.model.PageResult;
-import com.tianfang.common.model.Response;
-import com.tianfang.train.dto.TeamDto;
-import com.tianfang.train.service.ITeamService;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.dto.UserInfoDto;
-import com.tianfang.user.service.IUserInfoService;
-import com.tianfang.user.service.IUserService;
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value="/user")
@@ -41,12 +41,12 @@ public class UserController extends BaseController{
 	    
     @Autowired
     private IUserService userService;
-    
     @Autowired
     private IUserInfoService userInfoService;
-    
     @Autowired
     private ITeamService teamService;
+	@Autowired
+	private ITeamPlayerService playerService;
     
     
     @RequestMapping(value = "list")
@@ -176,10 +176,11 @@ public class UserController extends BaseController{
      * @throws Exception 
      */
     @RequestMapping(value = "team")
-    public ModelAndView auth(String id, String teamId) throws Exception {
-        ModelAndView mv = this.getModelAndView(this.getSessionUserId());   
-        List<TeamDto> teamList = teamService.findAll();
-        List<JsonTeam> jsonTeams = assemblyTreeNodes(teamId, teamList);
+    public ModelAndView auth(String id) throws Exception {
+        ModelAndView mv = this.getModelAndView(this.getSessionUserId());
+		TeamPlayerDto player = playerService.getTeamPlayeByUserId(id);
+		List<TeamDto> teamList = teamService.findAll();
+        List<JsonTeam> jsonTeams = assemblyTreeNodes(player == null? null : player.getTeamId(), teamList);
         String jsonStr = JSON.toJSONString(jsonTeams);
         logger.info("jsonStr="+jsonStr);
         mv.setViewName("/user/teams");
@@ -193,7 +194,21 @@ public class UserController extends BaseController{
     public Map<String, Object> joinTeam(String userId, String teamId) {
     	Map<String, Object> result;
         try {
-			userService.joinTeam(userId, teamId);
+			TeamPlayerDto teamPlayer = playerService.getTeamPlayeByUserId(userId);
+			if (null == teamPlayer){
+				UserInfoDto userInfo = userInfoService.getUserInfo(userId);
+				if (null != userInfo){
+					UserDto user = userService.getUserById(userId);
+					TeamPlayerDto player = assemblyPlayer(teamId, user, userInfo);
+					playerService.save(player);
+				}else{
+					result = MessageResp.getMessage(false, "用户参赛信息未填写!");
+					return result;
+				}
+			}else{
+				teamPlayer.setTeamId(teamId);
+				playerService.update(teamPlayer);
+			}
 			result = MessageResp.getMessage(true, "加入成功~");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -201,6 +216,34 @@ public class UserController extends BaseController{
 		}
         return result;
     }
+
+	/**
+	 * <p>Description: 组装球队球员数据 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param teamId
+	 * @param user
+	 * @param userInfo
+	 * @return TeamPlayerDto
+	 * @author wangxiang
+	 * @date 16/4/14 上午11:58
+	 * @version 1.0
+	 */
+	private TeamPlayerDto assemblyPlayer(String teamId, UserDto user, UserInfoDto userInfo) {
+		TeamPlayerDto player = new TeamPlayerDto();
+		player.setMobile(userInfo.getMobile());
+		player.setAge(userInfo.getAge());
+		player.setCardNo(userInfo.getCardNo());
+		player.setGender(userInfo.getGender());
+		player.setName(userInfo.getName());
+		player.setStudentNo(userInfo.getStudentNo());
+		player.setSchool(userInfo.getSchool());
+		// 保存用户头像
+		player.setPic(user.getPic());
+		player.setTeamId(teamId);
+		player.setUserId(user.getId());
+
+		return player;
+	}
     
 	private List<JsonTeam> assemblyTreeNodes(String teamId, List<TeamDto> teamList) {
 		if (null != teamList && teamList.size() > 0){

@@ -3,9 +3,9 @@ package com.tianfang.train.dao;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.mybatis.MyBatisBaseDao;
-import com.tianfang.common.util.BeanUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.train.dto.TeamPlayerDto;
+import com.tianfang.train.mapper.TeamPlayerExMapper;
 import com.tianfang.train.mapper.TeamPlayerMapper;
 import com.tianfang.train.pojo.TeamPlayer;
 import com.tianfang.train.pojo.TeamPlayerExample;
@@ -22,56 +22,21 @@ public class TeamPlayerDao extends MyBatisBaseDao<TeamPlayer>{
 	@Autowired
 	@Getter
 	private TeamPlayerMapper mapper;
+	@Autowired
+	private TeamPlayerExMapper exMapper;
+
 	public List<TeamPlayerDto> findTeamPlayerByParam(TeamPlayerDto dto){
 		return findTeamPlayerByParam(dto, null);
 	}
 	
 	public List<TeamPlayerDto> findTeamPlayerByParam(TeamPlayerDto dto, PageQuery query) {
-		TeamPlayerExample example = new TeamPlayerExample();
-		TeamPlayerExample.Criteria criteria = example.createCriteria();
-        assemblyParams(dto, criteria);
-        if(null != query){
-        	example.setOrderByClause("create_time desc limit "+query.getStartNum() +"," + query.getPageSize());
-		}
-        List<TeamPlayer> results = mapper.selectByExample(example);        
-		return BeanUtils.createBeanListByTarget(results, TeamPlayerDto.class);
+		return exMapper.findTeamPlayerByParam(dto, query);
 	}
 	
 	public int countTeamPlayerByParam(TeamPlayerDto dto){
-		TeamPlayerExample example = new TeamPlayerExample();
-		TeamPlayerExample.Criteria criteria = example.createCriteria();
-        assemblyParams(dto, criteria);
-		return mapper.countByExample(example);
+		return exMapper.countTeamPlayerByParam(dto);
 	}
 	
-	/**
-	 * 组装查询参数
-	 * @param params
-	 * @param criteria
-	 * @author xiang_wang
-	 * 2016年1月12日下午4:51:12
-	 */
-	private void assemblyParams(TeamPlayerDto params, TeamPlayerExample.Criteria criteria) {
-		if (null != params) {
-        	if (StringUtils.isNotBlank(params.getId())){
-        		criteria.andIdEqualTo(params.getId().trim());
-        	}
-        	if (StringUtils.isNotBlank(params.getTeamId())){
-        		criteria.andTeamIdEqualTo(params.getTeamId().trim());
-        	}
-        	if (null != params.getNum()){
-        		criteria.andNumEqualTo(params.getNum().intValue());
-        	}
-        	if (null != params.getPosition()){
-        		criteria.andPositionEqualTo(params.getPosition().intValue());
-        	}
-        	if (StringUtils.isNotBlank(params.getName())){
-        		criteria.andNameLike("%"+params.getName().trim()+"%");
-        	}
-        }
-		criteria.andStatEqualTo(DataStatus.ENABLED);
-	}
-
 	/**
 	 * 不带分页查询
 	 * @author YIn
