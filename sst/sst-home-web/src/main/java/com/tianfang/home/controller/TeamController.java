@@ -10,7 +10,6 @@ import com.tianfang.home.dto.AppTeamPlayer;
 import com.tianfang.home.dto.AppUser;
 import com.tianfang.train.dto.TeamDto;
 import com.tianfang.train.dto.TeamPlayerDto;
-import com.tianfang.train.pojo.TeamPlayer;
 import com.tianfang.train.service.ITeamPlayerService;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.app.AppUserInfo;
@@ -152,7 +151,6 @@ public class TeamController extends BaseController{
 						info.setReason(reasonJson.getRefuse());
 					}
 				}
-
 			}
 			response.setData(info);
 		} catch (Exception e) {
@@ -262,8 +260,8 @@ public class TeamController extends BaseController{
 	/**
 	 * <p>Description: 查询球队下成员,按管理员和成员分组展示 </p>
 	 * <p>Company: 上海天坊信息科技有限公司</p>
-	 * @param
-	 * @return
+	 * @param userId
+	 * @return Response<Map<String, Object>>
 	 * @author wangxiang
 	 * @date 16/4/6 下午6:14
 	 * @version 1.0
@@ -448,6 +446,7 @@ public class TeamController extends BaseController{
 	private AppUser UserDtoToAppUser(TeamPlayerDto dto){
 		if (null != dto){
 			AppUser user = new AppUser();
+			user.setId(dto.getId());
 			user.setName(dto.getName());
 			user.setCreateTime(dto.getCreateTime());
 			user.setGender(dto.getGender());
