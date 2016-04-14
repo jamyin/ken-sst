@@ -15,6 +15,13 @@ import java.util.Date;
 public class AppUser implements Serializable {
 
     /**
+     * 球员表主键id
+     */
+    @Getter
+    @Setter
+    private String id;
+
+    /**
      * 用户id
      */
     @Getter
