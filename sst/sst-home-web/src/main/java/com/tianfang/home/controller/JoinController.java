@@ -12,9 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class JoinController extends BaseController{
-
+	
 	@RequestMapping(value = "join")
-	public ModelAndView index(String userId,String teamId) {
+	public ModelAndView index(String userId,String teamId,String type) {
 		ModelAndView mv = getModelAndView();
 		mv.setViewName("join");
 		return mv;
