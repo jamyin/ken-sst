@@ -74,11 +74,11 @@
 							<th>发送人</th>
 							<th>接收人</th>
 							<th>提醒方式</th>
-							<th>发送时间</th>
+							<!-- <th>发送时间</th> -->
 							<th>附件</th>
 							<th>语音</th>
 							<th>文字</th>
-							<th class="hidden-phone"><i class="icon-time hidden-phone"></i>创建时间</th>
+							<th class="hidden-phone"><i class="icon-time hidden-phone"></i>发送时间</th>
 							<th style="width:20%;">操作</th>
 						</tr>
 					</thead>
@@ -101,7 +101,7 @@
 											无
 										</#if>
 									</td>	
-									<td>${(page.sendTime?string("yyyy-MM-dd HH:mm"))!}</td>
+									<!-- <td>${(page.sendTime?string("yyyy-MM-dd HH:mm"))!}</td> -->
 									<td><#if page.attachment??>含有<#else>不含有</#if></td>
 									<td><#if page.voice??>含有<#else>不含有</#if></td>
 									<td>

@@ -65,10 +65,10 @@ public class RemindServiceImpl implements IRemindService {
 	@Override
 	public PageResult<RemindDto> findRemindByParam(RemindDto dto, PageQuery query)
 			throws Exception {
-		int total = remindDao.countRemindByParam(dto);
+		int total = remindDao.countByExample(dto);
 		if (total > 0){
 			query.setTotal(total);
-			List<RemindDto> results = remindDao.findRemindByParam(dto, query);
+			List<RemindDto> results = remindDao.selectByExample(dto, query);
 			return new PageResult<RemindDto>(query, results);
 		}
 		

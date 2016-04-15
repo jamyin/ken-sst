@@ -61,6 +61,14 @@ public class RemindDao extends MyBatisBaseDao<Remind> {
 		return mappers.countRemindList(userId);
 	}
 	
+	public List<RemindDto> selectByExample(RemindDto dto, PageQuery query) {
+		return mappers.selectByExample(dto, query);
+	}
+	
+	public int countByExample (RemindDto dto) {
+		return mappers.countByExample(dto);
+	}
+	
 	/**
 	 * 组装查询参数
 	 * @param params
