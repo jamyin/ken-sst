@@ -49,6 +49,15 @@ public class JoinController extends BaseController{
 		return mv;
 	}
 	
+	@RequestMapping(value = "saveSubmit")
+	@ResponseBody
+	public Response<String> joinSubmit(UserInfoDto userInfo) {
+		Response<String> response = new Response<String>();
+	
+		iUserInfoService.addUserInfo(userInfo);
+		
+		return response;
+	}
 	
 	@RequestMapping(value = "joinSubmit")
 	@ResponseBody

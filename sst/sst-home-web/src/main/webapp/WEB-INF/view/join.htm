@@ -67,7 +67,12 @@
   <input class="rt js-date hide" type="date">
   <div class="pro-bar">
     <div class="step-tip">
-      <span>1</span>/<span>3</span>
+      <span>1</span>/
+      <#if opType ??>
+      <span>2</span>	
+      <#else>
+      <span>3</span>
+      </#if>
     </div>
   </div>
   <div class="bt next bt-step1">
@@ -142,20 +147,21 @@
   </ul>
   <div class="pro-bar pro-bar2">
     <div class="step-tip">
-      <span>2</span>/<span>3</span>
+      <span>2</span>/
+      <#if opType ??>
+      <span>2</span>	
+      <#else>
+      <span>3</span>
+      </#if>
     </div>
   </div>
   <div class="bt prev  bt-2">
     上一步
   </div>
   <#if opType ??>
-  	  <div class="bt saveInfo  bt-2">
-   		 保存
-  	  </div>
+  	<div class="bt saveInfo  bt-2">保存</div>
   <#else>
-	  <div class="bt next  bt-2">
-	   	 下一步
-	  </div>  	
+	  <div class="bt next  bt-2">下一步</div>  	
   </#if>
 </div>
 
@@ -201,27 +207,46 @@ $(function() {
     $(this).parents(".join-info").addClass("hide").prev().removeClass("hide");
   });
   $(".submit").on("click",function(){
-  
-    if(check3()){
+      if(check3()){
       return;
-    }
-    
+    }  
 	var dataParams =$("#join_Form").serialize();
 	//修改用户信息 
 	$.ajax({
 		url:'joinSubmit.htm',
+		type: 'POST',
+		dataType: 'json',
+		async:false,
+		data:dataParams,
+		success:function(data){
+			if(data.status==200){
+				alert("数据保存成功,请单击返回");
+			}else{
+				alert("数据保存失败");
+			}
+		}
+	});
+  });
+
+  $(".saveInfo").on("click",function(){
+	var dataParams =$("#join_Form").serialize();
+	//修改用户信息 
+	$.ajax({
+		url:'saveSubmit.htm',
 		type: 'POST',  
 		dataType: 'json',
 		async:false,
 		data:dataParams,
 		success:function(data){
-
+			if(data.status==200){
+				alert("数据保存成功,请单击返回");
+			}else{
+				alert("数据保存失败");
+			}
 		}
-	});  
-    
-    //alert("提交数据");
+	});
   });
-
+  
   $(".js-name,.js-place,.js-gender").on("blur",function(){
     if($(this).val().length==0){
       addError($(this));
