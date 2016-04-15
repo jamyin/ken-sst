@@ -92,14 +92,14 @@
 									</td>
 									<td>${(page.toUserName)!}</td>
 									<td>${(page.userName)!}</td>									
-									<td>
-										<#if page.type??>
+									<td>应用内
+										<!-- <#if page.type??>
 											<#list types as type>
 													<#if page.type == type.getIndex()>${type.getValue()}</#if>
 											</#list>
 										<#else>
 											无
-										</#if>
+										</#if> -->
 									</td>	
 									<!-- <td>${(page.sendTime?string("yyyy-MM-dd HH:mm"))!}</td> -->
 									<td><#if page.attachment??>含有<#else>不含有</#if></td>

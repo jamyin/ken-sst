@@ -33,7 +33,10 @@
 								<div class="control-group">
 									<label class="course_add_label" for="form-input-readonly">提醒方式</label>
 										<div class="course_add_input">
-											<#if datas.type??>
+											<label class="span2">
+												<input name="type" checked="checked"  type="radio" value="3"/><span class="lbl">应用内</span>
+											</label>
+											<!-- <#if datas.type??>
 												<#list types as type>
 													<label class="span2">
 														<input name="type" <#if datas.type == type.getIndex() >checked="checked"</#if>  type="radio" value="${type.getIndex()}"/><span class="lbl">${type.getValue()}</span>
@@ -41,7 +44,7 @@
 												</#list>
 											<#else>
 												无
-											</#if>
+											</#if> -->
 										</div>
 								</div>
 								<div class="control-group">
