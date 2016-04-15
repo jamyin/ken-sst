@@ -45,4 +45,38 @@
 			SELECT b.`remind_id` FROM `sst_remind_users` b WHERE b.`user_id` = #{userId}
 		);
   </select>
+  
+  <sql id="Remind_User_Where_Clause" >
+		<where >
+			a.stat = 1 AND b.stat = 1
+			<if test="dto.type != null and dto.type != ''">
+				and a.type = #{dto.type,jdbcType=VARCHAR}
+			</if>
+			<if test="dto.toUserName != null and dto.toUserName != ''">
+				and a.to_user_name like "%"#{dto.toUserName}"%"
+			</if>
+			<if test="dto.userName != null and dto.userName != ''">
+				and b.cname like "%"#{dto.userName}"%"
+			</if>
+		</where>
+	</sql>
+  
+  <select id="selectByExample" resultMap="remindPojoMap" parameterType="com.tianfang.user.dto.RemindDto" >
+    select a.id, a.to_user_id,a.to_user_name,a.type,a.send_time,a.attachment,a.text,a.voice,a.user_id,b.cname as userName,
+    a.create_time,a.last_update_time,a.stat
+   	from sst_remind as a left 
+   	join sport_user as b on a.user_id = b.id
+   	<include refid="Remind_User_Where_Clause" />
+   	order by a.create_time desc
+   	<if test="page != null and page.startNum != null and page.pageSize > page.startNum">
+   	limit ${page.startNum}, ${page.pageSize}
+   	</if>
+  </select>
+  
+   <select id="countByExample" resultType="java.lang.Integer" parameterType="com.tianfang.user.dto.RemindDto" >
+    select count(*)
+   	from sst_remind as a left 
+   	join sport_user as b on a.user_id = b.id
+   	<include refid="Remind_User_Where_Clause" />
+  </select>
 </mapper> 

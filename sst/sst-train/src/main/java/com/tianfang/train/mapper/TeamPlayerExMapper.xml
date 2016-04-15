@@ -92,8 +92,7 @@
         </where>
     </sql>
 
-    <select id="findTeamPlayerByTeamPlayer" resultType="com.tianfang.train.dto.TeamPlayerDto"
-            parameterType="com.tianfang.train.dto.TeamPlayerDto">
+    <select id="findTeamPlayerByTeamPlayer" resultMap="BaseResultMap" parameterType="com.tianfang.train.dto.TeamPlayerDto">
         SELECT
         <include refid="Base_Column_Team_List"/>
         FROM sst_team_player AS p
