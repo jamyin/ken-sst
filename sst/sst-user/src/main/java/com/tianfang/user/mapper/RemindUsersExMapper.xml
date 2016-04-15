@@ -48,7 +48,7 @@
   
   <sql id="Remind_User_Where_Clause" >
 		<where >
-			a.stat = 1 AND b.stat = 1
+			a.stat = 1 AND b.stat = 1 AND u.stat = 1
 			<if test="dto.type != null and dto.type != ''">
 				and a.type = #{dto.type,jdbcType=VARCHAR}
 			</if>
@@ -64,8 +64,9 @@
   <select id="selectByExample" resultMap="remindPojoMap" parameterType="com.tianfang.user.dto.RemindDto" >
     select a.id, a.to_user_id,a.to_user_name,a.type,a.send_time,a.attachment,a.text,a.voice,a.user_id,b.nick_name as userName,
     a.create_time,a.last_update_time,a.stat
-   	from sst_remind as a left 
-   	join sport_user as b on a.user_id = b.id
+   	from sst_remind_users as u
+   	left join sst_remind as a on u.remind_id =a.id
+   	left join sport_user as b on u.user_id = b.id
    	<include refid="Remind_User_Where_Clause" />
    	order by a.create_time desc
    	limit ${page.startNum}, ${page.pageSize}
@@ -73,8 +74,9 @@
   
    <select id="countByExample" resultType="java.lang.Integer" parameterType="com.tianfang.user.dto.RemindDto" >
     select count(*)
-   	from sst_remind as a left 
-   	join sport_user as b on a.user_id = b.id
+   	from sst_remind_users as u
+   	left join sst_remind as a on u.remind_id =a.id
+   	left join sport_user as b on u.user_id = b.id
    	<include refid="Remind_User_Where_Clause" />
   </select>
 </mapper> 
