@@ -9,6 +9,7 @@ import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.user.app.FriendApp;
 import com.tianfang.user.dao.UserDao;
 import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.enums.UserType;
 import com.tianfang.user.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,6 +29,10 @@ public class UserServiceImpl implements IUserService {
 	public String save(UserDto dto){
 		checkObjIsNullException(dto);
 		checkMobileIsException(dto.getMobile());
+		// 普通用户不用审核
+		if (null != dto.getUtype() && dto.getUtype().intValue() == UserType.GENERAL.getIndex()){
+			dto.setAudit(DataStatus.ENABLED);
+		}
 		User user = BeanUtils.createBeanByTarget(dto, User.class);
 		String id = UUIDGenerator.getUUID();
 		user.setId(id);

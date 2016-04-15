@@ -13,7 +13,7 @@ package com.tianfang.user.enums;
  * <p>修改备注：</p>
  */
 public enum UserType {
-	GENERAL(1,"普通用户"), COACH(2, "教练"),CAPTAIN(3, "队长");
+	GENERAL(1,"普通用户"), COACH(2, "教练"),CAPTAIN(3, "队长"), LEAD(5,"领队");
 	
 	UserType(int index,String value){
 		this.index =index;
