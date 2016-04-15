@@ -1,14 +1,12 @@
 package com.tianfang.home.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.scheduling.annotation.Async;
-
-import com.tianfang.common.util.GetPostUtil;
 import com.tianfang.common.util.HttpClientUtil;
 import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
+import org.springframework.scheduling.annotation.Async;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**		
  * <p>Title: TigaseUtil </p>
@@ -49,7 +47,7 @@ public class TigaseUtil {
 	 */
 	public static boolean registered(String mobile, String password){
 		checkAccountAndPassword(mobile, password);
-		Map<String, String> params = assemblyRequestParams(password, mobile);
+		Map<String, String> params = assemblyRequestParams(password, mobile, Type.create);
 		String result = HttpClientUtil.sendPostRequestByJava(REGISTERED_URL, params);
 		return analysisResult(result);
 	}
@@ -63,7 +61,7 @@ public class TigaseUtil {
 	 * 2016年3月3日下午1:34:02
 	 */
 	public static boolean resetPassword(String mobile, String password){
-		Map<String, String> params = assemblyRequestParams(password, mobile);
+		Map<String, String> params = assemblyRequestParams(password, mobile, Type.update);
 		String result = HttpClientUtil.sendPostRequestByJava(RESETPASSWORD_URL, params);
 		return analysisResult(result);
 	}
@@ -77,10 +75,16 @@ public class TigaseUtil {
 	 * 2016年3月3日下午1:32:36
 	 */
 	private static Map<String, String> assemblyRequestParams(String password,
-			String mobile) {
+			String mobile, Type type) {
 		Map<String, String> params = new HashMap<String, String>(2);
 		params.put("userAccount", mobile+suffix);
-		params.put("password", password);
+		if (type == Type.create){
+			params.put("password", password);
+		}
+		if (type == Type.update){
+			params.put("newPassword", password);
+		}
+
 		return params;
 	}
 	
@@ -148,6 +152,10 @@ public class TigaseUtil {
 //		sb.append("type=").append(0).append("&");
 //		System.out.println("sb+sb"+sb.toString());
 //		GetPostUtil.post("http://192.168.1.234/message/sendMessages.do?", sb.toString());
+	}
+
+	private enum Type{
+		create,update;
 	}
 	
 	public static void main(String[] args) {

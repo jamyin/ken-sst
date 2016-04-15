@@ -833,7 +833,7 @@ public class CompController extends BaseController {
 
 			UserInfoDto userInfo = userInfoService.getUserInfo(user.getId());
 			if (null == userInfo) {
-				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setStatus(DataStatus.HTTP_INFO);
 				result.setMessage("对不起.请补充参赛信息~");
 				return false;
 			}

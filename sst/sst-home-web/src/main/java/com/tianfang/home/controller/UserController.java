@@ -198,13 +198,7 @@ public class UserController extends BaseController{
 			result.setMessage("输入的用户密码为空！");
 			return result;
 		}
-		/*String md5oldPwd;// 获取页面上输入的密码并加密校验
-		try {
-			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPassword());
-		} catch (Exception e) {
-			throw new SystemException(e.getMessage(), e);
-		}
-		dto.setPassword(md5oldPwd);*/
+
 		UserDto user = null;
 		try {
 			user = userService.checkUser(dto);
@@ -245,14 +239,7 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public Response<String> resetPassword(HttpSession session, String mobile, @RequestParam(value = "code", required = false) String code, String password) {
 		Response<String> result = new Response<String>();
-		/* 移动端将密码加密后,传给服务器
-		 * String md5oldPwd;// 获取页面上输入的密码并加密校验
-		try {
-			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPassword());
-			dto.setPassword(md5oldPwd);
-		} catch (Exception e) {
-			throw new SystemException(e.getMessage(), e);
-		}*/
+
 		if (StringUtils.isBlank(password)){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("密码不能为空！");
@@ -317,14 +304,7 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public Response<String> changeMobile(HttpSession session, String mobile, String oldMobile, @RequestParam(value = "code", required = false) String code, String password) {
 		Response<String> result = new Response<String>();
-		/* 移动端将密码加密后,传给服务器
-		 * String md5oldPwd;// 获取页面上输入的密码并加密校验
-		try {
-			md5oldPwd = MD5Coder.encodeMD5Hex(dto.getPassword());
-			dto.setPassword(md5oldPwd);
-		} catch (Exception e) {
-			throw new SystemException(e.getMessage(), e);
-		}*/
+
 		if (StringUtils.isBlank(password)){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("密码不能为空！");
@@ -1399,7 +1379,7 @@ public class UserController extends BaseController{
 	 * @return
 	 */
 	private int checkCode(String code, Response<String> result, String key) {
-		if(!StringUtils.isBlank(code)){
+		if(StringUtils.isNotBlank(code)){
 			int num = 0;
 			try {
 				num = Integer.parseInt(code);
@@ -1415,9 +1395,13 @@ public class UserController extends BaseController{
 				if(!redisTemplate.opsForValue().get(key).equals(num)){
 					result.setStatus(DataStatus.HTTP_FAILE);
 					result.setMessage("手机验证码输入错误！");
+					return 0;
 				}
 			} 
 			return num;
+		}else{
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("验证未输入！");
 		}
 		return 0;
 	}

@@ -31,6 +31,8 @@ public interface DataStatus {
     final static int HTTP_SUCCESS = 200; //OK
 
     final static int HTTP_FAILE = 500; //OK
+
+    final static int HTTP_INFO = 501; // 用户参赛信息为空
     //200 OK
     //500 faile
 
