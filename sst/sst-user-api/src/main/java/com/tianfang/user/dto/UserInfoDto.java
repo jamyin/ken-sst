@@ -87,5 +87,14 @@ public class UserInfoDto implements Serializable{
 	@Getter
 	@Setter
     private Integer gender;    //姓别(1:男;2:女)
+	
+	@Getter
+	@Setter
+    private Integer chenyiCup;    //1 是 0 否
+	
+	@Getter
+	@Setter
+    private Integer joinUnion;    //1 是 0 否
+	
 
 }

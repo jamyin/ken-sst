@@ -1,10 +1,314 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+  <meta charset="UTF-8">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="telephone=no,email=no" name="format-detection">
+  <title>申请加入</title>
+  <script src="//g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+  <script src="//libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="css/join.css" >
 </head>
+
 <body>
-加入我们啦
+<form id="join_Form">
+	<input type="hidden" name="userId" value="${(userId)!}"/>
+	<input type="hidden" name="teamId" value="${(teamId)!}"/>
+  <div class="join-info step1">
+    <h2 class="step"><span class="no">1</span><label for="">必填信息</label></h2>
+    <ul class="join-info-basic">
+      <li>
+        <label class="show" >姓名</label>
+        <!-- <label class="rt">郝建</label> -->
+        <input class="rt js-name" type="text"  name="name" value="${(userInfo.name)!}">
+      </li>
+      <li>
+        <label class="show" >性别</label>
+        <!-- <i class="bracket">&gt;</i> -->
+        <!-- <label class="rt ">男</label> -->
+        <select class="genger js-gender" name="gender">
+          <#if userInfo.gender ==1>
+          	<option value="1" selected="selected">男</option>
+          	<option value="2">女</option>
+          <#else>
+          	<option value="1">男</option>
+          	<option value="2" selected="selected">女</option>
+          </#if>
+        </select>
+      </li>
+      <!-- <li>
+      <label class="show" >出生年月</label>
+      <i class="bracket">&gt;</i>
+      <label class="rt ">1992-04-04</label>
+      <input class="rt js-date" type="date" name="name" value="1992-02-02">
+    </li> -->
+    <li>
+      <label class="show" >身份证号</label>
+      <!-- <i class="bracket">&gt;</i>
+      <label class="rt ">624682199603260528</label> -->
+      <input class="rt js-id" type="text" name="cardNo" value="${(userInfo.cardNo)!}">
+    </li>
+    <li>
+      <label class="show" >手机号码</label>
+      <!-- <i class="bracket">&gt;</i>
+      <label class="rt ">13886868686</label> -->
+      <input class="rt js-phone" type="text" name="mobile" value="${(userInfo.mobile)!}">
+    </li>
+    <li>
+      <label class="show" >所在地</label>
+      <!-- <i class="bracket">&gt;</i>
+      <label class="rt ">上海</label> -->
+      <input class="rt js-place" type="text" name="localtion" value="${(userInfo.localtion)!}">
+    </li>
+  </ul>
+  <input class="rt js-date hide" type="date">
+  <div class="pro-bar">
+    <div class="step-tip">
+      <span>1</span>/<span>3</span>
+    </div>
+  </div>
+  <div class="bt next bt-step1">
+    下一步
+  </div>
+</div>
+
+<div class="join-info step2 hide">
+  <h2 class="step"><span class="no">2</span><label for="">备选信息</label></h2>
+  <p class="step2-tip">请根据个人实际参赛情况选填相关信息，以备未来参赛报名使用</p>
+  <ul class="join-info-basic">
+    <li>
+      <label class="show" >场上位置</label>
+      <!-- <i class="bracket">&gt;</i>
+      <label class="rt ">暂无</label> -->
+      <input class="rt" type="text" name="playPosition" value="${(userInfo.playPosition)!}">
+    </li>
+    <li>
+      <label class="show" >工作单位</label>
+      <!-- <i class="bracket">&gt;</i>
+      <label class="rt ">上海天坊信息科技有限公司</label> -->
+      <input class="rt" type="text" name="workLoca" value="${(userInfo.workLoca)!}">
+    </li>
+    <li>
+      <label class="show" >所在学校</label>
+      <!-- <i class="bracket">&gt;</i>
+      <label class="rt ">暂无</label> -->
+      <input class="rt" type="text" name="school" value="${(userInfo.school)!}">
+    </li>
+    <li>
+      <label class="show" >学籍卡号</label>
+      <!-- <i class="bracket">&gt;</i>
+      <label class="rt ">暂无</label> -->
+      <input class="rt" type="text" name="studentNo" value="${(userInfo.studentNo)!}">
+    </li>
+    <li>
+      <label class="show" >监护人姓名</label>
+      <!-- <i class="bracket">&gt;</i>
+      <label class="rt ">暂无</label> -->
+      <input class="rt" type="text" name="guardianName" value="${(userInfo.guardianName)!}">
+    </li>
+    <li>
+      <label class="show" >与用户关系</label>
+      <!-- <i class="bracket">&gt;</i>
+      <label class="rt ">暂无</label> -->
+      <input class="rt" type="text" name="userRala" value="${(userInfo.userRala)!}">
+    </li>
+    <li>
+      <label class="show" >是否参加过陈毅杯</label>
+      	<select class="" name="chenyiCup">
+          <#if userInfo.chenyiCup ?? && userInfo.chenyiCup ==1>
+        	<option value="1" selected>是</option>
+        	<option value="0" >否</option>
+          <#else>
+        	<option value="1">是</option>
+        	<option value="0" selected>否</option>
+          </#if>
+      </select>
+    </li>
+    <li>
+      <label class="show" >是否参加过校园联盟</label>
+      	<select class="" name="joinUnion">
+          <#if userInfo.joinUnion ?? && userInfo.joinUnion ==1>
+        	<option value="1" selected>是</option>
+        	<option value="0" >否</option>
+          <#else>
+        	<option value="1">是</option>
+        	<option value="0" selected>否</option>
+          </#if>
+      </select>
+    </li>
+  </ul>
+  <div class="pro-bar pro-bar2">
+    <div class="step-tip">
+      <span>2</span>/<span>3</span>
+    </div>
+  </div>
+  <div class="bt prev  bt-2">
+    上一步
+  </div>
+  <#if opType ??>
+  	  <div class="bt saveInfo  bt-2">
+   		 保存
+  	  </div>
+  <#else>
+	  <div class="bt next  bt-2">
+	   	 下一步
+	  </div>  	
+  </#if>
+</div>
+
+<div class="join-info step3 hide">
+  <h2 class="step"><span class="no">3</span><label for="">填写申请理由</label></h2>
+  <div class="join-reason">
+    <p class="join-reason-tip">
+      申请加入理由
+    </p>
+    <textarea class="join-textarea" name="reason" rows="8" cols="40"></textarea>
+  </div>
+  <p class="step3-tip">
+    * 1、需要手机注册赛事通会员<br>
+    * 2、24小时内只能申请一次
+  </p>
+  <div class="bt prev bt-2">
+    上一步
+  </div>
+  <div class="bt submit bt-2">
+    提交申请
+  </div>
+</div>
+</form>
+<script type="text/javascript">
+$(function() {	
+  $(".next").on("click",function(){
+    var idNO=$(".js-id").val();
+    if($(this).hasClass("bt-step1")){
+      if(check1()){
+        return;
+      }
+      //校验通过后对生日字段进行设置
+      if(idNO.length===18){
+        idNO=idNO.substr(6,4)+"-"+idNO.substr(10,2)+"-"+idNO.substr(12,2);
+      }else{
+        idNO=idNO.substr(6,2)+"-19"+idNO.substr(8,2)+"-"+idNO.substr(10,2);
+      }
+      $(".js-date").val(idNO);
+    }
+    $(this).parents(".join-info").addClass("hide").next().removeClass("hide");
+  });
+  $(".prev").on("click",function(){
+    $(this).parents(".join-info").addClass("hide").prev().removeClass("hide");
+  });
+  $(".submit").on("click",function(){
+  
+    if(check3()){
+      return;
+    }
+    
+	var dataParams =$("#join_Form").serialize();
+	//修改用户信息 
+	$.ajax({
+		url:'joinSubmit.htm',
+		type: 'POST',  
+		dataType: 'json',
+		async:false,
+		data:dataParams,
+		success:function(data){
+
+		}
+	});  
+    
+    //alert("提交数据");
+  });
+
+  $(".js-name,.js-place,.js-gender").on("blur",function(){
+    if($(this).val().length==0){
+      addError($(this));
+    }else{
+      removeError($(this));
+    }
+  });
+
+  var reg_phone=/^1\d{10}$/;
+  $(".js-phone").on("blur",function(){
+    if(!reg_phone.test($(this).val())){
+      addError($(this));
+    }else{
+      removeError($(this));
+    }
+  });
+
+  var reg_id = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+  $(".js-id").on("blur",function(){
+    if(!reg_id.test($(this).val())){
+      addError($(this));
+    }else{
+      removeError($(this));
+    }
+  });
+  $(".join-textarea").on("blur",function(){
+    if($(this).val().length===0){
+      $(this).parent().find("p").addClass("error");
+    }else{
+      $(this).parent().find("p").removeClass("error");
+    }
+  });
+
+
+  function check1(){
+    $(".join-info-basic").find("label").removeClass("error");
+    var flag_return=false,$id=$(".js-id"),
+    reg_id = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+    // debugger;
+    if($(".js-name").val().length==0){
+      $(".js-name").parent().find("label").addClass("error");
+      flag_return=true;
+    }
+    if($(".js-gender").val().length==0){
+      $(".js-gender").parent().find("label").addClass("error");
+      flag_return=true;
+    }
+    // var $date=$(".js-date");
+    // if($date.val().length!=10){
+    //   addError($date);
+    //   flag_return=true;
+    // }
+    // debugger;
+    if(!reg_id.test($id.val())){
+      addError($id);
+      flag_return=true;
+    }
+    var $phone=$(".js-phone"),reg_phone=/^1\d{10}$/;
+    if(!reg_phone.test($phone.val())){
+      addError($phone);
+      flag_return=true;
+    }
+    var $place=$(".js-place");
+    if($place.val().length==0){
+      addError($place);
+      flag_return=true;
+    }
+    return flag_return;
+  }
+});
+function check3(){
+  var flag_return=false,reson = $(".join-textarea").val();
+  if(reson.length==0){
+    $(".join-textarea").parent().find("p").addClass("error");
+    flag_return=true;
+  }else{
+    $(this).parent().find("p").removeClass("error");
+  }
+  return flag_return;
+};
+function addError(selector){
+  selector.parent().find("label").addClass("error");
+}
+function removeError(selector){
+  selector.parent().find("label").removeClass("error");
+}
+</script>
 </body>
+
 </html>
