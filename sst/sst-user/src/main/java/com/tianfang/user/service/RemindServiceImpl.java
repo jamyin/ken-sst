@@ -12,14 +12,19 @@ import com.tianfang.common.util.BeanUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.user.dao.RemindDao;
+import com.tianfang.user.dao.UserDao;
 import com.tianfang.user.dto.RemindDto;
 import com.tianfang.user.pojo.Remind;
+import com.tianfang.user.pojo.User;
 
 @Service
 public class RemindServiceImpl implements IRemindService {
 	
 	@Autowired
 	private RemindDao remindDao;
+	
+	@Autowired
+	private UserDao userDao;
 
 	@Override
 	public String save(RemindDto dto) throws Exception {
@@ -54,6 +59,11 @@ public class RemindServiceImpl implements IRemindService {
 		checkIdIsNull(id);
 		Remind m = remindDao.selectByPrimaryKey(id);
 		RemindDto dto = BeanUtils.createBeanByTarget(m, RemindDto.class);
+		User sportUser = new User();
+		if (StringUtils.isNotBlank(dto.getUserId())) {
+			sportUser = userDao.selectByPrimaryKey(dto.getUserId());
+		}
+		dto.setUserName(sportUser.getNickName());
 		return dto;
 	}
 
