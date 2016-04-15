@@ -30,7 +30,7 @@
         <!-- <i class="bracket">&gt;</i> -->
         <!-- <label class="rt ">男</label> -->
         <select class="genger js-gender" name="gender">
-          <#if userInfo.gender ==1>
+          <#if userInfo.gender ?? && userInfo.gender ==1>
           	<option value="1" selected="selected">男</option>
           	<option value="2">女</option>
           <#else>
