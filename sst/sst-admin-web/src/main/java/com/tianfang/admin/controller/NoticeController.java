@@ -215,7 +215,7 @@ public class NoticeController extends BaseController {
 	public ModelAndView findNoticeViewByPage(NoticeDto noticeDto, ExtPageQuery page){
 		logger.info("NoticeDto  : " + noticeDto);
 		ModelAndView mv = this.getModelAndView(this.getSessionUserId());
-		PageResult<NoticeDto> result = noticeService.findNoticeViewByPage(noticeDto, page.changeToPageQuery());
+		PageResult<NoticeDto> result = noticeService.queryNoticeViewByPage(noticeDto, page.changeToPageQuery());
 		mv.addObject("pageList", result);
 		mv.addObject("noticeDto", noticeDto);
 		mv.setViewName("/notice/notice_list");
