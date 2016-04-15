@@ -92,5 +92,10 @@ public class CompetitionDto implements Serializable{
 	@Getter
 	@Setter
     private String endDateStr;		//赛事结束时间显示
+	
+	@Getter
+	@Setter
+    private Integer extra = 0;//0不需要额外参数  1 需要额外参数
+	
 
 }
