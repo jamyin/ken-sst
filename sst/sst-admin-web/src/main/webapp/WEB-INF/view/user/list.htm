@@ -94,15 +94,23 @@
 										</#if></td>
 									<td>
 										<#if page.audit??>
-											<#if page.utype==1>
-												<span class="label label-success">审核通过</span>
+											<#if page.utype??>
+												<#if page.utype==1>
+													<span class="label label-success">审核通过</span>
+												<#else>
+													<#if page.audit == 0>
+														<span class="label label-warning">待审核或审核失败</span>
+													<#else>
+														<span class="label label-success">审核通过</span>
+													</#if>												
+												</#if>
 											<#else>
 												<#if page.audit == 0>
 													<span class="label label-warning">待审核或审核失败</span>
 												<#else>
 													<span class="label label-success">审核通过</span>
 												</#if>												
-											</#if>
+											</#if>											
 										</#if>
 									</td>											
 									<td  class='hidden-phone'>${(page.createTime?string("yyyy-MM-dd HH:mm:ss"))!}</td>
@@ -112,15 +120,17 @@
 											<a id='editObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-warning' style="margin-left:5px;" title="编辑"><i class='icon-edit'></i></a>
 											<a id='deleteObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-danger' style="margin-left:5px;" title="删除"><i class='icon-trash'></i></a>
 											<a id='editPwd' data-obj-id="${(page.id)!}" class="btn btn-mini btn-purple" style="margin-left:5px;"><i class="icon-pencil"></i>修改密码</a>
-											<#if page.utype!=1>
-												<#if page.audit ??>
-													<#if page.audit == 0>
-														<a id='auditObj' data-obj-audit="1" data-obj-id="${(page.id)!}" class="btn btn-mini btn-success" style="margin-left:5px;"><i class="icon-pencil"></i>审核通过</a>
-													<#else>
-														<a id='auditObj' data-obj-audit="0" data-obj-id="${(page.id)!}" class="btn btn-mini btn-warning" style="margin-left:5px;"><i class="icon-pencil"></i>审核不通过</a>
-													</#if>	
-												</#if>
-											</#if>											
+											<#if page.utype??>
+												<#if page.utype!=1>
+													<#if page.audit ??>
+														<#if page.audit == 0>
+															<a id='auditObj' data-obj-audit="1" data-obj-id="${(page.id)!}" class="btn btn-mini btn-success" style="margin-left:5px;"><i class="icon-pencil"></i>审核通过</a>
+														<#else>
+															<a id='auditObj' data-obj-audit="0" data-obj-id="${(page.id)!}" class="btn btn-mini btn-warning" style="margin-left:5px;"><i class="icon-pencil"></i>审核不通过</a>
+														</#if>	
+													</#if>
+												</#if>	
+											</#if>										
 										</div>
 									</td>
 								</tr>

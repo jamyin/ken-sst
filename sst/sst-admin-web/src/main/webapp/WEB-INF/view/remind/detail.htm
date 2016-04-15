@@ -21,13 +21,13 @@
 								<div class="control-group">
 										<label class="course_add_label" for="form-field-1">发送人</label>
 										<div class="course_add_input">
-											<input type="text" value="${(datas.userName)}">
+											<input type="text" value="${(datas.userName)!}">
 										</div>									
 								</div>
 								<div class="control-group">
 									<label class="course_add_label" for="form-field-2">接收人</label>
 									<div class="course_add_input">
-										<input type="text" value="${(datas.toUserName)}">
+										<input type="text" value="${(datas.toUserName)!}">
 									</div>
 								</div>
 								<div class="control-group">
@@ -53,19 +53,19 @@
 								<div class="control-group">
 									<label class="course_add_label" for="form-field-2">附件</label>
 									<div class="course_add_input">
-										<input type="text" value="${(datas.attachment)}">
+										<input type="text" value="${(datas.attachment)!}">
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="course_add_label" for="form-field-2">语音</label>
 									<div class="course_add_input">
-										<input type="text" value="${(datas.voice)}">
+										<input type="text" value="${(datas.voice)!}">
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="course_add_label" for="form-field-2">文字</label>
 									<div class="course_add_input">
-										<textarea rows="15" cols="10">${(datas.text)}</textarea>
+										<textarea rows="15" cols="10">${(datas.text)!}</textarea>
 									</div>
 								</div>
 								<div class="form-actions">
