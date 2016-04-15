@@ -840,8 +840,9 @@ public class CompController extends BaseController {
 			try {
 				TeamDto team = null;
 				boolean isCreate = false; // 是否需要创建球队
-				if (StringUtils.isNotBlank(user.getTeamId())) {
-					team = teamService.getTeamById(user.getTeamId());
+				TeamPlayerDto player = playerService.getTeamPlayeByUserId(user.getId());
+				if (null != player) {
+					team = teamService.getTeamById(player.getTeamId());
 					if (null == team.getStat() || team.getStat() == DataStatus.ENABLED) {
 						// 如果球队信息有更改,则更新球队信息
 						boolean flag = false;
@@ -881,13 +882,13 @@ public class CompController extends BaseController {
 					team.setContacts(compApply.getContacts());
 					team.setMobile(compApply.getMobile());
 					team.setCreateUserId(user.getId());
-					team.setCreateUserName(user.getNickName());
+					team.setCreateUserName(userInfo.getName());
 					team.setStat(DataStatus.ENABLED);
 					teamService.addTeam(team);
 
 					// 给新增的球队添加第一条球员数据
-					TeamPlayerDto player = assemblyPlayer(user, teamId, userInfo);
-					playerService.save(player);
+					TeamPlayerDto createPlayer = assemblyPlayer(user, teamId, userInfo);
+					playerService.save(createPlayer);
 				}
 
 				CompetitionApplyDto param = new CompetitionApplyDto();
