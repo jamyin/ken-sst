@@ -71,8 +71,8 @@
 							<th class="center" style="width:5%;">
 								<label><input type="checkbox" /><span class="lbl"></span></label>
 							</th>
-							<th>接收人</th>
-							<th>发送人</th>							
+							<th>发送人</th>	
+							<th>接收人</th>													
 							<th>提醒方式</th>
 							<!-- <th>发送时间</th> -->
 							<th>附件</th>
@@ -90,8 +90,8 @@
 									<td class='center'>
 										<label><input name="checkBoxId" value="${(page.id)!}" type='checkbox' /><span class="lbl"></span></label>
 									</td>
-									<td>${(page.userName)!}</td>
 									<td>${(page.toUserName)!}</td>
+									<td>${(page.userName)!}</td>									
 									<td>
 										<#if page.type??>
 											<#list types as type>
