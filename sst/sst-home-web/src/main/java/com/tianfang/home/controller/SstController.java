@@ -15,5 +15,13 @@ public class SstController extends BaseController{
 		mv.setViewName("about");
 		return mv;
 	}
+	
+	@RequestMapping(value = "agreement")
+	public ModelAndView agreement() {
+		ModelAndView mv = getModelAndView();
+		mv.setViewName("agreement");
+		return mv;
+	}
+	
 
 }

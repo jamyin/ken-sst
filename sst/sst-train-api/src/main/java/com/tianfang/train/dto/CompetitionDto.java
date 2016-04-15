@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tianfang.common.util.PropertiesUtils;
 
 @JsonIgnoreProperties({"createAdminId","createAdminName","updateAdminId","updateAdminName","createTime","lastUpdateTime","stat","createTimeStr","lastUpdateTimeStr","startDateStr","endDateStr"})
 public class CompetitionDto implements Serializable{
@@ -95,7 +96,7 @@ public class CompetitionDto implements Serializable{
 	
 	@Getter
 	@Setter
-    private Integer extra = 0;//0不需要额外参数  1 需要额外参数
+    private Integer extra = Integer.valueOf(PropertiesUtils.getProperty("extra"));//0不需要额外参数  1 需要额外参数
 	
 
 }
