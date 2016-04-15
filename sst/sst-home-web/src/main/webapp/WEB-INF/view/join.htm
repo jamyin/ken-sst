@@ -68,7 +68,7 @@
   <div class="pro-bar">
     <div class="step-tip">
       <span>1</span>/
-      <#if opType ??>
+      <#if opType ==0>
       <span>2</span>	
       <#else>
       <span>3</span>
@@ -145,20 +145,21 @@
       </select>
     </li>
   </ul>
+  
+  <div style="padding-top:30px;"></div>
+  
+  <#if opType ==1>
   <div class="pro-bar pro-bar2">
     <div class="step-tip">
       <span>2</span>/
-      <#if opType ??>
-      <span>2</span>	
-      <#else>
       <span>3</span>
-      </#if>
     </div>
-  </div>
+  </div>   
+   </#if>
   <div class="bt prev  bt-2">
     上一步
   </div>
-  <#if opType ??>
+  <#if opType ==0>
   	<div class="bt saveInfo  bt-2">保存</div>
   <#else>
 	  <div class="bt next  bt-2">下一步</div>  	

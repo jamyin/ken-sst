@@ -1,6 +1,6 @@
 package com.tianfang.home.controller;
 
-import org.apache.commons.lang3.StringUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.Response;
+import com.tianfang.common.util.StringUtils;
 import com.tianfang.user.dto.UserApplyTeamDto;
 import com.tianfang.user.dto.UserInfoDto;
 import com.tianfang.user.service.IUserApplyTeamService;
@@ -41,6 +42,10 @@ public class JoinController extends BaseController{
 			mv.addObject("opType",DataStatus.ENABLED);
 		}else{
 			mv.addObject("opType",DataStatus.DISABLED);
+		}
+		
+		if(StringUtils.isBlank(teamId)){
+			teamId = null;
 		}
 		mv.addObject("userId", userId);
 		mv.addObject("teamId", teamId);
