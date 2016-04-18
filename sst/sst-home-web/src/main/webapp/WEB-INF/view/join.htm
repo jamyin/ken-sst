@@ -96,11 +96,10 @@
       <select class="" name="position">
       	<#if teamPlayer ??>
       		<#list teamPlayer as player>
-      			<option value="${player.getIndex()}">${player.getValString()}</option>		
+      			<option <#if ((userInfo.position)!-1) == player.getIndex()>selected="true"</#if> value="${player.getIndex()}">${player.getValString()}</option>
       		</#list>
       	</#if>
       </select>
-      <input class="rt" type="text" name="position" value="${(userInfo.position)!}">
     </li>
     <li>
       <label class="show" >工作单位</label>
