@@ -102,7 +102,7 @@ public class UserInfoDto implements Serializable {
 
 	@Getter
 	@Setter
-	private String playPosition;
+	private String position;
 
 	@Getter
 	@Setter
