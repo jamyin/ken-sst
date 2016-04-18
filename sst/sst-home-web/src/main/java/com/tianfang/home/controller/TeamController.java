@@ -366,7 +366,7 @@ public class TeamController extends BaseController{
 	}
 
 	/**
-	 * 查询该用户是否是该球队的队长
+	 * 查询该用户是否是该球队的管理员
 	 * @param userId
 	 * @return
 	 * @author xiang_wang
@@ -380,10 +380,8 @@ public class TeamController extends BaseController{
 		if (user.getUtype() == UserType.GENERAL.getIndex()){
 			return null;
 		}
-		if (StringUtils.isBlank(user.getTeamId())){
-			return null;
-		}
-		TeamDto team = teamService.getTeamById(user.getTeamId());
+		TeamPlayerDto player = playerService.getTeamPlayeByUserId(userId);
+		TeamDto team = teamService.getTeamById(player.getTeamId());
 
 		if (null != team && team.getStat() == DataStatus.ENABLED){
 			return team;
