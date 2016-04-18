@@ -40,7 +40,7 @@ public class UserFriendController extends BaseController{
 	
 	/**
 	 * 
-	  @Name: UserFriendController.java 
+	  @Name: UserFriendController.java
 	  @Author: pengpeng
 	  @Date: 2016年4月9日 下午4:31:32 
 	  @Description:用户申请球队列表
@@ -94,14 +94,16 @@ public class UserFriendController extends BaseController{
     		if(!Objects.equal(dto.getUtype(), UserType.GENERAL)){//管理员用户
     			//队内成员 
     			List<FriendApp> teamFriends = userService.findTeamFriends(dto.getTeamId());
-    			for(FriendApp fApp: teamFriends){
-    				if(Objects.equal(userId, fApp.getFriendId())){//排除自身用户
-    					teamFriends.remove(fApp);
-    				}
-    				fApp.setUserId(dto.getId());
-    				fApp.setUserMobile(dto.getMobile());
-    			}
-    			// 赛事好友  + 队内成员 
+				Iterator<FriendApp> iterator = teamFriends.iterator();
+				while (iterator.hasNext()){
+					FriendApp fApp = iterator.next();
+					if(Objects.equal(userId, fApp.getFriendId())){//排除自身用户
+						iterator.remove();
+					}
+					fApp.setUserId(dto.getId());
+					fApp.setUserMobile(dto.getMobile());
+				}
+    			// 赛事好友  + 队内成员
     			raceFriendList.addAll(teamFriends);
     			
     			raceFriendList = removeDuplicateWithOrder(raceFriendList);
