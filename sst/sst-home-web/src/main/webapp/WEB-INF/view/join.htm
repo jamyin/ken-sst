@@ -25,6 +25,11 @@
         <!-- <label class="rt">郝建</label> -->
         <input class="rt js-name" type="text"  name="name" value="${(userInfo.name)!}">
       </li>
+<li>
+        <label class="show" >姓名</label>
+        <!-- <label class="rt">郝建</label> -->
+        <input class="rt js-age" type="text"  name="age" value="${(userInfo.age)!}">
+      </li>      
       <li>
         <label class="show" >性别</label>
         <!-- <i class="bracket">&gt;</i> -->
@@ -88,6 +93,13 @@
       <label class="show" >场上位置</label>
       <!-- <i class="bracket">&gt;</i>
       <label class="rt ">暂无</label> -->
+      <select class="" name="position">
+      	<#if teamPlayer ??>
+      		<#list teamPlayer as player>
+      			<option value="${player.getIndex()}">${player.getValString()}</option>		
+      		</#list>
+      	</#if>
+      </select>
       <input class="rt" type="text" name="position" value="${(userInfo.position)!}">
     </li>
     <li>
@@ -248,7 +260,7 @@ $(function() {
 	});
   });
   
-  $(".js-name,.js-place,.js-gender").on("blur",function(){
+  $(".js-name,.js-place,.js-gender,.js-age").on("blur",function(){
     if($(this).val().length==0){
       addError($(this));
     }else{
@@ -291,6 +303,10 @@ $(function() {
       $(".js-name").parent().find("label").addClass("error");
       flag_return=true;
     }
+    if($(".js-age").val().length==0){
+        $(".js-age").parent().find("label").addClass("error");
+        flag_return=true;
+      }    
     if($(".js-gender").val().length==0){
       $(".js-gender").parent().find("label").addClass("error");
       flag_return=true;
