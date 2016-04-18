@@ -93,9 +93,14 @@ public class UserController extends BaseController{
 		Response<String> result = new Response<String>();
 
 		String key = SMSController.SST_PHONE_NUMBER + dto.getMobile();
-		if (checkCode(code, result, key) == 0){
+		
+		result = checkCode(code, result, key);
+		if(result.getStatus()==DataStatus.HTTP_FAILE){
 			return result;
 		}
+//		if (checkCode(code, result, key) == 0){
+//			return result;
+//		}
 		try {
 			if (null != userService.checkMobile(dto.getMobile())) {
 				result.setStatus(DataStatus.HTTP_FAILE);
@@ -246,9 +251,13 @@ public class UserController extends BaseController{
 			return result;
 		}
 		String key = SMSController.SST_PHONE_NUMBER + mobile;
-		if (checkCode(code, result, key) == 0){
+		result = checkCode(code, result, key);
+		if(result.getStatus()==DataStatus.HTTP_FAILE){
 			return result;
-		};
+		}
+//		if (checkCode(code, result, key) == 0){
+//			return result;
+//		};
 		try {
 			UserDto dto = new UserDto();
 			dto.setMobile(mobile);
@@ -311,9 +320,13 @@ public class UserController extends BaseController{
 			return result;
 		}
 		String key = SMSController.SST_PHONE_NUMBER + mobile;
-		if (checkCode(code, result, key) == 0){
+		result = checkCode(code, result, key);
+		if(result.getStatus()==DataStatus.HTTP_FAILE){
 			return result;
-		};
+		}
+//		if (checkCode(code, result, key) == 0){
+//			return result;
+//		};
 		try {
 			UserDto dto = new UserDto();
 			dto.setMobile(oldMobile);
@@ -1378,32 +1391,49 @@ public class UserController extends BaseController{
 	 * @param key
 	 * @return
 	 */
-	private int checkCode(String code, Response<String> result, String key) {
+	private Response<String> checkCode(String code, Response<String> result, String key) {
 		if(StringUtils.isNotBlank(code)){
-			int num = 0;
-			try {
-				num = Integer.parseInt(code);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-				result.setStatus(DataStatus.HTTP_FAILE);
-				result.setMessage("输入的短信验证码不是4位数字！");
-			}
 			if (redisTemplate.opsForValue().get(key) == null) {
 				result.setStatus(DataStatus.HTTP_FAILE);
 				result.setMessage("没有点击获取验证码！");
 			}else{
-				if(!redisTemplate.opsForValue().get(key).equals(num)){
+				int randNum = (int) redisTemplate.opsForValue().get(key);
+				if(!String.valueOf(randNum).equals(code)){
 					result.setStatus(DataStatus.HTTP_FAILE);
 					result.setMessage("手机验证码输入错误！");
-					return 0;
+				}else{
+					result.setStatus(DataStatus.HTTP_SUCCESS);
 				}
-			} 
-			return num;
+			} 			
 		}else{
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("验证未输入！");
 		}
-		return 0;
+//		if(StringUtils.isNotBlank(code)){
+//			int num = 0;
+//			try {
+//				num = Integer.parseInt(code);
+//			} catch (NumberFormatException e) {
+//				e.printStackTrace();
+//				result.setStatus(DataStatus.HTTP_FAILE);
+//				result.setMessage("输入的短信验证码不是4位数字！");
+//			}
+//			if (redisTemplate.opsForValue().get(key) == null) {
+//				result.setStatus(DataStatus.HTTP_FAILE);
+//				result.setMessage("没有点击获取验证码！");
+//			}else{
+//				if(!redisTemplate.opsForValue().get(key).equals(num)){
+//					result.setStatus(DataStatus.HTTP_FAILE);
+//					result.setMessage("手机验证码输入错误！");
+//					return 0;
+//				}
+//			} 
+//			return num;
+//		}else{
+//			result.setStatus(DataStatus.HTTP_FAILE);
+//			result.setMessage("验证未输入！");
+//		}
+		return result;
 	}
 
 	/**
