@@ -133,13 +133,13 @@ public class SMSController {
     	String keySessionId = mobilePhone + DateUtils.format(new Date(), DateUtils.YMD_DASH)+"diff";
     	if(redisTemplate.opsForValue().get(keySessionId)!=null){
     		String nowDate = (String)redisTemplate.opsForValue().get(keySessionId);
-    		long  diffmin = DateUtils.diffNowMin(DateUtils.parse(nowDate, DateUtils.YMD_DASH_WITH_TIME));
-    		if(diffmin < 10){
+    		long  diffmin = DateUtils.diffNowSecond(DateUtils.parse(nowDate, DateUtils.YMD_DASH_WITH_TIME));
+    		if(diffmin < 90){
     			return false;
     		}
     	}else{
     		String nowDate = DateUtils.format(new Date(), DateUtils.YMD_DASH_WITH_TIME);
-    		redisTemplate.opsForValue().set(keySessionId, nowDate, 10, TimeUnit.MINUTES);
+    		redisTemplate.opsForValue().set(keySessionId, nowDate, 90, TimeUnit.SECONDS);
     	}
     	return true;
     }
