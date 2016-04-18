@@ -231,7 +231,7 @@ public class TeamController extends BaseController{
 			}
 		}
 		if (status == AuditType.PASS.getIndex()){
-			UserInfoDto userInfo = userInfoService.getUserInfo(userId);
+			UserInfoDto userInfo = userInfoService.getUserInfo(userApplyTeam.getUserId());
 			if (null != userInfo){
 				TeamPlayerDto player = assemblyPlayer(userApplyTeam, userInfo);
 				playerService.save(player);
