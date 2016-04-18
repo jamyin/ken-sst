@@ -279,6 +279,14 @@ public class VoteController extends BaseController{
 				voteService.save(dto, temps, options);
 
 				result.setMessage("发布成功!");
+
+				String nickName = "";
+				if(!StringUtils.isEmpty(user.getNickName())){
+					nickName = user.getNickName();
+				}else{
+					nickName = user.getMobile();
+				}
+				TigaseUtil.sendMessage(user.getMobile(), user.getPic(), nickName, vote.getJIds(), TigaseUtil.VOTE_INFO);
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
