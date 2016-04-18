@@ -21,7 +21,6 @@ import com.tianfang.user.enums.AuditType;
 import com.tianfang.user.enums.UserType;
 import com.tianfang.user.service.IUserApplyTeamService;
 import com.tianfang.user.service.IUserInfoService;
-import com.tianfang.user.service.IUserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +53,6 @@ public class TeamController extends BaseController{
 	private ITeamService teamService;
 	@Autowired
 	private IUserApplyTeamService userApplyTeamService;
-	@Autowired
-	private IUserService userService;
 	@Autowired
 	private ITeamPlayerService playerService;
 	@Autowired
@@ -222,7 +219,7 @@ public class TeamController extends BaseController{
 		}
 
 		// 逻辑改动:由sport_user下查询teamId字段  改为  查询sst_team_player表中是否有用户
-		TeamPlayerDto teamPlayer = getTeamPlayerByUserId(userId);
+		TeamPlayerDto teamPlayer = getTeamPlayerByUserId(userApplyTeam.getUserId());
 		if (null != teamPlayer){
 			TeamDto userTeam = teamService.getTeamById(teamPlayer.getTeamId());
 			if (null != userTeam){
@@ -421,17 +418,19 @@ public class TeamController extends BaseController{
     		if (null != applies && applies.size() > 0){
 				// 取最新一条申请记录
 				UserApplyTeamDto apply = applies.get(0);
-				if (apply.getStatus() == AuditType.PASS.getIndex() && null != user.getTeamId() && StringUtils.isNotBlank(user.getTeamId())){
-					result.setStatus(DataStatus.HTTP_FAILE);
-					result.setMessage("您已经是该球队中一员");
-					return false;
-				}else{
-					// 24小时才可以申请一次
-					if (System.currentTimeMillis() - apply.getCreateTime().getTime() < DataStatus.HOUR_24){
+				if (apply.getStatus() == AuditType.PASS.getIndex()){
+					TeamPlayerDto player = getTeamPlayerByUserId(userId);
+					if (null != player){
 						result.setStatus(DataStatus.HTTP_FAILE);
-						result.setMessage("24小时之内只准申请一次");
+						result.setMessage("您已经是该球队中一员");
 						return false;
 					}
+				}
+				// 24小时才可以申请一次
+				if (System.currentTimeMillis() - apply.getCreateTime().getTime() < DataStatus.HOUR_24){
+					result.setStatus(DataStatus.HTTP_FAILE);
+					result.setMessage("24小时之内只准申请一次");
+					return false;
 				}
     		}
     	}else{
