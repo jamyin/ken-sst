@@ -12,6 +12,7 @@ import com.tianfang.common.model.Response;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.user.dto.UserApplyTeamDto;
 import com.tianfang.user.dto.UserInfoDto;
+import com.tianfang.user.enums.AuditType;
 import com.tianfang.user.service.IUserApplyTeamService;
 import com.tianfang.user.service.IUserInfoService;
 
@@ -29,6 +30,9 @@ public class JoinController extends BaseController{
 	
 	@Autowired
 	private IUserInfoService iUserInfoService;
+	
+	@Autowired
+	private TeamController teamController;
 	
 	
 	@RequestMapping(value = "join")
@@ -58,9 +62,14 @@ public class JoinController extends BaseController{
 	@ResponseBody
 	public Response<String> joinSubmit(UserInfoDto userInfo) {
 		Response<String> response = new Response<String>();
-	
-		iUserInfoService.addUserInfo(userInfo);
 		
+		UserInfoDto dto = iUserInfoService.getUserInfo(userInfo.getUserId());
+		if(dto!=null){
+			userInfo.setId(dto.getId());
+			iUserInfoService.updateUserInfo(userInfo);
+		}else{
+			iUserInfoService.addUserInfo(userInfo);
+		}
 		return response;
 	}
 	
@@ -68,13 +77,19 @@ public class JoinController extends BaseController{
 	@ResponseBody
 	public Response<String> joinSubmit(UserInfoDto userInfo,UserApplyTeamDto applyTeam) {
 		Response<String> response = new Response<String>();
-		
-
-		iUserApplyTeamService.save(applyTeam);
-		
-		
-		iUserInfoService.addUserInfo(userInfo);
-		
+		UserInfoDto dto = iUserInfoService.getUserInfo(userInfo.getUserId());
+		if(dto!=null){
+			userInfo.setId(dto.getId());
+			iUserInfoService.updateUserInfo(userInfo);
+		}else{
+			iUserInfoService.addUserInfo(userInfo);
+		}		
+		if (teamController.checkUserApplyTeam(response, userInfo.getUserId(), applyTeam.getTeamId())){
+			applyTeam.setStatus(AuditType.UNAUDIT.getIndex());
+			iUserApplyTeamService.save(applyTeam);
+			response.setStatus(DataStatus.HTTP_SUCCESS);
+			response.setMessage("申请成功,请耐心等待队长审核...");
+		}	
 		return response;
 	}
 

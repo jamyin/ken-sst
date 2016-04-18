@@ -402,7 +402,7 @@ public class TeamController extends BaseController{
 	 * @date 16/4/12 上午9:39
 	 * @version 1.0
 	 */
-	private boolean checkUserApplyTeam(Response<?> result, String userId, String teamId){
+	public boolean checkUserApplyTeam(Response<?> result, String userId, String teamId){
 		if (StringUtils.isBlank(userId)){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("请先登录...");
