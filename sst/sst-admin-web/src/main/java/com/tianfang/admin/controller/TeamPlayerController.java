@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tianfang.common.constants.TeamPlayerPositionEnum;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.MessageResp;
 import com.tianfang.common.model.PageResult;
@@ -47,6 +48,7 @@ public class TeamPlayerController extends BaseController {
 		ModelAndView mv = this.getModelAndView(this.getSessionUserId());
 		List<TeamDto> teamList = teamService.findTeam(new TeamDto());
 		mv.addObject("allTeam", teamList);
+		mv.addObject("position", TeamPlayerPositionEnum.values());
 		mv.setViewName("/team/player/player_add");
 		return mv;
 	}
@@ -89,6 +91,7 @@ public class TeamPlayerController extends BaseController {
 		try {
 			mv.setViewName("/team/player/player_edit");
 			mv.addObject("msg", "edit");
+			mv.addObject("position", TeamPlayerPositionEnum.values());
 			mv.addObject("teamPlayerDto", list.get(0));
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
