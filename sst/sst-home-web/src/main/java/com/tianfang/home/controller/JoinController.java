@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.constants.TeamPlayerPositionEnum;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.user.dto.UserApplyTeamDto;
@@ -51,9 +52,12 @@ public class JoinController extends BaseController{
 		if(StringUtils.isBlank(teamId)){
 			teamId = null;
 		}
+		
 		mv.addObject("userId", userId);
 		mv.addObject("teamId", teamId);
 		mv.addObject("userInfo", userInfo);
+		mv.addObject("teamPlayer", TeamPlayerPositionEnum.values());
+		
 		mv.setViewName("join");
 		return mv;
 	}
