@@ -73,7 +73,8 @@ select {
   color: #999999;
 }
 
-.step2 {
+.step2,
+.step1 {
   padding-bottom: 1.333333rem;
 }
 
@@ -178,6 +179,10 @@ select {
 [data-dpr="3"] .pro-bar:before {
   height: 45px;
   border-radius: 45px;
+}
+
+.pro-bar-50:before {
+  width: 50%;
 }
 
 .pro-bar2:before {
