@@ -1,10 +1,10 @@
 package com.tianfang.user.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 
@@ -102,7 +102,7 @@ public class UserInfoDto implements Serializable {
 
 	@Getter
 	@Setter
-	private String position;
+	private Integer position;
 
 	@Getter
 	@Setter
