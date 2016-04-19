@@ -13,11 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tianfang.user.service.IEmailSendService;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.constants.SessionConstants;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.user.service.IEmailSendService;
 
 /**		
  * <p>Title: EmailController </p>
