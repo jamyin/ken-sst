@@ -119,7 +119,9 @@
 										</#if>
 										</td> -->
 										<td class='hidden-phone'>${(page.name)!}</td>
-										<td><img style="width: 45px; height: 45px;" src="${imgurl}${(page.pic)!}"></td>
+										<td><#if page.pic??>
+											<img style="width: 45px; height: 45px;" src="${imgurl}${(page.pic)!}">
+										</#if></td>
 										<td class='hidden-phone'>${(page.summary)!}</td>
 										<td class='hidden-phone'>${(page.num)!}</td>
 										<td class='hidden-phone'>${(page.positionStr)!}</td>
