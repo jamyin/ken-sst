@@ -7,6 +7,8 @@ import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.train.dto.TeamPlayerDto;
+import com.tianfang.train.service.ITeamPlayerService;
 import com.tianfang.user.app.AppUserInfo;
 import com.tianfang.user.app.FriendApp;
 import com.tianfang.user.dto.ReasonJson;
@@ -34,9 +36,10 @@ public class UserFriendController extends BaseController{
 	
 	@Autowired
 	private IUserService userService;	
-	
 	@Autowired
 	private IUserApplyTeamService iUserApplyTeamService;
+	@Autowired
+	private ITeamPlayerService playerService;
 	
 	/**
 	 * 
@@ -92,20 +95,23 @@ public class UserFriendController extends BaseController{
 			List<FriendApp> raceFriendList = userService.findFriendsByUserId(userId);//普通用户
 			
     		if(!Objects.equal(dto.getUtype(), UserType.GENERAL)){//管理员用户
-    			//队内成员 
-    			List<FriendApp> teamFriends = userService.findTeamFriends(dto.getTeamId());
-				Iterator<FriendApp> iterator = teamFriends.iterator();
-				while (iterator.hasNext()){
-					FriendApp fApp = iterator.next();
-					if(Objects.equal(userId, fApp.getFriendId())){//排除自身用户
-						iterator.remove();
+				TeamPlayerDto player = playerService.getTeamPlayeByUserId(userId);
+				if (null != player){
+					//队内成员
+					List<FriendApp> teamFriends = userService.findTeamFriends(player.getTeamId());
+					Iterator<FriendApp> iterator = teamFriends.iterator();
+					while (iterator.hasNext()){
+						FriendApp fApp = iterator.next();
+						if(Objects.equal(userId, fApp.getFriendId())){//排除自身用户
+							iterator.remove();
+						}
+						fApp.setUserId(dto.getId());
+						fApp.setUserMobile(dto.getMobile());
 					}
-					fApp.setUserId(dto.getId());
-					fApp.setUserMobile(dto.getMobile());
+					// 赛事好友  + 队内成员
+					raceFriendList.addAll(teamFriends);
 				}
-    			// 赛事好友  + 队内成员
-    			raceFriendList.addAll(teamFriends);
-    			
+
     			raceFriendList = removeDuplicateWithOrder(raceFriendList);
     			
     		}

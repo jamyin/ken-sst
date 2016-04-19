@@ -1346,44 +1346,6 @@ public class UserController extends BaseController{
     }
     
     /**
-     * 联盟通讯录
-     * @return {"status":状态码(200-成功,500-失败),"message":"提示信息","data":List<TeamDto>}
-     * @author xiang_wang
-     * 2016年1月20日下午2:10:25
-     */
-    @RequestMapping(value="teamBook")
-    @ResponseBody
-    public Response<List<TeamDto>> teamBook(String userId){
-    	UserDto user = getUserByCache(userId);
-    	Response<List<TeamDto>> result = new Response<List<TeamDto>>();
-    	if (null != user){
-    		try {
-    			result.setStatus(DataStatus.HTTP_SUCCESS);
-    			List<TeamDto> list = teamService.findAll();
-    			if (StringUtils.isNotBlank(user.getTeamId())){
-    				for (TeamDto team : list){
-        				if (user.getTeamId().equals(team.getId())){
-        					team.setChecked(true);
-        					break;
-        				}
-        			}
-    			}
-				result.setData(list);
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-				result.setStatus(DataStatus.HTTP_FAILE);
-	    		result.setMessage("系统异常");
-			}	
-    	}else{
-    		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户不存在");
-    	}
-    	
-    	return result;
-    }
-    
-    /**
 	 * 校验短信验证码
 	 * 
 	 * @param code
