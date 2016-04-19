@@ -294,11 +294,7 @@ public class TeamController extends BaseController{
 					}
 					if (user.getUtype().intValue() == UserType.GENERAL.getIndex()){
 						cy.getList().add(UserDtoToAppUser(user));
-					}
-					if (user.getUtype().intValue() == UserType.CAPTAIN.getIndex()){
-						gl.getList().add(UserDtoToAppUser(user));
-					}
-					if (user.getUtype().intValue() == UserType.COACH.getIndex()){
+					}else{
 						gl.getList().add(UserDtoToAppUser(user));
 					}
 					if (user.getUserId().equals(curruser.getId())){
