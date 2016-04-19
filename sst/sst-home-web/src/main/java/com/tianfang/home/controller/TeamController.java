@@ -371,9 +371,6 @@ public class TeamController extends BaseController{
 	 */
 	private TeamDto isOwnerTeam(String userId) {
 		UserDto user = getUserByCache(userId);
-		if (StringUtils.isBlank(user.getTeamId())){
-			return null;
-		}
 		if (user.getUtype() == UserType.GENERAL.getIndex()){
 			return null;
 		}
