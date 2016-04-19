@@ -370,7 +370,7 @@ public class TeamController extends BaseController{
 			return null;
 		}
 		TeamPlayerDto player = playerService.getTeamPlayeByUserId(userId);
-		if (null != player){
+		if (null == player){
 			result.setStatus(DataStatus.HTTP_FAILE);
 			result.setMessage("对不起,您还未创建球队!");
 			return null;
