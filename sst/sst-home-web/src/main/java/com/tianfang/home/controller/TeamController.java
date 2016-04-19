@@ -496,6 +496,14 @@ public class TeamController extends BaseController{
 		player.setName(userInfo.getName());
 		player.setStudentNo(userInfo.getStudentNo());
 		player.setSchool(userInfo.getSchool());
+		player.setPosition(userInfo.getPosition());
+		player.setChenyiCup(userInfo.getChenyiCup());
+		player.setJoinUnion(userInfo.getJoinUnion());
+		player.setLocaltion(userInfo.getLocaltion());
+		player.setUserRala(userInfo.getUserRala());
+		player.setGuardianName(userInfo.getGuardianName());
+		player.setWorkLoca(userInfo.getWorkLoca());
+
 		// 保存用户头像
 		player.setPic(userApplyTeam.getPic());
 		player.setTeamId(userApplyTeam.getTeamId());

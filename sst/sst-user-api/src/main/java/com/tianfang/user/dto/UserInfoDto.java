@@ -90,6 +90,14 @@ public class UserInfoDto implements Serializable {
 
 	@Getter
 	@Setter
+	private String userRala;
+
+	@Getter
+	@Setter
+	private String guardianName;
+
+	@Getter
+	@Setter
 	private Integer chenyiCup; // 1 是 0 否
 
 	@Getter

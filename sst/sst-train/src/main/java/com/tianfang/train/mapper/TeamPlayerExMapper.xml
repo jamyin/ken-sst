@@ -18,6 +18,13 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP"/>
         <result column="stat" property="stat" jdbcType="INTEGER"/>
+        <result column="localtion" property="localtion" jdbcType="VARCHAR"/>
+        <result column="work_loca" property="workLoca" jdbcType="VARCHAR"/>
+        <result column="guardian_name" property="guardianName" jdbcType="VARCHAR"/>
+        <result column="user_rala" property="userRala" jdbcType="VARCHAR"/>
+        <result column="chenyi_cup" property="chenyiCup" jdbcType="INTEGER"/>
+        <result column="join_union" property="joinUnion" jdbcType="INTEGER"/>
+        <result column="summary" property="summary" jdbcType="VARCHAR"/>
         <!--联表数据-->
         <result column="utype" property="utype" jdbcType="INTEGER"/>
         <result column="team_name" property="teamName" jdbcType="VARCHAR"/>
@@ -44,7 +51,8 @@
 
     <sql id="Base_Column_List">
         p.id, p.team_id, p.user_id, p.name, p.age, p.card_no, p.mobile, p.school, p.student_no, p.pic, p.gender,
-        p.num, p.position, p.create_time, p.last_update_time, p.stat, u.utype, t.name AS team_name, t.icon AS team_icon
+        p.num, p.position, p.create_time, p.last_update_time, p.stat, u.utype, t.name AS team_name, t.icon AS team_icon,
+        p.localtion, p.work_loca, p.guardian_name, p.user_rala, p.chenyi_cup, p.join_union, p.summary
     </sql>
 
     <select id="findTeamPlayerByParam" resultMap="BaseResultMap" parameterType="com.tianfang.train.dto.TeamPlayerDto">
@@ -71,7 +79,7 @@
 
     <sql id="Base_Column_Team_List">
         p.id, p.team_id, p.user_id, p.name, p.age, p.card_no, p.mobile, p.school, p.student_no, p.pic, p.gender,
-        p.num, p.position, p.create_time, p.last_update_time, p.stat, t.name as teamName
+        p.num, p.position, p.create_time, p.last_update_time, p.stat, t.name as teamName, p.localtion, p.work_loca, p.guardian_name, p.user_rala, p.chenyi_cup, p.join_union, p.summary
     </sql>
 
     <sql id="Example_Where_Team_Clause">

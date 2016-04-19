@@ -96,6 +96,48 @@ public class TeamPlayerDto implements Serializable{
 	@Getter
 	private Integer position;
 
+	/**
+	 * 所在地
+	 */
+	@Getter
+	@Setter
+	private String localtion;
+
+	/**
+	 * 工作单位
+	 */
+	@Getter
+	@Setter
+	private String workLoca;
+
+	/**
+	 * 监护人姓名
+	 */
+	@Getter
+	@Setter
+	private String guardianName;
+
+	/**
+	 * 与用户关系
+	 */
+	@Getter
+	@Setter
+	private String userRala;
+
+	/**
+	 * 是否参加过陈毅杯 1是 0否
+	 */
+	@Getter
+	@Setter
+	private Integer chenyiCup;
+
+	/**
+	 * 是否参加过校园联盟 1是 0否
+	 */
+	@Getter
+	@Setter
+	private Integer joinUnion;
+
 	public void setPosition(Integer position) {
 		this.position = position;
 		if (null != position && position.intValue() > 0){
