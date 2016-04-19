@@ -231,7 +231,7 @@ public class TeamController extends BaseController{
 			}
 		}
 		if (status == AuditType.PASS.getIndex()){
-			UserInfoDto userInfo = userInfoService.getUserInfo(userId);
+			UserInfoDto userInfo = userInfoService.getUserInfo(userApplyTeam.getUserId());
 			if (null != userInfo){
 				TeamPlayerDto player = assemblyPlayer(userApplyTeam, userInfo);
 				playerService.save(player);
@@ -371,9 +371,6 @@ public class TeamController extends BaseController{
 	 */
 	private TeamDto isOwnerTeam(String userId) {
 		UserDto user = getUserByCache(userId);
-		if (StringUtils.isBlank(user.getTeamId())){
-			return null;
-		}
 		if (user.getUtype() == UserType.GENERAL.getIndex()){
 			return null;
 		}

@@ -1,3 +1,5 @@
+<script type="text/javascript" src="${base}/static/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
 <div class="navbar navbar-inverse">
   <div class="navbar-inner">
    <div class="container-fluid">
@@ -179,6 +181,7 @@
 			<li class="light-blue user-profile">
 				<a class="user-menu dropdown-toggle" href="#" data-toggle="dropdown">
 					<img alt="Jason's Photo" src="${base}/static/avatars/user.jpg" class="nav-user-photo" />
+					<input type="hidden" id="userId" value="${(USERID)!}"> 
 					<span id="user_info">
 						<small>欢迎,</small> ${(USERNAME)!}
 					</span>
@@ -189,9 +192,26 @@
 					<!-- <li><a href="#"><i class="icon-user"></i>修改资料</a></li> -->
 					<li class="divider"></li>
 					<li><a href="${base}/logout.do"><i class="icon-off"></i>退出</a></li>
+					<li><a href="###"><i class="icon-key">&nbsp;&nbsp;修改密码</i></a></li>
 				</ul>
 			</li>
 	  </ul><!--/.ace-nav-->
    </div><!--/.container-fluid-->
   </div><!--/.navbar-inner-->
 </div><!--/.navbar-->
+<script type="text/javascript">
+$(function(){
+	$(".icon-key").on('click',function(){
+		var id = $("#userId").val();
+		//iframe层-父子操作
+		layer.open({
+		    type: 2,
+		    title:"修改密码",
+		    area: ['400px', '320px'],
+		    fix: true, //不固定
+		    maxmin: false,
+		    content: '${base}/admin/edit.do?id='+id
+		});				
+	});
+});
+</script>

@@ -21,19 +21,19 @@
 							<form id="submitForm" class="form-horizontal" action="${base}/sport/admin/edit.do" method="POST">
 								<input type="hidden" id="id" name="id" value="${(datas.id)!}"/>
 								<div class="control-group">
-										<label class="course_add_label" for="form-field-1">用户名</label>
+										<label class="course_add_label" for="form-field-1">用&nbsp;户&nbsp;名</label>
 										<div class="course_add_input">
-											<input type="text" name="account"  id="form-field-1" value="${(datas.account)!}"  placeholder="用户名">
+											<input type="text" name="account"  id="form-field-1" value="${(datas.account)!}"  placeholder="用户名" readonly="true">
 										</div>									
 								</div>
 								<div class="control-group">
-										<label class="course_add_label" for="form-field-1">密码</label>
+										<label class="course_add_label" for="form-field-1">新&nbsp;密&nbsp;码</label>
 										<div class="course_add_input">
 											<input type="password" name="pwd"  id="form-field-1" placeholder="输入密码">
 										</div>									
 								</div>
 								<div class="control-group">
-										<label class="course_add_label" for="form-field-1">确认密码</label>
+										<label class="course_add_label" for="form-field-1">确认新密码</label>
 										<div class="course_add_input">
 											<input type="password" name="confirmPwd"  id="form-field-1" placeholder="确认密码">
 										</div>									
@@ -161,7 +161,7 @@
 				var ajaxParams = $("#submitForm").serialize();
 				$.ajax({
 					type : "POST",
-					url : "${base}/admin/edit.do",
+					url : "${base}/admin/update.do",
 					data : ajaxParams,
 					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
 					beforeSend : function() {
@@ -175,7 +175,7 @@
 							    icon: 6,
 							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
 							}, function(){
-								parent.reload_page();
+								//parent.reload_page();
 								var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 								parent.layer.close(index);
 							}); 							
