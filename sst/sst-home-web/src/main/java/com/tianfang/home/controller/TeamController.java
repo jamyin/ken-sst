@@ -111,10 +111,8 @@ public class TeamController extends BaseController{
     @ResponseBody
 	public Response<PageResult<AppUserInfo>> listApply(String userId, PageQuery query){
 		Response<PageResult<AppUserInfo>> result = new Response<PageResult<AppUserInfo>>();
-		TeamDto team = isOwnerTeam(userId);
+		TeamDto team = isOwnerTeam(userId, result);
 		if (null == team){
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("对不起,您没有权限查看!");
 			return result;
 		}
 		AppUserInfo dto = new AppUserInfo();
@@ -170,10 +168,8 @@ public class TeamController extends BaseController{
 	@ResponseBody
 	public Response<String> isOwner(String userId){
 		Response<String> result = new Response<String>();
-		TeamDto team = isOwnerTeam(userId);
+		TeamDto team = isOwnerTeam(userId, result);
 		if (null == team){
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("对不起,您不是球队的队长");
 			return result;
 		}
 		result.setStatus(DataStatus.HTTP_SUCCESS);
@@ -200,10 +196,8 @@ public class TeamController extends BaseController{
 			result.setMessage("审核状态异常");
 			return result;
 		}
-		TeamDto team = isOwnerTeam(userId);
+		TeamDto team = isOwnerTeam(userId, result);
 		if (null == team){
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("对不起,您没有权限审核");
 			return result;
 		}
 		UserApplyTeamDto userApplyTeam = userApplyTeamService.getUserApplyTeamById(id);
@@ -335,10 +329,8 @@ public class TeamController extends BaseController{
 	@ResponseBody
 	public Response<String> kicking(String userId, String kickingId){
 		Response<String> result = new Response<String>();
-		TeamDto team = isOwnerTeam(userId);
+		TeamDto team = isOwnerTeam(userId, result);
 		if (null == team){
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("对不起,您没有权限审核");
 			return result;
 		}
 		try {
@@ -365,22 +357,32 @@ public class TeamController extends BaseController{
 	/**
 	 * 查询该用户是否是该球队的管理员
 	 * @param userId
+	 * @param result
 	 * @return
 	 * @author xiang_wang
 	 * 2016年3月7日上午10:01:24
 	 */
-	private TeamDto isOwnerTeam(String userId) {
+	private TeamDto isOwnerTeam(String userId, Response<?> result) {
 		UserDto user = getUserByCache(userId);
 		if (user.getUtype() == UserType.GENERAL.getIndex()){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("对不起,您没有权限查看!!");
 			return null;
 		}
 		TeamPlayerDto player = playerService.getTeamPlayeByUserId(userId);
-		TeamDto team = teamService.getTeamById(player.getTeamId());
-
-		if (null != team && team.getStat() == DataStatus.ENABLED){
-			return team;
+		if (null != player){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("对不起,您还未创建球队!");
+			return null;
 		}
-		return null;
+		TeamDto team = teamService.getTeamById(player.getTeamId());
+		if (null == team){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("对不起,您所在球队已解散!");
+			return null;
+		}
+
+		return team;
 	}
 
 	/**
