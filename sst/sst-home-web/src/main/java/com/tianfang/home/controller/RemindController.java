@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +22,9 @@ import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.util.FileUtils;
-import com.tianfang.common.util.GetPostUtil;
-import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.utils.TigaseUtil;
-import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.user.dto.RemindDto;
 import com.tianfang.user.dto.RemindUsersDto;
 import com.tianfang.user.dto.UserDto;

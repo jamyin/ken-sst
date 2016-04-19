@@ -1,5 +1,18 @@
 package com.tianfang.home.controller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Objects;
 import com.tianfang.common.constants.DataStatus;
@@ -18,15 +31,6 @@ import com.tianfang.user.enums.AuditType;
 import com.tianfang.user.enums.UserType;
 import com.tianfang.user.service.IUserApplyTeamService;
 import com.tianfang.user.service.IUserService;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.*;
 
 @Controller
 @RequestMapping(value = "userFriend")

@@ -1,5 +1,28 @@
 package com.tianfang.home.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.alibaba.fastjson.JSON;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.constants.SessionConstants;
@@ -7,7 +30,11 @@ import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
-import com.tianfang.common.util.*;
+import com.tianfang.common.util.DateUtils;
+import com.tianfang.common.util.PropertiesUtils;
+import com.tianfang.common.util.RandomCode;
+import com.tianfang.common.util.StringUtils;
+import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.dto.AppGroupDatas;
 import com.tianfang.home.dto.MatchesDto;
 import com.tianfang.home.utils.QRCodeUtil;
@@ -19,25 +46,19 @@ import com.tianfang.train.service.ICompetitionTeamService;
 import com.tianfang.train.service.ITeamPlayerService;
 import com.tianfang.train.service.ITeamService;
 import com.tianfang.user.app.FriendApp;
-import com.tianfang.user.dto.*;
-import com.tianfang.user.service.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
+import com.tianfang.user.dto.GroupDto;
+import com.tianfang.user.dto.GroupUserDto;
+import com.tianfang.user.dto.MemoDto;
+import com.tianfang.user.dto.PlanDto;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.dto.UserFriendDto;
+import com.tianfang.user.dto.UserInfoDto;
+import com.tianfang.user.service.IGroupService;
+import com.tianfang.user.service.IMemoService;
+import com.tianfang.user.service.IPlanService;
+import com.tianfang.user.service.IUserFriendService;
+import com.tianfang.user.service.IUserInfoService;
+import com.tianfang.user.service.IUserService;
 
 /**
  * <p>Title: UserController </p>

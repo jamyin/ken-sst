@@ -1,5 +1,17 @@
 package com.tianfang.home.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.alibaba.fastjson.JSON;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
@@ -21,17 +33,6 @@ import com.tianfang.user.enums.AuditType;
 import com.tianfang.user.enums.UserType;
 import com.tianfang.user.service.IUserApplyTeamService;
 import com.tianfang.user.service.IUserInfoService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**		
  * <p>Title: TeamController </p>
