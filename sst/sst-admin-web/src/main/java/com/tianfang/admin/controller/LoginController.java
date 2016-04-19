@@ -58,6 +58,7 @@ public class LoginController extends BaseController {
 		if (user != null) {
 			mv = this.getModelAndView(user.getId());
 			session.setAttribute(Const.SESSION_USERNAME,user.getAccount());
+			session.setAttribute(Const.SESSION_ID,user.getId());
 			mv.setViewName("/index");
 		}else {
 			mv = this.getModelAndView();
