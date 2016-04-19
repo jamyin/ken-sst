@@ -145,12 +145,13 @@ public class CompController extends BaseController {
 			response.setMessage("用户不存在!");
 			return response;
 		}
-		if (StringUtils.isBlank(user.getTeamId())) {
+		TeamPlayerDto player = playerService.getTeamPlayeByUserId(userId);
+		if (null == player) {
 			response.setStatus(DataStatus.HTTP_FAILE);
 			response.setMessage("对不起,用户未加入球队!");
 			return response;
 		}
-		params.setTeamId(user.getTeamId());
+		params.setTeamId(player.getTeamId());
 		List<CompetitionDto> datas = applyService.findCompApplyByParams(params);
 
 		response.setData(datas);
