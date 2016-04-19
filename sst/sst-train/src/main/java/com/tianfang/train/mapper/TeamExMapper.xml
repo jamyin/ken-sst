@@ -26,9 +26,10 @@
     b.stat
   </sql>
   <select id="findAllByCompId" resultMap="BaseResultMap" parameterType="java.lang.String" >
-  	SELECT DISTINCT <include refid="Base_Column_List" />
+  	SELECT DISTINCT
+    <include refid="Base_Column_List" />
 	FROM sst_competition_team AS a
-	JOIN sst_team AS b ON a.team_id = b.id
-	WHERE a.comp_id = #{compId,jdbcType=VARCHAR} ORDER BY b.create_time;
+	LEFT JOIN sst_team AS b ON a.team_id = b.id
+	WHERE a.comp_id = #{compId,jdbcType=VARCHAR} and a.stat = 1 and b.stat = 1 ORDER BY b.create_time;
   </select>
 </mapper>
