@@ -32,6 +32,7 @@ import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.common.util.UUIDGenerator;
 import com.tianfang.home.dto.AppNoticeDatas;
+import com.tianfang.home.utils.SmsUtils;
 import com.tianfang.home.utils.TigaseUtil;
 import com.tianfang.message.dto.NoticeDto;
 import com.tianfang.message.dto.NoticeUsersDto;
@@ -351,8 +352,10 @@ public class NoticeController extends BaseController {
 				nickName = userDto.getMobile();
 			}			
 //			if(StringUtils.isEmpty(remindDto.getSendTime())){
-			TigaseUtil.sendMessage(userDto.getMobile(), userDto.getPic(), nickName, noticeDto.getJIds(),TigaseUtil.NOTICE_INFO);	
-//			}			
+			TigaseUtil.sendMessage(userDto.getMobile(), userDto.getPic(), nickName, noticeDto.getJIds(),TigaseUtil.NOTICE_INFO);
+			//系统内部短信发送
+//			SmsUtils.sendMessage(noticeDto.getJIds(), SmsUtils.NOTICE_INFO);
+//			}
 			
 		}else{
 			data.setMessage("发布公告失败");
