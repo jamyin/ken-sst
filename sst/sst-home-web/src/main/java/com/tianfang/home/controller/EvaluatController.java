@@ -56,6 +56,7 @@ public class EvaluatController extends BaseController{
 	@ResponseBody
 	public Response<Object> evaList(EvaluatDto dto,PageQuery page){
 		Response<Object> response = new Response<Object>();
+		dto.setStat(DataStatus.ENABLED);
 		if(Objects.equal(dto.getEvaType(),DataStatus.EVA_TWO)){
 			List<EvaluatDto> resultList = iEvaluatService.findEvaluatBySql(dto);
 			if(resultList!=null){
