@@ -1,9 +1,9 @@
 package com.tianfang.home.utils;
 
-import java.io.File;
-
 import com.tianfang.common.qrcode.TwoDimensionCode;
 import com.tianfang.common.util.PropertiesUtils;
+
+import java.io.File;
 
 /**		
  * <p>Title: QRCodeUtil </p>

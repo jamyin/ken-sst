@@ -2,20 +2,17 @@ package com.tianfang.common.qrcode;
 
 
   
-import java.awt.Color;
-import java.awt.Graphics2D;
+import com.swetake.util.Qrcode;
+import jp.sourceforge.qrcode.QRCodeDecoder;
+import jp.sourceforge.qrcode.exception.DecodingFailedException;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import javax.imageio.ImageIO;
-
-import jp.sourceforge.qrcode.QRCodeDecoder;
-import jp.sourceforge.qrcode.exception.DecodingFailedException;
-
-import com.swetake.util.Qrcode;
  /*
   * 
  	 * 此类描述的是：二维码生成类
@@ -72,9 +69,12 @@ public class TwoDimensionCode {
     public static void encoderQRCode(String content, String imgPath, String imgType, int size) {  
         try {  
             BufferedImage bufImg = qRCodeCommon(content, imgType, size);  
-              
-            File imgFile = new File(imgPath);  
-            // 生成二维码QRCode图片  
+            File imgFile = new File(imgPath);
+            //如果文件夹不存在则创建
+            if(!imgFile.exists() && !imgFile.getParentFile().exists()) {
+                imgFile.getParentFile().mkdirs();
+            }
+            // 生成二维码QRCode图片
             ImageIO.write(bufImg, imgType, imgFile);  
         } catch (Exception e) {  
             e.printStackTrace();  
