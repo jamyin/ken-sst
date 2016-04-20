@@ -2,6 +2,8 @@ package com.tianfang.home.utils;
 
 import com.tianfang.common.qrcode.TwoDimensionCode;
 import com.tianfang.common.util.PropertiesUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
 
@@ -18,7 +20,7 @@ import java.io.File;
  * <p>修改备注：</p>
  */
 public class QRCodeUtil {
-
+	protected static final Log logger = LogFactory.getLog(QRCodeUtil.class);
 	private static final String QRCODE_URL = PropertiesUtils.getProperty("upload.url");
 	private static final String basePath;
 	private static final String SUFFIX = ".png";
@@ -37,7 +39,11 @@ public class QRCodeUtil {
 	public static String createCode(String userId){
 		StringBuilder url = new StringBuilder();
 		StringBuilder filePath = new StringBuilder(basePath).append(userId).append(SUFFIX);
-		TwoDimensionCode.encoderQRCode(userId, url.append(QRCODE_URL).append(filePath).toString());
-		return filePath.toString();
+		if (TwoDimensionCode.encoderQRCode(userId, url.append(QRCODE_URL).append(filePath).toString())){
+			return filePath.toString();
+		}else{
+			logger.error("生成二维码失败!");
+			return null;
+		}
 	}
 }

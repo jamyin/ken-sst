@@ -5,6 +5,8 @@ package com.tianfang.common.qrcode;
 import com.swetake.util.Qrcode;
 import jp.sourceforge.qrcode.QRCodeDecoder;
 import jp.sourceforge.qrcode.exception.DecodingFailedException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -19,15 +21,16 @@ import java.io.OutputStream;
  	 * @author: cwftalus@163.com
  	 * @version: 2015年4月30日 下午1:21:39
   */
-public class TwoDimensionCode {  
+public class TwoDimensionCode {
+     protected static final Log logger = LogFactory.getLog(TwoDimensionCode.class);
       
     /** 
      * 生成二维码(QRCode)图片 
      * @param content 存储内容 
      * @param imgPath 图片路径 
      */  
-    public static void encoderQRCode(String content, String imgPath) {  
-        encoderQRCode(content, imgPath, "png", 7);  
+    public static boolean encoderQRCode(String content, String imgPath) {
+        return encoderQRCode(content, imgPath, "png", 7);
     }  
       
     /** 
@@ -35,8 +38,8 @@ public class TwoDimensionCode {
      * @param content 存储内容 
      * @param output 输出流 
      */  
-    public static void encoderQRCode(String content, OutputStream output) {  
-        encoderQRCode(content, output, "png", 7);  
+    public static void encoderQRCode(String content, OutputStream output) {
+        encoderQRCode(content, output, "png", 7);
     }  
       
     /** 
@@ -45,8 +48,8 @@ public class TwoDimensionCode {
      * @param imgPath 图片路径 
      * @param imgType 图片类型 
      */  
-    public static void encoderQRCode(String content, String imgPath, String imgType) {  
-        encoderQRCode(content, imgPath, imgType, 7);  
+    public static boolean encoderQRCode(String content, String imgPath, String imgType) {
+        return encoderQRCode(content, imgPath, imgType, 7);
     }  
       
     /** 
@@ -55,8 +58,8 @@ public class TwoDimensionCode {
      * @param output 输出流 
      * @param imgType 图片类型 
      */  
-    public static void encoderQRCode(String content, OutputStream output, String imgType) {  
-        encoderQRCode(content, output, imgType, 7);  
+    public static void encoderQRCode(String content, OutputStream output, String imgType) {
+        encoderQRCode(content, output, imgType, 7);
     }  
   
     /** 
@@ -66,20 +69,30 @@ public class TwoDimensionCode {
      * @param imgType 图片类型 
      * @param size 二维码尺寸 
      */  
-    public static void encoderQRCode(String content, String imgPath, String imgType, int size) {  
-        try {  
-            BufferedImage bufImg = qRCodeCommon(content, imgType, size);  
+    public static boolean encoderQRCode(String content, String imgPath, String imgType, int size) {
+        try {
+            BufferedImage bufImg = qRCodeCommon(content, imgType, size);
             File imgFile = new File(imgPath);
             //如果文件夹不存在则创建
-            if(!imgFile.exists() && !imgFile.getParentFile().exists()) {
-                imgFile.getParentFile().mkdirs();
+            if(!imgFile.exists()) {
+                if (!imgFile.getParentFile().exists()){
+                    logger.info("创建父级文件夹:"+imgFile.getParentFile());
+                    imgFile.getParentFile().mkdirs();
+                }
+                imgFile.createNewFile();
+                logger.info("创建文件:"+imgFile);
             }
             // 生成二维码QRCode图片
-            ImageIO.write(bufImg, imgType, imgFile);  
-        } catch (Exception e) {  
-            e.printStackTrace();  
-        }  
-    }  
+            ImageIO.write(bufImg, imgType, imgFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("生成二维码(QRCode)图片异常:"+e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
   
     /** 
      * 生成二维码(QRCode)图片 
@@ -195,7 +208,7 @@ public class TwoDimensionCode {
         return content;  
     }  
   
-    public static void main(String[] args) {  
+    public static void main(String[] args) {
         String imgPath = "d:/qrcodes/85db5957-39ec-4750-aeaa-af78c9e2353a.png";  
         String encoderContent = "85db5957-39ec-4750-aeaa-af78c9e2353a";  
         encoderQRCode(encoderContent, imgPath);
