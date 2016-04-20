@@ -242,7 +242,7 @@ public class UserController extends BaseController{
 			return result;
 		}
 
-		if(TigaseUtil.getUserByAccount(dto.getMobile())){
+		if(!TigaseUtil.getUserByAccount(dto.getMobile())){
 			TigaseUtil.registered(dto.getMobile(), dto.getPassword());
 		};
 				

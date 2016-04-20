@@ -179,7 +179,7 @@ public class TigaseUtil {
 	
 
 	public static boolean getUserByAccount(String mobile){
-		Map<String, String> params = new HashMap<String, String>(2);
+		Map<String, String> params = new HashMap<String, String>(1);
 		params.put("userAccount", mobile+suffix);
 		String result = HttpClientUtil.sendPostRequestByJava(GETUSERBYACCOUNT_URL, params);
 		return analysisResult(result);
