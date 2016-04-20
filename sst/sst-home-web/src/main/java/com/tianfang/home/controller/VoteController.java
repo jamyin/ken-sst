@@ -1,20 +1,8 @@
 package com.tianfang.home.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.alibaba.fastjson.JSON;
 import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.jdbc.DataSourceHolderUtil;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
@@ -26,14 +14,20 @@ import com.tianfang.home.dto.AppOption;
 import com.tianfang.home.dto.AppVoteDatas;
 import com.tianfang.home.utils.TigaseUtil;
 import com.tianfang.user.app.VoteApp;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.dto.VoteDto;
-import com.tianfang.user.dto.VoteOptionDto;
-import com.tianfang.user.dto.VoteParams;
-import com.tianfang.user.dto.VoteUserOptionDto;
-import com.tianfang.user.dto.VoteUserTempDto;
+import com.tianfang.user.dto.*;
 import com.tianfang.user.service.IVoteService;
 import com.tianfang.user.service.IVoteUserOptionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>Title: VoteController </p>
@@ -202,49 +196,7 @@ public class VoteController extends BaseController{
 	public Response<String> publishIOS(String datas, HttpServletRequest request) throws Exception{
 		Response<String> result = new Response<String>();
 		AppVoteDatas vote = JSON.parseObject(datas, AppVoteDatas.class);
-		if (StringUtils.isBlank(vote.getUserId())){
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("用户未登陆");
-			return result;
-		}
-		if (null == vote.getToUserIds() || vote.getToUserIds().length == 0){
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("未选择发送用户");
-			return result;
-		}
-		UserDto user = getUserByCache(vote.getUserId());
-		if (null != user){
-			try {
-				// 组装Vote数据
-				String voteId = UUIDGenerator.getUUID();
-				VoteDto dto = assemblyVote(vote, user, voteId);
-				// 组装VoteUserTemp数据
-				List<VoteUserTempDto> temps = assemblyTemps(vote, voteId);
-				// 组装VoteOption(ios端组装方式)
-				List<VoteOptionDto> options = assemblyVoteOptions(vote, voteId);
-				// 批量保存数据
-				voteService.save(dto, temps, options);
-
-				result.setMessage("发布成功!");
-				
-				String nickName = "";
-				if(!StringUtils.isEmpty(user.getNickName())){
-					nickName = user.getNickName();
-				}else{
-					nickName = user.getMobile();
-				}
-				TigaseUtil.sendMessage(user.getMobile(), user.getPic(), nickName, vote.getJIds(),TigaseUtil.VOTE_INFO);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-				result.setStatus(DataStatus.HTTP_FAILE);
-				result.setMessage("系统异常");
-			}
-		}else{
-			result.setStatus(DataStatus.HTTP_FAILE);
-			result.setMessage("用户不存在");
-		}
+		publishVote(result, vote);
 
 		return result;
 	}
@@ -260,48 +212,7 @@ public class VoteController extends BaseController{
 	@ResponseBody
 	public Response<String> publish(@RequestBody AppVoteDatas vote) throws Exception{
 		Response<String> result = new Response<String>();
-		if (StringUtils.isBlank(vote.getUserId())){
-			result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户未登陆");
-    		return result;
-		}
-		if (null == vote.getToUserIds() || vote.getToUserIds().length == 0){
-			result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("未选择发送用户");
-    		return result;
-		}
-		UserDto user = getUserByCache(vote.getUserId());
-    	if (null != user){
-			try {
-				// 组装Vote数据
-				String voteId = UUIDGenerator.getUUID();
-				VoteDto dto = assemblyVote(vote, user, voteId);
-				// 组装VoteUserTemp数据
-				List<VoteUserTempDto> temps = assemblyTemps(vote, voteId);
-				// 组装VoteOption
-				List<VoteOptionDto> options = assemblyVoteOptions(vote, voteId);
-				// 批量保存数据
-				voteService.save(dto, temps, options);
-
-				result.setMessage("发布成功!");
-
-				String nickName = "";
-				if(!StringUtils.isEmpty(user.getNickName())){
-					nickName = user.getNickName();
-				}else{
-					nickName = user.getMobile();
-				}
-				TigaseUtil.sendMessage(user.getMobile(), user.getPic(), nickName, vote.getJIds(), TigaseUtil.VOTE_INFO);
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-				result.setStatus(DataStatus.HTTP_FAILE);
-	    		result.setMessage("系统异常");
-			}
-    	}else{
-    		result.setStatus(DataStatus.HTTP_FAILE);
-    		result.setMessage("用户不存在");
-    	}
+		publishVote(result, vote);
 
 		return result;
 	}
@@ -323,6 +234,53 @@ public class VoteController extends BaseController{
 		VoteDto last = voteService.getLast(userId);
 		response.setData(last);
 		return response;
+	}
+
+	private void publishVote(Response<String> result, AppVoteDatas vote) {
+		if (StringUtils.isBlank(vote.getUserId())){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("用户未登陆");
+			return;
+		}
+		if (null == vote.getToUserIds() || vote.getToUserIds().length == 0){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("未选择发送用户");
+			return;
+		}
+		UserDto user = getUserByCache(vote.getUserId());
+		if (null != user){
+			try {
+				// 组装Vote数据
+				String voteId = UUIDGenerator.getUUID();
+				VoteDto dto = assemblyVote(vote, user, voteId);
+				// 组装VoteUserTemp数据
+				List<VoteUserTempDto> temps = assemblyTemps(vote, voteId);
+				// 组装VoteOption(ios端组装方式)
+				List<VoteOptionDto> options = assemblyVoteOptions(vote, voteId);
+				// 批量保存数据
+				DataSourceHolderUtil.setToMaster();
+				voteService.save(dto, temps, options);
+
+				result.setMessage("发布成功!");
+
+				String nickName = "";
+				if(!StringUtils.isEmpty(user.getNickName())){
+					nickName = user.getNickName();
+				}else{
+					nickName = user.getMobile();
+				}
+				TigaseUtil.sendMessage(user.getMobile(), user.getPic(), nickName, vote.getJIds(),TigaseUtil.VOTE_INFO);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("系统异常");
+			}
+		}else{
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("用户不存在");
+		}
 	}
 
 	/**
