@@ -20,10 +20,12 @@ import com.tianfang.train.service.ITeamPlayerService;
 import com.tianfang.user.app.FriendApp;
 import com.tianfang.user.dto.*;
 import com.tianfang.user.service.*;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -218,9 +221,8 @@ public class UserController extends BaseController{
 			return result;
 		}
 
-		if(!TigaseUtil.getUserByAccount(dto.getMobile())){
-			TigaseUtil.registered(dto.getMobile(), dto.getPassword());
-		};
+		//登录是检查用户是否存在 
+		checkTigaseUser(dto);
 				
 		session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
 		if(user != null){
@@ -230,6 +232,16 @@ public class UserController extends BaseController{
 		result.setStatus(DataStatus.HTTP_SUCCESS);
 		result.setMessage("用户登录成功！");
 		return result;
+	}
+	
+	/*
+	 * 登录是检查用户是否存在 
+	 */
+	@Async
+	private void checkTigaseUser(UserDto dto){
+		if(!TigaseUtil.getUserByAccount(dto.getMobile())){
+			TigaseUtil.registered(dto.getMobile(), dto.getPassword());
+		};
 	}
 
 	/**
