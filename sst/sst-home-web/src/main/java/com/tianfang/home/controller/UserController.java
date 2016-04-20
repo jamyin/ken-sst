@@ -242,6 +242,10 @@ public class UserController extends BaseController{
 			return result;
 		}
 
+		if(TigaseUtil.getUserByAccount(dto.getMobile())){
+			TigaseUtil.registered(dto.getMobile(), dto.getPassword());
+		};
+				
 		session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
 		if(user != null){
 			redisTemplate.opsForValue().set(DataStatus.SST_USER+user.getId(), user);
@@ -301,7 +305,7 @@ public class UserController extends BaseController{
 					result.setStatus(DataStatus.HTTP_SUCCESS);
 					result.setMessage("恭喜您密码重置成功！");
 					return result;
-				}else{
+				}else{			
 					result.setStatus(DataStatus.HTTP_FAILE);
 					result.setMessage("对不起密码重置失败！");
 					return result;

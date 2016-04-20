@@ -3,6 +3,10 @@ package com.tianfang.home.utils;
 import com.tianfang.common.util.HttpClientUtil;
 import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.home.controller.AddressesController;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.HashMap;
@@ -21,12 +25,16 @@ import java.util.Map;
  * <p>修改备注：</p>
  */
 public class TigaseUtil {
+	
+	protected static final Log logger = LogFactory.getLog(TigaseUtil.class);
+	
 	public static String REMIND_INFO = "我给你发了一条提醒,请点击提醒列表查看";
 	public static String NOTICE_INFO = "我给你发了一条公告,请点击公告列表查看";
 	public static String VOTE_INFO = "我给你发了一条投票,请点击投票列表查看";
 	
 	private static String REGISTERED_URL = "http://${ip}/user/regUser.do";
 	private static String RESETPASSWORD_URL = "http://${ip}/user/changePassword.do";
+	private static String GETUSERBYACCOUNT_URL = "http://${ip}/user/getUserByAccount.do";
 	private static final String ip;
 	private static final String suffix;
 	
@@ -161,6 +169,20 @@ public class TigaseUtil {
 	public static void main(String[] args) {
 		StringBuffer sb = new StringBuffer("18721472363#sst,13040691917#sst,");
 		System.out.println(sb.subSequence(0, sb.length()-1));
+	}
+	/**
+	 * 
+		 * 此方法描述的是：判断tigase用户是否存在
+		 * @author: cwftalus@163.com
+		 * @version: 2016年4月20日 上午11:07:31
+	 */
+	
+
+	public static boolean getUserByAccount(String mobile){
+		Map<String, String> params = new HashMap<String, String>(2);
+		params.put("userAccount", mobile+suffix);
+		String result = HttpClientUtil.sendPostRequestByJava(GETUSERBYACCOUNT_URL, params);
+		return analysisResult(result);
 	}
 	
 }
