@@ -78,4 +78,6 @@ public interface DataStatus {
     public static final String SST_USER = "SSTUSER";
 
     public final static long HOUR_24 =24*60*60*1000L;// 24小时
+    
+    public final static String TIGASEACCOUNT = "tigaseAccount-";
 }

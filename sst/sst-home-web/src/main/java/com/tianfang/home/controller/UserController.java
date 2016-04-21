@@ -221,9 +221,12 @@ public class UserController extends BaseController{
 			return result;
 		}
 
-		//登录是检查用户是否存在 
-		checkTigaseUser(dto);
-				
+		//登录是检查用户是否存在
+		Object object = redisTemplate.opsForValue().get(DataStatus.TIGASEACCOUNT+dto.getMobile());
+		if(Objects.equals(object, null)){
+			checkTigaseUser(dto);	
+		}
+		
 		session.setAttribute(SessionConstants.LOGIN_USER_INFO, user);
 		if(user != null){
 			redisTemplate.opsForValue().set(DataStatus.SST_USER+user.getId(), user);
@@ -242,6 +245,7 @@ public class UserController extends BaseController{
 		if(!TigaseUtil.getUserByAccount(dto.getMobile())){
 			TigaseUtil.registered(dto.getMobile(), dto.getPassword());
 		};
+		redisTemplate.opsForValue().set(DataStatus.TIGASEACCOUNT+dto.getMobile(), DataStatus.ENABLED);
 	}
 
 	/**
