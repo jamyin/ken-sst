@@ -1,19 +1,11 @@
 package com.tianfang.home.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.gson.Gson;
+import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.ffmpeg.FFmpegUtil;
+import com.tianfang.common.util.PropertiesUtils;
+import com.tianfang.common.util.StringUtils;
+import com.tianfang.common.util.UUIDGenerator;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -23,12 +15,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
-import com.tianfang.common.constants.DataStatus;
-import com.tianfang.common.ffmpeg.FFmpegUtil;
-import com.tianfang.common.util.PropertiesUtils;
-import com.tianfang.common.util.StringUtils;
-import com.tianfang.common.util.UUIDGenerator;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class FileController {

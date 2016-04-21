@@ -1,20 +1,5 @@
 package com.tianfang.home.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.google.gson.Gson;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.Response;
@@ -23,6 +8,19 @@ import com.tianfang.common.util.FileUtils;
 import com.tianfang.common.util.LogWriter;
 import com.tianfang.common.util.PropertiesUtils;
 import com.tianfang.home.dto.UploadDto;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
 
 /**
  * 
@@ -55,7 +53,7 @@ public class UploadController {
 			}
 			
 			try {
-				uploadDto.setUrl(uploadImage(myfile, request));
+				uploadDto.setUrl(uploadImage(myfile));
 				result.setData(uploadDto);
 				result.setStatus(DataStatus.HTTP_SUCCESS);
 				result.setMessage("图片上传成功");
@@ -92,7 +90,7 @@ public class UploadController {
 			}
 			
 			try {
-				uploadDto.setUrl(uploadImage(myfileex, request));
+				uploadDto.setUrl(uploadImage(myfileex));
 				result.setData(uploadDto);
 				result.setStatus(DataStatus.HTTP_SUCCESS);
 				result.setMessage("图片上传成功");
@@ -112,7 +110,32 @@ public class UploadController {
 //		return result;
 	}
 
-	private String uploadImage(MultipartFile myfile, HttpServletRequest request)
+	public static Response<UploadDto> uploadImg(MultipartFile myfile){
+		Response<UploadDto> result = new Response<UploadDto>();
+		UploadDto uploadDto = new UploadDto();
+		if (!myfile.isEmpty()) {
+			long fileSize = printFileInfo(myfile);//判断图片大小 超过1M不允许上传
+			if(fileSize > DataStatus._FILESIZE_){
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("上传图片大小不允许超过1M");
+			}
+
+			try {
+				uploadDto.setUrl(uploadImage(myfile));
+				result.setData(uploadDto);
+				result.setStatus(DataStatus.HTTP_SUCCESS);
+				result.setMessage("图片上传成功");
+			} catch (IOException e) {
+				result.setData(uploadDto);
+				result.setStatus(DataStatus.HTTP_FAILE);
+				result.setMessage("图片上传失败");
+				logger.debug(LogWriter.getStackMsg(e.getStackTrace()));
+			}
+		}
+		return result;
+	}
+
+	private static String uploadImage(MultipartFile myfile)
 			throws IOException {
 		// 如果只是上传一个文件，则只需要MultipartFile类型接收文件即可，而且无需显式指定@RequestParam注解
 		// 如果想上传多个文件，那么这里就要用MultipartFile[]类型来接收文件，并且还要指定@RequestParam注解
@@ -131,7 +154,7 @@ public class UploadController {
 		return (context + "/" + fileDe + "/" + fileName);
 	}
 
-	private long printFileInfo(MultipartFile myfile) {
+	private static long printFileInfo(MultipartFile myfile) {
 		logger.info("文件长度: " + myfile.getSize());
 		logger.info("文件类型: " + myfile.getContentType());
 		logger.info("文件名称: " + myfile.getName());
