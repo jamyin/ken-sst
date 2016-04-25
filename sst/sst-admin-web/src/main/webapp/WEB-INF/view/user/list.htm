@@ -131,7 +131,9 @@
 															<a id='auditObj' data-obj-audit="1" data-obj-id="${(page.id)!}" class="btn btn-mini btn-success" style="margin-left:5px;"><i class="icon-pencil"></i>审核通过</a>
 														<#else>
 															<a id='auditObj' data-obj-audit="0" data-obj-id="${(page.id)!}" class="btn btn-mini btn-warning" style="margin-left:5px;"><i class="icon-pencil"></i>审核不通过</a>
-														</#if>	
+														</#if>
+													<#else>
+														<a id='auditObj' data-obj-audit="1" data-obj-id="${(page.id)!}" class="btn btn-mini btn-success" style="margin-left:5px;"><i class="icon-pencil"></i>审核通过</a>
 													</#if>
 												</#if>	
 											</#if>										
