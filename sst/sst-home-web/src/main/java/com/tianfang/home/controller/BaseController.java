@@ -1,9 +1,11 @@
 package com.tianfang.home.controller;
 
-import java.util.concurrent.TimeUnit;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.constants.SessionConstants;
+import com.tianfang.common.util.PropertiesUtils;
+import com.tianfang.home.utils.SessionUtil;
+import com.tianfang.user.dto.UserDto;
+import com.tianfang.user.service.IUserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,11 +13,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tianfang.common.constants.DataStatus;
-import com.tianfang.common.constants.SessionConstants;
-import com.tianfang.home.utils.SessionUtil;
-import com.tianfang.user.dto.UserDto;
-import com.tianfang.user.service.IUserService;
+import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 
 public class BaseController {
 	protected Logger logger = Logger.getLogger(BaseController.class);
@@ -64,6 +63,7 @@ public class BaseController {
 	public ModelAndView getModelAndView(){
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("user", getUserAccountByUserId());
+		mv.addObject("wwwdomain", PropertiesUtils.getProperty("wwwdomain"));
 		return mv;
 	}
 

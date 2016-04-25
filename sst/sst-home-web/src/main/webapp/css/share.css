@@ -1,0 +1,97 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+i {
+  font-style: normal;
+}
+
+ul {
+  list-style: none;
+}
+
+body {
+  background-color: #FFF;
+}
+
+.hide {
+  display: none !important;
+}
+
+.banner {
+  overflow: hidden;
+}
+
+.banner-img {
+  width: 100%;
+  height: auto;
+}
+
+.act-hd {
+  padding: 0.346667rem 0.48rem;
+  line-height: 2;
+  border-bottom: 1px solid #E5E5E5;
+}
+
+[data-dpr="1"] .act-hd {
+  font-size: 14px;
+}
+
+[data-dpr="2"] .act-hd {
+  font-size: 28px;
+}
+
+[data-dpr="3"] .act-hd {
+  font-size: 42px;
+}
+
+.act-hd p {
+  padding-left: 0.613333rem;
+  background-image: url(../img/canlader00.png);
+  background-repeat: no-repeat;
+  background-position: left center;
+  color: #676767;
+}
+
+[data-dpr="1"] .act-hd p {
+  background-size: 20px 20px;
+}
+
+[data-dpr="2"] .act-hd p {
+  background-size: 40px 40px;
+}
+
+[data-dpr="3"] .act-hd p {
+  background-size: 60px 60px;
+}
+
+.act-hd p.act-hd-place {
+  background-image: url(../img/position00.png);
+}
+
+.act-hd p.act-hd-nn {
+  background-image: url(../img/item00.png);
+}
+
+[data-dpr="1"] .act-hd-nm {
+  font-size: 18px;
+}
+
+[data-dpr="2"] .act-hd-nm {
+  font-size: 36px;
+}
+
+[data-dpr="3"] .act-hd-nm {
+  font-size: 54px;
+}
+
+.act-cont {
+  margin-top: 0.266667rem;
+  padding: 0.346667rem 0.48rem;
+  border-top: 1px solid #E5E5E5;
+}
+
+.act-cont p {
+  margin-bottom: 0.4rem;
+}

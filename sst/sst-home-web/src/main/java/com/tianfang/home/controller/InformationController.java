@@ -1,13 +1,7 @@
 package com.tianfang.home.controller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.tianfang.common.constants.DataStatus;
+import com.tianfang.common.constants.ShareType;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
@@ -16,6 +10,12 @@ import com.tianfang.message.dto.InformationDto;
 import com.tianfang.message.enums.InformationType;
 import com.tianfang.message.service.IActivityService;
 import com.tianfang.message.service.IInformationService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**		
  * <p>Title: InformationController </p>
@@ -38,6 +38,11 @@ public class InformationController extends BaseController {
 	private IInformationService infoService;
 	@Autowired
 	private IActivityService activityService;
+
+	/**
+	 * 分享路径
+	 */
+	private static final String SHARE_URL = "share.do";
 	
 	/**
 	 * 新闻分页列表
@@ -54,6 +59,7 @@ public class InformationController extends BaseController {
 		try {
 			dto.setParentType(InformationType.NEWS.getIndex());
 			PageResult<InformationDto> datas = infoService.findInformationByParam(dto, query);
+			appendShareUrl_news(datas);
 			response.setStatus(DataStatus.HTTP_SUCCESS);
 			response.setData(datas);
 		} catch (Exception e) {
@@ -65,7 +71,7 @@ public class InformationController extends BaseController {
 		
 		return response;
 	}
-	
+
 	/**
 	 * 新闻详情
 	 * @param id
@@ -104,6 +110,7 @@ public class InformationController extends BaseController {
 		Response<PageResult<ActivityDto>> response = new Response<PageResult<ActivityDto>>();
 		try {
 			PageResult<ActivityDto> datas = activityService.findActivityByParam(dto, query);
+			appendShareUrl_active(datas);
 			response.setStatus(DataStatus.HTTP_SUCCESS);
 			response.setData(datas);
 		} catch (Exception e) {
@@ -115,7 +122,7 @@ public class InformationController extends BaseController {
 		
 		return response;
 	}
-	
+
 	/**
 	 * 活动详情
 	 * @param id
@@ -189,5 +196,23 @@ public class InformationController extends BaseController {
 			logger.error(e.getMessage());
 		}
 		return response;
+	}
+
+	private void appendShareUrl_news(PageResult<InformationDto> datas) {
+		if (null != datas && null != datas.getResults() && datas.getResults().size() > 0){
+			for (InformationDto info : datas.getResults()){
+				StringBuilder url = new StringBuilder(SHARE_URL);
+				info.setShareUrl(url.append("id="+info.getId()).append("&type="+ ShareType.NEWS.getIndex()).toString());
+			}
+		}
+	}
+
+	private void appendShareUrl_active(PageResult<ActivityDto> datas) {
+		if (null != datas && null != datas.getResults() && datas.getResults().size() > 0){
+			for (ActivityDto info : datas.getResults()){
+				StringBuilder url = new StringBuilder(SHARE_URL);
+				info.setShareUrl(url.append("id="+info.getId()).append("&type="+ ShareType.ACTIVE.getIndex()).toString());
+			}
+		}
 	}
 }

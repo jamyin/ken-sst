@@ -1,18 +1,17 @@
 package com.tianfang.home.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.base.Objects;
 import com.tianfang.business.dto.AppVersionDto;
 import com.tianfang.business.service.IAppVersionService;
 import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 分配安卓用户和ios用户访问的URL地址
@@ -39,10 +38,10 @@ public class AppUrlController {
 		}
 		if(!Objects.equal(dto.getVersionNum(),dtoObj.getVersionNum())){	//判断移动的版本不一样则需要跟新
 			dtoObj.setHttpUrl(dtoObj.getVersionUrl());
-			dtoObj.setType(DataStatus.ENABLED);//跟新
+			dtoObj.setType(DataStatus.ENABLED);//更新
 			
 			data.setData(dtoObj);
-			data.setMessage("您的程序需要跟新啦");
+			data.setMessage("您的程序需要更新啦");
 			data.setStatus(DataStatus.HTTP_SUCCESS);
 			return data;
 		}else{	//分享

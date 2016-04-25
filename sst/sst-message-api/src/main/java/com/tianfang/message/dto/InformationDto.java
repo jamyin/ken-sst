@@ -1,12 +1,11 @@
 package com.tianfang.message.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**		
  * <p>Title: NewsDto </p>
@@ -96,4 +95,11 @@ public class InformationDto implements Serializable {
     @Getter
     @Setter
     private Integer stat;
+
+    /**
+     * 分享全路径(包括参数)
+     */
+    @Getter
+    @Setter
+    private String shareUrl;
 }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="telephone=no,email=no" name="format-detection">
+  <title>聚赛事分享页面</title>
+  <script src="//g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+  <script src="//libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="css/share.css" >
+</head>
+
+<body>
+  <div class="banner">
+    <img class="banner-img" src="${(wwwdomain)!}${(data.pic)!}" alt="" />
+  </div>
+  <div class="act-hd">
+    <h1 class="act-hd-nm">${(data.title)!}</h1>
+    <#if data.active??>
+        <p class="act-hd-tm">
+          ${(data.active.activityDate)!} ${(data.active.startTime)!}--${(data.active.endTime)!}
+        </p>
+        <p class="act-hd-place">
+          ${(data.active.address)!}
+        </p>
+        <p class="act-hd-nn">
+          ${(data.summary)!}
+        </p>
+    </#if>
+  </div>
+  <div class="act-cont">
+    ${(data.content)!}
+  </div>
+  <script type="text/javascript">
+  $(function() {
+
+  });
+  </script>
+</body>
+
+</html>
