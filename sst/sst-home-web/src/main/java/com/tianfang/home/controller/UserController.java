@@ -89,7 +89,8 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "register")
 	@ResponseBody
-	public Response<String> register(HttpSession session, UserDto dto, @RequestParam(value = "code", required = false) String code) {
+	public Response<String> register(HttpServletRequest request,HttpSession session, UserDto dto,@RequestParam(value = "file",required = false)  MultipartFile file,
+			/**@RequestParam(value = "code", required = false) */ String code) {
 		Response<String> result = new Response<String>();
 
 		String key = SMSController.SST_PHONE_NUMBER + dto.getMobile();
@@ -98,6 +99,16 @@ public class UserController extends BaseController{
 		if(result.getStatus()==DataStatus.HTTP_FAILE){
 			return result;
 		}
+		try {
+	        if (file != null) {
+//	          Response<UploadDto> res = uploadPic(myfile, request, response);
+	        	Map<String, String> map = uploadImages(file , request);
+	        	dto.setPic(map.get("fileUrl"));
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 //		if (checkCode(code, result, key) == 0){
 //			return result;
 //		}
@@ -413,7 +424,7 @@ public class UserController extends BaseController{
 			HttpServletRequest request,HttpServletResponse response){
      Response<String> result = new Response<String>();
      if(userDto == null ){
-    	 result.setStatus(DataStatus.HTTP_FAILE);
+    	 result.setStatus(DataStatus.HTTP_FAILE);                                             
 		 result.setMessage("用户信息为空");
 		 return result;
      }
