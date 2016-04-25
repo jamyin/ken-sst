@@ -649,6 +649,14 @@ public class UserController extends BaseController{
 				}
 
 				userFriendService.save(uf);
+				// 互加为好友
+				UserFriendDto uf2 = new UserFriendDto();
+				uf2.setUserId(friendId);
+				uf2.setFriendId(userId);
+				List<UserFriendDto> userFriend2 = userFriendService.findUserFriendByParam(uf2);
+				if (null == userFriend2 && userFriend2.size() == 0){
+					userFriendService.save(uf2);
+				}
 				result.setMessage("添加成功");
 				result.setStatus(DataStatus.HTTP_SUCCESS);
 			} catch (Exception e) {
