@@ -68,15 +68,20 @@
     </bean>
 
 	<!-- 配置数据库注解aop -->
-    <aop:aspectj-autoproxy />  
+    <!--<aop:aspectj-autoproxy />-->
     <bean id="manyDataSourceAspect" class="com.tianfang.common.jdbc.DataSourceAspect" />
+    <bean id="adminLogAspect" class="com.tianfang.admin.aspect.AdminLogAspect"/>
     <aop:config>
         <aop:aspect id="c" ref="manyDataSourceAspect">
             <aop:pointcut id="tx" expression="execution(* com.tianfang..mapper.*.*(..))"/>
             <aop:before pointcut-ref="tx" method="before"/>
         </aop:aspect>
+        <aop:aspect ref="adminLogAspect">
+            <aop:pointcut expression="execution(* com.tianfang..service.*.* (..))" id="perform_log"/>
+            <aop:around method="logger" pointcut-ref="perform_log"/>
+        </aop:aspect>
     </aop:config>
-	
+
 	<tx:annotation-driven transaction-manager="transactionManager"  />
 </beans>
 
