@@ -28,7 +28,13 @@ public enum TeamPlayerPositionEnum {
 	RF(22, "右前锋"),
 	LS(23, "左中锋"),
 	ST(24, "中锋"),
-	RS(25, "右中锋");
+	RS(25, "右中锋"),
+	
+	JL(22, "教练"),
+	LD(23, "领队"),
+	DZ(24, "队长"),
+	DY(25, "队医");
+
    
 	TeamPlayerPositionEnum(){
 	}
