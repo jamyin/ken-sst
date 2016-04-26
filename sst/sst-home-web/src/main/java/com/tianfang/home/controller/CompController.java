@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**		
  * <p>Title: CompController </p>
@@ -378,10 +380,20 @@ public class CompController extends BaseController {
 	public Response<String> apply(CompetitionApplyDto dto, String userId) {
 		Response<String> result = new Response<String>();
 		dto.setCreateUserId(userId);
+		if (checkCode(dto.getTeamName())){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("球队名称中存在特殊字符!");
+			return result;
+		}
+		if (checkCode(dto.getContacts())){
+			result.setStatus(DataStatus.HTTP_FAILE);
+			result.setMessage("联系人中存在特殊字符!");
+			return result;
+		}
 		try {
 			if (checkCompApply(result, dto)) {
 				applyService.addCompetitionApply(dto);
-				result.setMessage("恭喜您,报名成功!");
+				result.setMessage("恭喜您,报名成功,请耐心等待审核!");
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -1010,6 +1022,39 @@ public class CompController extends BaseController {
 		player.setUserId(user.getId());
 
 		return player;
+	}
+
+	private boolean checkCode(String str){
+		String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+		Pattern p = Pattern.compile(regEx);
+		Matcher m = p.matcher(str);
+		if (!m.find()){
+			return containsEmoji(str);
+		}
+		return false;
+	}
+	private boolean containsEmoji(String source) {
+		if (StringUtils.isBlank(source)) {
+			return false;
+		}
+		int len = source.length();
+		for (int i = 0; i < len; i++) {
+			char codePoint = source.charAt(i);
+			if (isEmojiCharacter(codePoint)) {
+				//do nothing，判断到了这里表明，确认有表情字符
+				return true;
+			}
+		}
+		return false;
+	}
+	private static boolean isEmojiCharacter(char codePoint) {
+		return (codePoint == 0x0) ||
+				(codePoint == 0x9) ||
+				(codePoint == 0xA) ||
+				(codePoint == 0xD) ||
+				((codePoint >= 0x20) && (codePoint <= 0xD7FF)) ||
+				((codePoint >= 0xE000) && (codePoint <= 0xFFFD)) ||
+				((codePoint >= 0x10000) && (codePoint <= 0x10FFFF));
 	}
 }
 

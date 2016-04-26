@@ -36,7 +36,7 @@ public class CompetitionApplyServiceImpl implements ICompetitionApplyService {
 	 * @time:2016年1月20日 上午11:20:18
 	 */
 	@Override
-	public int addCompetitionApply(CompetitionApplyDto competitionApplyDto) {
+	public int addCompetitionApply(CompetitionApplyDto competitionApplyDto){
 		CompetitionApply competitionApply = BeanUtils.createBeanByTarget(competitionApplyDto, CompetitionApply.class);
 		if (StringUtils.isBlank(competitionApply.getCompName()) && StringUtils.isNotBlank(competitionApply.getCompId())){
 			Competition competition = compDao.selectByPrimaryKey(competitionApply.getCompId());

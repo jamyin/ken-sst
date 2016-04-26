@@ -1,16 +1,6 @@
 package com.tianfang.admin.controller.comp;
 
-import java.util.List;
-import java.util.Map;
-
 import com.tianfang.admin.controller.BaseController;
-import com.tianfang.train.enums.AuditType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.tianfang.admin.dto.AdminDto;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.MessageResp;
@@ -20,9 +10,18 @@ import com.tianfang.common.util.StringUtils;
 import com.tianfang.train.dto.CompetitionApplyDto;
 import com.tianfang.train.dto.CompetitionDto;
 import com.tianfang.train.dto.TeamDto;
+import com.tianfang.train.enums.AuditType;
 import com.tianfang.train.service.ICompetitionApplyService;
 import com.tianfang.train.service.ICompetitionService;
 import com.tianfang.train.service.ITeamService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 比赛报名比赛报名Controller
@@ -156,7 +155,6 @@ public class CompetitionApplyController extends BaseController {
 	 * 根据主键Id删除 -逻辑删除
 	 * @author YIn
 	 * @time:2016年1月20日 下午5:54:33
-	 * @param competitionapplyDto
 	 * @return
 	 */
 	@ResponseBody
