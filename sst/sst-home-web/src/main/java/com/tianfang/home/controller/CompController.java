@@ -1025,6 +1025,9 @@ public class CompController extends BaseController {
 	}
 
 	private boolean checkCode(String str){
+		if (StringUtils.isBlank(str)) {
+			return false;
+		}
 		String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
 		Pattern p = Pattern.compile(regEx);
 		Matcher m = p.matcher(str);
@@ -1033,28 +1036,14 @@ public class CompController extends BaseController {
 		}
 		return false;
 	}
-	private boolean containsEmoji(String source) {
-		if (StringUtils.isBlank(source)) {
+	private boolean containsEmoji(String str) {
+		if (StringUtils.isBlank(str)) {
 			return false;
 		}
-		int len = source.length();
-		for (int i = 0; i < len; i++) {
-			char codePoint = source.charAt(i);
-			if (isEmojiCharacter(codePoint)) {
-				//do nothing，判断到了这里表明，确认有表情字符
-				return true;
-			}
-		}
-		return false;
-	}
-	private static boolean isEmojiCharacter(char codePoint) {
-		return (codePoint == 0x0) ||
-				(codePoint == 0x9) ||
-				(codePoint == 0xA) ||
-				(codePoint == 0xD) ||
-				((codePoint >= 0x20) && (codePoint <= 0xD7FF)) ||
-				((codePoint >= 0xE000) && (codePoint <= 0xFFFD)) ||
-				((codePoint >= 0x10000) && (codePoint <= 0x10FFFF));
+		String regEx = "[^\\u0000-\\uFFFF]";
+		Pattern p = Pattern.compile(regEx);
+		Matcher m = p.matcher(str);
+		return m.find();
 	}
 }
 
