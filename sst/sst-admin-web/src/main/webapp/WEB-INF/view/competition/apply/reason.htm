@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>拒绝理由</title>
+		<meta name="description" content="Common form elements and layouts" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<#include "../../common/head.htm"/>
+		<link href="${base}/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+		<!-- <script type="text/javascript" src="${base}/plugins/uploadify/jquery-1.3.2.min.js"></script> -->
+ 		<script type="text/javascript" src="${base}/plugins/uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="${base}/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+		<!--提示框-->
+		<script type="text/javascript" src="${base}/static/js/jquery.tips.js"></script>
+	</head>
+	<body>
+		<div class="container-fluid" id="main-container">
+			<div id="main-content" class="clearfix" style="margin-left:0px;">
+					<div id="page-content" class="clearfix">
+						<div class="row-fluid">
+							<!-- PAGE CONTENT BEGINS HERE -->
+							<form id="submitForm" class="form-horizontal"  method="POST">
+								<input type="hidden" name="id" value="${(id)!}" />
+								<input type="hidden" name="status" value="2" />
+								<div class="control-group">
+									<textarea class="span10" name="auditReason" rows="5" placeholder="请输入拒绝理由"></textarea>
+								</div>
+								<div class="form-actions" style="text-align: right;">
+									<button id='savebutton' class="btn btn-info btn-mini" type="button"><i class="icon-ok"></i>提交</button>
+									<button class="btn btn-mini" type="reset" id="reset-btn"><i class="icon-undo"></i>关闭</button>
+								</div>
+							 </form>
+							<!-- PAGE CONTENT ENDS HERE -->
+						 </div><!--/row-->
+					</div><!--/#page-content-->
+			</div><!-- #main-content -->
+		</div><!--/.fluid-container#main-container-->
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only"></i>
+		</a>
+		<!-- basic scripts -->
+		<!-- <script src="${base}/static/1.9.1/jquery.min.js"></script> -->
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+		</script>
+		
+		<script src="${base}/static/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		
+		<!--[if lt IE 9]>
+		<script type="text/javascript" src="${base}/static/js/excanvas.min.js"></script>
+		<![endif]-->
+		<script type="text/javascript" src="${base}/static/js/jquery-ui-1.10.2.custom.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/fuelux.spinner.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-timepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/date.js"></script>
+		<script type="text/javascript" src="${base}/static/js/daterangepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-colorpicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.autosize-min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.inputlimiter.1.3.1.min.js"></script>
+		<!-- ace scripts -->
+		<script src="${base}/static/js/ace-elements.min.js"></script>
+		<script src="${base}/static/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+		
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/lang/zh-cn/zh-cn.js"></script>		
+		<!-- layer 弹出框处理 -->
+		<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+		<script type="text/javascript">
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		$(function() {
+
+			$("#savebutton").on('click',function(){
+				//输入框校验
+				var auditReason = $("[name = auditReason]").val();
+				if (null == auditReason || '' == auditReason) {
+					layer.alert('拒绝理由不能为空~', { icon: 7 });
+					return;
+				}
+				if(auditReason.length>200){
+					layer.alert('拒绝理由长度大于200~', { icon: 7 });
+					return;
+				}
+				var ajaxParams = $("#submitForm").serialize();
+				$.ajax({
+					type : "POST",
+					url : "${base}/competition/apply/audit.do",
+					data : ajaxParams,
+					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+					beforeSend : function() {
+						$("#msg").html("logining");
+					},
+					success : function(data) {// 成功返回之后调用的函数
+						var jsondata = data;// eval('(' + data + ')');
+						if(data.success){
+							parent.layer.msg(data.msg, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								parent.reload_page();
+								parent.layer.close(index);
+							}); 							
+						}else{
+							parent.layer.msg(data.msg, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+							}); 	
+						}
+					},
+					complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						
+					},
+					error : function() {// 调用出错执行的函数
+					}
+				});
+			});
+			$("#reset-btn").on('click',function(){
+				parent.layer.close(index);
+			});
+		});
+		</script>
+	</body>
+</html>

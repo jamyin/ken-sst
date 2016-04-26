@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.tianfang.admin.controller.BaseController;
+import com.tianfang.train.enums.AuditType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -252,14 +253,20 @@ public class CompetitionApplyController extends BaseController {
 	 */
 	@RequestMapping(value="/audit")
 	@ResponseBody
-	public Map<String, Object> audit(String id, Integer status){
+	public Map<String, Object> audit(String id, Integer status, String auditReason){
 		if (StringUtils.isEmpty(id)) {
 			return MessageResp.getMessage(false, "主键id为空！");
 		}
 		if (null == status){
 			return MessageResp.getMessage(false, "审核状态异常！");
 		}
-	    Integer resObject =(Integer) competitionApplyService.auditCompetitionApply(id, status);
+		if (AuditType.FAIL.getIndex() == status){
+			if (StringUtils.isBlank(auditReason)){
+				return MessageResp.getMessage(false, "请填写拒绝理由！");
+			}
+		}
+		AdminDto admin = getSessionAdmin();
+		Integer resObject =(Integer) competitionApplyService.auditCompetitionApply(id, status, auditReason, admin.getId(), admin.getAccount());
 	    if (resObject == 0) {
             return MessageResp.getMessage(false, "审核失败");
         }
@@ -267,5 +274,22 @@ public class CompetitionApplyController extends BaseController {
             return MessageResp.getMessage(true, "审核成功");
         }
 	    return MessageResp.getMessage(false, "审核异常");
+	}
+
+	/**
+	 * <p>Description: 填写拒绝理由页面 </p>
+	 * <p>Company: 上海天坊信息科技有限公司</p>
+	 * @param
+	 * @return
+	 * @author wangxiang
+	 * @date 2016/4/26 13:59
+	 * @version 1.0
+	 */
+	@RequestMapping(value="/reason")
+	public ModelAndView reason(String id){
+		ModelAndView mv = this.getModelAndView(this.getSessionUserId());
+		mv.setViewName("/competition/apply/reason");
+		mv.addObject("id", id);
+		return mv;
 	}
 }

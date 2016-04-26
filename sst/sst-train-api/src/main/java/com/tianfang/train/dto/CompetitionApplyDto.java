@@ -1,12 +1,11 @@
 package com.tianfang.train.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author YIn
@@ -95,4 +94,8 @@ public class CompetitionApplyDto implements Serializable{
 	@Getter
 	@Setter
 	private Integer compType; // 用于联表查询,赛事状态(0-未开始,1-进行中,2-已结束)
+
+	@Getter
+	@Setter
+	private String auditReason;	// 审核理由
 }

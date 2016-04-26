@@ -57,7 +57,7 @@ public class CompetitionApplyServiceImpl implements ICompetitionApplyService {
 	}
 
 	@Override
-	public int auditCompetitionApply(String id, Integer status) {
+	public int auditCompetitionApply(String id, Integer status, String auditReason, String adminId, String adminAccount) {
 		if (StringUtils.isBlank(id) || null == status || StringUtils.isBlank(AuditType.getByIndexValue(status))){
 			return 0;
 		}
@@ -68,6 +68,11 @@ public class CompetitionApplyServiceImpl implements ICompetitionApplyService {
 		CompetitionApply apply = new CompetitionApply();
 		apply.setId(id);
 		apply.setAuditType(status);
+		apply.setAuditUserId(adminId);
+		apply.setAuditUserName(adminAccount);
+		if (AuditType.FAIL.getIndex() == status){
+			apply.setAuditReason(auditReason);
+		}
 		int count = competitionApplyDao.updateByPrimaryKeySelective(apply);
 		if (count > 0){
 			if (AuditType.PASS.getIndex() == status.intValue()){

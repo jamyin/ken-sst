@@ -279,6 +279,18 @@
 			$("#operation #auditObj").on('click',function(){
 				var id = $(this).attr("data-obj-id");
 				var status = $(this).attr("data-obj-status");
+				// 填写拒绝理由
+				if (status == 2){
+					layer.open({
+						title:'拒绝理由',
+						type: 2,
+						area: ['500px', '300px'],
+						fix: true, //不固定
+						maxmin: false,
+						content: '${base}/competition/apply/reason.do?id='+id
+					});
+					return;
+				}
 				$.ajax({
 		             type: "POST",
 		             url: "${base}/competition/apply/audit.do",

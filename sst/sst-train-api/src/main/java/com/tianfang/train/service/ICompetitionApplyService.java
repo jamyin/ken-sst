@@ -35,7 +35,7 @@ public interface ICompetitionApplyService {
 	 * @author xiang_wang
 	 * 2016年1月23日上午11:20:50
 	 */
-	int auditCompetitionApply(String id, Integer status);
+	int auditCompetitionApply(String id, Integer status, String auditReason, String adminId, String adminAccount);
 	
 	/**
 	 * 根据主键Id删除 -物理删除
