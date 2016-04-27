@@ -15,10 +15,10 @@ public class CompReasonController extends BaseController{
 	private ICompetitionApplyService iCompetitionApplyService; 
 	
 	@RequestMapping(value = "comp/reason")
-	public ModelAndView  reason(String id) {
+	public ModelAndView  reason(String applyId) {
 		ModelAndView mv = new ModelAndView();
 
-		CompetitionApplyDto applyDto = iCompetitionApplyService.getCompetitionApplyById(id);
+		CompetitionApplyDto applyDto = iCompetitionApplyService.getCompetitionApplyById(applyId);
 
 		mv.addObject("applyDto", applyDto);
 		mv.setViewName("reason");
