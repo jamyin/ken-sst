@@ -101,4 +101,8 @@ public class CompetitionDto implements Serializable{
 	@Getter
 	@Setter
 	private Integer auditType;		// 审核状态(0-未审核,1-通过,2-拒绝)
+
+	@Getter
+	@Setter
+	private String applyId;			// 审核id
 }

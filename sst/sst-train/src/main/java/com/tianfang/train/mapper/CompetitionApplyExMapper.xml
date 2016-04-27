@@ -19,12 +19,13 @@
 		<result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
 		<result column="stat" property="stat" jdbcType="INTEGER" />
 		<result column="audit_type" property="auditType" jdbcType="INTEGER" />
+		<result column="apply_id" property="applyId" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<sql id="Competition_Column_List" >
 		a.id, a.title, a.content, a.icon, a.start_date, a.end_date, a.is_closed, a.comp_type, a.create_admin_id,
 		a.create_admin_name, a.update_admin_id, a.update_admin_name, a.create_time, a.last_update_time,
-		a.stat, b.audit_type
+		a.stat, b.audit_type, b.id as apply_id
 	</sql>
 
 	<select id="selectByExample" resultType="com.tianfang.train.dto.CompetitionApplyDto">
