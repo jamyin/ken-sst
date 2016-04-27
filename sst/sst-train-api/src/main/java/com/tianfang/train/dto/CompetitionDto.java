@@ -1,13 +1,12 @@
 package com.tianfang.train.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tianfang.common.util.PropertiesUtils;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.tianfang.common.util.PropertiesUtils;
+import java.io.Serializable;
+import java.util.Date;
 
 @JsonIgnoreProperties({"createAdminId","createAdminName","updateAdminId","updateAdminName","createTime","lastUpdateTime","stat","createTimeStr","lastUpdateTimeStr","startDateStr","endDateStr"})
 public class CompetitionDto implements Serializable{
@@ -99,4 +98,7 @@ public class CompetitionDto implements Serializable{
     private Integer extra = Integer.valueOf(PropertiesUtils.getProperty("extra"));//0不需要额外参数  1 需要额外参数
 	
 
+	@Getter
+	@Setter
+	private Integer auditType;		// 审核状态(0-未审核,1-通过,2-拒绝)
 }
