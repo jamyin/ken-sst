@@ -101,5 +101,10 @@ public class TeamPlayerDao extends MyBatisBaseDao<TeamPlayer>{
         assemblyParams(teamPlayer, criteria);   //组装参数
         return mapper.countByExample(example);
 	}
+
+	public void updateTeamPlayerList(TeamPlayerDto teamPlayerDto) {
+		// TODO Auto-generated method stub
+		exMapper.updateTeamPlayerList(teamPlayerDto);
+	}
 	
 }

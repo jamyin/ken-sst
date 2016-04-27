@@ -117,4 +117,9 @@
         LEFT JOIN sst_team AS t ON p.team_id = t.id
         <include refid="Example_Where_Team_Clause"/>
     </select>
+    
+    <update id="updateTeamPlayerList">
+    	update sst_team_player set name = #{dto.name},pic = #{dto.pic},gender=#{dto.gender} where user_id = #{dto.userId}
+    </update>
+    
 </mapper>

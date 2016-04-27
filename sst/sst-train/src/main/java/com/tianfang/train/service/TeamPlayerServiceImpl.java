@@ -210,5 +210,11 @@ public class TeamPlayerServiceImpl implements ITeamPlayerService {
 		List<TeamPlayerDto> dtoList = BeanUtils.createBeanListByTarget(list, TeamPlayerDto.class);
 		return new PageResult<TeamPlayerDto>(page, list);
 	}
+
+	@Override
+	public void updateTeamPlayerList(TeamPlayerDto teamPlayerDto) {
+		// TODO Auto-generated method stub
+		playerDao.updateTeamPlayerList(teamPlayerDto);
+	}
 	
 }

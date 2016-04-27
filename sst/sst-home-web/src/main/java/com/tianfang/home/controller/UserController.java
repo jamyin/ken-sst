@@ -445,8 +445,35 @@ public class UserController extends BaseController{
    	 }else{
    		 result.setStatus(DataStatus.HTTP_SUCCESS);
 		 result.setMessage("修改用户信息成功");
+		 
+		 //用户信息修改成功之后 question By chen
+		 updateUserRaceInfo(userDto);
+		 
    	 }
    	return result;
+    }
+    /**
+     * 
+    	 * 此方法描述的是：保证信息统一 而做的异步信息修改操作
+    	 * @author: cwftalus@163.com
+    	 * @version: 2016年4月27日 下午1:23:26
+     */
+    @Async
+    public void updateUserRaceInfo(UserDto userDto){
+    	UserInfoDto userInfoDto = userInfoService.getUserInfo(userDto.getId());//new UserInfoDto();
+    	userInfoDto.setUserId(userDto.getId());
+    	userInfoDto.setName(userDto.getNickName());
+    	userInfoDto.setGender(userDto.getGender());
+    	userInfoDto.setPhoto(userDto.getPic());
+    	userInfoService.updateUserInfo(userInfoDto);
+    	
+    	
+    	TeamPlayerDto teamPlayerDto = new TeamPlayerDto();
+    	teamPlayerDto.setUserId(userDto.getId());
+    	teamPlayerDto.setName(userDto.getNickName());
+    	teamPlayerDto.setGender(userDto.getGender());
+    	teamPlayerDto.setPic(userDto.getPic());
+    	playerService.updateTeamPlayerList(teamPlayerDto);
     }
     
     @ResponseBody

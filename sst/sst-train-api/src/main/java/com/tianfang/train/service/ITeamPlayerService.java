@@ -121,4 +121,6 @@ public interface ITeamPlayerService {
 	 * @return
 	 */
 	PageResult<TeamPlayerDto> findTeamPlayerViewByPage(TeamPlayerDto teamPlayerDto, PageQuery page);
+
+	void updateTeamPlayerList(TeamPlayerDto teamPlayerDto);
 }
